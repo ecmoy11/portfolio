@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solace Health — Emma Moystner</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --peach: #FFD5BB;
+  --pink: #FFBAEC;
+  --orange: #E15304;
+  --lavender: #9DA5C5;
+  --burgundy: #410016;
+  --olive: #775D0F;
+
+  --bg-cream: #FAF8F5;
+  --bg-warm: #F7F5F1;
+  --text-dark: #2C2B28;
+  --text-light: #6B6862;
+  --text-muted: #A8A49C;
+  --white: #FFFFFF;
+  --divider: rgba(44, 43, 40, 0.1);
+
+  --font-primary: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-serif: 'DM Serif Display', serif;
+}
+
+html {
+  background: var(--bg-cream);
+  color: var(--text-dark);
+  font-family: var(--font-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+body { overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+
+::selection {
+  background: var(--orange);
+  color: var(--white);
+}
+
+/* ============ NAV ============ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.5s ease, padding 0.4s ease, border-color 0.5s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.nav.scrolled {
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 16px 48px;
+  border-bottom-color: rgba(0,0,0,0.06);
+}
+
+.nav-logo {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-dark);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-right a {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.3s;
+  cursor: pointer;
+}
+
+.nav-right a:not(.nav-cta):hover { color: var(--text-dark); }
+
+.nav-cta {
+  background: var(--orange);
+  color: var(--white) !important;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: background 0.3s;
+  margin-left: 8px;
+}
+
+.nav-cta:hover { background: #c94800; }
+
+.nav-connect-wrap { position: relative; margin-left: 8px; }
+.connect-dropdown { position: absolute; top: calc(100% + 12px); right: 0; background: var(--white); border: 1px solid var(--divider); border-radius: 12px; padding: 8px; min-width: 200px; opacity: 0; transform: translateY(-8px); pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 12px 32px rgba(44,43,40,0.1); z-index: 101; }
+.connect-dropdown.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.connect-dropdown a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dark) !important; transition: background 0.2s; }
+.connect-dropdown a:hover { background: var(--bg-warm); }
+.connect-dropdown a svg { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.5; }
+.connect-dropdown a:hover svg { opacity: 1; }
+.connect-dropdown-divider { height: 1px; background: var(--divider); margin: 4px 8px; }
+
+/* ============ BACK LINK ============ */
+.back-link {
+  position: fixed;
+  top: 90px;
+  left: 48px;
+  z-index: 90;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-link:hover { color: var(--orange); }
+.back-link svg { width: 14px; height: 14px; }
+
+/* ============ HERO ============ */
+.case-hero {
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 48px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.case-hero-tag {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+}
+
+.case-hero-title {
+  font-family: var(--font-primary);
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 200;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--text-dark);
+  margin-bottom: 24px;
+}
+
+.case-hero-subtitle {
+  font-family: var(--font-serif);
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 400;
+  color: var(--text-light);
+  line-height: 1.4;
+  max-width: 600px;
+  margin-bottom: 48px;
+}
+
+.case-meta {
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+  padding-top: 32px;
+  border-top: 1px solid var(--divider);
+}
+
+.case-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.case-meta-label {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.case-meta-value {
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: var(--text-dark);
+  line-height: 1.4;
+}
+
+/* ============ CONTENT ============ */
+.case-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.case-section {
+  padding: 80px 0;
+  border-top: 1px solid var(--divider);
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 32px;
+}
+
+.section-heading {
+  font-family: var(--font-primary);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+  line-height: 1.2;
+  margin-bottom: 32px;
+  max-width: 700px;
+}
+
+.section-text {
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: var(--text-light);
+  max-width: 680px;
+  margin-bottom: 24px;
+}
+
+.section-text strong {
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+/* ============ FULL-WIDTH IMAGE ============ */
+.case-image {
+  margin: 48px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #1d1d1c;
+  border: 1px solid var(--divider);
+}
+
+.case-image img {
+  width: 100%;
+  display: block;
+}
+
+.case-image-caption {
+  padding: 16px 24px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  background: var(--bg-warm);
+  border-top: 1px solid var(--divider);
+}
+
+/* ============ SIDE-BY-SIDE IMAGES ============ */
+.case-image-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 48px 0;
+}
+
+.case-image-grid .case-image {
+  margin: 0;
+}
+
+/* ============ BREAKDOWN CARDS ============ */
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin: 40px 0;
+}
+
+.breakdown-card {
+  background: var(--bg-warm);
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  padding: 32px 28px;
+}
+
+.breakdown-card-role {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 12px;
+}
+
+.breakdown-card h4 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.breakdown-card p {
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-light);
+}
+
+/* ============ IMPACT CALLOUT ============ */
+.impact-row {
+  display: flex;
+  gap: 32px;
+  margin: 48px 0;
+}
+
+.impact-card {
+  flex: 1;
+  background: var(--text-dark);
+  border-radius: 12px;
+  padding: 40px 36px;
+}
+
+.impact-card .impact-number {
+  font-family: var(--font-primary);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 200;
+  color: var(--orange);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.impact-card .impact-label {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.6;
+}
+
+/* ============ QUOTE ============ */
+.case-quote {
+  margin: 56px 0;
+  padding: 40px 0 40px 32px;
+  border-left: 3px solid var(--orange);
+  max-width: 700px;
+}
+
+.case-quote p {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--text-dark);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.case-quote cite {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-style: normal;
+  margin-top: 16px;
+}
+
+/* ============ RESEARCH THEMES ============ */
+.research-themes {
+  margin: 48px 0;
+}
+
+.research-theme {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--divider);
+}
+
+.research-theme:first-child {
+  border-top: 1px solid var(--divider);
+}
+
+.research-theme h4 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+}
+
+.research-theme p {
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--text-light);
+  max-width: 680px;
+}
+
+/* ============ OBJECTIVES ============ */
+.objectives-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin: 40px 0;
+}
+
+.objective-card {
+  background: var(--bg-warm);
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  padding: 32px 28px;
+}
+
+.objective-number {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--orange);
+  margin-bottom: 16px;
+}
+
+.objective-card h4 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+}
+
+.objective-card p {
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-light);
+}
+
+/* ============ SYSTEM FLOW ============ */
+.system-steps {
+  margin: 48px 0;
+  counter-reset: step;
+}
+
+.system-step {
+  display: flex;
+  gap: 32px;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--divider);
+  align-items: flex-start;
+}
+
+.system-step:first-child {
+  border-top: 1px solid var(--divider);
+}
+
+.step-number {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--orange);
+  flex-shrink: 0;
+  width: 32px;
+  padding-top: 2px;
+}
+
+.system-step p {
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--text-light);
+}
+
+.system-step strong {
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+/* ============ TESTING GRID ============ */
+.testing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin: 40px 0;
+}
+
+.testing-col h4 {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.testing-item {
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-light);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--divider);
+}
+
+/* ============ SUCCESS METRICS ============ */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin: 40px 0;
+}
+
+.metric-card {
+  background: var(--text-dark);
+  border-radius: 12px;
+  padding: 36px 28px;
+}
+
+.metric-card h4 {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+}
+
+.metric-card p {
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.6);
+}
+
+/* ============ FOOTER ============ */
+.footer {
+  background: var(--text-dark);
+  color: rgba(255,255,255,0.5);
+  padding: 80px 48px 40px;
+}
+
+.footer-top {
+  max-width: 1100px;
+  margin: 0 auto 64px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 48px;
+}
+
+.footer-tagline {
+  font-family: var(--font-primary);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+}
+
+.footer-col h4 {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 16px;
+}
+
+.footer-col p, .footer-col a {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.8;
+  transition: color 0.3s;
+}
+
+.footer-col a:hover { color: rgba(255,255,255,0.9); }
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 300;
+}
+
+/* ============ ANIMATIONS ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============ MOBILE MENU ============ */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.mobile-menu-toggle span {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: var(--text-dark);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.mobile-menu-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.mobile-menu-toggle.open span:nth-child(2) { opacity: 0; }
+.mobile-menu-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg-cream);
+  z-index: 99;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-nav-overlay.open {
+  display: flex;
+  opacity: 1;
+}
+
+.mobile-nav-overlay a {
+  font-family: var(--font-primary);
+  font-size: 1.8rem;
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.mobile-nav-overlay a:hover { color: var(--orange); }
+
+.mobile-nav-overlay .mobile-connect-links {
+  display: flex;
+  gap: 24px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--divider);
+}
+
+.mobile-nav-overlay .mobile-connect-links a {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1000px) {
+  .breakdown-grid { grid-template-columns: 1fr; }
+  .objectives-grid { grid-template-columns: 1fr; }
+  .testing-grid { grid-template-columns: 1fr; }
+  .metrics-grid { grid-template-columns: 1fr; }
+  .case-image-grid { grid-template-columns: 1fr; }
+  .impact-row { flex-direction: column; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 16px 24px; }
+  .nav.scrolled { padding: 12px 24px; }
+  .nav-right { display: none; }
+  .mobile-menu-toggle { display: flex; }
+  .case-hero { padding: 0 24px 48px; min-height: 70vh; }
+  .case-content { padding: 0 24px; }
+  .case-meta { gap: 24px; }
+  .back-link { left: 24px; top: 80px; }
+  .footer { padding: 56px 24px 32px; }
+  .footer-bottom { flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ======== NAV ======== -->
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav-logo">Emma Moystner</a>
+  <div class="nav-right">
+    <a href="work.html">Work</a>
+    <a href="playground.html">Playground</a>
+    <a href="about.html">About</a>
+    <a href="Resume.EmmaMoystner.pdf" target="_blank">Resume</a>
+    <div class="nav-connect-wrap">
+      <a href="#" class="nav-cta" onclick="toggleConnectDropdown(event)">Connect</a>
+      <div class="connect-dropdown" id="connect-dropdown">
+        <a href="mailto:emmamoystner.design@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
+          Email me
+        </a>
+        <div class="connect-dropdown-divider"></div>
+        <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+  <button class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-nav-overlay" id="mobile-nav-overlay">
+  <a href="index.html">Home</a>
+  <a href="work.html">Work</a>
+  <a href="playground.html">Playground</a>
+  <a href="about.html">About</a>
+  <div class="mobile-connect-links">
+    <a href="mailto:emmamoystner.design@gmail.com">Email</a>
+    <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
+  </div>
+</div>
+
+<!-- ======== BACK LINK ======== -->
+<a href="work.html" class="back-link">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  All Work
+</a>
+
+<!-- ======== HERO ======== -->
+<section class="case-hero">
+  <div class="case-hero-tag">Healthcare &middot; Systems Design &middot; EPD Collaboration</div>
+  <h1 class="case-hero-title">Solace Health</h1>
+  <p class="case-hero-subtitle">Designing the collaboration system, not just the interface</p>
+  <div class="case-meta">
+    <div class="case-meta-item">
+      <span class="case-meta-label">Role</span>
+      <span class="case-meta-value">Framework Design Lead</span>
+    </div>
+    <div class="case-meta-item">
+      <span class="case-meta-label">Team</span>
+      <span class="case-meta-value">Emma Moystner, Christina Lee,<br>Roxanna Jackson, Shruti Amritkar</span>
+    </div>
+    <div class="case-meta-item">
+      <span class="case-meta-label">Duration</span>
+      <span class="case-meta-value">One Term &mdash; Spring 2026</span>
+    </div>
+    <div class="case-meta-item">
+      <span class="case-meta-label">Course</span>
+      <span class="case-meta-value">GIXD 609 &middot; People, Processes, Leadership</span>
+    </div>
+  </div>
+</section>
+
+<!-- ======== OVERVIEW ======== -->
+<div class="case-content">
+  <section class="case-section reveal">
+    <div class="section-label">Overview</div>
+    <h2 class="section-heading">A women's healthcare startup scaling fast, breaking faster.</h2>
+    <p class="section-text">Solace Health is a women's healthcare startup expanding from Austin across five cities. Growth exposed a structural problem: Austin's core team was making product decisions in isolation, causing sprint rework, delayed launches, and local teams building someone else's product.</p>
+    <p class="section-text">Our team of four designed new collaboration workflows, rituals, and tooling for Solace Health's EPD teams. <strong>I led the framework design</strong> &mdash; the structural layer that makes misalignment visible before it compounds.</p>
+  </section>
+
+  <!-- ======== THE PROBLEM ======== -->
+  <section class="case-section reveal">
+    <div class="section-label">The Problem</div>
+    <h2 class="section-heading">Three breakdowns, compounding into millions in waste.</h2>
+
+    <div class="breakdown-grid">
+      <div class="breakdown-card">
+        <div class="breakdown-card-role">PM</div>
+        <h4>Drafts in isolation</h4>
+        <p>Daniel, the Austin PM, creates roadmaps and requirements without cross-city input. By the time local teams see them, the assumptions are baked in.</p>
+      </div>
+      <div class="breakdown-card">
+        <div class="breakdown-card-role">Engineering</div>
+        <h4>Hits blockers mid-sprint</h4>
+        <p>Maria discovers architectural conflicts &mdash; like an EHR integration that doesn't work in a new city's regulatory context &mdash; triggering weeks of rework.</p>
+      </div>
+      <div class="breakdown-card">
+        <div class="breakdown-card-role">Design</div>
+        <h4>Discovers requirements too late</h4>
+        <p>Teri finds city-specific clinical and demographic requirements after designs are already approved, forcing redesigns from near-final work.</p>
+      </div>
+    </div>
+
+    <div class="case-image">
+      <img src="images/solace/problem-timeline.png" alt="Problem diagnosis timeline showing rework delays across the launch cycle">
+      <div class="case-image-caption">Launch cycle timeline showing where misalignment creates rework, idle time, and delays</div>
+    </div>
+
+    <div class="impact-row">
+      <div class="impact-card">
+        <div class="impact-number">6&ndash;8 months</div>
+        <div class="impact-label">Launch delays per city &mdash; 46&ndash;56 weeks total lead time across city launches</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-number">$1&ndash;1.5M</div>
+        <div class="impact-label">Wasted labor &amp; growing &mdash; 31&ndash;41 weeks of rework and idle time, before deferred revenue</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== RESEARCH ======== -->
+  <section class="case-section reveal">
+    <div class="section-label">Research</div>
+    <h2 class="section-heading">13 EPD professionals. The same problems everywhere.</h2>
+    <p class="section-text">We interviewed engineers, PMs, and designers across Meta, Netflix, TikTok, Indeed, Walmart, and SAP. Three patterns dominated:</p>
+
+    <div class="research-themes">
+      <div class="research-theme reveal">
+        <h4>Alignment is the unlock &mdash; but it's never handed to you.</h4>
+        <p>Surfacing assumptions early was the single biggest factor in team success. But clarity is never spoon-fed &mdash; alignment has to be forged collectively.</p>
+      </div>
+      <div class="research-theme reveal">
+        <h4>Drowning in communication, starving for context.</h4>
+        <p>Teams were buried in Slack, email, and meetings while still lacking visibility into what other disciplines were actually doing. Information overload, zero shared context.</p>
+      </div>
+      <div class="research-theme reveal">
+        <h4>The tools aren't the problem &mdash; the gaps between them are.</h4>
+        <p>No tool bridged the space between disciplines. No shared source of truth evolved with the project. Teams relied on meetings and tribal knowledge that broke down at scale.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== OBJECTIVES ======== -->
+  <section class="case-section reveal">
+    <div class="section-label">Objectives</div>
+    <h2 class="section-heading">What success looks like.</h2>
+
+    <div class="objectives-grid">
+      <div class="objective-card">
+        <div class="objective-number">01</div>
+        <h4>Protect sprint efficiency</h4>
+        <p>Tooling that maintains velocity across simultaneous city launches &mdash; less rework with every launch.</p>
+      </div>
+      <div class="objective-card">
+        <div class="objective-number">02</div>
+        <h4>Eliminate decision ambiguity</h4>
+        <p>Frameworks that make it clear who owns what, and what's been decided &mdash; no surprises that send teams back to square one.</p>
+      </div>
+      <div class="objective-card">
+        <div class="objective-number">03</div>
+        <h4>Scale institutional knowledge</h4>
+        <p>Every city learns from the last, not just the first. Knowledge accumulates rather than evaporating.</p>
+      </div>
+      <div class="objective-card">
+        <div class="objective-number">04</div>
+        <h4>Build two-way decision culture</h4>
+        <p>Local teams flag issues early and shape the decisions that affect them &mdash; co-authors, not executors.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== THE DESIGN: RITUAL ======== -->
+  <section class="case-section reveal">
+    <div class="section-label">The Ritual</div>
+    <h2 class="section-heading">Pre-Kickoff Alignment Call &amp; City Pulse Check</h2>
+    <p class="section-text">A structured 60-minute call before every city launch. The design move: <strong>the local PM presents first.</strong> Austin listens before it leads. This isn't just polite &mdash; it's psychological safety by design. Each call ends with one named decision, documented and witnessed by the full room.</p>
+    <p class="section-text">Between calls, a weekly async <strong>City Pulse Check</strong> keeps alignment alive. Every city team reports what's in progress, blocked, or needs escalation. By Friday, the Austin PM has a full picture without chasing anyone down.</p>
+  </section>
+
+  <!-- ======== THE DESIGN: FRAMEWORK ======== -->
+  <section class="case-section reveal">
+    <div class="section-label">The Framework</div>
+    <h2 class="section-heading">Launch Readiness Canvas &amp; Decision Context Log</h2>
+    <p class="section-text">The <strong>Launch Readiness Canvas</strong> gets filled out during weekly calls. Every section has a named owner. The <strong>Decision Context Log</strong> persists across launches &mdash; the next city inherits it, required reading before any new PRD. Institutional knowledge scales through a living artifact tied to real decisions, not tribal knowledge.</p>
+
+    <div class="case-image-grid">
+      <div class="case-image">
+        <img src="images/solace/framework-canvas-detail.png" alt="Launch Readiness Canvas showing Decision Readiness and Credibility layers">
+        <div class="case-image-caption">Launch Readiness Canvas &mdash; Speed Layer: Decision Readiness</div>
+      </div>
+      <div class="case-image">
+        <img src="images/solace/launch-readiness-canvas.png" alt="Launch Readiness Canvas in the Sprint Ticket Panel knowledge hub">
+        <div class="case-image-caption">Decision Context Log &mdash; searchable knowledge hub</div>
+      </div>
+    </div>
+
+    <div class="case-image">
+      <img src="images/solace/raci-matrix.png" alt="RACI matrix showing role ownership across key activities from Pre-KO through Launch">
+      <div class="case-image-caption">RACI matrix &mdash; clear ownership across key activities from discovery through launch</div>
+    </div>
+  </section>
+
+  <!-- ======== THE DESIGN: TOOL ======== -->
+  <section class="case-section reveal">
+    <div class="section-label">The Tool</div>
+    <h2 class="section-heading">Sprint Ticket Panel &mdash; bridging the gaps between tools</h2>
+    <p class="section-text">The disconnect between team members wasn't just happening within tools, but between them. Instead of building another standalone product, we designed a lightweight plugin &mdash; the <strong>Sprint Ticket Panel</strong> &mdash; that connects Jira, Slack, and Notion within teams' existing workflows.</p>
+
+    <div class="case-image">
+      <img src="images/solace/tool-v2-slack.png" alt="Sprint Ticket Panel integrated into Slack workspace showing City Pulse Check and channel tickets">
+      <div class="case-image-caption">Final design &mdash; Sprint Ticket Panel in Slack with City Pulse Check, channel tickets, and team status</div>
+    </div>
+
+    <div class="case-image-grid">
+      <div class="case-image">
+        <img src="images/solace/tool-v2-jira.png" alt="Sprint Ticket Panel side panel in Jira">
+        <div class="case-image-caption">Sprint Ticket Panel in Jira &mdash; sprint visibility and blockers</div>
+      </div>
+      <div class="case-image">
+        <img src="images/solace/tool-v2-ai-summary.png" alt="AI Health Summary providing sprint status and suggested actions">
+        <div class="case-image-caption">AI Health Summary &mdash; suggested actions, not automated decisions</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== HOW THE SYSTEM WORKS ======== -->
+  <section class="case-section reveal">
+    <div class="section-label">How the System Works</div>
+    <h2 class="section-heading">Catching misalignment before it compounds.</h2>
+    <p class="section-text">Teri, a designer on the Chicago expansion, catches an assumption that doesn't hold in this market. Under the old way, her flag gets buried. Here's what happens instead:</p>
+
+    <div class="system-steps">
+      <div class="system-step">
+        <span class="step-number">01</span>
+        <p><strong>Teri flags it right where she's working</strong> &mdash; no extra step, no chasing anyone down.</p>
+      </div>
+      <div class="system-step">
+        <span class="step-number">02</span>
+        <p><strong>Her flag surfaces in the weekly async.</strong> The right people see it. If it needs a decision, it routes to the alignment call.</p>
+      </div>
+      <div class="system-step">
+        <span class="step-number">03</span>
+        <p><strong>The decision lands in the Decision Context Log.</strong> It's documented, not lost. Teri can see what happened to her flag without asking.</p>
+      </div>
+      <div class="system-step">
+        <span class="step-number">04</span>
+        <p><strong>The log feeds the retro.</strong> The learnings shape the next cycle.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== TESTING ======== -->
+  <section class="case-section reveal">
+    <div class="section-label">Testing &amp; Iteration</div>
+    <h2 class="section-heading">Two rounds of usability testing. One clear lesson.</h2>
+
+    <div class="testing-grid">
+      <div class="testing-col">
+        <h4>Round 1 &mdash; Findings</h4>
+        <div class="testing-item">Isolated signal labels didn't communicate meaning clearly</div>
+        <div class="testing-item">AI recommendations felt coercive and forced</div>
+        <div class="testing-item">Time zone and availability issues not considered in scheduling</div>
+        <div class="testing-item">Auto-scheduling was universally rejected</div>
+      </div>
+      <div class="testing-col">
+        <h4>Round 2 &mdash; Refinements</h4>
+        <div class="testing-item">Moved AI Health Summary into the Sprint Ticket Panel</div>
+        <div class="testing-item">Two recommendation options instead of one &mdash; giving users agency</div>
+        <div class="testing-item">Consolidated interface, removed unnecessary elements</div>
+        <div class="testing-item">Added dark mode support</div>
+      </div>
+    </div>
+
+    <div class="case-image-grid">
+      <div class="case-image">
+        <img src="images/solace/tool-v1-slack.png" alt="V1 Sprint Ticket Panel in Slack - initial designs">
+        <div class="case-image-caption">V1 &mdash; Initial Sprint Ticket Panel design in Slack</div>
+      </div>
+      <div class="case-image">
+        <img src="images/solace/tool-v2-slack.png" alt="V2 Sprint Ticket Panel in Slack - refined after testing">
+        <div class="case-image-caption">V2 &mdash; Refined after usability testing</div>
+      </div>
+    </div>
+
+    <div class="case-quote reveal">
+      <p>People didn't reject AI assistance. They rejected AI that didn't give them a reason to trust it. The system needs to support decisions, not make them. Agency isn't a feature; it's the prerequisite.</p>
+    </div>
+  </section>
+
+  <!-- ======== MEASURING SUCCESS ======== -->
+  <section class="case-section reveal">
+    <div class="section-label">Measuring Success</div>
+    <h2 class="section-heading">Speed, credibility, belonging.</h2>
+
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <h4>Speed</h4>
+        <p>Are teams maintaining momentum while reducing costs as new cities scale? Fewer sprint disruptions, shorter rework cycles, faster time-to-launch.</p>
+      </div>
+      <div class="metric-card">
+        <h4>Credibility</h4>
+        <p>Are decisions documented with owners and context? Is product knowledge accumulating rather than evaporating? Institutional memory as competitive advantage.</p>
+      </div>
+      <div class="metric-card">
+        <h4>Belonging</h4>
+        <p>Are local teams saying "we" instead of "they"? Are they shaping decisions, not just executing them? The hardest to measure and the most important.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== REFLECTION ======== -->
+  <section class="case-section reveal">
+    <div class="section-label">Reflection</div>
+    <h2 class="section-heading">Psychological safety is designable.</h2>
+    <p class="section-text">Working at the systems level meant designing rituals, decision flows, and knowledge structures instead of screens. The core insight: <strong>psychological safety isn't just a value to aspire to &mdash; it's designable.</strong> Who speaks first, who owns what, where knowledge lives &mdash; these determine whether the product succeeds more than any interface decision.</p>
+    <p class="section-text">The usability testing reinforced this: people didn't reject AI assistance, they rejected AI that decided for them. <strong>You can design the conditions for trust, but you can't automate trust itself.</strong></p>
+  </section>
+</div>
+
+<!-- ======== FOOTER ======== -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-tagline">Craft in service of systems. Systems in service of humans.</div>
+    <div class="footer-col">
+      <h4>Program</h4>
+      <p>ArtCenter College of Design</p>
+      <p>Graduate IxD, 2026</p>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <a href="mailto:emmamoystner.design@gmail.com">emmamoystner.design@gmail.com</a>
+      <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Emma Moystner</span>
+    <span>Solace Health Case Study</span>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.05 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Connect dropdown
+function toggleConnectDropdown(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  document.getElementById('connect-dropdown').classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.nav-connect-wrap')) {
+    document.getElementById('connect-dropdown').classList.remove('open');
+  }
+});
+
+function toggleMobileMenu() {
+  const btn = document.getElementById('mobile-menu-toggle');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  btn.classList.toggle('open');
+  overlay.classList.toggle('open');
+  document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
+}
+</script>
+
+</body>
+</html>
