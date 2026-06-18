@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Lost the trail · Emma Moystner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+@font-face {
+  font-family: 'Lennon';
+  src: url('TAYLennonRegular.otf') format('opentype');
+  font-display: swap;
+}
+:root {
+  --peach: #FFD5BB;
+  --pink: #FFBAEC;
+  --orange: #E15304;
+  --lavender: #9DA5C5;
+  --burgundy: #410016;
+  --olive: #775D0F;
+  --bg-cream: #FAF8F5;
+  --bg-warm: #FFF5EE;
+  --text-dark: #2C2B28;
+  --text-light: #6B6862;
+  --text-muted: #A8A49C;
+  --white: #FFFFFF;
+  --divider: rgba(44, 43, 40, 0.1);
+  --font-primary: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-serif: 'DM Serif Display', serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  background: var(--bg-cream);
+  color: var(--text-dark);
+  font-family: var(--font-primary);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+a { color: inherit; text-decoration: none; }
+
+/* ---------- NAV ---------- */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 40px;
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.nav-logo { font-family: var(--font-primary); font-weight: 500; font-size: 17px; color: var(--text-dark); letter-spacing: -0.01em; }
+.nav-right { display: flex; align-items: center; gap: 28px; }
+.nav-right a:not(.nav-cta) { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); transition: color 0.2s; }
+.nav-right a:not(.nav-cta):hover { color: var(--text-dark); }
+.nav-cta {
+  background: var(--orange); color: var(--white) !important;
+  font-family: var(--font-mono); font-size: 13px;
+  padding: 9px 18px; border-radius: 999px; transition: background 0.3s;
+}
+.nav-cta:hover { background: #c94800; }
+
+/* ---------- STAGE ---------- */
+.stage {
+  position: relative;
+  height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 0 24px;
+  cursor: default;
+  user-select: none;
+}
+.eyebrow {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--orange);
+  margin-bottom: 8px;
+}
+
+/* the big draggable 404 */
+.numbers {
+  position: relative;
+  height: clamp(160px, 32vh, 320px);
+  width: 100%;
+  max-width: 720px;
+  margin: 4px auto 12px;
+}
+.glyph {
+  position: absolute;
+  top: 50%; left: 50%;
+  font-family: var(--font-serif);
+  font-size: clamp(120px, 26vw, 280px);
+  line-height: 1;
+  color: var(--text-dark);
+  cursor: grab;
+  will-change: transform;
+  transform: translate(-50%, -50%);
+}
+.glyph.zero { color: var(--orange); }
+.glyph.dragging { cursor: grabbing; }
+
+.headline {
+  font-family: var(--font-serif);
+  font-size: clamp(26px, 4.4vw, 42px);
+  line-height: 1.12; letter-spacing: -0.01em;
+  max-width: 620px; margin: 8px auto 0;
+}
+.headline .accent { color: var(--orange); }
+.subtext {
+  font-family: var(--font-primary); font-weight: 300;
+  font-size: clamp(15px, 1.6vw, 17px); color: var(--text-light);
+  max-width: 440px; margin: 16px auto 28px; line-height: 1.55;
+}
+.actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.btn {
+  font-family: var(--font-mono); font-size: 13px;
+  padding: 12px 22px; border-radius: 999px; transition: all 0.25s;
+}
+.btn.primary { background: var(--orange); color: var(--white); }
+.btn.primary:hover { background: #c94800; transform: translateY(-1px); }
+.btn.ghost { border: 1px solid rgba(44,43,40,0.2); color: var(--text-dark); }
+.btn.ghost:hover { background: rgba(44,43,40,0.05); }
+
+.hint {
+  position: fixed; bottom: 26px; left: 0; right: 0;
+  text-align: center;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em;
+  color: var(--text-muted);
+  transition: opacity 0.6s;
+}
+.hint.faded { opacity: 0; }
+
+@media (max-width: 600px) {
+  .nav { padding: 18px 22px; }
+  .nav-right { gap: 16px; }
+  .numbers { height: clamp(120px, 24vh, 200px); }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">Emma Moystner</a>
+  <div class="nav-right">
+    <a href="index.html">Work</a>
+    <a href="index.html">About</a>
+    <a href="index.html" class="nav-cta">Back home</a>
+  </div>
+</nav>
+
+<main class="stage" id="stage">
+  <p class="eyebrow">Error 404 · Page not found</p>
+
+  <div class="numbers" id="numbers">
+    <span class="glyph" data-x="-200">4</span>
+    <span class="glyph zero" data-x="0">0</span>
+    <span class="glyph" data-x="200">4</span>
+  </div>
+
+  <h1 class="headline">Looks like you took a <span class="accent">wrong turn.</span></h1>
+  <p class="subtext">This page wandered off chasing the next adventure. The rest of the work is still right where you left it.</p>
+
+  <div class="actions">
+    <a href="index.html" class="btn primary">Take me home</a>
+    <a href="index.html" class="btn ghost">See the work</a>
+  </div>
+</main>
+
+<p class="hint" id="hint">psst — grab the numbers and give them a toss</p>
+
+<script>
+(function () {
+  const stage = document.getElementById('numbers');
+  const glyphs = Array.from(document.querySelectorAll('.glyph'));
+  const hint = document.getElementById('hint');
+
+  // each glyph: home offset (hx), current offset (x,y), velocity (vx,vy)
+  const items = glyphs.map(el => {
+    const hx = parseFloat(el.dataset.x);
+    return { el, hx, hy: 0, x: hx, y: 0, vx: 0, vy: 0, dragging: false };
+  });
+
+  const SPRING = 0.045;   // pull back to home
+  const DAMP = 0.86;      // velocity damping
+  const MAG = 0.9;        // cursor magnetism strength
+  const MAG_RADIUS = 220; // px
+
+  let mouse = { x: null, y: null, active: false };
+  let dragItem = null, dragOffX = 0, dragOffY = 0, lastPX = 0, lastPY = 0;
+  let interacted = false;
+
+  function rectCenter() {
+    const r = stage.getBoundingClientRect();
+    return { cx: r.left + r.width / 2, cy: r.top + r.height / 2 };
+  }
+
+  // ---- pointer drag ----
+  glyphs.forEach((el, i) => {
+    el.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      dragItem = items[i];
+      dragItem.dragging = true;
+      el.classList.add('dragging');
+      el.setPointerCapture(e.pointerId);
+      lastPX = e.clientX; lastPY = e.clientY;
+      markInteracted();
+    });
+  });
+
+  window.addEventListener('pointermove', e => {
+    mouse.x = e.clientX; mouse.y = e.clientY; mouse.active = true;
+    if (dragItem) {
+      const dx = e.clientX - lastPX, dy = e.clientY - lastPY;
+      dragItem.x += dx; dragItem.y += dy;
+      dragItem.vx = dx; dragItem.vy = dy;
+      lastPX = e.clientX; lastPY = e.clientY;
+    }
+  });
+
+  window.addEventListener('pointerup', () => {
+    if (dragItem) {
+      dragItem.dragging = false;
+      dragItem.el.classList.remove('dragging');
+      dragItem = null;
+    }
+  });
+
+  stage.parentElement.addEventListener('pointerleave', () => { mouse.active = false; });
+  window.addEventListener('blur', () => { mouse.active = false; });
+
+  function markInteracted() {
+    if (!interacted) { interacted = true; hint.classList.add('faded'); }
+  }
+  // auto-fade hint after a while
+  setTimeout(() => hint.classList.add('faded'), 7000);
+
+  function tick() {
+    const { cx, cy } = rectCenter();
+    for (const it of items) {
+      if (it.dragging) {
+        // velocity already applied via pointermove
+      } else {
+        // spring toward home
+        it.vx += (it.hx - it.x) * SPRING;
+        it.vy += (it.hy - it.y) * SPRING;
+
+        // gentle cursor magnetism (repel) when idle near home
+        if (mouse.active && mouse.x !== null) {
+          const gx = cx + it.x, gy = cy + it.y;
+          const dx = gx - mouse.x, dy = gy - mouse.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < MAG_RADIUS && dist > 0.1) {
+            const force = (1 - dist / MAG_RADIUS) * MAG;
+            it.vx += (dx / dist) * force;
+            it.vy += (dy / dist) * force;
+          }
+        }
+        it.vx *= DAMP; it.vy *= DAMP;
+        it.x += it.vx; it.y += it.vy;
+      }
+      it.el.style.transform =
+        `translate(calc(-50% + ${it.x}px), calc(-50% + ${it.y}px)) rotate(${it.vx * 0.4}deg)`;
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
