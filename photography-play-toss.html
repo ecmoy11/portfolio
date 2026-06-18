@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photography Play — loose toss</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --d-ink:#f4f4f5;--d-muted:#8a8a92;--mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;min-height:100vh;background:#ececed;color:#1a1a1c;
+    font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+    display:flex;flex-direction:column;
+  }
+  .bar{padding:18px 26px;border-bottom:1px solid #e2e2e4;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .bar h1{font-size:14px;font-weight:600;margin:0}
+  .bar .meta{font-family:var(--mono);font-size:11px;color:#8a8a90}
+  .bar .controls{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .bar button{
+    font-family:var(--mono);font-size:11px;border:1px solid #cfcfd3;background:#fff;color:#1a1a1c;
+    padding:7px 12px;border-radius:7px;cursor:pointer;
+  }
+  .bar button:hover{background:#f3f3f5}
+  .bar label{font-family:var(--mono);font-size:11px;color:#55555c;display:flex;align-items:center;gap:6px}
+
+  .stage{
+    flex:1;position:relative;overflow:hidden;cursor:pointer;
+    background:radial-gradient(130% 120% at 50% 4%, #18181d 0%, #0a0a0c 65%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .deck{position:relative;width:1px;height:240px;display:flex;align-items:center;justify-content:center}
+  .ph{
+    position:absolute;width:170px;height:215px;border-radius:9px;overflow:hidden;
+    border:4px solid #fafafa;background:#222 center/cover;
+    box-shadow:0 22px 46px rgba(0,0,0,.6);
+    transition:transform .65s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
+    will-change:transform;
+  }
+  .ph img{width:100%;height:100%;object-fit:cover;display:block}
+  /* the PILL — always pinned above the photos (z-index beats every card) */
+  .caption{text-align:center;position:relative;z-index:999;pointer-events:none;transition:transform .5s ease}
+  .pill{
+    display:inline-flex;flex-direction:column;align-items:center;gap:8px;
+    padding:18px 30px;border-radius:999px;
+    background:rgba(10,10,12,.55);backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.14);
+    box-shadow:0 8px 40px rgba(0,0,0,.5);
+  }
+  .pill .ttl{
+    font-family:'Fraunces',serif;font-weight:500;font-size:40px;color:var(--d-ink);
+    letter-spacing:-.015em;line-height:1;
+  }
+  .pill .sub{
+    font-family:var(--mono);font-size:10px;color:var(--d-muted);letter-spacing:.24em;
+    text-transform:uppercase;
+  }
+  .hint{
+    position:absolute;bottom:18px;left:0;right:0;text-align:center;
+    font-family:var(--mono);font-size:10px;color:#52525a;letter-spacing:.14em;text-transform:uppercase;
+    opacity:.8;pointer-events:none;transition:opacity .3s;
+  }
+  .stage.open .hint{opacity:0}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <h1>Photography Play — loose toss (7 photos)</h1>
+    <span class="meta">hover the section · prints scatter, some fly off-frame</span>
+    <div class="controls">
+      <label><input type="checkbox" id="messy" checked> extra messy</label>
+      <button id="retoss">↻ re-toss</button>
+      <button id="shuffle">↻ new photos</button>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="deck" id="deck"></div>
+    <div class="caption">
+      <div class="pill">
+        <div class="ttl">Photography Play</div>
+        <div class="sub">enter the gallery</div>
+      </div>
+    </div>
+    <div class="hint">hover to spill</div>
+  </div>
+
+<script>
+  const N=7;
+  const deck=document.getElementById('deck');
+  const stage=document.getElementById('stage');
+  const fallbacks=['#3b5b6e','#6e5b3b','#5b3b6e','#3b6e54','#6e3b4a','#46466e','#6e6446'];
+  const cards=[];
+  let scatter=[];
+
+  const seed=()=>Math.floor(Math.random()*100000);
+  const rand=(a,b)=>a+Math.random()*(b-a);
+
+  function build(){
+    deck.innerHTML='';cards.length=0;
+    for(let i=0;i<N;i++){
+      const el=document.createElement('div');
+      el.className='ph';el.style.background=fallbacks[i%fallbacks.length];
+      const img=document.createElement('img');
+      img.loading='lazy';img.src=`https://picsum.photos/seed/${seed()}/340/430`;
+      img.onerror=()=>img.style.display='none';
+      el.appendChild(img);deck.appendChild(el);cards.push(el);
+    }
+    genScatter();layoutClosed();
+  }
+
+  // each card gets a random toss target. a couple are pushed far enough to clip off-frame.
+  function genScatter(){
+    const messy=document.getElementById('messy').checked;
+    const reach=messy?1:0.72;
+    scatter=[];
+    for(let i=0;i<N;i++){
+      scatter.push({
+        x:rand(-360,360)*reach,
+        y:rand(-150,150)*reach,
+        r:rand(-26,26)*(messy?1:.7)
+      });
+    }
+    // guarantee at least two genuinely off-frame
+    scatter[0].x=rand(380,520)*(messy?1:.8); scatter[0].y=rand(-120,40);
+    scatter[N-1].x=-rand(380,520)*(messy?1:.8); scatter[N-1].y=rand(-40,120);
+    // clear a lane around the pill: nudge any card sitting dead-center outward
+    const clearX=200, clearY=110;
+    scatter.forEach(s=>{
+      if(Math.abs(s.x)<clearX && Math.abs(s.y)<clearY){
+        s.x += (s.x>=0?1:-1)*(clearX-Math.abs(s.x)+rand(20,80));
+        s.y += (s.y>=0?1:-1)*(clearY-Math.abs(s.y)+rand(10,40));
+      }
+    });
+  }
+
+  function layoutClosed(){
+    cards.forEach((c,i)=>{
+      const d=i-(N-1)/2;
+      c.style.transform=`translate(${d*5}px,0) rotate(${d*2.5}deg)`;
+      c.style.zIndex=20-Math.abs(d);
+      c.style.boxShadow='0 22px 46px rgba(0,0,0,.6)';
+    });
+  }
+  function layoutOpen(){
+    cards.forEach((c,i)=>{
+      const s=scatter[i];
+      c.style.transform=`translate(${s.x}px,${s.y}px) rotate(${s.r}deg)`;
+      c.style.zIndex=20+i;
+      c.style.boxShadow='0 30px 64px rgba(0,0,0,.5)';
+    });
+  }
+
+  stage.addEventListener('mouseenter',()=>{stage.classList.add('open');layoutOpen();});
+  stage.addEventListener('mouseleave',()=>{stage.classList.remove('open');layoutClosed();});
+  stage.addEventListener('click',()=>{
+    const t=stage.querySelector('.ttl');
+    t.style.transition='transform .2s ease';t.style.transform='scale(1.05)';
+    setTimeout(()=>t.style.transform='',200);
+  });
+
+  document.getElementById('retoss').addEventListener('click',e=>{
+    e.stopPropagation();genScatter();
+    if(stage.classList.contains('open'))layoutOpen();
+  });
+  document.getElementById('shuffle').addEventListener('click',e=>{e.stopPropagation();build();layoutOpen();});
+  document.getElementById('messy').addEventListener('change',()=>{
+    genScatter();if(stage.classList.contains('open'))layoutOpen();
+  });
+
+  build();
+</script>
+</body>
+</html>

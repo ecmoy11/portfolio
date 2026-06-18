@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photography tile — preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --font-primary:'Inter',sans-serif;--font-mono:'JetBrains Mono',monospace;
+    --text-dark:#2C2B28;--bg-cream:#FAF8F5;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg-cream);font-family:var(--font-primary);min-height:100vh;
+       display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:40px}
+  .hint{font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#A8A49C}
+  .wrap{width:460px;max-width:90vw}
+
+  /* --- identical to the styles added in index.html --- */
+  .playground-card{position:relative;overflow:hidden;border-radius:4px;cursor:pointer;background:#f0efec}
+  .playground-card-info{position:absolute;left:14px;right:14px;bottom:14px;z-index:2;display:flex;
+    flex-wrap:wrap;gap:8px;align-items:center;pointer-events:none;opacity:0;transform:translateY(6px);
+    transition:opacity .35s ease,transform .45s cubic-bezier(.22,1,.36,1)}
+  .playground-card:hover .playground-card-info{opacity:1;transform:translateY(0)}
+  .playground-card-title,.playground-card-tag{background:rgba(255,255,255,.85);
+    -webkit-backdrop-filter:blur(14px) saturate(150%);backdrop-filter:blur(14px) saturate(150%);
+    border:1px solid rgba(255,255,255,.6);box-shadow:0 2px 12px rgba(0,0,0,.16)}
+  .playground-card-title{padding:7px 13px;border-radius:12px;font-size:.82rem;color:var(--text-dark)}
+  .playground-card-tag{padding:5px 11px;border-radius:10px;font-family:var(--font-mono);font-size:.5rem;
+    letter-spacing:.12em;text-transform:uppercase;color:#5F594F}
+
+  .photo-toss-card .photo-stage{position:relative;width:100%;aspect-ratio:3/2;overflow:hidden;
+    background:linear-gradient(155deg,#F4EDE5 0%,#E9DDD0 100%);isolation:isolate}
+  .photo-toss-card .photo-deck{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .photo-toss-card .photo-print{position:absolute;width:46%;aspect-ratio:3/2;object-fit:cover;padding:5px;
+    background:#fff;border-radius:3px;box-shadow:0 8px 22px rgba(44,43,40,.28);
+    transform:rotate(var(--rest,0deg));
+    transition:transform .6s cubic-bezier(.2,.8,.25,1),box-shadow .4s ease;will-change:transform}
+  .photo-toss-card .photo-print.portrait{width:33%;aspect-ratio:2/3}
+  .photo-toss-card:hover .photo-print{transform:translate(var(--tx,0px),var(--ty,0px)) rotate(var(--rot,0deg));
+    box-shadow:0 16px 34px rgba(44,43,40,.34)}
+  .photo-toss-card .playground-card-info{z-index:5}
+</style>
+</head>
+<body>
+  <div class="hint">hover the tile</div>
+  <div class="wrap">
+    <div class="playground-card photo-toss-card">
+      <div class="photo-stage">
+        <div class="photo-deck">
+          <img class="photo-print" src="images/play/photography/thumbs/DSCF1290.jpg" alt="Photography">
+          <img class="photo-print portrait" src="images/play/photography/thumbs/DSCF1154.jpg" alt="Photography">
+          <img class="photo-print" src="images/play/photography/thumbs/DSCF2435.jpg" alt="Photography">
+          <img class="photo-print portrait" src="images/play/photography/thumbs/DSCF0105.jpg" alt="Photography">
+          <img class="photo-print" src="images/play/photography/thumbs/DSCF1046.jpg" alt="Photography">
+          <img class="photo-print portrait" src="images/play/photography/thumbs/DSCF2882.jpg" alt="Photography">
+          <img class="photo-print" src="images/play/photography/thumbs/DSCF2436.jpg" alt="Photography">
+        </div>
+      </div>
+      <div class="playground-card-info">
+        <span class="playground-card-title">Photography</span>
+        <span class="playground-card-tag">Stills</span>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const card=document.querySelector('.photo-toss-card');
+  const stage=card.querySelector('.photo-stage');
+  const prints=[...card.querySelectorAll('.photo-print')];
+  const rand=(a,b)=>a+Math.random()*(b-a), n=prints.length;
+  function layout(){
+    const W=stage.clientWidth||440,H=stage.clientHeight||293;
+    prints.forEach((p,i)=>{const d=i-(n-1)/2;
+      p.style.setProperty('--rest',(d*3).toFixed(2)+'deg');
+      p.style.setProperty('--tx',(rand(-.40,.40)*W).toFixed(1)+'px');
+      p.style.setProperty('--ty',(rand(-.34,.34)*H).toFixed(1)+'px');
+      p.style.setProperty('--rot',rand(-22,22).toFixed(1)+'deg');p.style.zIndex=i;});
+    prints[0].style.setProperty('--tx',(.54*W).toFixed(1)+'px');
+    prints[0].style.setProperty('--ty',(rand(-.22,.08)*H).toFixed(1)+'px');
+    prints[n-1].style.setProperty('--tx',(-.54*W).toFixed(1)+'px');
+    prints[n-1].style.setProperty('--ty',(rand(-.08,.22)*H).toFixed(1)+'px');
+  }
+  layout();addEventListener('resize',layout,{passive:true});
+  card.addEventListener('mouseleave',()=>setTimeout(layout,600));
+})();
+</script>
+</body>
+</html>

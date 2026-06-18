@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work — Emma Moystner</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --peach: #FFD5BB;
+  --pink: #FFBAEC;
+  --orange: #E15304;
+  --lavender: #9DA5C5;
+  --burgundy: #410016;
+  --olive: #775D0F;
+
+  --bg-cream: #FAF8F5;
+  --bg-warm: #F7F5F1;
+  --text-dark: #2C2B28;
+  --text-light: #6B6862;
+  --text-muted: #A8A49C;
+  --white: #FFFFFF;
+  --divider: rgba(44, 43, 40, 0.1);
+
+  --font-primary: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-serif: 'DM Serif Display', serif;
+}
+
+html {
+  background: var(--bg-cream);
+  color: var(--text-dark);
+  font-family: var(--font-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+body { overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+
+::selection {
+  background: var(--orange);
+  color: var(--white);
+}
+
+/* ============ NAV ============ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.5s ease, padding 0.4s ease, border-color 0.5s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.nav.scrolled {
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 16px 48px;
+  border-bottom-color: rgba(0,0,0,0.06);
+}
+
+.nav-logo {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-dark);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-right a {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.3s;
+  cursor: pointer;
+}
+
+.nav-right a:not(.nav-cta):hover { color: var(--text-dark); }
+.nav-right a.active { color: var(--text-dark); }
+
+.nav-cta {
+  background: var(--orange);
+  color: var(--white) !important;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: background 0.3s;
+  margin-left: 8px;
+}
+
+.nav-cta:hover { background: #c94800; }
+
+.nav-connect-wrap { position: relative; margin-left: 8px; }
+.connect-dropdown { position: absolute; top: calc(100% + 12px); right: 0; background: var(--white); border: 1px solid var(--divider); border-radius: 12px; padding: 8px; min-width: 200px; opacity: 0; transform: translateY(-8px); pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 12px 32px rgba(44,43,40,0.1); z-index: 101; }
+.connect-dropdown.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.connect-dropdown a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dark) !important; transition: background 0.2s; }
+.connect-dropdown a:hover { background: var(--bg-warm); }
+.connect-dropdown a svg { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.5; }
+.connect-dropdown a:hover svg { opacity: 1; }
+.connect-dropdown-divider { height: 1px; background: var(--divider); margin: 4px 8px; }
+
+/* ============ HERO ============ */
+.work-hero {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 48px 64px;
+  background: var(--bg-cream);
+}
+
+.work-hero-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+.work-hero-title {
+  font-family: var(--font-primary);
+  font-size: clamp(2.8rem, 7vw, 6rem);
+  font-weight: 200;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--text-dark);
+}
+
+.work-hero-count {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-bottom: 12px;
+  white-space: nowrap;
+}
+
+/* ============ FILTER BAR ============ */
+.filter-bar {
+  padding: 32px 48px;
+  border-top: 1px solid var(--divider);
+  border-bottom: 1px solid var(--divider);
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  display: inline-block;
+  padding: 8px 20px;
+  border: 1px solid var(--divider);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.3s;
+  background: transparent;
+}
+
+.filter-pill:hover {
+  border-color: var(--text-dark);
+  color: var(--text-dark);
+}
+
+.filter-pill.active {
+  background: var(--text-dark);
+  border-color: var(--text-dark);
+  color: var(--white);
+}
+
+/* ============ MASONRY GRID ============ */
+.work-grid {
+  padding: 48px;
+  columns: 2;
+  column-gap: 32px;
+}
+
+.work-tile {
+  break-inside: avoid;
+  margin-bottom: 32px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  background: var(--bg-warm);
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.work-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px rgba(44, 43, 40, 0.08);
+}
+
+/* Tile sizes for editorial variety */
+.work-tile.tall .tile-image { aspect-ratio: 3 / 4; }
+.work-tile.wide .tile-image { aspect-ratio: 16 / 9; }
+.work-tile.square .tile-image { aspect-ratio: 1 / 1; }
+.work-tile.editorial .tile-image { aspect-ratio: 4 / 5; }
+
+.tile-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg-warm);
+}
+
+.tile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.work-tile:hover .tile-image img {
+  transform: scale(1.03);
+}
+
+.tile-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* Phone ad tile */
+.tile-phone-ad {
+  background: var(--bg-warm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.tile-phone-trio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 100%;
+}
+
+.tile-phone-trio {
+  perspective: 800px;
+}
+
+.tile-phone-frame {
+  background: #000;
+  border-radius: 20px;
+  padding: 6px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.06);
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+  transform-style: preserve-3d;
+}
+
+.tile-phone-frame.center {
+  width: 35%;
+  z-index: 2;
+}
+
+.tile-phone-frame.side {
+  width: 26%;
+  opacity: 0.9;
+}
+
+.tile-phone-frame.side:first-child {
+  transform: rotateY(15deg);
+}
+
+.tile-phone-frame.side:last-child {
+  transform: rotateY(-15deg);
+}
+
+.tile-phone-frame img {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  display: block;
+}
+
+.work-tile:hover .tile-phone-frame.center {
+  transform: rotateY(-5deg) rotateX(3deg);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.06);
+}
+
+.work-tile:hover .tile-phone-frame.side:first-child {
+  transform: rotateY(25deg) translateZ(-10px);
+  box-shadow: 0 16px 44px rgba(0,0,0,0.2);
+}
+
+.work-tile:hover .tile-phone-frame.side:last-child {
+  transform: rotateY(-25deg) translateZ(-10px);
+  box-shadow: 0 16px 44px rgba(0,0,0,0.2);
+}
+
+/* Overlay on hover */
+.tile-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(44, 43, 40, 0.85) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  display: flex;
+  align-items: flex-end;
+  padding: 32px;
+}
+
+.work-tile:hover .tile-overlay {
+  opacity: 1;
+}
+
+.tile-overlay-text {
+  color: var(--white);
+}
+
+.tile-overlay-text .tile-overlay-domain {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.tile-overlay-text h3 {
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+
+/* Tile content (always visible) */
+.tile-content {
+  padding: 24px 28px 28px;
+}
+
+.tile-tag {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tile-tag::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--divider);
+}
+
+.tile-title {
+  font-family: var(--font-primary);
+  font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+  line-height: 1.2;
+  transition: color 0.3s;
+}
+
+.work-tile:hover .tile-title {
+  color: var(--orange);
+}
+
+.tile-desc {
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-light);
+}
+
+.tile-meta {
+  display: flex;
+  gap: 24px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--divider);
+}
+
+.tile-meta span {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ============ FEATURED TILE (full width) ============ */
+.work-featured {
+  padding: 0 48px;
+  margin-bottom: 32px;
+}
+
+.featured-tile {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  background: var(--bg-warm);
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.featured-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px rgba(44, 43, 40, 0.08);
+}
+
+.featured-image {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--bg-warm);
+}
+
+.featured-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.featured-tile:hover .featured-image img {
+  transform: scale(1.03);
+}
+
+.featured-content {
+  padding: 56px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.featured-tag {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 20px;
+}
+
+.featured-title {
+  font-family: var(--font-primary);
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+  line-height: 1.2;
+  margin-bottom: 20px;
+  transition: color 0.3s;
+}
+
+.featured-tile:hover .featured-title {
+  color: var(--orange);
+}
+
+.featured-desc {
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--text-light);
+  margin-bottom: 32px;
+}
+
+.featured-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.featured-cta-arrow {
+  width: 24px;
+  height: 1px;
+  background: var(--orange);
+  transition: width 0.3s;
+}
+
+.featured-tile:hover .featured-cta-arrow {
+  width: 40px;
+}
+
+/* ============ FOOTER ============ */
+.footer {
+  background: var(--text-dark);
+  color: rgba(255,255,255,0.5);
+  padding: 80px 48px 40px;
+}
+
+.footer-top {
+  max-width: 1100px;
+  margin: 0 auto 64px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 48px;
+}
+
+.footer-tagline {
+  font-family: var(--font-primary);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+}
+
+.footer-col h4 {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 16px;
+}
+
+.footer-col p, .footer-col a {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.8;
+  transition: color 0.3s;
+}
+
+.footer-col a:hover { color: rgba(255,255,255,0.9); }
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 300;
+}
+
+/* ============ ANIMATIONS ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger tiles */
+.work-tile, .featured-tile {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.4s ease;
+}
+
+.work-tile.visible, .featured-tile.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============ MOBILE MENU ============ */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.mobile-menu-toggle span {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: var(--text-dark);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.mobile-menu-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.mobile-menu-toggle.open span:nth-child(2) { opacity: 0; }
+.mobile-menu-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg-cream);
+  z-index: 99;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-nav-overlay.open {
+  display: flex;
+  opacity: 1;
+}
+
+.mobile-nav-overlay a {
+  font-family: var(--font-primary);
+  font-size: 1.8rem;
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.mobile-nav-overlay a:hover { color: var(--orange); }
+
+.mobile-nav-overlay .mobile-connect-links {
+  display: flex;
+  gap: 24px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--divider);
+}
+
+.mobile-nav-overlay .mobile-connect-links a {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1000px) {
+  .featured-tile { grid-template-columns: 1fr; }
+  .featured-content { padding: 40px 32px; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 16px 24px; }
+  .nav.scrolled { padding: 12px 24px; }
+  .nav-right { display: none; }
+  .mobile-menu-toggle { display: flex; }
+  .work-hero { padding: 0 24px 48px; min-height: 40vh; }
+  .filter-bar { padding: 24px; }
+  .work-grid { padding: 24px; columns: 1; }
+  .work-featured { padding: 0 24px; }
+  .footer { padding: 56px 24px 32px; }
+  .footer-bottom { flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ======== NAV ======== -->
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav-logo">Emma Moystner</a>
+  <div class="nav-right">
+    <a href="work.html" class="active">Work</a>
+    <a href="playground.html">Playground</a>
+    <a href="about.html">About</a>
+    <a href="Resume.EmmaMoystner.pdf" target="_blank">Resume</a>
+    <div class="nav-connect-wrap">
+      <a href="#" class="nav-cta" onclick="toggleConnectDropdown(event)">Connect</a>
+      <div class="connect-dropdown" id="connect-dropdown">
+        <a href="mailto:emmamoystner.design@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
+          Email me
+        </a>
+        <div class="connect-dropdown-divider"></div>
+        <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+  <button class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-nav-overlay" id="mobile-nav-overlay">
+  <a href="index.html">Home</a>
+  <a href="work.html">Work</a>
+  <a href="playground.html">Playground</a>
+  <a href="about.html">About</a>
+  <div class="mobile-connect-links">
+    <a href="mailto:emmamoystner.design@gmail.com">Email</a>
+    <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
+  </div>
+</div>
+
+<!-- ======== HERO ======== -->
+<section class="work-hero">
+  <div class="work-hero-top">
+    <h1 class="work-hero-title">Work</h1>
+    <div class="work-hero-count">All Projects</div>
+  </div>
+</section>
+
+<!-- ======== FILTER BAR ======== -->
+<div class="filter-bar">
+  <button class="filter-pill active" data-filter="all">All</button>
+  <button class="filter-pill" data-filter="systems">Systems Design</button>
+  <button class="filter-pill" data-filter="service">Service Design</button>
+  <button class="filter-pill" data-filter="futures">Futures</button>
+</div>
+
+<!-- ======== FEATURED PROJECT ======== -->
+<div class="work-featured" style="margin-top: 48px;">
+  <div class="featured-tile" data-category="futures" onclick="window.location.href='index.html?cs=airline-futures'" style="cursor:pointer;">
+    <div class="featured-image">
+      <div class="tile-placeholder">Featured — 01</div>
+    </div>
+    <div class="featured-content">
+      <div class="featured-tag">Aviation · Futures · Service Design</div>
+      <h2 class="featured-title">Airline Interaction Design 2036</h2>
+      <p class="featured-desc">Designing the interaction layer for a future where AI-driven anticipation has replaced most active passenger decision-making. When the airline knows what you need before you do, who is really in control?</p>
+      <div class="featured-cta">View Case Study <span class="featured-cta-arrow"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== MASONRY GRID ======== -->
+<div class="work-grid">
+
+  <!-- Solace Health -->
+  <div class="work-tile tall" data-category="systems service" onclick="window.location.href='index.html?cs=solace-health'" style="cursor:pointer;">
+    <div class="tile-image">
+      <img src="images/solace/solace-card.png" alt="Solace Health" loading="lazy">
+    </div>
+    <div class="tile-content">
+      <div class="tile-tag">Healthcare</div>
+      <h3 class="tile-title">Solace Health</h3>
+      <p class="tile-desc">A multi-city expansion framework that makes misalignment visible before it compounds into delays. Designing the collaboration system, not just the interface.</p>
+      <div class="tile-meta">
+        <span>Systems</span>
+        <span>Team of 4</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- COROS -->
+  <div class="work-tile square" data-category="service" onclick="window.location.href='index.html?cs=coros'" style="cursor:pointer;">
+    <div class="tile-image tile-phone-ad">
+      <div class="tile-phone-trio">
+        <div class="tile-phone-frame side">
+          <img src="images/coros/screens/iPhone%2016%20Pro%20-%203.png" alt="Follicular phase insights" loading="lazy">
+        </div>
+        <div class="tile-phone-frame center">
+          <img src="images/coros/image24.png" alt="COROS Today Dashboard redesign" loading="lazy">
+        </div>
+        <div class="tile-phone-frame side">
+          <img src="images/coros/screens/iPhone%2016%20Pro%20-%205.png" alt="Luteal phase insights" loading="lazy">
+        </div>
+      </div>
+    </div>
+    <div class="tile-content">
+      <div class="tile-tag">Wellness</div>
+      <h3 class="tile-title">COROS</h3>
+      <p class="tile-desc">COROS had no menstrual cycle tracking when I started this project. They launched one mid-way through, but it was just a calendar. I audited the full service and redesigned it into a system that connects cycle data to training.</p>
+      <div class="tile-meta">
+        <span>Service Design</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Airbnb Group Booking -->
+  <div class="work-tile wide" data-category="systems service" onclick="window.location.href='index.html?cs=airbnb'" style="cursor:pointer;">
+    <div class="tile-image">
+      <div class="tile-placeholder">EM — 04</div>
+    </div>
+    <div class="tile-content">
+      <div class="tile-tag">Travel</div>
+      <h3 class="tile-title">Airbnb Group Booking</h3>
+      <p class="tile-desc">Redesigning how Airbnb handles the hardest part of group trips — the money. Shared planning, flexible cost-splitting, and a group hub that gives every traveler agency.</p>
+      <div class="tile-meta">
+        <span>Concept Redesign</span>
+        <span>Pair</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WorkTrip -->
+  <div class="work-tile tall" data-category="systems" onclick="window.location.href='index.html?cs=worktrip'" style="cursor:pointer;">
+    <div class="tile-image">
+      <div class="tile-placeholder">EM — 05</div>
+    </div>
+    <div class="tile-content">
+      <div class="tile-tag">Enterprise</div>
+      <h3 class="tile-title">WorkTrip</h3>
+      <p class="tile-desc">I saw a broken process at my own company — paper forms, lost requests, frustrated employees — and designed the fix. A self-initiated internal tool for corporate travel.</p>
+      <div class="tile-meta">
+        <span>Self-Initiated</span>
+        <span>Barge Design</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Patreon Discovery -->
+  <div class="work-tile square" data-category="service" onclick="window.location.href='index.html?cs=patreon'" style="cursor:pointer;">
+    <div class="tile-image">
+      <div class="tile-placeholder">EM — 06</div>
+    </div>
+    <div class="tile-content">
+      <div class="tile-tag">Creator Economy</div>
+      <h3 class="tile-title">Patreon Discovery</h3>
+      <p class="tile-desc">Patreon knows who you support. It should also know who you'd love to discover. A redesigned discovery experience with Sage, an AI-powered creator guide.</p>
+      <div class="tile-meta">
+        <span>Concept Redesign</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ======== FOOTER ======== -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-tagline">Craft in service of systems. Systems in service of humans.</div>
+    <div class="footer-col">
+      <h4>Program</h4>
+      <p>ArtCenter College of Design</p>
+      <p>Graduate IxD, 2026</p>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <a href="mailto:emmamoystner.design@gmail.com">emmamoystner.design@gmail.com</a>
+      <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Emma Moystner</span>
+    <span>Portfolio</span>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal, .work-tile, .featured-tile').forEach((el, i) => {
+  el.style.transitionDelay = `${i * 0.08}s`;
+  observer.observe(el);
+});
+
+// Filter
+const filterPills = document.querySelectorAll('.filter-pill');
+const tiles = document.querySelectorAll('.work-tile');
+const featured = document.querySelector('.work-featured');
+
+filterPills.forEach(pill => {
+  pill.addEventListener('click', () => {
+    filterPills.forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+
+    const filter = pill.dataset.filter;
+
+    // Show/hide featured
+    if (filter === 'all' || featured.querySelector('[data-category]').dataset.category.includes(filter)) {
+      featured.style.display = '';
+    } else {
+      featured.style.display = 'none';
+    }
+
+    // Show/hide tiles
+    tiles.forEach(tile => {
+      const categories = tile.dataset.category;
+      if (filter === 'all' || categories.includes(filter)) {
+        tile.style.display = '';
+        // Re-trigger animation
+        tile.classList.remove('visible');
+        setTimeout(() => tile.classList.add('visible'), 50);
+      } else {
+        tile.style.display = 'none';
+      }
+    });
+
+    // Update count
+    const visibleCount = filter === 'all'
+      ? tiles.length + 1
+      : document.querySelectorAll(`.work-tile[data-category*="${filter}"]:not([style*="display: none"])`).length +
+        (featured.style.display === 'none' ? 0 : 1);
+    document.querySelector('.work-hero-count').textContent =
+      filter === 'all' ? 'All Projects' : `${visibleCount} Project${visibleCount !== 1 ? 's' : ''}`;
+  });
+});
+
+function toggleConnectDropdown(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  document.getElementById('connect-dropdown').classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.nav-connect-wrap')) {
+    document.getElementById('connect-dropdown').classList.remove('open');
+  }
+});
+
+function toggleMobileMenu() {
+  const btn = document.getElementById('mobile-menu-toggle');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  btn.classList.toggle('open');
+  overlay.classList.toggle('open');
+  document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
+}
+</script>
+
+</body>
+</html>

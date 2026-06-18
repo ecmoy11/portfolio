@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BARGE Vehicle Report — Redesign</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #FEC524;
+    --gold-light: #FFF8E1;
+    --gold-dark: #C89A0E;
+    --charcoal: #1C1D1F;
+    --slate: #415064;
+    --gray-50: #FAFAFA;
+    --gray-100: #F4F4F5;
+    --gray-200: #E4E4E7;
+    --gray-300: #D1D1D6;
+    --gray-400: #A1A1AA;
+    --gray-500: #71717A;
+    --gray-600: #52525B;
+    --white: #FFFFFF;
+    --success: #16A34A;
+    --success-light: #F0FDF4;
+    --danger: #DC2626;
+    --danger-light: #FEF2F2;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #111113;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .phone-frame {
+    width: 375px;
+    height: 812px;
+    background: var(--white);
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.1),
+      0 0 0 8px #2a2a2e,
+      0 0 0 9px #3a3a3e,
+      0 50px 100px rgba(0,0,0,0.6);
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 54px;
+    padding: 14px 28px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--charcoal);
+    position: relative;
+    z-index: 10;
+  }
+  .status-bar.dark { color: var(--white); }
+  .status-dots { display: flex; gap: 4px; align-items: center; }
+  .status-dots i {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: currentColor; opacity: 0.5;
+  }
+  .status-dots i:first-child { opacity: 1; width: 6px; height: 6px; }
+
+  /* Screen system */
+  .screen {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0;
+    transform: translateX(40px);
+    pointer-events: none;
+    transition: opacity 0.5s var(--ease-out-expo),
+                transform 0.5s var(--ease-out-expo);
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+  .screen { scrollbar-width: none; }
+  .screen.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .screen.exit-left {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+
+  /* ===== HOME ===== */
+  .home-header {
+    padding: 54px 24px 36px;
+    background: var(--charcoal);
+    position: relative;
+    overflow: hidden;
+  }
+  .home-header::before {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: -60px;
+    width: 240px; height: 240px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(254,197,36,0.1) 0%, transparent 70%);
+  }
+  .logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 36px;
+    padding-top: 6px;
+  }
+  .logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 4px;
+  }
+  .logo span { color: var(--gold); }
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .avatar:active { background: rgba(255,255,255,0.2); }
+  .home-greeting {
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+  }
+  .home-greeting strong { font-weight: 600; }
+  .home-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 6px;
+    font-weight: 400;
+  }
+
+  /* Curved bottom edge */
+  .home-curve {
+    height: 24px;
+    background: var(--charcoal);
+    border-radius: 0 0 28px 28px;
+    margin-bottom: -12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Action cards */
+  .actions-wrap { padding: 20px 20px 0; position: relative; z-index: 2; }
+  .action-primary {
+    background: var(--gold);
+    border-radius: 18px;
+    padding: 22px 22px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    cursor: pointer;
+    transition: transform 0.35s var(--ease-out-expo), box-shadow 0.35s;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .action-primary::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12));
+    pointer-events: none;
+  }
+  .action-primary:active { transform: scale(0.97); }
+  .action-primary .a-icon {
+    width: 48px; height: 48px;
+    background: rgba(28, 29, 31, 0.08);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .action-primary h3 {
+    font-size: 16px; font-weight: 600;
+    color: var(--charcoal); margin-bottom: 2px;
+  }
+  .action-primary p { font-size: 13px; color: rgba(28,29,31,0.5); font-weight: 400; }
+
+  .action-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .action-tile {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 16px;
+    padding: 18px 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s var(--ease-out-expo), background 0.2s, border-color 0.2s;
+  }
+  .action-tile:active { transform: scale(0.95); }
+  .action-tile:hover { background: var(--gray-100); border-color: var(--gray-300); }
+  .action-tile .tile-icon {
+    width: 36px; height: 36px;
+    margin: 0 auto 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .action-tile h4 { font-size: 12px; font-weight: 600; color: var(--charcoal); letter-spacing: 0.01em; }
+  .action-tile p { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+
+  /* Recent */
+  .section-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px;
+    margin-bottom: 10px;
+  }
+  .section-head h3 {
+    font-size: 13px; font-weight: 600; color: var(--gray-400);
+    text-transform: uppercase; letter-spacing: 1.2px;
+  }
+  .section-head a {
+    font-size: 13px; font-weight: 500; color: var(--gold-dark);
+    text-decoration: none; cursor: pointer;
+  }
+  .report-item {
+    display: flex; align-items: center;
+    padding: 14px 24px; gap: 14px;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .report-item:active { background: var(--gray-50); }
+  .report-status {
+    width: 8px; height: 8px;
+    border-radius: 50%; flex-shrink: 0;
+  }
+  .report-status.pending { background: var(--gold); }
+  .report-status.done { background: var(--success); }
+  .report-info { flex: 1; }
+  .report-info h5 { font-size: 14px; font-weight: 500; color: var(--charcoal); }
+  .report-info p { font-size: 12px; color: var(--gray-400); margin-top: 1px; }
+
+  /* ===== TAB BAR ===== */
+  .tab-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 82px;
+    background: var(--white);
+    border-top: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    padding-bottom: 16px;
+    z-index: 20;
+  }
+  .tab-item {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 3px;
+    cursor: pointer; background: none; border: none;
+    font-family: 'Inter', sans-serif;
+    padding: 6px 0;
+    transition: transform 0.15s;
+  }
+  .tab-item:active { transform: scale(0.88); }
+  .tab-item .t-icon { width: 24px; height: 24px; color: var(--gray-400); transition: color 0.2s; }
+  .tab-item span { font-size: 10px; color: var(--gray-400); font-weight: 500; transition: color 0.2s; letter-spacing: 0.02em; }
+  .tab-item.active .t-icon { color: var(--charcoal); }
+  .tab-item.active span { color: var(--charcoal); }
+
+  .screen-content { padding-bottom: 96px; }
+
+  /* ===== FLOW SCREENS ===== */
+  .flow-header {
+    padding: 54px 20px 18px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .back-btn {
+    width: 38px; height: 38px;
+    border-radius: 12px;
+    background: var(--gray-100);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.15s;
+    flex-shrink: 0;
+  }
+  .back-btn:active { transform: scale(0.88); background: var(--gray-200); }
+  .flow-title { font-size: 17px; font-weight: 600; color: var(--charcoal); flex: 1; letter-spacing: -0.01em; }
+  .step-pill {
+    font-size: 11px; font-weight: 600;
+    color: var(--gold-dark); background: var(--gold-light);
+    padding: 5px 12px; border-radius: 20px;
+    letter-spacing: 0.03em;
+  }
+
+  /* Stepper */
+  .stepper { display: flex; padding: 0 24px; gap: 5px; margin-bottom: 24px; }
+  .step-bar {
+    flex: 1; height: 3px;
+    background: var(--gray-200); border-radius: 2px;
+    overflow: hidden; position: relative;
+  }
+  .step-bar .fill {
+    position: absolute; top: 0; left: 0; bottom: 0; width: 0%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.6s var(--ease-out-expo);
+  }
+  .step-bar.complete .fill { width: 100%; }
+  .step-bar.current .fill { width: 100%; background: var(--charcoal); }
+
+  /* Form */
+  .form-section { padding: 0 24px; margin-bottom: 22px; }
+  .form-label {
+    font-size: 11px; font-weight: 600;
+    color: var(--gray-400); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 10px;
+  }
+  .input-field {
+    width: 100%; padding: 13px 16px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px; color: var(--charcoal);
+    background: var(--white);
+    margin-bottom: 8px;
+    transition: border-color 0.25s, box-shadow 0.25s;
+    outline: none; -webkit-appearance: none;
+  }
+  .input-field:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(254, 197, 36, 0.12);
+  }
+  .input-field::placeholder { color: var(--gray-300); }
+  .input-field.prefilled { background: var(--gray-50); color: var(--gray-600); }
+  .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  /* Checklist */
+  .checklist { padding: 0 24px; }
+  .check-item {
+    display: flex; align-items: center;
+    padding: 14px 16px;
+    background: var(--white);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 14px;
+    margin-bottom: 8px;
+    cursor: pointer; gap: 14px;
+    transition: all 0.3s var(--ease-out-expo);
+    user-select: none;
+  }
+  .check-item:active { transform: scale(0.98); }
+  .check-item.checked { border-color: var(--success); background: var(--success-light); }
+  .check-ring {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--gray-300);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s var(--ease-spring);
+  }
+  .check-item.checked .check-ring {
+    background: var(--success); border-color: var(--success);
+  }
+  .check-ring svg {
+    width: 12px; height: 12px; color: var(--white);
+    opacity: 0; transform: scale(0.4);
+    transition: all 0.25s var(--ease-spring);
+  }
+  .check-item.checked .check-ring svg { opacity: 1; transform: scale(1); }
+  .check-text { flex: 1; }
+  .check-text h4 { font-size: 14px; font-weight: 500; color: var(--charcoal); }
+  .check-text p { font-size: 12px; color: var(--gray-400); margin-top: 1px; }
+  .check-item.checked .check-text h4 { color: var(--gray-600); }
+  .flag-btn {
+    font-size: 11px; font-weight: 600; color: var(--danger);
+    background: var(--danger-light); border: none;
+    padding: 5px 10px; border-radius: 8px;
+    cursor: pointer; flex-shrink: 0;
+    opacity: 0; transition: opacity 0.2s, transform 0.15s;
+    letter-spacing: 0.02em;
+  }
+  .check-item:hover .flag-btn,
+  .check-item.checked .flag-btn { opacity: 1; }
+  .flag-btn:active { transform: scale(0.9); }
+
+  /* Photo grid */
+  .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 24px; margin-bottom: 16px; }
+  .photo-slot {
+    aspect-ratio: 1.2;
+    background: var(--gray-50);
+    border-radius: 14px;
+    border: 1.5px dashed var(--gray-300);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 6px;
+    cursor: pointer; transition: all 0.25s;
+  }
+  .photo-slot:active { transform: scale(0.96); }
+  .photo-slot:hover { border-color: var(--gold); background: var(--gold-light); }
+  .photo-slot span { font-size: 11px; color: var(--gray-400); font-weight: 500; }
+  .photo-slot.filled { border-style: solid; border-color: var(--success); background: var(--success-light); }
+
+  /* ===== QR SCAN SCREEN ===== */
+  .scan-viewport {
+    margin: 0 24px 20px;
+    background: var(--charcoal);
+    border-radius: 20px;
+    height: 260px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .scan-viewport::before {
+    content: '';
+    position: absolute;
+    width: 160px; height: 160px;
+    border: 2px solid rgba(254,197,36,0.5);
+    border-radius: 16px;
+    animation: scanPulse 2s ease-in-out infinite;
+  }
+  @keyframes scanPulse {
+    0%, 100% { transform: scale(1); border-color: rgba(254,197,36,0.3); }
+    50% { transform: scale(1.04); border-color: rgba(254,197,36,0.7); }
+  }
+  .scan-line {
+    position: absolute;
+    width: 140px; height: 2px;
+    background: var(--gold);
+    border-radius: 1px;
+    animation: scanMove 2.5s ease-in-out infinite;
+    box-shadow: 0 0 12px rgba(254,197,36,0.4);
+  }
+  @keyframes scanMove {
+    0%, 100% { transform: translateY(-60px); }
+    50% { transform: translateY(60px); }
+  }
+  .scan-corners {
+    position: absolute;
+    width: 160px; height: 160px;
+  }
+  .scan-corners::before, .scan-corners::after,
+  .scan-corners span::before, .scan-corners span::after {
+    content: '';
+    position: absolute;
+    width: 24px; height: 24px;
+    border-color: var(--gold);
+    border-style: solid;
+    border-width: 0;
+  }
+  .scan-corners::before { top: 0; left: 0; border-top-width: 3px; border-left-width: 3px; border-radius: 6px 0 0 0; }
+  .scan-corners::after { top: 0; right: 0; border-top-width: 3px; border-right-width: 3px; border-radius: 0 6px 0 0; }
+  .scan-corners span::before { bottom: 0; left: 0; border-bottom-width: 3px; border-left-width: 3px; border-radius: 0 0 0 6px; }
+  .scan-corners span::after { bottom: 0; right: 0; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0 0 6px 0; }
+  .scan-corners span { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+
+  .scan-hint {
+    text-align: center;
+    padding: 0 24px;
+    margin-bottom: 24px;
+  }
+  .scan-hint h4 { font-size: 15px; font-weight: 500; color: var(--charcoal); margin-bottom: 4px; }
+  .scan-hint p { font-size: 13px; color: var(--gray-400); line-height: 1.5; }
+
+  /* Auto-filled card */
+  .autofill-card {
+    margin: 0 24px 16px;
+    background: var(--gold-light);
+    border: 1.5px solid rgba(254,197,36,0.3);
+    border-radius: 16px;
+    padding: 16px 18px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .autofill-icon {
+    width: 40px; height: 40px;
+    background: var(--gold);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .autofill-card h4 { font-size: 14px; font-weight: 600; color: var(--charcoal); }
+  .autofill-card p { font-size: 12px; color: var(--gray-600); margin-top: 1px; }
+
+  /* ===== JOURNEY LOG ===== */
+  .date-pill {
+    margin: 0 24px 16px;
+    background: var(--gray-100);
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .date-pill:active { background: var(--gray-200); }
+  .date-pill h4 { font-size: 14px; font-weight: 500; color: var(--charcoal); }
+  .date-pill p { font-size: 12px; color: var(--gray-400); }
+
+  /* Trip mileage hero */
+  .trip-hero {
+    margin: 0 24px 20px;
+    background: var(--charcoal);
+    border-radius: 20px;
+    padding: 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .trip-hero::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(254,197,36,0.15) 0%, transparent 70%);
+  }
+  .trip-hero-label {
+    font-size: 11px; font-weight: 600;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+  .trip-hero-number {
+    font-size: 56px; font-weight: 700;
+    color: var(--gold);
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .trip-hero-unit {
+    font-size: 13px; color: var(--gray-400);
+    font-weight: 400;
+  }
+  .trip-hero-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(254,197,36,0.12);
+    color: var(--gold);
+    font-size: 11px; font-weight: 600;
+    padding: 5px 12px; border-radius: 20px;
+    margin-top: 14px;
+    letter-spacing: 0.03em;
+  }
+
+  .odo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 24px; margin-bottom: 20px; }
+  .odo-card {
+    background: var(--gray-50);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 14px 16px;
+  }
+  .odo-card.active { border-color: var(--gold); background: var(--gold-light); }
+  .odo-label { font-size: 11px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .odo-input {
+    width: 100%; border: none; background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 22px; font-weight: 600; color: var(--charcoal);
+    outline: none; letter-spacing: 1px;
+  }
+  .odo-input::placeholder { color: var(--gray-300); }
+  .odo-unit { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+
+  /* ===== BOTTOM CTA ===== */
+  .bottom-cta {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 12px 24px 40px;
+    background: linear-gradient(transparent, var(--white) 30%);
+  }
+  .btn-primary {
+    width: 100%; padding: 15px;
+    background: var(--charcoal);
+    color: var(--white); border: none;
+    border-radius: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px; font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s var(--ease-out-expo);
+    position: relative; overflow: hidden;
+    letter-spacing: 0.01em;
+  }
+  .btn-primary:active { transform: scale(0.97); }
+  .btn-primary.gold { background: var(--gold); color: var(--charcoal); }
+  .btn-secondary {
+    width: 100%; padding: 15px;
+    background: transparent;
+    color: var(--gray-500); border: 1.5px solid var(--gray-200);
+    border-radius: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px; font-weight: 500;
+    cursor: pointer; margin-top: 8px;
+    transition: transform 0.2s var(--ease-out-expo), background 0.15s;
+  }
+  .btn-secondary:active { transform: scale(0.97); background: var(--gray-50); }
+
+  /* ===== SUCCESS ===== */
+  .success-screen {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    height: 100%; padding: 40px 24px; text-align: center;
+  }
+  .success-circle {
+    width: 80px; height: 80px;
+    background: var(--success-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    animation: popIn 0.5s var(--ease-spring) forwards;
+    opacity: 0;
+  }
+  @keyframes popIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
+  .success-h { font-size: 22px; font-weight: 600; color: var(--charcoal); margin-bottom: 8px; animation: fadeUp 0.4s 0.15s var(--ease-out-expo) forwards; opacity: 0; }
+  .success-p { font-size: 14px; color: var(--gray-500); line-height: 1.6; margin-bottom: 32px; animation: fadeUp 0.4s 0.25s var(--ease-out-expo) forwards; opacity: 0; }
+  @keyframes fadeUp { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
+
+  .success-card {
+    width: 100%;
+    background: var(--gray-50);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.4s 0.35s var(--ease-out-expo) forwards;
+    opacity: 0;
+  }
+  .success-card .trip-charge {
+    text-align: center;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .trip-charge-label { font-size: 11px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .trip-charge-val { font-size: 32px; font-weight: 700; color: var(--charcoal); letter-spacing: -1px; }
+  .trip-charge-sub { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+  .detail-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; }
+  .detail-row span:first-child { color: var(--gray-400); }
+  .detail-row span:last-child { font-weight: 500; color: var(--charcoal); }
+
+  /* Stagger animations */
+  .screen-content > * {
+    animation: staggerIn 0.4s var(--ease-out-expo) forwards;
+    opacity: 0;
+  }
+  .screen.active .screen-content > *:nth-child(1) { animation-delay: 0.04s; }
+  .screen.active .screen-content > *:nth-child(2) { animation-delay: 0.08s; }
+  .screen.active .screen-content > *:nth-child(3) { animation-delay: 0.12s; }
+  .screen.active .screen-content > *:nth-child(4) { animation-delay: 0.16s; }
+  .screen.active .screen-content > *:nth-child(5) { animation-delay: 0.2s; }
+  .screen.active .screen-content > *:nth-child(6) { animation-delay: 0.24s; }
+  .screen.active .screen-content > *:nth-child(7) { animation-delay: 0.28s; }
+  .screen.active .screen-content > *:nth-child(8) { animation-delay: 0.32s; }
+  .screen.active .screen-content > *:nth-child(9) { animation-delay: 0.36s; }
+  @keyframes staggerIn { 0% { opacity: 0; transform: translateY(14px); } 100% { opacity: 1; transform: translateY(0); } }
+
+  /* Toast */
+  .toast {
+    position: absolute;
+    top: 66px; left: 20px; right: 20px;
+    background: var(--charcoal);
+    color: var(--white);
+    padding: 13px 16px;
+    border-radius: 14px;
+    font-size: 13px; font-weight: 500;
+    display: flex; align-items: center; gap: 10px;
+    z-index: 100;
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: all 0.4s var(--ease-out-expo);
+    pointer-events: none;
+    letter-spacing: 0.01em;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="phone-frame" id="app">
+  <div class="toast" id="toast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+    <span id="toast-text"></span>
+  </div>
+
+  <!-- ===== HOME ===== -->
+  <div class="screen active" id="screen-home">
+    <div class="screen-content">
+      <div class="home-header">
+        <div class="status-bar dark">
+          <span>9:41</span>
+          <div class="status-dots"><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="logo-row">
+          <div class="logo">BARG<span>E</span></div>
+          <div class="avatar">EM</div>
+        </div>
+        <div class="home-greeting">Good morning,<br><strong>Emma</strong></div>
+        <div class="home-sub">2 reports in progress</div>
+      </div>
+      <div class="home-curve"></div>
+
+      <div class="actions-wrap">
+        <div class="action-primary" onclick="navigateTo('screen-scan')">
+          <div class="a-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1C1D1F" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 7V4a1 1 0 011-1h3"/>
+              <path d="M16 3h3a1 1 0 011 1v3"/>
+              <path d="M20 17v3a1 1 0 01-1 1h-3"/>
+              <path d="M8 21H5a1 1 0 01-1-1v-3"/>
+              <path d="M7 12h10"/>
+              <path d="M12 7v10"/>
+            </svg>
+          </div>
+          <div>
+            <h3>New report</h3>
+            <p>Scan vehicle QR to start</p>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <div class="action-tile" onclick="navigateTo('screen-journey')">
+            <div class="tile-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--charcoal)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2v4"/>
+                <path d="M12 18v4"/>
+                <path d="M4.93 4.93l2.83 2.83"/>
+                <path d="M16.24 16.24l2.83 2.83"/>
+                <path d="M2 12h4"/>
+                <path d="M18 12h4"/>
+                <circle cx="12" cy="12" r="4"/>
+              </svg>
+            </div>
+            <h4>Journey log</h4>
+            <p>Track trips</p>
+          </div>
+          <div class="action-tile" onclick="showToast('Vehicle details')">
+            <div class="tile-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--charcoal)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 17m-2 0a2 2 0 104 0 2 2 0 10-4 0"/>
+                <path d="M17 17m-2 0a2 2 0 104 0 2 2 0 10-4 0"/>
+                <path d="M5 17H3v-4l2-5h9l4 5h3v4h-2"/>
+                <path d="M9 17h6"/>
+                <path d="M14 8V6"/>
+              </svg>
+            </div>
+            <h4>Vehicle</h4>
+            <p>View info</p>
+          </div>
+          <div class="action-tile" onclick="showToast('3 past reports')">
+            <div class="tile-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--charcoal)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/>
+                <path d="M14 2v6h6"/>
+                <path d="M16 13H8"/>
+                <path d="M16 17H8"/>
+                <path d="M10 9H8"/>
+              </svg>
+            </div>
+            <h4>Reports</h4>
+            <p>3 done</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <h3>Recent</h3>
+        <a onclick="showToast('All reports')">See all</a>
+      </div>
+      <div class="report-item" onclick="showToast('Opening report')">
+        <div class="report-status pending"></div>
+        <div class="report-info">
+          <h5>Ford F-150 — Inspection</h5>
+          <p>Jun 4 · 60% complete</p>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gray-300)" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="report-item" onclick="showToast('Opening report')">
+        <div class="report-status done"></div>
+        <div class="report-info">
+          <h5>Toyota Tacoma — Weekly</h5>
+          <p>Jun 1 · 47 mi billed</p>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gray-300)" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="report-item" onclick="showToast('Opening report')">
+        <div class="report-status done"></div>
+        <div class="report-info">
+          <h5>Ford F-150 — Inspection</h5>
+          <p>May 28 · 112 mi billed</p>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gray-300)" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-item active">
+        <svg class="t-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.182V22h18V10.182L12 2z"/><path d="M9 22V14h6v8"/></svg>
+        <span>Home</span>
+      </button>
+      <button class="tab-item" onclick="showToast('Reports')">
+        <svg class="t-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/><path d="M14 2v6h6"/></svg>
+        <span>Reports</span>
+      </button>
+      <button class="tab-item" onclick="navigateTo('screen-scan')">
+        <svg class="t-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h3"/><path d="M17 3h3v3"/><path d="M20 17v3h-3"/><path d="M7 21H4v-3"/><path d="M7 12h10"/></svg>
+        <span>Scan</span>
+      </button>
+      <button class="tab-item" onclick="showToast('Vehicle info')">
+        <svg class="t-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17m-2 0a2 2 0 104 0 2 2 0 10-4 0"/><path d="M17 17m-2 0a2 2 0 104 0 2 2 0 10-4 0"/><path d="M5 17H3v-4l2-5h9l4 5h3v4h-2"/><path d="M9 17h6"/></svg>
+        <span>Vehicle</span>
+      </button>
+      <button class="tab-item" onclick="showToast('Profile')">
+        <svg class="t-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 00-16 0"/></svg>
+        <span>Profile</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== QR SCAN ===== -->
+  <div class="screen" id="screen-scan">
+    <div class="screen-content">
+      <div class="flow-header">
+        <button class="back-btn" onclick="navigateTo('screen-home')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--charcoal)" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="flow-title">Scan vehicle</div>
+        <span class="step-pill">Step 1/4</span>
+      </div>
+
+      <div class="stepper">
+        <div class="step-bar current"><div class="fill"></div></div>
+        <div class="step-bar"><div class="fill"></div></div>
+        <div class="step-bar"><div class="fill"></div></div>
+        <div class="step-bar"><div class="fill"></div></div>
+      </div>
+
+      <div class="scan-viewport">
+        <div class="scan-corners"><span></span></div>
+        <div class="scan-line"></div>
+      </div>
+
+      <div class="scan-hint">
+        <h4>Point at the vehicle QR code</h4>
+        <p>Located on the driver-side dashboard. Car details will auto-fill.</p>
+      </div>
+
+      <div class="autofill-card" id="autofill-card" style="display: none;">
+        <div class="autofill-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--charcoal)" stroke-width="2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <div>
+          <h4>Ford F-150 · TN-4829-XR</h4>
+          <p>2024 · White · 34,281 mi</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-cta">
+      <button class="btn-primary" id="scan-btn" onclick="simulateScan()">Simulate scan</button>
+      <button class="btn-secondary" onclick="navigateTo('screen-carinfo')">Enter manually instead</button>
+    </div>
+  </div>
+
+  <!-- ===== INSPECTION ===== -->
+  <div class="screen" id="screen-inspection">
+    <div class="screen-content">
+      <div class="flow-header">
+        <button class="back-btn" onclick="navigateTo('screen-scan')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--charcoal)" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="flow-title">Vehicle inspection</div>
+        <span class="step-pill">Step 2/4</span>
+      </div>
+
+      <div class="stepper">
+        <div class="step-bar complete"><div class="fill"></div></div>
+        <div class="step-bar current"><div class="fill"></div></div>
+        <div class="step-bar"><div class="fill"></div></div>
+        <div class="step-bar"><div class="fill"></div></div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-label">Exterior check</div>
+      </div>
+
+      <div class="checklist">
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <div class="check-text"><h4>Tires &amp; wheels</h4><p>Pressure, tread, damage</p></div>
+          <button class="flag-btn" onclick="event.stopPropagation(); showToast('Issue flagged')">Flag</button>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <div class="check-text"><h4>Lights &amp; signals</h4><p>Headlights, brake, indicators</p></div>
+          <button class="flag-btn" onclick="event.stopPropagation(); showToast('Issue flagged')">Flag</button>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <div class="check-text"><h4>Body condition</h4><p>Dents, scratches, rust</p></div>
+          <button class="flag-btn" onclick="event.stopPropagation(); showToast('Issue flagged')">Flag</button>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <div class="check-text"><h4>Windshield &amp; mirrors</h4><p>Cracks, chips, visibility</p></div>
+          <button class="flag-btn" onclick="event.stopPropagation(); showToast('Issue flagged')">Flag</button>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <div class="check-text"><h4>Fluid levels</h4><p>Oil, coolant, washer fluid</p></div>
+          <button class="flag-btn" onclick="event.stopPropagation(); showToast('Issue flagged')">Flag</button>
+        </div>
+      </div>
+
+      <div class="form-section" style="margin-top: 16px;">
+        <div class="form-label">Photo evidence</div>
+      </div>
+      <div class="photo-grid">
+        <div class="photo-slot" onclick="this.classList.toggle('filled')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="1.75" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span>Front</span>
+        </div>
+        <div class="photo-slot" onclick="this.classList.toggle('filled')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="1.75" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span>Rear</span>
+        </div>
+        <div class="photo-slot" onclick="this.classList.toggle('filled')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="1.75" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span>Left</span>
+        </div>
+        <div class="photo-slot" onclick="this.classList.toggle('filled')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="1.75" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span>Right</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-cta">
+      <button class="btn-primary" onclick="navigateTo('screen-journey')">Continue</button>
+    </div>
+  </div>
+
+  <!-- ===== CAR INFO (manual entry) ===== -->
+  <div class="screen" id="screen-carinfo">
+    <div class="screen-content">
+      <div class="flow-header">
+        <button class="back-btn" onclick="navigateTo('screen-scan')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--charcoal)" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="flow-title">Car information</div>
+        <span class="step-pill">Step 1/4</span>
+      </div>
+
+      <div class="stepper">
+        <div class="step-bar current"><div class="fill"></div></div>
+        <div class="step-bar"><div class="fill"></div></div>
+        <div class="step-bar"><div class="fill"></div></div>
+        <div class="step-bar"><div class="fill"></div></div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-label">Vehicle</div>
+        <input class="input-field" placeholder="Registration number">
+        <div class="input-row">
+          <input class="input-field" placeholder="Make">
+          <input class="input-field" placeholder="Model">
+        </div>
+        <div class="input-row">
+          <input class="input-field" placeholder="Year">
+          <input class="input-field" placeholder="Color">
+        </div>
+        <input class="input-field" placeholder="Current mileage">
+      </div>
+
+      <div class="form-section">
+        <div class="form-label">Driver</div>
+        <input class="input-field" placeholder="Full name" value="Emma Moystner">
+        <input class="input-field" placeholder="License number">
+      </div>
+    </div>
+
+    <div class="bottom-cta">
+      <button class="btn-primary" onclick="navigateTo('screen-inspection')">Continue</button>
+    </div>
+  </div>
+
+  <!-- ===== JOURNEY LOG ===== -->
+  <div class="screen" id="screen-journey">
+    <div class="screen-content">
+      <div class="flow-header">
+        <button class="back-btn" onclick="navigateTo('screen-inspection')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--charcoal)" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="flow-title">Journey log</div>
+        <span class="step-pill">Step 3/4</span>
+      </div>
+
+      <div class="stepper">
+        <div class="step-bar complete"><div class="fill"></div></div>
+        <div class="step-bar complete"><div class="fill"></div></div>
+        <div class="step-bar current"><div class="fill"></div></div>
+        <div class="step-bar"><div class="fill"></div></div>
+      </div>
+
+      <div class="trip-hero">
+        <div class="trip-hero-label">Trip mileage</div>
+        <div class="trip-hero-number" id="trip-miles">—</div>
+        <div class="trip-hero-unit">miles</div>
+        <div class="trip-hero-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg>
+          Billed to project
+        </div>
+      </div>
+
+      <div class="odo-row">
+        <div class="odo-card">
+          <div class="odo-label">Start</div>
+          <input class="odo-input" id="odo-start" placeholder="0" value="34,281" oninput="calcTrip()">
+          <div class="odo-unit">miles</div>
+        </div>
+        <div class="odo-card active">
+          <div class="odo-label">End</div>
+          <input class="odo-input" id="odo-end" placeholder="0" value="" oninput="calcTrip()">
+          <div class="odo-unit">miles</div>
+        </div>
+      </div>
+
+      <div class="date-pill" onclick="showToast('Date picker')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--charcoal)" stroke-width="1.75" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        <div>
+          <h4>June 6, 2026</h4>
+          <p>Tap to change</p>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-label">Route</div>
+        <input class="input-field" placeholder="Start location" value="Nashville, TN">
+        <input class="input-field" placeholder="Destination">
+        <input class="input-field" placeholder="Project code">
+      </div>
+    </div>
+
+    <div class="bottom-cta">
+      <button class="btn-primary gold" onclick="navigateTo('screen-success')">Submit report</button>
+    </div>
+  </div>
+
+  <!-- ===== SUCCESS ===== -->
+  <div class="screen" id="screen-success">
+    <div class="success-screen">
+      <div class="success-circle">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div class="success-h">Report submitted</div>
+      <div class="success-p">Your vehicle inspection has been sent to your fleet manager for review.</div>
+
+      <div class="success-card">
+        <div class="trip-charge">
+          <div class="trip-charge-label">Trip mileage billed</div>
+          <div class="trip-charge-val" id="success-miles">— mi</div>
+          <div class="trip-charge-sub">Charged to project</div>
+        </div>
+        <div class="detail-row">
+          <span>Vehicle</span>
+          <span>Ford F-150 · TN-4829</span>
+        </div>
+        <div class="detail-row">
+          <span>Date</span>
+          <span>June 6, 2026</span>
+        </div>
+        <div class="detail-row">
+          <span>Issues flagged</span>
+          <span>0</span>
+        </div>
+        <div class="detail-row">
+          <span>Report ID</span>
+          <span>#BR-0606-003</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="navigateTo('screen-home')" style="animation: fadeUp 0.4s 0.45s var(--ease-out-expo) forwards; opacity: 0;">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function navigateTo(id) {
+    const cur = document.querySelector('.screen.active');
+    const nxt = document.getElementById(id);
+    if (!nxt || cur === nxt) return;
+    cur.classList.remove('active');
+    cur.classList.add('exit-left');
+    setTimeout(() => cur.classList.remove('exit-left'), 500);
+    nxt.classList.add('active');
+    nxt.scrollTop = 0;
+  }
+
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+    el.style.transform = 'scale(0.97)';
+    setTimeout(() => el.style.transform = '', 150);
+    const t = document.querySelectorAll('#screen-inspection .check-item').length;
+    const c = document.querySelectorAll('#screen-inspection .check-item.checked').length;
+    if (c === t) showToast('All checks complete');
+  }
+
+  function simulateScan() {
+    const btn = document.getElementById('scan-btn');
+    btn.textContent = 'Scanning...';
+    btn.disabled = true;
+    setTimeout(() => {
+      document.getElementById('autofill-card').style.display = 'flex';
+      document.getElementById('autofill-card').style.animation = 'fadeUp 0.4s var(--ease-out-expo) forwards';
+      btn.textContent = 'Continue';
+      btn.disabled = false;
+      btn.onclick = () => navigateTo('screen-inspection');
+      showToast('Vehicle identified');
+    }, 1800);
+  }
+
+  function calcTrip() {
+    const s = parseInt(document.getElementById('odo-start').value.replace(/,/g, '')) || 0;
+    const e = parseInt(document.getElementById('odo-end').value.replace(/,/g, '')) || 0;
+    const diff = e > s ? e - s : 0;
+    const el = document.getElementById('trip-miles');
+    const success = document.getElementById('success-miles');
+    if (diff > 0) {
+      el.textContent = diff.toLocaleString();
+      success.textContent = diff.toLocaleString() + ' mi';
+    } else {
+      el.textContent = '—';
+      success.textContent = '— mi';
+    }
+  }
+
+  let toastT;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-text').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastT);
+    toastT = setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  document.querySelectorAll('.btn-primary').forEach(b => {
+    b.addEventListener('click', function(e) {
+      const r = document.createElement('span');
+      r.style.cssText = 'position:absolute;border-radius:50%;background:rgba(255,255,255,0.25);transform:scale(0);animation:ripple 0.5s ease-out;pointer-events:none;width:200px;height:200px;';
+      const rect = this.getBoundingClientRect();
+      r.style.left = (e.clientX - rect.left - 100) + 'px';
+      r.style.top = (e.clientY - rect.top - 100) + 'px';
+      this.appendChild(r);
+      setTimeout(() => r.remove(), 500);
+    });
+  });
+
+  // CSS for ripple
+  const style = document.createElement('style');
+  style.textContent = '@keyframes ripple{to{transform:scale(4);opacity:0}}';
+  document.head.appendChild(style);
+</script>
+
+</body>
+</html>

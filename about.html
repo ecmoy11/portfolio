@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Emma Moystner</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --peach: #FFD5BB;
+  --pink: #FFBAEC;
+  --orange: #E15304;
+  --lavender: #9DA5C5;
+  --burgundy: #410016;
+  --olive: #775D0F;
+
+  --bg-cream: #FAF8F5;
+  --bg-warm: #FFF5EE;
+  --text-dark: #2C2B28;
+  --text-light: #6B6862;
+  --text-muted: #A8A49C;
+  --white: #FFFFFF;
+  --divider: rgba(44, 43, 40, 0.1);
+
+  --font-primary: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-serif: 'DM Serif Display', serif;
+}
+
+html {
+  background: var(--bg-cream);
+  color: var(--text-dark);
+  font-family: var(--font-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+body { overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+
+::selection {
+  background: var(--orange);
+  color: var(--white);
+}
+
+/* ============ NAV ============ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.5s ease, padding 0.4s ease, border-color 0.5s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.nav.scrolled {
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 16px 48px;
+  border-bottom-color: rgba(0,0,0,0.06);
+}
+
+.nav-logo {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-dark);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-right a {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.3s;
+  cursor: pointer;
+}
+
+.nav-right a:not(.nav-cta):hover { color: var(--text-dark); }
+.nav-right a.active { color: var(--text-dark); }
+
+.nav-cta {
+  background: var(--orange);
+  color: var(--white) !important;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: background 0.3s;
+  margin-left: 8px;
+}
+
+.nav-cta:hover { background: #c94800; }
+
+.nav-connect-wrap {
+  position: relative;
+  margin-left: 8px;
+}
+
+.connect-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  background: var(--white);
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 200px;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 12px 32px rgba(44, 43, 40, 0.1);
+  z-index: 101;
+}
+
+.connect-dropdown.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.connect-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dark) !important;
+  transition: background 0.2s;
+}
+
+.connect-dropdown a:hover {
+  background: var(--bg-warm);
+}
+
+.connect-dropdown a svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.connect-dropdown a:hover svg {
+  opacity: 1;
+}
+
+.connect-dropdown-divider {
+  height: 1px;
+  background: var(--divider);
+  margin: 4px 8px;
+}
+
+/* ============ HERO ============ */
+.about-hero {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  padding: 120px 48px 80px;
+  position: relative;
+  background: var(--orange);
+}
+
+.about-hero-photo {
+  width: 320px;
+  height: 320px;
+  border-radius: 16px;
+  object-fit: cover;
+  flex-shrink: 0;
+  order: 2;
+}
+
+.about-hero-title {
+  font-family: var(--font-primary);
+  font-size: clamp(2.4rem, 6vw, 5.5rem);
+  font-weight: 200;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--white);
+  order: 1;
+}
+
+.about-hero-title .accent {
+  color: var(--white);
+  font-weight: 400;
+}
+
+/* ============ SECTION SHARED ============ */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+}
+
+/* ============ STORY ============ */
+.about-story {
+  padding: 160px 48px;
+  background: var(--bg-cream);
+  border-top: 1px solid var(--divider);
+}
+
+.about-story-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 96px;
+}
+
+.about-story-heading {
+  font-family: var(--font-primary);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 300;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+}
+
+.about-story-heading strong { font-weight: 500; }
+
+.about-story-text p {
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: var(--text-light);
+}
+
+.about-story-text p + p { margin-top: 1.4rem; }
+
+.highlight {
+  color: var(--text-dark);
+  font-weight: 500;
+  border-bottom: 2px solid var(--orange);
+}
+
+/* ============ BEYOND THE SCREEN ============ */
+.about-personal {
+  background: var(--orange);
+  color: var(--white);
+  padding: 120px 48px;
+}
+
+.about-personal-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.personal-carousel {
+  position: relative;
+  width: 360px;
+  height: 360px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.personal-carousel img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.personal-carousel img.active {
+  opacity: 1;
+}
+
+.personal-carousel-caption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-primary);
+  font-size: 0.8rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--white);
+  padding: 14px 20px;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  z-index: 2;
+}
+
+.personal-carousel-caption.active {
+  opacity: 1;
+}
+
+.personal-carousel-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.personal-carousel-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  transition: background 0.3s;
+}
+
+.personal-carousel-dots span.active {
+  background: var(--white);
+}
+
+.personal-text h3 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 2.5vw, 2rem);
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+
+.personal-text p {
+  font-family: var(--font-primary);
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.85;
+  margin-bottom: 28px;
+  opacity: 0.92;
+}
+
+.personal-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* ============ APPROACH ============ */
+.about-approach {
+  padding: 160px 48px;
+  background: var(--bg-cream);
+  border-top: 1px solid var(--divider);
+}
+
+.about-approach-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.about-approach-heading {
+  font-family: var(--font-primary);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 300;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+  margin-bottom: 64px;
+}
+
+.approach-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--text-dark);
+}
+
+.approach-item {
+  padding: 40px 40px;
+  border-right: 1px solid var(--divider);
+}
+
+.approach-item:first-child { padding-left: 0; }
+.approach-item:last-child { border-right: none; padding-right: 0; }
+
+.approach-item h4 {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+}
+
+.approach-item p {
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--text-light);
+}
+
+/* ============ EDUCATION ============ */
+.about-education {
+  padding: 0 48px 160px;
+  background: var(--bg-cream);
+}
+
+.about-education-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  border-top: 1px solid var(--divider);
+  padding-top: 80px;
+}
+
+.education-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+}
+
+.education-item h4 {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 12px;
+}
+
+.education-item h3 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.education-item p {
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--text-light);
+}
+
+.education-item p + p { margin-top: 0.5rem; }
+
+/* ============ CONNECT ============ */
+.about-connect {
+  padding: 160px 48px;
+  background: var(--bg-cream);
+  border-top: 1px solid var(--divider);
+}
+
+.about-connect-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto 1.5fr 1fr;
+  gap: 64px;
+  align-items: end;
+}
+
+.connect-photo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(44,43,40,0.08);
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.connect-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.connect-photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--orange);
+  font-family: var(--font-serif);
+  font-size: 48px;
+  color: var(--white);
+}
+
+.connect-heading {
+  font-family: var(--font-primary);
+  font-size: clamp(2.4rem, 5.5vw, 4.5rem);
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  line-height: 0.95;
+  color: var(--text-dark);
+}
+
+.connect-text p {
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--text-light);
+  margin-bottom: 48px;
+}
+
+.connect-links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.connect-btn {
+  display: inline-block;
+  padding: 14px 32px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-radius: 50px;
+  transition: all 0.3s;
+}
+
+.connect-btn-primary {
+  background: var(--orange);
+  color: var(--white);
+}
+
+.connect-btn-primary:hover { background: #c94800; }
+
+.connect-btn-outline {
+  border: 1px solid var(--text-dark);
+  color: var(--text-dark);
+}
+
+.connect-btn-outline:hover {
+  background: var(--text-dark);
+  color: var(--white);
+}
+
+/* ============ FOOTER ============ */
+.footer {
+  background: var(--text-dark);
+  color: rgba(255,255,255,0.5);
+  padding: 80px 48px 40px;
+}
+
+.footer-top {
+  max-width: 1100px;
+  margin: 0 auto 64px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 48px;
+}
+
+.footer-tagline {
+  font-family: var(--font-primary);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+}
+
+.footer-col h4 {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 16px;
+}
+
+.footer-col p, .footer-col a {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.8;
+  transition: color 0.3s;
+}
+
+.footer-col a:hover { color: rgba(255,255,255,0.9); }
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 300;
+}
+
+/* ============ ANIMATIONS ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============ MOBILE MENU ============ */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.mobile-menu-toggle span {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: var(--text-dark);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.mobile-menu-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.mobile-menu-toggle.open span:nth-child(2) { opacity: 0; }
+.mobile-menu-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg-cream);
+  z-index: 99;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-nav-overlay.open {
+  display: flex;
+  opacity: 1;
+}
+
+.mobile-nav-overlay a {
+  font-family: var(--font-primary);
+  font-size: 1.8rem;
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.mobile-nav-overlay a:hover { color: var(--orange); }
+
+.mobile-nav-overlay .mobile-connect-links {
+  display: flex;
+  gap: 24px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--divider);
+}
+
+.mobile-nav-overlay .mobile-connect-links a {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1000px) {
+  .about-story-inner { grid-template-columns: 1fr; gap: 48px; }
+  .about-connect-inner { grid-template-columns: 1fr; gap: 48px; }
+  .connect-photo { width: 160px; height: 160px; align-self: start; }
+  .approach-grid { grid-template-columns: 1fr; }
+  .approach-item { border-right: none; border-bottom: 1px solid var(--divider); padding: 32px 0; }
+  .approach-item:last-child { border-bottom: none; }
+  .education-grid { grid-template-columns: 1fr; gap: 48px; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 16px 24px; }
+  .nav.scrolled { padding: 12px 24px; }
+  .nav-right { display: none; }
+  .mobile-menu-toggle { display: flex; }
+  .about-hero { padding: 100px 24px 56px; flex-direction: column; align-items: center; gap: 32px; text-align: center; }
+  .about-hero-photo { width: 220px; height: 220px; order: 1; }
+  .about-hero-title { order: 2; }
+  .about-story, .about-approach, .about-connect { padding: 100px 24px; }
+  .about-education { padding: 0 24px 100px; }
+  .about-personal { padding: 80px 24px; }
+  .about-personal-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+  .personal-carousel {
+    width: 280px;
+    height: 280px;
+    margin: 0 auto;
+  }
+  .footer { padding: 56px 24px 32px; }
+  .footer-bottom { flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ======== NAV ======== -->
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav-logo">Emma Moystner</a>
+  <div class="nav-right">
+    <a href="work.html">Work</a>
+    <a href="playground.html">Playground</a>
+    <a href="about.html" class="active">About</a>
+    <a href="Resume.EmmaMoystner.pdf" target="_blank">Resume</a>
+    <div class="nav-connect-wrap">
+      <a href="#" class="nav-cta" onclick="toggleConnectDropdown(event)">Connect</a>
+      <div class="connect-dropdown" id="connect-dropdown">
+        <a href="mailto:emmamoystner.design@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
+          Email me
+        </a>
+        <div class="connect-dropdown-divider"></div>
+        <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+  <button class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-nav-overlay" id="mobile-nav-overlay">
+  <a href="index.html">Home</a>
+  <a href="work.html">Work</a>
+  <a href="playground.html">Playground</a>
+  <a href="about.html">About</a>
+  <div class="mobile-connect-links">
+    <a href="mailto:emmamoystner.design@gmail.com">Email</a>
+    <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
+  </div>
+</div>
+
+<!-- ======== HERO ======== -->
+<section class="about-hero">
+  <img src="Headshot_Moystner.jpg" alt="Emma Moystner" class="about-hero-photo">
+  <h1 class="about-hero-title">
+    Hi, I'm <span class="accent">Emma.</span>
+  </h1>
+</section>
+
+<!-- ======== STORY ======== -->
+<section class="about-story">
+  <div class="about-story-inner">
+    <div>
+      <div class="section-label reveal">A Little About Me</div>
+      <h2 class="about-story-heading reveal">I didn't start in design. I started by trying to understand <strong>people.</strong></h2>
+    </div>
+    <div class="about-story-text reveal">
+      <p>I studied international business and cultures at Tennessee Tech, with minors in Spanish and religious studies. I've always been fascinated by how people see the world differently, and how the systems around us either support them or let them down.</p>
+      <p>After graduating, I spent four years as a project coordinator at an architecture and engineering firm, where I got to see firsthand how design decisions ripple through real projects and real people's lives. Somewhere along the way, I realized I wanted to be the one <span class="highlight">making those decisions.</span></p>
+      <p>Now I'm finishing my M.Des in Interaction Design at ArtCenter College of Design. I think in systems, I care about the details, and I'm looking for my first role as a product designer.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======== BEYOND THE SCREEN ======== -->
+<section class="about-personal">
+  <div class="about-personal-inner reveal">
+    <div class="personal-carousel">
+      <img src="personal%20photos/emma.JPEG" alt="Emma" class="active" onerror="this.style.display='none'">
+      <img src="personal%20photos/redwoods.jpg" alt="Emma in the redwoods" onerror="this.style.display='none'">
+      <img src="personal%20photos/surf.jpg" alt="Emma surfing the counter" data-caption="Went on a surf trip, got zero photos. This was me showing my friends how you surf after." onerror="this.style.display='none'">
+      <img src="personal%20photos/waterfall.jpg" alt="Emma at a waterfall" onerror="this.style.display='none'">
+      <img src="personal%20photos/bike.jpg" alt="Emma biking" onerror="this.style.display='none'">
+      <img src="personal%20photos/run.jpg" alt="Emma running" onerror="this.style.display='none'">
+      <img src="personal%20photos/hike.jpg" alt="Emma hiking" onerror="this.style.display='none'">
+      <img src="personal%20photos/travel.JPG" alt="Emma traveling" onerror="this.style.display='none'">
+      <img src="personal%20photos/sanfran.jpg" alt="Emma exploring" onerror="this.style.display='none'">
+      <img src="personal%20photos/tj.JPG" alt="Emma under a rainbow" onerror="this.style.display='none'">
+      <img src="personal%20photos/home.JPG" alt="Emma at home" onerror="this.style.display='none'">
+      <div class="personal-carousel-caption"></div>
+      <div class="personal-carousel-dots">
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    <div class="personal-text">
+      <h3>Beyond the pixels.</h3>
+      <p>I'm someone who loves adventure and play in equal measure. I surf (poorly but enthusiastically), climb, run, and I'm always ready to pick up whatever hobby catches my eye next.</p>
+      <p>When I'm not designing, you'll probably find me with a matcha in hand and a book I can't put down. If you have a recommendation, seriously, send it my way.</p>
+      <p>I believe the best work comes from people who love the little things in life. I'm always down for a new challenge, a new city, a new conversation. Let's go.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======== APPROACH ======== -->
+<section class="about-approach">
+  <div class="about-approach-inner">
+    <div class="section-label reveal">How I Work</div>
+    <h2 class="about-approach-heading reveal">What I bring to a team.</h2>
+    <div class="approach-grid reveal">
+      <div class="approach-item">
+        <h4>Big Picture First</h4>
+        <p>I want to understand the business, the users, and the whole system before designing any one part of it. Strategy and design aren't separate for me.</p>
+      </div>
+      <div class="approach-item">
+        <h4>Comfortable In Between</h4>
+        <p>Business, culture, tech, people. My background means I can move between disciplines and talk to anyone in the room.</p>
+      </div>
+      <div class="approach-item">
+        <h4>Design That Matters</h4>
+        <p>I'm drawn to problems where getting it right actually changes someone's day. Work that carries real weight.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== EDUCATION ======== -->
+<section class="about-education">
+  <div class="about-education-inner">
+    <div class="section-label reveal">Education</div>
+    <div class="education-grid reveal">
+      <div class="education-item">
+        <h4>Graduate</h4>
+        <h3>ArtCenter College of Design</h3>
+        <p>M.Des in Interaction Design, Expected August 2026</p>
+        <p>Systems design, service design, futures thinking, and design research.</p>
+      </div>
+      <div class="education-item">
+        <h4>Undergraduate</h4>
+        <h3>Tennessee Technological University</h3>
+        <p>B.S. International Business & Cultures, 2021</p>
+        <p>Minors in Spanish and Religious Studies.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== CONNECT ======== -->
+<section class="about-connect">
+  <div class="about-connect-inner">
+    <div class="connect-photo reveal">
+      <img src="Headshot_Moystner.jpg" alt="Emma Moystner" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="connect-photo-placeholder" style="display:none;">EM</div>
+    </div>
+    <h2 class="connect-heading reveal">Let's<br>work<br>together.</h2>
+    <div class="connect-text reveal">
+      <p>I'm looking for my first product design role somewhere that cares about doing good work. If that sounds like your team, I'd love to chat.</p>
+      <div class="connect-links">
+        <a href="mailto:emmamoystner.design@gmail.com" class="connect-btn connect-btn-primary">Get in Touch</a>
+        <a href="https://www.linkedin.com/in/emmamoystner" target="_blank" class="connect-btn connect-btn-outline">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== FOOTER ======== -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-tagline">Designing with intention. Always learning.</div>
+    <div class="footer-col">
+      <h4>Program</h4>
+      <p>ArtCenter College of Design</p>
+      <p>Graduate IxD, 2026</p>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <a href="mailto:emmamoystner.design@gmail.com">emmamoystner.design@gmail.com</a>
+      <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Emma Moystner</span>
+    <span>Portfolio</span>
+  </div>
+</footer>
+
+<script>
+// Nav scroll behavior
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Personal photo carousel
+(function() {
+  const carousel = document.querySelector('.personal-carousel');
+  if (!carousel) return;
+  const imgs = carousel.querySelectorAll('img');
+  const dots = carousel.querySelectorAll('.personal-carousel-dots span');
+  const captionEl = carousel.querySelector('.personal-carousel-caption');
+  const loaded = [];
+  imgs.forEach((img, i) => {
+    if (img.complete && img.naturalWidth > 0) loaded.push(i);
+    img.addEventListener('load', () => { if (!loaded.includes(i)) loaded.push(i); });
+  });
+  let current = 0;
+  let timer;
+
+  function updateCaption() {
+    const img = imgs[loaded[current]];
+    const caption = img.dataset.caption;
+    if (caption) {
+      captionEl.textContent = caption;
+      captionEl.classList.add('active');
+    } else {
+      captionEl.classList.remove('active');
+    }
+  }
+
+  function goTo(idx) {
+    if (loaded.length <= 1) return;
+    imgs[loaded[current]].classList.remove('active');
+    dots[loaded[current]].classList.remove('active');
+    current = idx % loaded.length;
+    imgs[loaded[current]].classList.add('active');
+    dots[loaded[current]].classList.add('active');
+    updateCaption();
+  }
+
+  function advance() { goTo(current + 1); }
+
+  function resetTimer() {
+    clearInterval(timer);
+    timer = setInterval(advance, 3500);
+  }
+
+  // Click right half to advance, left half to go back
+  carousel.addEventListener('click', (e) => {
+    if (e.target.closest('.personal-carousel-dots')) return;
+    const rect = carousel.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    if (clickX > rect.width / 2) {
+      goTo(current + 1);
+    } else {
+      goTo((current - 1 + loaded.length) % loaded.length);
+    }
+    resetTimer();
+  });
+
+  // Click on dots to jump to that photo
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      const idx = loaded.indexOf(i);
+      if (idx !== -1) { goTo(idx); resetTimer(); }
+    });
+  });
+
+  carousel.style.cursor = 'pointer';
+  updateCaption();
+  timer = setInterval(advance, 3500);
+})();
+
+function toggleConnectDropdown(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  document.getElementById('connect-dropdown').classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.nav-connect-wrap')) {
+    document.getElementById('connect-dropdown').classList.remove('open');
+  }
+});
+
+function toggleMobileMenu() {
+  const btn = document.getElementById('mobile-menu-toggle');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  btn.classList.toggle('open');
+  overlay.classList.toggle('open');
+  document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photography Play — 7-card fan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --d-bg:#0a0a0c;--d-bg2:#141417;--d-ink:#f4f4f5;--d-muted:#8a8a92;--d-line:#26262b;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;min-height:100vh;background:#ececed;color:#1a1a1c;
+    font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+    display:flex;flex-direction:column;
+  }
+  .bar{padding:18px 26px;border-bottom:1px solid #e2e2e4;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .bar h1{font-size:14px;font-weight:600;margin:0}
+  .bar .meta{font-family:var(--mono);font-size:11px;color:#8a8a90}
+  .bar .controls{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .bar button{
+    font-family:var(--mono);font-size:11px;border:1px solid #cfcfd3;background:#fff;color:#1a1a1c;
+    padding:7px 12px;border-radius:7px;cursor:pointer;
+  }
+  .bar button:hover{background:#f3f3f5}
+  .bar label{font-family:var(--mono);font-size:11px;color:#55555c;display:flex;align-items:center;gap:6px}
+
+  /* the real surface: full-bleed dark portfolio section */
+  .stage{
+    flex:1;position:relative;overflow:hidden;cursor:pointer;
+    background:radial-gradient(130% 120% at 50% 4%, #18181d 0%, #0a0a0c 65%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .deck{position:relative;width:1px;height:300px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:18px}
+  .ph{
+    position:absolute;bottom:0;width:160px;height:210px;border-radius:9px;overflow:hidden;
+    border:4px solid #fafafa;background:#222 center/cover;
+    box-shadow:0 22px 48px rgba(0,0,0,.6);
+    transform-origin:50% 150%;
+    transition:transform .6s cubic-bezier(.18,.85,.2,1), box-shadow .4s ease;
+    will-change:transform;
+  }
+  .ph img{width:100%;height:100%;object-fit:cover;display:block}
+  .caption{
+    text-align:center;position:relative;z-index:5;pointer-events:none;
+    transition:transform .5s ease;
+  }
+  .caption .ttl{
+    font-family:'Fraunces',serif;font-weight:500;font-size:44px;color:var(--d-ink);
+    letter-spacing:-.015em;line-height:1;
+  }
+  .caption .sub{
+    font-family:var(--mono);font-size:11px;color:var(--d-muted);letter-spacing:.22em;
+    text-transform:uppercase;margin-top:12px;
+  }
+  .stage.open .caption{transform:translateY(8px)}
+  .hint{
+    position:absolute;bottom:18px;left:0;right:0;text-align:center;
+    font-family:var(--mono);font-size:10px;color:#52525a;letter-spacing:.14em;text-transform:uppercase;
+    opacity:.8;pointer-events:none;transition:opacity .3s;
+  }
+  .stage.open .hint{opacity:0}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <h1>Photography Play — 7-card fan</h1>
+    <span class="meta">hover the section · outer cards sweep off-frame</span>
+    <div class="controls">
+      <label><input type="checkbox" id="wide" checked> wide sweep</label>
+      <button id="shuffle">↻ new photos</button>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="deck" id="deck"></div>
+    <div class="caption">
+      <div class="ttl">Photography Play</div>
+      <div class="sub">enter the gallery</div>
+    </div>
+    <div class="hint">hover to spread</div>
+  </div>
+
+<script>
+  const N=7;
+  const deck=document.getElementById('deck');
+  const stage=document.getElementById('stage');
+  const fallbacks=['#3b5b6e','#6e5b3b','#5b3b6e','#3b6e54','#6e3b4a','#46466e','#6e6446'];
+  const cards=[];
+
+  function seed(){return Math.floor(Math.random()*100000);}
+  function build(){
+    deck.innerHTML='';cards.length=0;
+    for(let i=0;i<N;i++){
+      const el=document.createElement('div');
+      el.className='ph';
+      el.style.background=fallbacks[i%fallbacks.length];
+      const img=document.createElement('img');
+      img.loading='lazy';img.src=`https://picsum.photos/seed/${seed()}/320/420`;
+      img.onerror=()=>img.style.display='none';
+      el.appendChild(img);deck.appendChild(el);cards.push(el);
+    }
+    layoutClosed();
+  }
+
+  const mid=(N-1)/2; // 3
+  // resting stack: tight, slight fan
+  function layoutClosed(){
+    cards.forEach((c,i)=>{
+      const d=i-mid;
+      c.style.transform=`rotate(${d*3}deg) translateX(${d*6}px)`;
+      c.style.zIndex=10-Math.abs(d);
+      c.style.boxShadow='0 22px 48px rgba(0,0,0,.6)';
+    });
+  }
+  // spread: arc fan, outer cards pushed beyond frame
+  function layoutOpen(){
+    const wide=document.getElementById('wide').checked;
+    const angle=wide?20:14;      // deg per step
+    const lift=wide?20:14;       // upward arc
+    const push=wide?150:120;     // horizontal spacing
+    cards.forEach((c,i)=>{
+      const d=i-mid;
+      const rot=d*angle;
+      const x=d*push;
+      const y=-Math.cos(d/ (N/2.2))*0 - (lift*(1-Math.abs(d)/(mid+1)))*3; // center lifts most
+      c.style.transform=`translateX(${x}px) translateY(${y}px) rotate(${rot}deg)`;
+      c.style.zIndex=10-Math.abs(d);
+      c.style.boxShadow='0 30px 60px rgba(0,0,0,.55)';
+    });
+  }
+
+  stage.addEventListener('mouseenter',()=>{stage.classList.add('open');layoutOpen();});
+  stage.addEventListener('mouseleave',()=>{stage.classList.remove('open');layoutClosed();});
+  stage.addEventListener('click',()=>{
+    const t=stage.querySelector('.ttl');
+    t.style.transition='transform .2s ease';t.style.transform='scale(1.05)';
+    setTimeout(()=>t.style.transform='',200);
+  });
+  document.getElementById('wide').addEventListener('change',()=>{if(stage.classList.contains('open'))layoutOpen();});
+  document.getElementById('shuffle').addEventListener('click',e=>{e.stopPropagation();build();});
+
+  build();
+</script>
+</body>
+</html>

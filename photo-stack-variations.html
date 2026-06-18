@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Testing: Photography Play stack tile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page:#ececed;
+    --card:#ffffff;
+    --ink:#1a1a1c;
+    --muted:#8a8a90;
+    --line:#e2e2e4;
+    --mono:'JetBrains Mono', ui-monospace, monospace;
+    /* the dark portfolio palette the variations live in */
+    --d-bg:#0a0a0c;
+    --d-bg2:#141417;
+    --d-ink:#f4f4f5;
+    --d-muted:#8a8a92;
+    --d-line:#26262b;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--page);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+  }
+  header.top{
+    padding:22px 28px 18px;border-bottom:1px solid var(--line);background:var(--page);
+  }
+  header.top h1{font-size:15px;font-weight:600;margin:0;letter-spacing:-.01em}
+  header.top p{margin:5px 0 0;font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .note{
+    max-width:760px;margin:18px 28px 0;font-size:13px;line-height:1.55;color:#55555c;
+  }
+  .grid{
+    display:grid;gap:18px;padding:24px 28px 60px;
+    grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+  }
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    display:flex;flex-direction:column;min-width:0;
+  }
+  .card .strip{
+    padding:11px 13px;border-bottom:1px solid var(--line);
+  }
+  .card .strip .vname{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--ink)}
+  .card .strip .bet{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
+  /* the live stage: dark portfolio surface */
+  .stage{
+    background:radial-gradient(120% 130% at 50% 10%, #17171b 0%, #0a0a0c 70%);
+    flex:1;min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:30px 18px;position:relative;cursor:pointer;overflow:hidden;
+  }
+  .stage .play-label{
+    font-family:'Fraunces',serif;color:var(--d-ink);font-size:26px;font-weight:500;
+    letter-spacing:-.01em;margin-top:26px;text-align:center;
+    transition:transform .4s ease, letter-spacing .4s ease;
+  }
+  .stage .play-sub{
+    font-family:var(--mono);font-size:10px;color:var(--d-muted);letter-spacing:.18em;
+    text-transform:uppercase;margin-top:8px;
+  }
+  /* generic photo */
+  .ph{
+    position:absolute;border-radius:7px;overflow:hidden;
+    background:#222 center/cover no-repeat;
+    box-shadow:0 14px 34px rgba(0,0,0,.55), 0 2px 0 rgba(255,255,255,.04) inset;
+    border:3px solid #fafafa;
+  }
+  .ph img{width:100%;height:100%;object-fit:cover;display:block}
+  .deckwrap{position:relative;width:200px;height:200px;display:flex;align-items:center;justify-content:center}
+
+  /* ---------- V1 : fan ---------- */
+  .v1 .ph{width:118px;height:148px;transition:transform .45s cubic-bezier(.2,.8,.25,1)}
+  .v1 .ph:nth-child(1){transform:rotate(-5deg) translateY(2px)}
+  .v1 .ph:nth-child(2){transform:rotate(2deg)}
+  .v1 .ph:nth-child(3){transform:rotate(8deg) translateY(2px)}
+  .v1.open .ph:nth-child(1){transform:translateX(-92px) rotate(-9deg)}
+  .v1.open .ph:nth-child(2){transform:translateX(0) rotate(0deg) translateY(-6px)}
+  .v1.open .ph:nth-child(3){transform:translateX(92px) rotate(9deg)}
+
+  /* ---------- V2 : arc hand ---------- */
+  .v2 .deckwrap{height:210px}
+  .v2 .ph{width:108px;height:138px;bottom:8px;transform-origin:50% 150%;transition:transform .5s cubic-bezier(.2,.85,.2,1)}
+  .v2 .ph:nth-child(1){transform:rotate(-6deg)}
+  .v2 .ph:nth-child(2){transform:rotate(0deg)}
+  .v2 .ph:nth-child(3){transform:rotate(6deg)}
+  .v2.open .ph:nth-child(1){transform:rotate(-34deg)}
+  .v2.open .ph:nth-child(2){transform:rotate(0deg) translateY(-12px)}
+  .v2.open .ph:nth-child(3){transform:rotate(34deg)}
+
+  /* ---------- V3 : toss / scatter ---------- */
+  .v3 .ph{width:120px;height:150px;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+  .v3 .ph:nth-child(1){transform:rotate(-4deg)}
+  .v3 .ph:nth-child(2){transform:rotate(3deg)}
+  .v3 .ph:nth-child(3){transform:rotate(-1deg)}
+  .v3.open .ph:nth-child(1){transform:translate(-78px,-34px) rotate(-18deg)}
+  .v3.open .ph:nth-child(2){transform:translate(70px,-46px) rotate(13deg)}
+  .v3.open .ph:nth-child(3){transform:translate(8px,40px) rotate(-7deg)}
+
+  /* ---------- V4 : cursor tracked (JS drives transform) ---------- */
+  .v4 .ph{width:116px;height:146px;transition:transform .25s ease-out}
+  .v4 .ph:nth-child(1){transform:rotate(-5deg)}
+  .v4 .ph:nth-child(2){transform:rotate(2deg)}
+  .v4 .ph:nth-child(3){transform:rotate(7deg)}
+
+  /* ---------- V5 : explode into inline gallery ---------- */
+  .v5 .stage{min-height:380px}
+  .v5 .deckwrap{width:130px;height:160px;transition:opacity .4s ease, transform .4s ease}
+  .v5 .ph{width:108px;height:138px;transition:transform .45s ease}
+  .v5 .ph:nth-child(1){transform:rotate(-5deg)}
+  .v5 .ph:nth-child(2){transform:rotate(2deg)}
+  .v5 .ph:nth-child(3){transform:rotate(8deg)}
+  .v5 .inlinegrid{
+    position:absolute;inset:0;display:grid;gap:6px;padding:18px;
+    grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;
+    opacity:0;pointer-events:none;transition:opacity .5s ease;
+  }
+  .v5 .inlinegrid .gph{border-radius:5px;overflow:hidden;background:#222;transform:scale(.9);transition:transform .5s ease}
+  .v5 .inlinegrid .gph img{width:100%;height:100%;object-fit:cover;display:block}
+  .v5.open .deckwrap{opacity:0;transform:scale(.7)}
+  .v5.open .inlinegrid{opacity:1}
+  .v5.open .inlinegrid .gph{transform:scale(1)}
+  .v5 .play-label{position:relative;z-index:3}
+  .v5.open .play-label{color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.8)}
+
+  .hint{
+    position:absolute;bottom:10px;left:0;right:0;text-align:center;
+    font-family:var(--mono);font-size:9px;color:#55555c;letter-spacing:.12em;text-transform:uppercase;
+    opacity:.7;pointer-events:none;
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Testing: "Photography Play" stack tile</h1>
+  <p>5 variations · one feature · hover each tile · randomized photos every reload</p>
+</header>
+<div class="note">
+  The shared idea across all five: a small stack of photos that comes apart when your cursor enters,
+  then leads into the Photography Play gallery. Each loads different random shots, so reload to see the
+  "couple of photos at once" effect. What differs is <em>how</em> the stack comes apart — neat fan,
+  hand-of-cards arc, loose toss, cursor-led, or full explode-into-gallery.
+</div>
+
+<div class="grid" id="grid">
+
+  <!-- V1 -->
+  <div class="card">
+    <div class="strip">
+      <div class="vname">V1 · Clean fan</div>
+      <div class="bet">Safe baseline. Three photos fan out evenly left-center-right. Reads instantly, never feels gimmicky.</div>
+    </div>
+    <div class="stage v1" data-stage>
+      <div class="deckwrap" data-deck data-count="3"></div>
+      <div class="play-label">Photography Play</div>
+      <div class="play-sub">view gallery</div>
+      <div class="hint">hover to spread</div>
+    </div>
+  </div>
+
+  <!-- V2 -->
+  <div class="card">
+    <div class="strip">
+      <div class="vname">V2 · Hand of cards</div>
+      <div class="bet">Photos pivot from a low point and arc open like cards held in your hand. Most tactile / literal to your idea.</div>
+    </div>
+    <div class="stage v2" data-stage>
+      <div class="deckwrap" data-deck data-count="3"></div>
+      <div class="play-label">Photography Play</div>
+      <div class="play-sub">view gallery</div>
+      <div class="hint">hover to spread</div>
+    </div>
+  </div>
+
+  <!-- V3 -->
+  <div class="card">
+    <div class="strip">
+      <div class="vname">V3 · Loose toss</div>
+      <div class="bet">The stack scatters with uneven rotation, like tossing prints on a table. Playful, human, less precise.</div>
+    </div>
+    <div class="stage v3" data-stage>
+      <div class="deckwrap" data-deck data-count="3"></div>
+      <div class="play-label">Photography Play</div>
+      <div class="play-sub">view gallery</div>
+      <div class="hint">hover to spread</div>
+    </div>
+  </div>
+
+  <!-- V4 -->
+  <div class="card">
+    <div class="strip">
+      <div class="vname">V4 · Cursor-led</div>
+      <div class="bet">The fan direction follows your cursor — photos lean toward where your hand is. Feels alive and responsive.</div>
+    </div>
+    <div class="stage v4" data-stage>
+      <div class="deckwrap" data-deck data-count="3"></div>
+      <div class="play-label">Photography Play</div>
+      <div class="play-sub">view gallery</div>
+      <div class="hint">move cursor over tile</div>
+    </div>
+  </div>
+
+  <!-- V5 -->
+  <div class="card">
+    <div class="strip">
+      <div class="vname">V5 · Explode to gallery (the swing)</div>
+      <div class="bet">The stack dissolves and the gallery itself blooms in place — the tile <em>is</em> the doorway. Bold, memorable.</div>
+    </div>
+    <div class="stage v5" data-stage>
+      <div class="deckwrap" data-deck data-count="3"></div>
+      <div class="inlinegrid" data-inlinegrid data-count="9"></div>
+      <div class="play-label">Photography Play</div>
+      <div class="hint">hover to open</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // pick fresh random photo seeds each load -> "different photos every time"
+  function seed(){ return Math.floor(Math.random()*100000); }
+  function photoURL(s,w,h){ return `https://picsum.photos/seed/${s}/${w}/${h}`; }
+  // colorful fallback so the interaction still reads if the CDN is blocked
+  const fallbacks = ['#3b5b6e','#6e5b3b','#5b3b6e','#3b6e54','#6e3b4a','#46466e','#6e6446','#3b6e6e','#6e463b'];
+
+  function makePhoto(w,h,i){
+    const el=document.createElement('div');
+    el.className='ph';
+    el.style.background=fallbacks[i%fallbacks.length];
+    const img=document.createElement('img');
+    img.loading='lazy';
+    img.src=photoURL(seed(),w,h);
+    img.onerror=()=>{img.style.display='none';};
+    el.appendChild(img);
+    return el;
+  }
+
+  document.querySelectorAll('[data-deck]').forEach(deck=>{
+    const n=parseInt(deck.dataset.count,10)||3;
+    for(let i=0;i<n;i++) deck.appendChild(makePhoto(240,300,i));
+  });
+  document.querySelectorAll('[data-inlinegrid]').forEach(g=>{
+    const n=parseInt(g.dataset.count,10)||9;
+    for(let i=0;i<n;i++){
+      const cell=document.createElement('div');
+      cell.className='gph';cell.style.background=fallbacks[i%fallbacks.length];
+      const img=document.createElement('img');img.loading='lazy';
+      img.src=photoURL(seed(),200,200);img.onerror=()=>{img.style.display='none';};
+      cell.appendChild(img);g.appendChild(cell);
+    }
+  });
+
+  // open/close on hover (works for V1,V2,V3,V5 via CSS .open)
+  document.querySelectorAll('[data-stage]').forEach(stage=>{
+    if(stage.classList.contains('v4')) return; // v4 handled below
+    stage.addEventListener('mouseenter',()=>stage.classList.add('open'));
+    stage.addEventListener('mouseleave',()=>stage.classList.remove('open'));
+    stage.addEventListener('click',()=>flash(stage));
+  });
+
+  // V4: cursor-tracked fan
+  document.querySelectorAll('.v4[data-stage]').forEach(stage=>{
+    const phs=stage.querySelectorAll('.ph');
+    stage.addEventListener('mousemove',e=>{
+      const r=stage.getBoundingClientRect();
+      const px=(e.clientX-r.left)/r.width - .5;   // -.5 .. .5
+      const py=(e.clientY-r.top)/r.height - .5;
+      phs.forEach((p,i)=>{
+        const dir=i-1;                              // -1,0,1
+        const spread=110*px + dir*70;
+        const lift=-30*Math.abs(px) + py*14;
+        const rot=dir*12 + px*10;
+        p.style.transform=`translate(${spread}px,${lift}px) rotate(${rot}deg)`;
+      });
+    });
+    stage.addEventListener('mouseleave',()=>{
+      phs.forEach((p,i)=>{const dir=i-1;p.style.transform=`rotate(${dir*5+ (i===2?2:0)}deg)`;});
+    });
+    stage.addEventListener('click',()=>flash(stage));
+  });
+
+  // tiny click feedback standing in for "navigate to gallery"
+  function flash(stage){
+    const lbl=stage.querySelector('.play-label');
+    if(!lbl) return;
+    lbl.style.transform='scale(1.06)';lbl.style.letterSpacing='.02em';
+    setTimeout(()=>{lbl.style.transform='';lbl.style.letterSpacing='';},220);
+  }
+</script>
+</body>
+</html>

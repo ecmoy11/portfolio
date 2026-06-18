@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gesture Tetris — ML5.js Interactive Experience</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap');
+
+    :root {
+      --primary: #00ff41;
+      --secondary: #ff006e;
+      --accent: #ffbe0b;
+      --dark: #0a0a0a;
+      --light: #f0f0f0;
+      --grid: #1a1a1a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Space Mono', monospace;
+      background: var(--dark);
+      color: var(--light);
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* Animated background grid */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 30px 30px;
+      animation: grid-move 10s linear infinite;
+      opacity: 0.5;
+      z-index: -1;
+    }
+
+    @keyframes grid-move {
+      from { transform: translate(0, 0); }
+      to   { transform: translate(30px, 30px); }
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1rem;
+      position: relative;
+    }
+
+    .hero-content {
+      text-align: center;
+      max-width: 960px;
+      animation: glitch 2s infinite;
+    }
+
+    @keyframes glitch {
+      0%,100% { transform: translate(0); }
+      20% { transform: translate(-1px,1px); }
+      40% { transform: translate(1px,-1px); }
+      60% { transform: translate(-1px,-1px); }
+      80% { transform: translate(1px,1px); }
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(4rem, 12vw, 8rem);
+      letter-spacing: 0.1em;
+      background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: hue-rotate 3s infinite;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes hue-rotate {
+      to { filter: hue-rotate(360deg); }
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-bottom: 2rem;
+      text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+    }
+
+    .scroll-indicator {
+  position: absolute;
+      bottom: 3.3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 3rem;
+      color: var(--accent);
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-header::before {
+      content: '//';
+      color: var(--primary);
+      margin-right: 1rem;
+    }
+
+    .section-header::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), transparent);
+    }
+
+    /* GRID / CARDS */
+    .concept-grid,
+    .controls-grid,
+    .failure-grid,
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .concept-card,
+    .control-card,
+    .failure-item,
+    .tech-stat {
+      background: rgba(255,255,255,0.05);
+      border: 2px solid var(--primary);
+      padding: 1.5rem;
+      transition: all .3s;
+    }
+
+    .concept-card:hover,
+    .control-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--secondary);
+    }
+
+    .control-icon {
+      font-size: 2rem;
+      margin-bottom: .5rem;
+    }
+
+    /* TIMELINE */
+    .dev-timeline {
+      position: relative;
+      padding-left: 3rem;
+      margin-top: 1rem;
+    }
+
+    .dev-timeline::before {
+      content: '';
+      position: absolute;
+      left: 1rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(var(--primary), var(--secondary), var(--accent));
+    }
+
+    .timeline-item {
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.5rem;
+      top: .5rem;
+      width: 1rem;
+      height: 1rem;
+      background: var(--accent);
+      transform: rotate(45deg);
+    }
+
+    .timeline-item h3 {
+      color: var(--secondary);
+      margin-bottom: .5rem;
+    }
+
+    .inline-code {
+      color: var(--primary);
+      background: rgba(0,255,65,0.08);
+      border: 1px solid rgba(0,255,65,0.25);
+      padding: 0.1rem 0.35rem;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    /* IMAGE GALLERY */
+    .sketch-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.25rem;
+    }
+
+    .sketch-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 0.9rem;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .sketch-item:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0,255,65,0.55);
+    }
+
+    .sketch-item img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      display: block;
+      border: 2px solid rgba(0,255,65,0.55);
+      background: #111;
+    }
+
+    .sketch-label {
+      margin-top: 0.65rem;
+      font-size: 0.9rem;
+      color: var(--primary);
+      line-height: 1.35;
+    }
+
+    /* DEMO */
+    .demo-container {
+      border: 2px solid var(--primary);
+      padding: 2rem;
+      margin-top: 2rem;
+      background: rgba(0,255,65,0.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--grid);
+      margin-top: 5rem;
+    }
+
+    a { color: var(--primary); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 3rem; }
+      .section-header { font-size: 2rem; }
+      .sketch-item img { height: 200px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-grid"></div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Gesture Tetris</h1>
+      <p class="subtitle">Hand-Tracked Game Control via ML5.js</p>
+      <p>
+        A fully working gesture-based Tetris prototype exploring
+        computer vision, embodied interaction, and real-time feedback.
+      </p>
+      <div class="scroll-indicator">↓ SCROLL ↓</div>
+    </div>
+  </section>
+
+  <!-- ASSIGNMENT -->
+  <section>
+    <h2 class="section-header">Assignment Context</h2>
+    <p>
+      This project responds to the prompt to build a high-fidelity prototype
+      that balances <strong>look & feel</strong>, <strong>technical implementation</strong>,
+      and a <strong>role in everyday life</strong>. Through iterative development,
+      Gesture Tetris evolved into a fully playable system using only a webcam
+      and hand gestures—no controllers or props required.
+    </p>
+  </section>
+
+  <!-- CONCEPT -->
+  <section>
+    <h2 class="section-header">Concept Shift</h2>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h3>From Objects → Gestures</h3>
+        <p>
+          The project began with object recognition (cups, lids, props).
+          This iteration removes objects entirely, letting the body itself
+          become the controller.
+        </p>
+      </div>
+      <div class="concept-card">
+        <h3>Embodied Interaction</h3>
+        <p>
+          Movement, finger bends, and hand position directly affect gameplay,
+          creating a more physical, expressive interaction.
+        </p>
+      </div>
+      <div class="concept-card">
+        <h3>Messy Reality</h3>
+        <p>
+          The system embraces jitter, latency, and imperfection as part
+          of the experience rather than hiding them.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTROLS -->
+  <section>
+    <h2 class="section-header">Gesture Control System</h2>
+    <div class="controls-grid">
+      <div class="control-card">
+        <div class="control-icon">✋</div>
+        <div>Move Hand</div>
+        <strong>Hold Left / Right</strong>
+      </div>
+      <div class="control-card">
+        <div class="control-icon">👉</div>
+        <div>Index Bend</div>
+        <strong>Nudge One Tile</strong>
+      </div>
+      <div class="control-card">
+        <div class="control-icon">💍</div>
+        <div>Ring Bend</div>
+        <strong>Nudge Opposite</strong>
+      </div>
+      <div class="control-card">
+        <div class="control-icon">🤏</div>
+        <div>Pinch</div>
+        <strong>Rotate</strong>
+      </div>
+      <div class="control-card">
+        <div class="control-icon">👇</div>
+        <div>Fingers Below Wrist</div>
+        <strong>Drop</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEVELOPMENT -->
+  <section>
+    <h2 class="section-header">Iteration & Development</h2>
+
+    <div class="dev-timeline">
+      <div class="timeline-item">
+        <h3>Handpose Integration</h3>
+        <p>
+          I used <span class="inline-code">ml5.handpose</span> to get 21 landmarks per hand and drew a skeleton overlay
+          on top of the camera feed. This gave me real-time feedback that the model was actually detecting the hand.
+        </p>
+      </div>
+
+      <div class="timeline-item">
+  <h3>Sensitivity Problems (Micro-Movements → “Jitter”)</h3>
+  <p>
+    In my first working hand-control build, the game felt <em>way</em> too sensitive. Even when I thought my hand was
+    “still,” tiny wrist tremors and natural micro-adjustments were constantly detected as movement. The result was
+    the piece sliding left/right when I didn’t mean to — basically <strong>noise</strong> being treated as <strong>intent</strong>.
+  </p>
+
+  <p style="margin-top:0.9rem;">
+    The root cause was that I was mapping hand position to movement on every frame. Handpose runs continuously and the
+    wrist landmark (<span class="inline-code">lm[0]</span>) updates many times per second, so any small variation in
+    x-position could flip the “move” state. I also realized the camera was mirrored, so the sign of my movement needed
+    to match the user’s mental model (left on screen = left in game), otherwise it felt extra chaotic.
+  </p>
+
+  <p style="margin-top:0.9rem;">
+    With ChatGPT, I fixed this by adding three layers of stabilization so movement only happens when there’s a clear,
+    sustained gesture:
+  </p>
+
+  <ul style="margin-top:0.8rem; line-height:1.8; padding-left:1.25rem;">
+    <li>
+      <strong>1) Deadzone (ignore small drift):</strong>
+      I created a threshold called <span class="inline-code">HOLD_DEADZONE</span>. The wrist has to move far enough
+      left or right of center before the system considers it an intentional “hold” direction. This filters out small
+      shakes around the center line.
+    </li>
+    <li>
+      <strong>2) Delay (prove intent before repeating):</strong>
+      I added <span class="inline-code">HOLD_DELAY</span> so the first move happens immediately when I enter a side,
+      but repeat moves won’t start until I’ve held that direction for a short time. This stops the piece from “running away”
+      due to a quick accidental lean.
+    </li>
+    <li>
+      <strong>3) Repeat rate (controlled sliding):</strong>
+      Once I’m holding a direction, moves only repeat every <span class="inline-code">HOLD_RATE</span> milliseconds.
+      That makes the piece slide at a predictable speed instead of jittering unpredictably on every frame.
+    </li>
+  </ul>
+
+  <p style="margin-top:0.9rem;">
+    Technically, this turned movement into a tiny state machine:
+    <span class="inline-code">desired</span> direction is computed from wrist x-offset,
+    <span class="inline-code">holdDir</span> stores the current held direction,
+    <span class="inline-code">holdStart</span> timestamps when the hold began,
+    and <span class="inline-code">lastHoldRepeat</span> gates repeat triggers.
+    If my hand returns to the deadzone, <span class="inline-code">holdDir</span> resets to 0.
+  </p>
+
+  <p style="margin-top:0.9rem;">
+    The outcome: movement felt <strong>intentional</strong> instead of twitchy. I could rest my hand without the piece
+    drifting, then deliberately push left/right to slide. This one change made the prototype feel dramatically more “playable,”
+    because it matched the reality of how humans actually hold their hands in front of a camera.
+  </p>
+</div>
+
+
+      <div class="timeline-item">
+        <h3>Overlay Misalignment (Skeleton Not on My Hand)</h3>
+        <p>
+          One of the biggest issues was that my green skeleton and dots were drifting and not lining up with my real hand.
+          The problem was the camera was being drawn “cover style” (scaled + cropped to fill the screen), but I was
+          drawing landmarks using raw video coordinates. That meant the overlay didn’t match the transformed camera.
+        </p>
+        <p style="margin-top:0.75rem;">
+          With ChatGPT, I fixed it by computing a camera cover transform
+          (<span class="inline-code">camScale</span>, <span class="inline-code">camDrawX</span>, <span class="inline-code">camDrawY</span>)
+          and then mapping each landmark through the same transform before drawing. Since the camera is mirrored, I also flipped
+          the X coordinate:
+          <span class="inline-code">screenX = width - (camDrawX + lmX * camScale)</span>.
+          After that, the skeleton finally “locked” onto my actual hand.
+        </p>
+
+        <!-- PHOTO GALLERY -->
+        <div class="sketch-gallery">
+          <div class="sketch-item">
+            <img src="overlay.png" alt="the start of the problem">
+            <div class="sketch-label">the start of the problem</div>
+          </div>
+          <div class="sketch-item">
+            <img src="overlaynotworking.png" alt="frustration building">
+            <div class="sketch-label">frustration building</div>
+          </div>
+          <div class="sketch-item">
+            <img src="overlaysuccess.png" alt="Success!">
+            <div class="sketch-label">Successs!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <h3>Gesture Refinement</h3>
+        <p>
+          Finger bend detection replaced raw distances to make nudges more intentional and repeatable.
+          Instead of relying on noisy positions, I used joint-angle checks (MCP → PIP → DIP → TIP)
+          and a small cooldown so each bend triggers only once.
+        </p>
+      </div>
+
+    <div class="timeline-item">
+  <h3>Performance Tuning (Camera Resolution)</h3>
+  <p>
+    To reduce lag and “glitchiness,” I intentionally lowered the webcam capture resolution in p5 using
+    <code>video.size(640, 480)</code>. This reduces the amount of pixel data processed each frame, which
+    made the handpose model respond more consistently and helped stabilize the overall experience.
+    It’s a tradeoff (slightly softer image), but it improved real-time tracking and playability.
+  </p>
+  </div>
+  <div class="timeline-item">
+  <h3>Visual Feedback for Gestures (Making Invisible Input Visible)</h3>
+  <p>
+    One major usability issue with gesture-based control is that successful gestures are <em>invisible</em>.
+    To reduce confusion and improve learnability, I added a real-time feedback system that confirms what the
+    model thinks I just did.
+  </p>
+
+  <p style="margin-top:0.9rem;">
+    Each detected gesture spawns a lightweight, short-lived floating emoji near the bottom-left of the screen:
+  </p>
+
+  <ul style="margin-top:0.8rem; line-height:1.8; padding-left:1.25rem;">
+    <li><strong>↻</strong> for rotation (pinch)</li>
+    <li><strong>☝️ + ← / →</strong> for index-finger nudges</li>
+    <li><strong>💍 + ← / →</strong> for ring-finger nudges</li>
+    <li><strong>🖐️</strong> (upside-down) for a drop gesture</li>
+  </ul>
+
+  <p style="margin-top:0.9rem;">
+    These feedback elements act like a “receipt” for user intent — letting players instantly understand why
+    something happened (or didn’t). This dramatically improved early-game clarity and reduced the “why did it move?”
+    feeling during testing.
+  </p>
+
+  <p style="margin-top:0.9rem;">
+    <strong>A new problem emerged:</strong> adding feedback surfaced a gesture overlap I hadn’t fully noticed before.
+    Every time I rotated using a pinch, the index-finger bend often fired too — so a rotation would be followed by an
+    unintended horizontal nudge. The emoji feedback made this conflict obvious for the first time.
+  </p>
+  <div class="sketch-item">
+            <img src="newprob.png" alt="New problem">
+            <div class="sketch-label">New problem</div>
+          </div>
+</div>
+<div class="timeline-item">
+  <h3>Gesture Conflict Fix (Priority + Time-Based Lockout)</h3>
+
+  <p>
+    After adding emoji feedback, I could finally <em>see</em> a hidden failure: every pinch rotation (↻) was often followed
+    by an accidental index-bend nudge (☝️). The model wasn’t “wrong” — my code was allowing multiple gesture conditions to
+    fire in the same frame, so one intent produced two actions.
+  </p>
+
+  <p style="margin-top:0.9rem;">
+    To fix this, I introduced <strong>gesture arbitration</strong>: pinch rotation became a higher-priority gesture, and when
+    it triggers, it temporarily blocks lower-priority bend gestures for a short window. In code, this is a
+    <span class="inline-code">time-based lockout</span> using a timestamp + a constant lock duration.
+  </p>
+
+  <p style="margin-top:0.9rem;">
+    The system now works like a mini state machine: rotation sets a shared state (<span class="inline-code">lastRotateTime</span>),
+    and index/ring bend checks only run when the lockout window has expired. It currently doesn't work perfectly but it is an improvement!
+  </p>
+
+  <div class="code-block">
+    <code>// Gesture priority gating (lockout after rotate)
+const ROTATE_LOCK_MS = 220;
+let lastRotateTime = -999999;
+
+function bendsAllowed(nowMs){
+  return (nowMs - lastRotateTime) &gt; ROTATE_LOCK_MS;
+}
+
+// 1) Rotate first (highest priority)
+if (pinchJustFired) {
+  rotatePiece();
+  lastRotateTime = nowMs;
+  spawnEmoji("↻");
+}
+
+// 2) Only allow bends if not in lockout window
+if (bendsAllowed(nowMs)) {
+  if (indexBendTriggered) nudge(+1);   // ☝️ → / ←
+  if (ringBendTriggered)  nudge(-1);   // 💍 → / ←
+}</code>
+  </div>
+
+  <p style="margin-top:0.9rem;">
+    The outcome: rotation stopped “dragging” the piece sideways. The controls felt more human, because the system began
+    enforcing a rule players assume naturally: <strong>one gesture = one action</strong>.
+  </p>
+</div>
+
+</div>
+
+  </section>
+
+  <section>
+  <h2 class="section-header">UI Iterations</h2>
+
+  <div class="dev-timeline">
+    <div class="timeline-item">
+      <h3>Framing the Prototype Like a Product</h3>
+      <p>
+        I treated the p5.js sketch like one component inside a designed interface instead of “just a canvas.”
+        I updated the Week 13 visual language (Space Mono + Bebas Neue, neon accents, grid motif) and built a
+        clear hierarchy: <strong>title → instructions → live prototype</strong>.
+      </p>
+    </div>
+
+    <div class="timeline-item">
+      <h3>Instruction Clarity & Onboarding</h3>
+      <p>
+        Gesture controls aren’t obvious, so I iterated on onboarding UI (short, readable rules + icons).
+        The goal was to reduce cognitive load while the camera initializes: users should immediately know
+        what to try first (move, pinch, drop) and what backups exist (arrow keys / space / R).
+      </p>
+    </div>
+
+    <div class="timeline-item">
+      <h3>HUD + Feedback Loop</h3>
+      <p>
+        I iterated the HUD so the system always explains what it thinks is happening (ex: “hand detected” / “no hand”)
+        while still showing core game feedback (score, lines, level). This made the interaction feel less “mysterious”
+        when the model misses a hand or lighting changes.
+      </p>
+    </div>
+
+    <div class="timeline-item">
+      <h3>Reducing Visual Noise</h3>
+      <p>
+        I had to balance “cool” hand visualizations (skeleton lines + landmarks) with gameplay readability.
+        I adjusted placement and density so the overlay supports the experience without blocking the board.
+        The UI iterations were basically about making the experience feel intentional, not like a debug view.
+      </p>
+      <p>Now I am wondering about high score feedback and how that could work.... hmmm</p>
+    </div>
+    <div class="sketch-gallery">
+          <div class="sketch-item">
+            <img src="intro.png" alt="Intro Screen">
+            <div class="sketch-label">Intro Screen</div>
+          </div>
+          <div class="sketch-item">
+            <img src="UI.png" alt="New UI">
+            <div class="sketch-label">New UI</div>
+          </div>
+  </div>
+</section>
+
+
+  <!-- FAILURES -->
+  <section>
+    <h2 class="section-header">Documented Failures</h2>
+    <div class="failure-grid">
+      <div class="failure-item">Micro-movements caused jitter</div>
+      <div class="failure-item">Handedness flipped due to mirroring</div>
+      <div class="failure-item">Overlay drift when camera was scaled/cropped</div>
+      <div class="failure-item">Pinch misfires without hysteresis</div>
+      <div class="failure-item">Lighting strongly affects accuracy</div>
+    </div>
+  </section>
+
+  <!-- DEMO -->
+  <section>
+    <h2 class="section-header">Live Prototype</h2>
+    <div class="demo-container">
+      <iframe
+        src="https://editor.p5js.org/emoystner/full/aq_l2cmPV"
+        style="width:100%; height:950px; border:2px solid #00ff41;"
+        allow="camera"
+      ></iframe>
+      <p style="margin-top:1rem; font-size:.9rem;">
+        Click inside the frame and allow camera access.
+      </p>
+    </div>
+  </section>
+
+  <!-- REFLECTION -->
+  <section>
+    <h2 class="section-header">Reflection</h2>
+    <p>
+      Gesture Tetris reframes gameplay as a negotiation between human motion
+      and machine interpretation. Rather than optimizing for perfection,
+      the system highlights how our bodies adapt to imperfect sensing—
+      revealing new forms of play and control.
+    </p>
+    <p>Also can I just say I LOVE the drawn hand in green - it makes me feel like in Spy Kids or something. Just needed to profess my love.</p>
+  </section>
+
+  <footer>
+    <p>Interaction Design • ML5.js + p5.js • Week 14</p>
+  </footer>
+</body>
+</html>

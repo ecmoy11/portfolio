@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playground — Emma Moystner</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --peach: #FFD5BB;
+  --pink: #FFBAEC;
+  --orange: #E15304;
+  --lavender: #9DA5C5;
+  --burgundy: #410016;
+  --olive: #775D0F;
+
+  --bg-cream: #FAF8F5;
+  --bg-warm: #FFF5EE;
+  --text-dark: #2C2B28;
+  --text-light: #6B6862;
+  --text-muted: #A8A49C;
+  --white: #FFFFFF;
+  --divider: rgba(44, 43, 40, 0.1);
+
+  --font-primary: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-serif: 'DM Serif Display', serif;
+}
+
+html {
+  background: var(--bg-cream);
+  color: var(--text-dark);
+  font-family: var(--font-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+body { overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+
+::selection {
+  background: var(--orange);
+  color: var(--white);
+}
+
+/* ============ NAV ============ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.5s ease, padding 0.4s ease, border-color 0.5s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.nav.scrolled {
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 16px 48px;
+  border-bottom-color: rgba(0,0,0,0.06);
+}
+
+.nav-logo {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-dark);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-right a {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.3s;
+  cursor: pointer;
+}
+
+.nav-right a:not(.nav-cta):hover { color: var(--text-dark); }
+.nav-right a.active { color: var(--text-dark); }
+
+.nav-cta {
+  background: var(--orange);
+  color: var(--white) !important;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: background 0.3s;
+  margin-left: 8px;
+}
+
+.nav-cta:hover { background: #c94800; }
+
+.nav-connect-wrap { position: relative; margin-left: 8px; }
+.connect-dropdown { position: absolute; top: calc(100% + 12px); right: 0; background: var(--white); border: 1px solid var(--divider); border-radius: 12px; padding: 8px; min-width: 200px; opacity: 0; transform: translateY(-8px); pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 12px 32px rgba(44,43,40,0.1); z-index: 101; }
+.connect-dropdown.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.connect-dropdown a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dark) !important; transition: background 0.2s; }
+.connect-dropdown a:hover { background: var(--bg-warm); }
+.connect-dropdown a svg { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.5; }
+.connect-dropdown a:hover svg { opacity: 1; }
+.connect-dropdown-divider { height: 1px; background: var(--divider); margin: 4px 8px; }
+
+/* ============ SECTION SHARED ============ */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+}
+
+/* ============ PAGE HEADER ============ */
+.playground-header {
+  padding: 140px 48px 48px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.playground-header h1 {
+  font-family: var(--font-primary);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 200;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  color: var(--text-dark);
+  line-height: 0.95;
+}
+
+.playground-header p {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 12px;
+}
+
+/* ============ TENNIS CARD ============ */
+.playground-card.tennis-card {
+  cursor: none;
+}
+
+.tennis-canvas-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+  background: #C75A4A;
+  overflow: hidden;
+}
+
+.tennis-canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tennis-score {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.tennis-pause {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.tennis-pause:hover {
+  background: rgba(255,255,255,0.25);
+  border-color: rgba(255,255,255,0.4);
+}
+
+.tennis-pause svg {
+  width: 10px;
+  height: 10px;
+  fill: rgba(255,255,255,0.8);
+}
+
+/* Fullscreen tennis overlay */
+.tennis-fullscreen-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #C75A4A;
+  z-index: 200;
+  display: none;
+  cursor: none;
+}
+
+.tennis-fullscreen-overlay.active {
+  display: block;
+}
+
+.tennis-fullscreen-overlay canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tennis-fullscreen-overlay .tennis-score {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  top: 24px;
+}
+
+.tennis-fullscreen-overlay .tennis-pause {
+  width: 36px;
+  height: 36px;
+  top: 24px;
+  right: 48px;
+}
+
+.tennis-fullscreen-overlay .tennis-pause svg {
+  width: 14px;
+  height: 14px;
+}
+
+.tennis-close {
+  position: absolute;
+  top: 24px;
+  left: 48px;
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  background: none;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.tennis-close:hover {
+  color: rgba(255,255,255,0.9);
+  border-color: rgba(255,255,255,0.5);
+}
+
+/* ============ BODY ============ */
+.playground-body {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 48px 8px 120px;
+}
+
+.playground-grid {
+  columns: 3;
+  column-gap: 8px;
+}
+
+.playground-card {
+  break-inside: avoid;
+  margin-bottom: 8px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #f0efec;
+}
+
+.playground-card-image {
+  width: 100%;
+  display: block;
+  overflow: hidden;
+}
+
+.playground-card-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.playground-card:hover .playground-card-image img {
+  transform: scale(1.03);
+}
+
+/* Placeholder colors for items without images */
+.playground-card-image.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.playground-card-image.placeholder span {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+}
+
+/* Hover-reveal label */
+.playground-card-info {
+  padding: 12px 4px 4px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.playground-card:hover .playground-card-info {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.playground-card-title {
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text-dark);
+}
+
+.playground-card-tag {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ============ FOOTER ============ */
+.footer {
+  background: var(--text-dark);
+  color: rgba(255,255,255,0.5);
+  padding: 80px 48px 40px;
+}
+
+.footer-top {
+  max-width: 1100px;
+  margin: 0 auto 64px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 48px;
+}
+
+.footer-tagline {
+  font-family: var(--font-primary);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+}
+
+.footer-col h4 {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 16px;
+}
+
+.footer-col p, .footer-col a {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.8;
+  transition: color 0.3s;
+}
+
+.footer-col a:hover { color: rgba(255,255,255,0.9); }
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 300;
+}
+
+/* ============ ANIMATIONS ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============ MOBILE MENU ============ */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.mobile-menu-toggle span {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: var(--text-dark);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.mobile-menu-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.mobile-menu-toggle.open span:nth-child(2) { opacity: 0; }
+.mobile-menu-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg-cream);
+  z-index: 99;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-nav-overlay.open {
+  display: flex;
+  opacity: 1;
+}
+
+.mobile-nav-overlay a {
+  font-family: var(--font-primary);
+  font-size: 1.8rem;
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.mobile-nav-overlay a:hover { color: var(--orange); }
+
+.mobile-nav-overlay .mobile-connect-links {
+  display: flex;
+  gap: 24px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--divider);
+}
+
+.mobile-nav-overlay .mobile-connect-links a {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+  .playground-grid { columns: 2; }
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 16px 24px; }
+  .nav.scrolled { padding: 12px 24px; }
+  .nav-right { display: none; }
+  .mobile-menu-toggle { display: flex; }
+  .footer { padding: 56px 24px 32px; }
+  .footer-bottom { flex-direction: column; gap: 8px; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+  .playground-card-info { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .playground-grid { columns: 1; }
+  .playground-body { padding: 32px 8px 80px; }
+  .playground-header { padding: 100px 24px 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ======== NAV ======== -->
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav-logo">Emma Moystner</a>
+  <div class="nav-right">
+    <a href="work.html">Work</a>
+    <a href="playground.html" class="active">Playground</a>
+    <a href="about.html">About</a>
+    <a href="Resume.EmmaMoystner.pdf" target="_blank">Resume</a>
+    <div class="nav-connect-wrap">
+      <a href="#" class="nav-cta" onclick="toggleConnectDropdown(event)">Connect</a>
+      <div class="connect-dropdown" id="connect-dropdown">
+        <a href="mailto:emmamoystner.design@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
+          Email me
+        </a>
+        <div class="connect-dropdown-divider"></div>
+        <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+  <button class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-nav-overlay" id="mobile-nav-overlay">
+  <a href="index.html">Home</a>
+  <a href="work.html">Work</a>
+  <a href="playground.html">Playground</a>
+  <a href="about.html">About</a>
+  <div class="mobile-connect-links">
+    <a href="mailto:emmamoystner.design@gmail.com">Email</a>
+    <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
+  </div>
+</div>
+
+<!-- ======== PAGE HEADER ======== -->
+<div class="playground-header">
+  <h1>Playground</h1>
+  <p>Experiments, Prototypes & Side Quests</p>
+</div>
+
+<!-- ======== PROJECTS ======== -->
+<div class="playground-body">
+  <div class="playground-grid">
+
+    <div class="playground-card">
+      <div class="playground-card-image placeholder" style="aspect-ratio:4/5; background:#1C1C1E;">
+        <span>Preview</span>
+      </div>
+      <div class="playground-card-info">
+        <span class="playground-card-title">One-Button Sound</span>
+        <span class="playground-card-tag">Unity</span>
+      </div>
+    </div>
+
+    <div class="playground-card tennis-card" id="tennis-card">
+      <div class="tennis-canvas-wrap" id="tennis-wrap">
+        <canvas id="playground-canvas"></canvas>
+        <div class="tennis-score" id="playground-score">0 — 0</div>
+        <button class="tennis-pause" id="playground-pause" onclick="toggleTennisPause()">
+          <svg viewBox="0 0 24 24" id="pause-icon"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        </button>
+      </div>
+      <div class="playground-card-info">
+        <span class="playground-card-title">Tennis</span>
+        <span class="playground-card-tag">Canvas Game</span>
+      </div>
+    </div>
+
+    <div class="playground-card">
+      <div class="playground-card-image placeholder" style="aspect-ratio:1/1; background:var(--lavender);">
+        <span>Preview</span>
+      </div>
+      <div class="playground-card-info">
+        <span class="playground-card-title">Newton's Pendulum</span>
+        <span class="playground-card-tag">Blender</span>
+      </div>
+    </div>
+
+    <div class="playground-card">
+      <div class="playground-card-image placeholder" style="aspect-ratio:3/4; background:var(--burgundy);">
+        <span>Preview</span>
+      </div>
+      <div class="playground-card-info">
+        <span class="playground-card-title">Project Title</span>
+        <span class="playground-card-tag">Prototype</span>
+      </div>
+    </div>
+
+    <div class="playground-card">
+      <div class="playground-card-image placeholder" style="aspect-ratio:16/9; background:#1C1C1E;">
+        <span>Preview</span>
+      </div>
+      <div class="playground-card-info">
+        <span class="playground-card-title">Project Title</span>
+        <span class="playground-card-tag">Code</span>
+      </div>
+    </div>
+
+    <div class="playground-card">
+      <div class="playground-card-image placeholder" style="aspect-ratio:4/3; background:var(--peach);">
+        <span>Preview</span>
+      </div>
+      <div class="playground-card-info">
+        <span class="playground-card-title">Project Title</span>
+        <span class="playground-card-tag">Interaction</span>
+      </div>
+    </div>
+
+    <div class="playground-card">
+      <div class="playground-card-image placeholder" style="aspect-ratio:3/2; background:var(--olive);">
+        <span>Preview</span>
+      </div>
+      <div class="playground-card-info">
+        <span class="playground-card-title">Project Title</span>
+        <span class="playground-card-tag">Experiment</span>
+      </div>
+    </div>
+
+    <div class="playground-card">
+      <div class="playground-card-image placeholder" style="aspect-ratio:1/1; background:#1C1C1E;">
+        <span>Preview</span>
+      </div>
+      <div class="playground-card-info">
+        <span class="playground-card-title">Project Title</span>
+        <span class="playground-card-tag">3D</span>
+      </div>
+    </div>
+
+    <div class="playground-card">
+      <div class="playground-card-image placeholder" style="aspect-ratio:4/5; background:var(--orange);">
+        <span>Preview</span>
+      </div>
+      <div class="playground-card-info">
+        <span class="playground-card-title">Project Title</span>
+        <span class="playground-card-tag">Side Quest</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ======== TENNIS FULLSCREEN ======== -->
+<div class="tennis-fullscreen-overlay" id="tennis-fullscreen">
+  <canvas id="tennis-fs-canvas"></canvas>
+  <div class="tennis-score" id="tennis-fs-score">0 — 0</div>
+  <button class="tennis-close" onclick="closeTennisFullscreen()">Esc — Close</button>
+  <button class="tennis-pause" id="tennis-fs-pause" onclick="toggleTennisPause()">
+    <svg viewBox="0 0 24 24" id="fs-pause-icon"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+  </button>
+</div>
+
+<!-- ======== FOOTER ======== -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-tagline">Craft in service of systems. Systems in service of humans.</div>
+    <div class="footer-col">
+      <h4>Program</h4>
+      <p>ArtCenter College of Design</p>
+      <p>Graduate IxD, 2026</p>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <a href="mailto:emmamoystner.design@gmail.com">emmamoystner.design@gmail.com</a>
+      <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Emma Moystner</span>
+    <span>Portfolio</span>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Tennis game — renders in card, expands to fullscreen on click
+let tennisFullscreen = false;
+let tennisGame = null;
+
+function initPlaygroundScene() {
+  const fsOverlay = document.getElementById('tennis-fullscreen');
+  const cardWrap = document.getElementById('tennis-wrap');
+  const cardCanvas = document.getElementById('playground-canvas');
+  const fsCanvas = document.getElementById('tennis-fs-canvas');
+  const cardScore = document.getElementById('playground-score');
+  const fsScore = document.getElementById('tennis-fs-score');
+
+  // Active canvas/context switch between card and fullscreen
+  let canvas = cardCanvas;
+  let wrap = cardWrap;
+  let ctx = canvas.getContext('2d');
+  const fsCtx = fsCanvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio, 2);
+
+  let w, h;
+  function resize() {
+    w = wrap.clientWidth;
+    h = wrap.clientHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+
+  const SURROUND = '#C75A4A';
+  const GREEN_L = '#6E9450';
+  const GREEN_R = '#7BA35A';
+  const LINE = 'rgba(255,255,255,0.92)';
+  const SHADOW = 'rgba(0,0,0,0.18)';
+  const BALL_COL = '#D4E34C';
+
+  let playerPoints = 0, botPoints = 0;
+  let playerGames = 0, botGames = 0;
+  let mouseX = w * 0.15, mouseY = h / 2;
+  let serving = true, serveTimer = 0;
+  let paused = false;
+  let waitingForServe = true;
+
+  const POINT_NAMES = ['Love', '15', '30', '40'];
+
+  function getScoreText() {
+    const gameText = `Games: ${playerGames} — ${botGames}`;
+    if (playerPoints < 3 || botPoints < 3) {
+      return `${POINT_NAMES[playerPoints] || playerPoints} — ${POINT_NAMES[botPoints] || botPoints}\n${gameText}`;
+    }
+    if (playerPoints === botPoints) return `Deuce\n${gameText}`;
+    if (playerPoints === botPoints + 1) return `Ad — You\n${gameText}`;
+    if (botPoints === playerPoints + 1) return `Ad — Bot\n${gameText}`;
+    return `${playerPoints} — ${botPoints}\n${gameText}`;
+  }
+
+  function updateScoreDisplay() {
+    const html = getScoreText().replace('\n', '<br>');
+    cardScore.innerHTML = html;
+    fsScore.innerHTML = html;
+  }
+
+  function switchToFullscreen() {
+    tennisFullscreen = true;
+    fsOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    canvas = fsCanvas;
+    wrap = fsOverlay;
+    ctx = fsCtx;
+    resize();
+    initPositions();
+  }
+
+  function switchToCard() {
+    tennisFullscreen = false;
+    fsOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+    canvas = cardCanvas;
+    wrap = cardWrap;
+    ctx = cardCanvas.getContext('2d');
+    resize();
+    initPositions();
+  }
+
+  // Click card to go fullscreen
+  cardWrap.addEventListener('click', (e) => {
+    if (e.target.closest('.tennis-pause')) return;
+    switchToFullscreen();
+  });
+
+  // Expose close for the button
+  window.closeTennisFullscreen = switchToCard;
+
+  // Escape to close
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Escape' && tennisFullscreen) {
+      switchToCard();
+    }
+    if (e.code === 'Space' && tennisFullscreen) {
+      e.preventDefault();
+      triggerPlayerServe();
+    }
+  });
+
+  function court() {
+    const courtRatio = 2.17;
+    let cw = w * 0.55;
+    let ch = cw / courtRatio;
+    if (ch > h * 0.6) { ch = h * 0.6; cw = ch * courtRatio; }
+    const cx = (w - cw) / 2;
+    const cy = (h - ch) / 2;
+    const alley = ch * 0.125;
+    return { cx, cy, cw, ch, midX: cx + cw / 2, alley };
+  }
+
+  const ball = { x: 0, y: 0, vx: 0, vy: 0, radius: 6, trail: [], active: false, bounces: 0, lastHitBy: 'none', landed: false };
+  const player = { x: 0, y: 0, swing: 0 };
+  const bot = { x: 0, y: 0, swing: 0 };
+  let serverIs = 'player';
+  const HIT_RADIUS = 35;
+  const bounceRings = [];
+  let announcement = { text: '', timer: 0 };
+  let rallyCount = 0;
+
+  function resetBall() {
+    const c = court();
+    ball.trail = [];
+    ball.active = false;
+    ball.bounces = 0;
+    ball.lastHitBy = 'none';
+    ball.landed = false;
+    serving = true;
+
+    if (serverIs === 'player') {
+      waitingForServe = true;
+      serveTimer = 0;
+      ball.x = c.cx - 15;
+      ball.y = c.cy + c.ch / 2;
+      ball.vx = 0;
+      ball.vy = 0;
+      ball.lastHitBy = 'player';
+    } else {
+      waitingForServe = false;
+      serveTimer = 70;
+      ball.x = c.cx + c.cw + 15;
+      ball.y = c.cy + c.ch / 2 + (Math.random() - 0.5) * c.ch * 0.3;
+      ball.vx = -(3.5 + Math.random() * 0.5);
+      ball.vy = (Math.random() - 0.5) * 1.5;
+      ball.lastHitBy = 'bot';
+    }
+  }
+
+  function triggerPlayerServe() {
+    if (!waitingForServe || !serving) return;
+    waitingForServe = false;
+    ball.x = player.x - 10;
+    ball.y = player.y;
+    ball.vx = 3.5 + Math.random() * 0.5;
+    ball.vy = (Math.random() - 0.5) * 1.5;
+    ball.lastHitBy = 'player';
+    ball.active = true;
+    serving = false;
+    player.swing = 1.0;
+  }
+
+  function scorePoint(winner, reason) {
+    if (winner === 'player') playerPoints++;
+    else botPoints++;
+
+    let callout = '';
+    if (reason === 'ace') callout = 'Ace!';
+    else if (reason === 'out') callout = 'Out!';
+    else if (rallyCount >= 6) callout = 'Great rally!';
+    else if (winner === 'player') callout = 'Point!';
+    else callout = 'Fault';
+
+    if (playerPoints >= 4 && playerPoints - botPoints >= 2) {
+      callout = 'Game — You!';
+      playerGames++;
+      playerPoints = 0;
+      botPoints = 0;
+      serverIs = serverIs === 'player' ? 'bot' : 'player';
+    } else if (botPoints >= 4 && botPoints - playerPoints >= 2) {
+      callout = 'Game — Bot';
+      botGames++;
+      playerPoints = 0;
+      botPoints = 0;
+      serverIs = serverIs === 'player' ? 'bot' : 'player';
+    } else if (playerPoints >= 3 && botPoints >= 3 && playerPoints === botPoints) {
+      callout = 'Deuce';
+    }
+
+    announcement = { text: callout, timer: 90 };
+    rallyCount = 0;
+    updateScoreDisplay();
+    resetBall();
+  }
+
+  function initPositions() {
+    const c = court();
+    player.x = c.cx + 35;
+    player.y = c.cy + c.ch / 2;
+    bot.x = c.cx + c.cw - 35;
+    bot.y = c.cy + c.ch / 2;
+    resetBall();
+  }
+  initPositions();
+
+  // Mouse tracking on both surfaces
+  fsOverlay.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+  cardWrap.addEventListener('mousemove', (e) => {
+    const rect = cardWrap.getBoundingClientRect();
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
+  });
+
+  function drawCourt() {
+    const c = court();
+    const { cx, cy, cw, ch, midX, alley } = c;
+    const midY = cy + ch / 2;
+
+    ctx.fillStyle = SURROUND;
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.fillStyle = GREEN_L;
+    ctx.fillRect(cx, cy, cw / 2, ch);
+    ctx.fillStyle = GREEN_R;
+    ctx.fillRect(midX, cy, cw / 2, ch);
+
+    ctx.strokeStyle = LINE;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(cx, cy, cw, ch);
+
+    ctx.beginPath();
+    ctx.moveTo(cx, cy + alley);
+    ctx.lineTo(cx + cw, cy + alley);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx, cy + ch - alley);
+    ctx.lineTo(cx + cw, cy + ch - alley);
+    ctx.stroke();
+
+    const serviceDist = cw * 0.27;
+    ctx.beginPath();
+    ctx.moveTo(midX - serviceDist, cy + alley);
+    ctx.lineTo(midX - serviceDist, cy + ch - alley);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(midX + serviceDist, cy + alley);
+    ctx.lineTo(midX + serviceDist, cy + ch - alley);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(midX - serviceDist, midY);
+    ctx.lineTo(midX + serviceDist, midY);
+    ctx.stroke();
+
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, midY);
+    ctx.lineTo(cx + 6, midY);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx + cw, midY);
+    ctx.lineTo(cx + cw - 6, midY);
+    ctx.stroke();
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(20,20,20,0.55)';
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash([5, 3]);
+    ctx.beginPath();
+    ctx.moveTo(midX, cy - 10);
+    ctx.lineTo(midX, cy + ch + 10);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = 'rgba(20,20,20,0.7)';
+    ctx.beginPath();
+    ctx.arc(midX, cy - 5, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(midX, cy + ch + 5, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.fillStyle = 'rgba(0,0,0,0.04)';
+    ctx.fillRect(midX + 2, cy, 4, ch);
+  }
+
+  function drawFigure(px, py, color, facingRight, swing) {
+    const dir = facingRight ? 1 : -1;
+    const swingAngle = swing > 0 ? (-1.0 + swing * 2.2) * dir : 0;
+
+    ctx.fillStyle = SHADOW;
+    ctx.beginPath();
+    ctx.ellipse(px + 5, py + 4, 12, 8, 0.15, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.save();
+    ctx.translate(px, py);
+    ctx.rotate(swing * 0.15 * dir);
+
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 10, 7, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#F0DCC8';
+    ctx.beginPath();
+    ctx.arc(dir * 6, 0, 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    const shoulderX = dir * 6;
+    const shoulderY = -1;
+    const armLen = 16;
+    const racketBaseAngle = facingRight ? -0.3 : Math.PI + 0.3;
+    const finalAngle = racketBaseAngle + swingAngle;
+
+    const elbowX = shoulderX + Math.cos(finalAngle) * armLen;
+    const elbowY = shoulderY + Math.sin(finalAngle) * armLen;
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(shoulderX, shoulderY);
+    ctx.lineTo(elbowX, elbowY);
+    ctx.stroke();
+
+    const racketX = elbowX + Math.cos(finalAngle) * 7;
+    const racketY = elbowY + Math.sin(finalAngle) * 7;
+    ctx.strokeStyle = '#555';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.ellipse(racketX, racketY, 6, 5, finalAngle, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(85,85,85,0.3)';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(racketX - Math.cos(finalAngle + 1.57) * 4, racketY - Math.sin(finalAngle + 1.57) * 4);
+    ctx.lineTo(racketX + Math.cos(finalAngle + 1.57) * 4, racketY + Math.sin(finalAngle + 1.57) * 4);
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function drawBall() {
+    if (!ball.active && serving) return;
+
+    for (let i = 0; i < ball.trail.length; i++) {
+      const t = ball.trail[i];
+      const alpha = (i / ball.trail.length) * 0.12;
+      const size = ball.radius * (0.4 + (i / ball.trail.length) * 0.6);
+      ctx.fillStyle = `rgba(212,227,76,${alpha})`;
+      ctx.beginPath();
+      ctx.arc(t.x, t.y, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.fillStyle = 'rgba(0,0,0,0.12)';
+    ctx.beginPath();
+    ctx.ellipse(ball.x + 3, ball.y + 3, ball.radius, ball.radius * 0.6, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = BALL_COL;
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.beginPath();
+    ctx.arc(ball.x - 1.5, ball.y - 1.5, ball.radius * 0.35, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function updateGame() {
+    // Only process input in fullscreen
+    if (!tennisFullscreen) return;
+
+    const c = court();
+    const midY = c.cy + c.ch / 2;
+
+    player.x += (Math.max(20, Math.min(w - 20, mouseX)) - player.x) * 0.14;
+    player.y += (Math.max(20, Math.min(h - 20, mouseY)) - player.y) * 0.14;
+
+    if (serving) {
+      if (waitingForServe) {
+        ball.x = player.x - 10;
+        ball.y = player.y;
+        return;
+      }
+      serveTimer--;
+      if (serverIs === 'bot' && serveTimer <= 0) {
+        ball.active = true;
+        serving = false;
+      }
+      return;
+    }
+
+    ball.vx *= 0.998;
+    ball.vy *= 0.998;
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+
+    ball.trail.push({ x: ball.x, y: ball.y });
+    if (ball.trail.length > 12) ball.trail.shift();
+
+    const speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+
+    if (!ball.landed && speed < 2.8 && ball.lastHitBy !== 'none') {
+      ball.landed = true;
+      ball.bounces++;
+      ball.vx *= 0.65;
+      ball.vy *= 0.65;
+      bounceRings.push({ x: ball.x, y: ball.y, radius: 5, maxRadius: 25, alpha: 0.6 });
+    }
+
+    if (ball.landed && speed > 3.2) {
+      ball.landed = false;
+    }
+
+    if (ball.bounces >= 2) {
+      scorePoint(ball.lastHitBy === 'player' ? 'player' : 'bot', 'double');
+      return;
+    }
+
+    if (ball.x < -120 || ball.x > w + 120 || ball.y < -120 || ball.y > h + 120) {
+      if (ball.lastHitBy === 'player') {
+        if (ball.x > w + 50) {
+          scorePoint('player', rallyCount === 0 ? 'ace' : 'winner');
+        } else {
+          scorePoint('bot', 'out');
+        }
+      } else {
+        if (ball.x < -50) {
+          scorePoint('bot', rallyCount === 0 ? 'ace' : 'winner');
+        } else {
+          scorePoint('player', 'out');
+        }
+      }
+      return;
+    }
+
+    if (speed < 0.3 && ball.bounces >= 1) {
+      scorePoint(ball.lastHitBy === 'player' ? 'player' : 'bot', 'winner');
+      return;
+    }
+
+    const playerIsReceiver = serverIs === 'bot' && rallyCount === 0;
+    const playerCanHit = !playerIsReceiver || ball.bounces >= 1;
+    const pdist = Math.sqrt((ball.x - player.x) ** 2 + (ball.y - player.y) ** 2);
+    if (pdist < HIT_RADIUS && ball.lastHitBy !== 'player' && playerCanHit) {
+      const hitSpeed = 3.8 + Math.random() * 0.8;
+      const aimAngle = (ball.y - player.y) * 0.03;
+      ball.vx = Math.abs(hitSpeed);
+      ball.vy = aimAngle * 10 + (Math.random() - 0.5) * 1.2;
+      ball.lastHitBy = 'player';
+      ball.bounces = 0;
+      ball.landed = false;
+      player.swing = 1.0;
+      rallyCount++;
+    }
+
+    if (ball.vx > 0 && ball.lastHitBy === 'player') {
+      const timeToArrive = Math.max(1, (bot.x - ball.x) / Math.max(ball.vx, 0.5));
+      const predictY = ball.y + ball.vy * timeToArrive * 0.7;
+      bot.x += (Math.max(c.midX + 20, ball.x + ball.vx * 3) - bot.x) * 0.08;
+      bot.y += (predictY - bot.y) * 0.09;
+    } else {
+      bot.x += (c.cx + c.cw * 0.82 - bot.x) * 0.04;
+      bot.y += (midY + Math.sin(Date.now() * 0.0007) * 20 - bot.y) * 0.04;
+    }
+    bot.x = Math.max(c.midX, Math.min(w - 15, bot.x));
+    bot.y = Math.max(15, Math.min(h - 15, bot.y));
+
+    const botIsReceiver = serverIs === 'player' && rallyCount === 0;
+    const botCanHit = !botIsReceiver || ball.bounces >= 1;
+    const bdist = Math.sqrt((ball.x - bot.x) ** 2 + (ball.y - bot.y) ** 2);
+    if (bdist < HIT_RADIUS && ball.lastHitBy !== 'bot' && botCanHit) {
+      const hitSpeed = 3.5 + Math.random() * 0.8;
+      const aimAngle = (ball.y - bot.y) * 0.025;
+      ball.vx = -Math.abs(hitSpeed);
+      ball.vy = aimAngle * 8 + (Math.random() - 0.5) * 1.5;
+      ball.lastHitBy = 'bot';
+      ball.bounces = 0;
+      ball.landed = false;
+      bot.swing = 1.0;
+      rallyCount++;
+    }
+
+    if (speed > 5.5) {
+      ball.vx *= 5.5 / speed;
+      ball.vy *= 5.5 / speed;
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+    drawCourt();
+    if (!paused) {
+      updateGame();
+      player.swing *= 0.88;
+      bot.swing *= 0.88;
+      if (player.swing < 0.01) player.swing = 0;
+      if (bot.swing < 0.01) bot.swing = 0;
+
+      for (let i = bounceRings.length - 1; i >= 0; i--) {
+        const r = bounceRings[i];
+        r.radius += 1.2;
+        r.alpha -= 0.015;
+        if (r.alpha <= 0) bounceRings.splice(i, 1);
+      }
+
+      if (announcement.timer > 0) announcement.timer--;
+    }
+
+    bounceRings.forEach(r => {
+      ctx.strokeStyle = `rgba(255,255,255,${r.alpha})`;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+      ctx.stroke();
+    });
+
+    drawFigure(bot.x, bot.y, '#2C2B28', false, bot.swing);
+    drawBall();
+    drawFigure(player.x, player.y, '#E15304', true, player.swing);
+
+    if (announcement.timer > 0) {
+      const fadeIn = Math.min(1, (90 - announcement.timer + 1) / 10);
+      const fadeOut = Math.min(1, announcement.timer / 15);
+      const alpha = Math.min(fadeIn, fadeOut);
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.font = '500 ' + Math.min(w * 0.03, 22) + 'px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const yOffset = (1 - fadeIn) * 10;
+      ctx.fillText(announcement.text, w / 2, h / 2 + yOffset);
+      ctx.restore();
+    }
+
+    if (tennisFullscreen && waitingForServe && !paused) {
+      const pulse = 0.5 + 0.3 * Math.sin(Date.now() * 0.003);
+      ctx.save();
+      ctx.globalAlpha = pulse;
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.font = '500 ' + Math.min(w * 0.02, 14) + 'px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('PRESS SPACE TO SERVE', w / 2, h * 0.88);
+      ctx.restore();
+    }
+
+    // "Click to play" prompt on card thumbnail
+    if (!tennisFullscreen) {
+      ctx.save();
+      ctx.fillStyle = 'rgba(0,0,0,0.15)';
+      ctx.fillRect(0, 0, w, h);
+      ctx.globalAlpha = 0.6 + 0.2 * Math.sin(Date.now() * 0.002);
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.font = '500 ' + Math.min(w * 0.035, 13) + 'px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('CLICK TO PLAY', w / 2, h / 2);
+      ctx.restore();
+    }
+
+    if (paused && tennisFullscreen) {
+      ctx.fillStyle = 'rgba(0,0,0,0.3)';
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      ctx.font = '300 ' + Math.min(w * 0.04, 28) + 'px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('PAUSED', w / 2, h / 2);
+      ctx.font = '400 ' + Math.min(w * 0.015, 11) + 'px "JetBrains Mono", monospace';
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.fillText('CLICK TO RESUME', w / 2, h / 2 + 28);
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  tennisGame = {
+    togglePause() {
+      paused = !paused;
+      const icons = [document.getElementById('pause-icon'), document.getElementById('fs-pause-icon')];
+      icons.forEach(icon => {
+        if (!icon) return;
+        if (paused) {
+          icon.innerHTML = '<polygon points="8,5 19,12 8,19"/>';
+        } else {
+          icon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+        }
+      });
+    }
+  };
+
+  requestAnimationFrame(animate);
+  updateScoreDisplay();
+  window.addEventListener('resize', () => { resize(); initPositions(); });
+}
+
+function toggleTennisPause() {
+  if (tennisGame) tennisGame.togglePause();
+}
+
+// Init immediately
+initPlaygroundScene();
+
+function toggleConnectDropdown(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  document.getElementById('connect-dropdown').classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.nav-connect-wrap')) {
+    document.getElementById('connect-dropdown').classList.remove('open');
+  }
+});
+
+function toggleMobileMenu() {
+  const btn = document.getElementById('mobile-menu-toggle');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  btn.classList.toggle('open');
+  overlay.classList.toggle('open');
+  document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
+}
+</script>
+
+</body>
+</html>

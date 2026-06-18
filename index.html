@@ -1,0 +1,3226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emma Moystner · Portfolio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+
+<style>
+@font-face {
+  font-family: 'Lennon';
+  src: url('TAYLennonRegular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --peach: #FFD5BB;
+  --pink: #FFBAEC;
+  --orange: #E15304;
+  --lavender: #9DA5C5;
+  --burgundy: #410016;
+  --olive: #775D0F;
+
+  --bg-cream: #FAF8F5;
+  --bg-warm: #FFF5EE;
+  --text-dark: #2C2B28;
+  --text-light: #6B6862;
+  --text-muted: #A8A49C;
+  --white: #FFFFFF;
+  --divider: rgba(44, 43, 40, 0.1);
+
+  --font-primary: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-serif: 'DM Serif Display', serif;
+}
+
+html {
+  background: var(--bg-cream);
+  color: var(--text-dark);
+  font-family: var(--font-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+html.lenis, html.lenis body { height: auto; }
+body { overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+
+::selection {
+  background: var(--orange);
+  color: var(--white);
+}
+
+/* ============ NAV ============ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.5s ease, padding 0.4s ease, border-color 0.5s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.nav.scrolled {
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 16px 48px;
+  border-bottom-color: rgba(0,0,0,0.06);
+}
+
+.nav-logo {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--text-dark);
+  opacity: 0;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  opacity: 0;
+}
+
+.nav-right a {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.3s;
+  cursor: pointer;
+}
+
+.nav-right a:not(.nav-cta):hover { color: var(--text-dark); }
+
+.nav-cta {
+  background: var(--orange);
+  color: var(--white) !important;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: background 0.3s;
+  margin-left: 8px;
+}
+
+.nav-cta:hover { background: #c94800; }
+
+.nav-connect-wrap {
+  position: relative;
+  margin-left: 8px;
+}
+
+.connect-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  background: var(--white);
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 200px;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 12px 32px rgba(44, 43, 40, 0.1);
+  z-index: 101;
+}
+
+.connect-dropdown.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.connect-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dark) !important;
+  transition: background 0.2s;
+}
+
+.connect-dropdown a:hover {
+  background: var(--bg-warm);
+}
+
+.connect-dropdown a svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.connect-dropdown a:hover svg {
+  opacity: 1;
+}
+
+.connect-dropdown-divider {
+  height: 1px;
+  background: var(--divider);
+  margin: 4px 8px;
+}
+
+/* ============ HERO INTRO ============ */
+.hero-intro {
+  padding: 160px 48px 56px;
+  max-width: 1600px;
+  margin: 0 auto;
+  background: var(--bg-cream);
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 20px;
+}
+
+.hero-statement {
+  font-family: var(--font-primary);
+  font-size: clamp(1.6rem, 3.6vw, 2.9rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+  max-width: 52ch;
+}
+
+@media (max-width: 700px) {
+  .hero-intro { padding: 120px 24px 40px; }
+}
+
+/* ============ WORK GRID ============ */
+#work-grid {
+  padding: 8px 8px 8px;
+  background: var(--bg-cream);
+  min-height: 100vh;
+}
+
+.grid-inner {
+  columns: 3;
+  column-gap: 8px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.work-tile {
+  position: relative;
+  cursor: pointer;
+  break-inside: avoid;
+  margin-bottom: 8px;
+}
+
+.tile-media {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--bg-warm);
+  aspect-ratio: 4 / 3;
+}
+
+.tile-media img,
+.tile-media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tile-media.contain img,
+.tile-media.contain video {
+  object-fit: contain;
+  padding: 5%;
+}
+
+.work-tile:hover .tile-media img,
+.work-tile:hover .tile-media video {
+  transform: scale(1.02);
+}
+
+.tile-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.work-tile:hover .tile-placeholder { transform: scale(1.02); }
+
+.ph-name {
+  font-family: var(--font-primary);
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.ph-note {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.tile-caption {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 10px 4px 4px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.work-tile:hover .tile-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tc-name {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text-dark);
+}
+
+.tc-tag {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Pills overlaid on the tile photo · revealed on hover */
+.tile-overlay {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  right: 14px;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.work-tile:hover .tile-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* When the card's bottom is below the fold, pin pills to the top-left */
+.work-tile.pills-top .tile-overlay {
+  top: 14px;
+  bottom: auto;
+}
+
+.tile-pill {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.16);
+}
+
+.tile-pill-name {
+  padding: 7px 13px;
+  font-family: var(--font-primary);
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--text-dark);
+}
+
+.tile-pill-tag {
+  padding: 5px 11px;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5F594F;
+  border-radius: 10px;
+}
+
+/* Touch devices have no hover · keep pills visible */
+@media (hover: none) {
+  .tile-overlay,
+  .playground-card-info { opacity: 1; transform: none; }
+}
+
+@media (max-width: 1024px) {
+  .grid-inner { columns: 2; }
+}
+
+@media (max-width: 700px) {
+  #work-grid { padding-top: 8px; }
+  .grid-inner { columns: 1; }
+  .tile-overlay { opacity: 1; transform: none; }
+}
+
+/* ============ REVEAL ANIMATION ============ */
+.reveal-up {
+  opacity: 0.25;
+  transform: translateY(16px);
+}
+
+/* ============ SECTION SHARED ============ */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+}
+
+.section-heading {
+  font-family: var(--font-primary);
+  font-size: 42px;
+  font-weight: 300;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+}
+
+/* ============ INFO OVERLAY ============ */
+.info-inner {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 140px 48px 100px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.info-photo {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(44,43,40,0.08);
+}
+
+.info-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+.info-lede {
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  font-weight: 300;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+  margin-bottom: 28px;
+}
+
+.info-body {
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: var(--text-light);
+  margin-bottom: 1.2rem;
+}
+
+.info-meta {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  line-height: 2.2;
+  margin-top: 32px;
+}
+
+.info-links { display: flex; gap: 12px; margin-top: 36px; flex-wrap: wrap; }
+
+.info-links a {
+  padding: 12px 28px;
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.info-links a.primary { background: var(--orange); color: var(--white); }
+.info-links a.primary:hover { background: #c94700; }
+.info-links a.outline { border: 1px solid rgba(44,43,40,0.2); color: var(--text-dark); }
+.info-links a.outline:hover { background: rgba(44,43,40,0.06); }
+
+@media (max-width: 700px) {
+  .info-inner { padding: 110px 24px 80px; }
+  .info-grid { grid-template-columns: 1fr; gap: 32px; }
+  .info-photo { width: 120px; height: 120px; }
+}
+
+/* ============ ABOUT PAGE (info overlay) ============ */
+#info-page .about-hero {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  padding: 120px 48px 80px;
+  background: var(--orange);
+}
+#info-page .about-hero-photo {
+  width: 320px; height: 320px;
+  border-radius: 16px;
+  object-fit: cover;
+  flex-shrink: 0;
+  order: 2;
+}
+#info-page .about-hero-title {
+  font-family: var(--font-primary);
+  font-size: clamp(2.4rem, 6vw, 5.5rem);
+  font-weight: 200;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--white);
+  order: 1;
+}
+#info-page .about-hero-title .accent { font-weight: 400; }
+
+#info-page .about-story {
+  padding: 140px 48px;
+  background: var(--bg-cream);
+}
+#info-page .about-story-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.2fr 1fr; gap: 96px;
+}
+#info-page .about-story-heading {
+  font-family: var(--font-primary);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 300; line-height: 1.3; letter-spacing: -0.02em;
+  color: var(--text-dark);
+}
+#info-page .about-story-heading strong { font-weight: 500; }
+#info-page .about-story-text p {
+  font-size: 0.95rem; font-weight: 300; line-height: 1.85; color: var(--text-light);
+}
+#info-page .about-story-text p + p { margin-top: 1.4rem; }
+#info-page .highlight { color: var(--text-dark); font-weight: 500; border-bottom: 2px solid var(--orange); }
+
+#info-page .about-personal { background: var(--orange); color: var(--white); padding: 120px 48px; }
+#info-page .about-personal-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 360px 1fr; gap: 64px; align-items: center;
+}
+#info-page .personal-carousel {
+  position: relative; width: 360px; height: 360px;
+  border-radius: 12px; overflow: hidden; flex-shrink: 0;
+}
+#info-page .personal-carousel img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; opacity: 0; transition: opacity 1s ease;
+}
+#info-page .personal-carousel img.active { opacity: 1; }
+#info-page .personal-carousel-caption {
+  position: absolute; top: 0; left: 0; right: 0; text-align: center;
+  font-family: var(--font-primary); font-size: 0.8rem; font-weight: 300; font-style: italic;
+  color: var(--white); padding: 14px 20px; background: rgba(0,0,0,0.5);
+  opacity: 0; transition: opacity 0.6s ease; z-index: 2;
+}
+#info-page .personal-carousel-caption.active { opacity: 1; }
+#info-page .personal-carousel-dots {
+  position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 2;
+}
+#info-page .personal-carousel-dots span {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.4); transition: background 0.3s; cursor: pointer;
+}
+#info-page .personal-carousel-dots span.active { background: var(--white); }
+#info-page .personal-text h3 {
+  font-family: var(--font-serif); font-size: clamp(1.6rem, 2.5vw, 2rem); font-weight: 400; margin-bottom: 24px;
+}
+#info-page .personal-text p {
+  font-family: var(--font-primary); font-size: 1.05rem; font-weight: 300;
+  line-height: 1.85; margin-bottom: 28px; opacity: 0.92;
+}
+#info-page .personal-text p:last-child { margin-bottom: 0; }
+
+#info-page .about-approach { padding: 140px 48px; background: var(--bg-cream); }
+#info-page .about-approach-inner { max-width: 1100px; margin: 0 auto; }
+#info-page .about-approach-heading {
+  font-family: var(--font-primary); font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 300; line-height: 1.3; letter-spacing: -0.02em; color: var(--text-dark); margin-bottom: 64px;
+}
+#info-page .approach-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--text-dark); }
+#info-page .approach-item { padding: 40px; border-right: 1px solid var(--divider); }
+#info-page .approach-item:first-child { padding-left: 0; }
+#info-page .approach-item:last-child { border-right: none; padding-right: 0; }
+#info-page .approach-item h4 {
+  font-family: var(--font-mono); font-size: 0.55rem; font-weight: 500;
+  letter-spacing: 0.25em; text-transform: uppercase; color: var(--orange); margin-bottom: 16px;
+}
+#info-page .approach-item p { font-size: 0.9rem; font-weight: 300; line-height: 1.75; color: var(--text-light); }
+
+#info-page .about-education { padding: 0 48px 140px; background: var(--bg-cream); }
+#info-page .about-education-inner { max-width: 1100px; margin: 0 auto; border-top: 1px solid var(--divider); padding-top: 80px; }
+#info-page .education-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+#info-page .education-item h4 {
+  font-family: var(--font-mono); font-size: 0.55rem; font-weight: 500;
+  letter-spacing: 0.25em; text-transform: uppercase; color: var(--orange); margin-bottom: 12px;
+}
+#info-page .education-item h3 { font-size: 1.1rem; font-weight: 500; color: var(--text-dark); margin-bottom: 6px; }
+#info-page .education-item p { font-size: 0.9rem; font-weight: 300; line-height: 1.75; color: var(--text-light); }
+#info-page .education-item p + p { margin-top: 0.5rem; }
+
+#info-page .about-connect { padding: 140px 48px; background: var(--bg-cream); border-top: 1px solid var(--divider); }
+#info-page .about-connect-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: auto 1.5fr 1fr; gap: 64px; align-items: end;
+}
+#info-page .connect-photo {
+  width: 200px; height: 200px; border-radius: 50%; overflow: hidden;
+  border: 3px solid rgba(44,43,40,0.08); flex-shrink: 0; align-self: center;
+}
+#info-page .connect-photo img { width: 100%; height: 100%; object-fit: cover; }
+#info-page .connect-heading {
+  font-family: var(--font-primary); font-size: clamp(2.4rem, 5.5vw, 4.5rem);
+  font-weight: 200; letter-spacing: -0.03em; text-transform: uppercase; line-height: 0.95; color: var(--text-dark);
+}
+#info-page .connect-text p { font-size: 0.95rem; font-weight: 300; line-height: 1.8; color: var(--text-light); margin-bottom: 48px; }
+#info-page .connect-links { display: flex; gap: 16px; flex-wrap: wrap; }
+#info-page .connect-btn {
+  display: inline-block; padding: 14px 32px; font-family: var(--font-mono);
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
+  border-radius: 50px; transition: all 0.3s;
+}
+#info-page .connect-btn-primary { background: var(--orange); color: var(--white); }
+#info-page .connect-btn-primary:hover { background: #c94800; }
+#info-page .connect-btn-outline { border: 1px solid var(--text-dark); color: var(--text-dark); }
+#info-page .connect-btn-outline:hover { background: var(--text-dark); color: var(--white); }
+
+@media (max-width: 1000px) {
+  #info-page .about-story-inner { grid-template-columns: 1fr; gap: 48px; }
+  #info-page .about-connect-inner { grid-template-columns: 1fr; gap: 48px; }
+  #info-page .connect-photo { width: 160px; height: 160px; align-self: start; }
+  #info-page .approach-grid { grid-template-columns: 1fr; }
+  #info-page .approach-item { border-right: none; border-bottom: 1px solid var(--divider); padding: 32px 0; }
+  #info-page .approach-item:last-child { border-bottom: none; }
+  #info-page .education-grid { grid-template-columns: 1fr; gap: 48px; }
+}
+@media (max-width: 768px) {
+  #info-page .about-hero { padding: 100px 24px 56px; flex-direction: column; align-items: center; gap: 32px; text-align: center; }
+  #info-page .about-hero-photo { width: 220px; height: 220px; order: 1; }
+  #info-page .about-hero-title { order: 2; }
+  #info-page .about-story, #info-page .about-approach, #info-page .about-connect { padding: 100px 24px; }
+  #info-page .about-education { padding: 0 24px 100px; }
+  #info-page .about-personal { padding: 80px 24px; }
+  #info-page .about-personal-inner { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+  #info-page .personal-carousel { width: 280px; height: 280px; margin: 0 auto; }
+}
+
+/* ============ FOOTER ============ */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 56px 16px 24px;
+  background: var(--bg-cream);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.footer a { transition: color 0.3s; }
+.footer a:hover { color: var(--text-dark); }
+
+.nav { z-index: 100; }
+#work-grid, .footer, .case-study-page {
+  position: relative;
+  z-index: 5;
+}
+
+/* ============ PLAYGROUND PAGE ============ */
+.playground-page {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--bg-cream);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  z-index: 200;
+}
+
+.playground-page.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.playground-topnav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 201;
+  padding: 16px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.playground-topnav .pg-logo {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+.pg-topnav-right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.pg-topnav-right a {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.3s;
+  cursor: pointer;
+}
+
+.pg-topnav-right a:hover { color: var(--text-dark); }
+.pg-topnav-right a.active { color: var(--text-dark); }
+
+@media (max-width: 768px) {
+  .playground-topnav { padding: 14px 24px; }
+  .pg-topnav-right { gap: 18px; }
+}
+
+/* Tennis card in masonry */
+.playground-card.tennis-card {
+  cursor: none;
+}
+
+.tennis-canvas-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+  background: #C75A4A;
+  overflow: hidden;
+}
+
+.tennis-canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tennis-score {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.tennis-pause {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.tennis-pause:hover {
+  background: rgba(255,255,255,0.25);
+  border-color: rgba(255,255,255,0.4);
+}
+
+.tennis-pause svg {
+  width: 10px;
+  height: 10px;
+  fill: rgba(255,255,255,0.8);
+}
+
+/* Fullscreen tennis overlay */
+.tennis-fullscreen-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #C75A4A;
+  z-index: 200;
+  display: none;
+  cursor: none;
+}
+
+.tennis-fullscreen-overlay.active {
+  display: block;
+}
+
+.tennis-fullscreen-overlay canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tennis-fullscreen-overlay .tennis-score {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  top: 24px;
+}
+
+.tennis-fullscreen-overlay .tennis-pause {
+  width: 36px;
+  height: 36px;
+  top: 24px;
+  right: 48px;
+}
+
+.tennis-fullscreen-overlay .tennis-pause svg {
+  width: 14px;
+  height: 14px;
+}
+
+.tennis-close {
+  position: absolute;
+  top: 24px;
+  left: 48px;
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  background: none;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.tennis-close:hover {
+  color: rgba(255,255,255,0.9);
+  border-color: rgba(255,255,255,0.5);
+}
+
+.playground-body {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 48px 8px 120px;
+}
+
+.playground-grid {
+  columns: 3;
+  column-gap: 8px;
+}
+
+.playground-card {
+  break-inside: avoid;
+  margin-bottom: 8px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #f0efec;
+}
+
+.playground-card-image {
+  width: 100%;
+  display: block;
+  overflow: hidden;
+}
+
+.playground-card-image img,
+.playground-card-image video {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.playground-card:hover .playground-card-image img,
+.playground-card:hover .playground-card-image video {
+  transform: scale(1.03);
+}
+
+.playground-card-image.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.playground-card-image.placeholder span {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+}
+
+/* Playground captions as frosted pills, revealed on hover */
+.playground-card-info {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.playground-card:hover .playground-card-info {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* When the card's bottom is below the fold, pin pills to the top-left */
+.playground-card.pills-top .playground-card-info {
+  top: 14px;
+  bottom: auto;
+}
+
+.playground-card-title,
+.playground-card-tag {
+  background: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.16);
+}
+
+.playground-card-title {
+  padding: 7px 13px;
+  border-radius: 12px;
+  font-family: var(--font-primary);
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--text-dark);
+}
+
+.playground-card-tag {
+  padding: 5px 11px;
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5F594F;
+}
+
+/* ---- Photography tile · stack of prints that toss out on hover ---- */
+.photo-toss-card .photo-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: linear-gradient(155deg, #F4EDE5 0%, #E9DDD0 100%);
+  /* contain the prints in their own stacking layer so none can ever
+     climb above the Photography / Stills pills */
+  isolation: isolate;
+}
+.photo-toss-card .photo-deck {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.photo-toss-card .photo-print {
+  position: absolute;
+  width: 46%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  padding: 5px;
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: 0 8px 22px rgba(44, 43, 40, 0.28);
+  transform: rotate(var(--rest, 0deg));
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.25, 1), box-shadow 0.4s ease;
+  will-change: transform;
+}
+.photo-toss-card .photo-print.portrait {
+  width: 33%;
+  aspect-ratio: 2 / 3;
+}
+/* on hover the deck spills — pill (.playground-card-info, z-index 2) stays above */
+.photo-toss-card:hover .photo-print {
+  transform: translate(var(--tx, 0px), var(--ty, 0px)) rotate(var(--rot, 0deg));
+  box-shadow: 0 16px 34px rgba(44, 43, 40, 0.34);
+}
+/* Photography + Stills pills behave like every other card (hidden at rest,
+   fade in on hover) — but always sit above the spilling prints */
+.photo-toss-card .playground-card-info {
+  z-index: 5;
+}
+@media (hover: none) {
+  /* touch: show a gentle resting fan, no toss */
+  .photo-toss-card .photo-print { transform: rotate(var(--rest, 0deg)); }
+}
+
+/* ============ PHOTOGRAPHY GALLERY PAGE ============ */
+.photo-gallery-page {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--bg-cream);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  z-index: 260;
+}
+.photo-gallery-page.active { opacity: 1; pointer-events: auto; }
+
+.pgal-topnav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 261;
+  padding: 16px 48px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.pgal-back {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dark);
+  cursor: pointer;
+  padding: 8px 20px;
+  border: 1px solid var(--divider);
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+.pgal-back:hover { color: var(--orange); border-color: var(--orange); }
+.pgal-title {
+  margin-left: 8px;
+  font-family: var(--font-primary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+.pgal-tag {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.pgal-body {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 110px 16px 100px;
+}
+.pgal-grid { columns: 3; column-gap: 12px; }
+.pgal-item {
+  break-inside: avoid;
+  margin: 0 0 12px;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: zoom-in;
+  background: var(--bg-warm);
+}
+.pgal-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pgal-item:hover img { transform: scale(1.03); }
+
+@media (max-width: 900px) { .pgal-grid { columns: 2; } }
+@media (max-width: 600px) {
+  .pgal-grid { columns: 1; }
+  .pgal-topnav { padding: 14px 24px; }
+  .pgal-body { padding: 96px 12px 80px; }
+}
+
+/* lightbox */
+.pgal-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 270;
+  background: rgba(26, 24, 21, 0.94);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.pgal-lightbox.active { display: flex; }
+.pgal-lb-img {
+  max-width: 88vw;
+  max-height: 86vh;
+  border-radius: 4px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  user-select: none;
+}
+.pgal-lb-close {
+  position: absolute;
+  top: 24px; right: 32px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  background: none;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.pgal-lb-close:hover { color: #fff; border-color: rgba(255,255,255,0.6); }
+.pgal-lb-nav {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.3s ease;
+}
+.pgal-lb-nav:hover { background: rgba(255,255,255,0.22); }
+.pgal-lb-nav.prev { left: 32px; }
+.pgal-lb-nav.next { right: 32px; }
+.pgal-lb-count {
+  position: absolute;
+  bottom: 28px; left: 50%; transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.7);
+}
+@media (max-width: 600px) {
+  .pgal-lb-nav { width: 40px; height: 40px; }
+  .pgal-lb-nav.prev { left: 12px; }
+  .pgal-lb-nav.next { right: 12px; }
+}
+
+@media (max-width: 900px) {
+  .playground-grid { columns: 2; }
+}
+
+@media (max-width: 600px) {
+  .playground-grid { columns: 1; }
+  .playground-body { padding: 32px 8px 80px; }
+  .playground-card-info { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ CASE STUDY PAGES ============ */
+.case-study-page {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--bg-cream);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  z-index: 200;
+}
+
+.case-study-page.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cs-nav {
+  position: fixed;
+  top: 24px;
+  left: 48px;
+  z-index: 201;
+}
+
+.cs-nav button {
+  background: var(--bg-cream);
+  border: 1px solid var(--divider);
+  padding: 10px 24px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dark);
+  cursor: pointer;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cs-nav button:hover {
+  color: var(--orange);
+  border-color: var(--orange);
+}
+
+.cs-header {
+  padding: 140px 48px 56px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cs-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+}
+
+.cs-title {
+  font-family: var(--font-primary);
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-weight: 200;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--text-dark);
+  margin-bottom: 24px;
+}
+
+.cs-subtitle {
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-light);
+  max-width: 640px;
+}
+
+.cs-meta-bar {
+  display: flex;
+  gap: 48px;
+  padding: 32px 0;
+  margin-top: 32px;
+  border-top: 1px solid var(--divider);
+  border-bottom: 1px solid var(--divider);
+}
+
+.cs-meta-item { display: flex; flex-direction: column; gap: 6px; }
+
+.cs-meta-label {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.cs-meta-value {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--text-dark);
+}
+
+.cs-body {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 56px 48px 100px;
+}
+
+.cs-section { margin-bottom: 64px; }
+
+.cs-section-label {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.cs-section p {
+  font-size: 0.95rem;
+  line-height: 1.85;
+  color: var(--text-light);
+  margin-bottom: 1rem;
+  font-weight: 300;
+}
+
+.cs-section p strong { color: var(--text-dark); font-weight: 500; }
+
+.cs-image-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--bg-warm);
+  border: 1px solid var(--divider);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 32px 0;
+}
+
+.cs-image-placeholder span {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.cs-image {
+  width: 100%;
+  margin: 32px 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.cs-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cs-image-caption {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 12px;
+  text-align: center;
+}
+
+.cs-image-wide {
+  width: calc(100% + 200px);
+  margin-left: -100px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.cs-image-wide img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cs-phone-grid {
+  display: flex;
+  gap: 16px;
+  margin: 32px 0;
+  padding: 40px 32px;
+  background: #1C1C1E;
+  border-radius: 8px;
+  overflow-x: auto;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.cs-phone-grid img {
+  height: 480px;
+  width: auto;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.cs-phone-grid.small img {
+  height: 360px;
+}
+
+.cs-phone-mockup {
+  display: flex;
+  justify-content: center;
+  margin: 32px 0;
+}
+
+.cs-phone-frame {
+  position: relative;
+  width: 280px;
+  background: #000;
+  border-radius: 40px;
+  padding: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15), inset 0 0 0 2px #333;
+}
+
+.cs-phone-notch {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 28px;
+  background: #000;
+  border-radius: 0 0 16px 16px;
+  z-index: 2;
+}
+
+.cs-phone-frame img {
+  width: 100%;
+  height: auto;
+  border-radius: 28px;
+  display: block;
+}
+
+.cs-prototype-embed {
+  margin-top: 32px;
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.cs-prototype-embed iframe {
+  max-width: 480px;
+  border-radius: 16px;
+}
+
+.cs-phone-showcase {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  background: #1C1C1E;
+  padding: 60px 40px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.cs-phone-showcase-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.cs-phone-showcase-row:last-child {
+  margin-bottom: 0;
+}
+
+.cs-phone-showcase-row img {
+  width: 220px;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease;
+}
+
+.cs-phone-showcase-row img:hover {
+  transform: scale(1.03);
+}
+
+.cs-image-grid {
+  display: grid;
+  gap: 16px;
+  margin: 32px 0;
+}
+
+.cs-image-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.cs-image-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.cs-image-grid img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+}
+
+/* Hand Tetris live demo */
+.tetris-demo {
+  margin: 32px 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+.tetris-launch {
+  display: block;
+  position: relative;
+  width: 100%;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background: #0a0a0a;
+  line-height: 0;
+}
+
+.tetris-launch img {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0.78;
+  transition: opacity 0.3s ease, transform 0.5s ease;
+}
+
+.tetris-launch:hover img { opacity: 0.95; transform: scale(1.01); }
+
+.tetris-launch-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dark);
+  white-space: nowrap;
+}
+
+.tetris-demo iframe {
+  width: 100%;
+  height: min(860px, 82vh);
+  border: none;
+  display: block;
+}
+
+.tetris-demo-note {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 12px;
+}
+
+.cs-watch-grid {
+  display: flex;
+  gap: 32px;
+  margin: 32px 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.cs-watch-grid img {
+  width: 180px;
+  height: auto;
+  border-radius: 50%;
+}
+
+.highlight {
+  color: var(--orange);
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .cs-image-wide { width: 100%; margin-left: 0; }
+  .cs-phone-grid { padding: 24px 16px; gap: 12px; }
+  .cs-phone-grid img { height: 340px; }
+  .cs-phone-grid.small img { height: 260px; }
+  .cs-phone-showcase { padding: 32px 16px; }
+  .cs-phone-showcase-row { flex-wrap: wrap; gap: 16px; }
+  .cs-phone-showcase-row img { width: 160px; }
+  .cs-image-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+  .cs-image-grid.cols-2 { grid-template-columns: 1fr; }
+  .cs-watch-grid img { width: 140px; }
+}
+
+.quote-block {
+  border-left: 3px solid var(--orange);
+  padding: 24px 32px;
+  margin: 32px 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--text-dark);
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1000px) {
+}
+
+/* ============ MOBILE MENU ============ */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.mobile-menu-toggle span {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: var(--text-dark);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.mobile-menu-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.mobile-menu-toggle.open span:nth-child(2) { opacity: 0; }
+.mobile-menu-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg-cream);
+  z-index: 99;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-nav-overlay.open {
+  display: flex;
+  opacity: 1;
+}
+
+.mobile-nav-overlay a {
+  font-family: var(--font-primary);
+  font-size: 1.8rem;
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.mobile-nav-overlay a:hover { color: var(--orange); }
+
+.mobile-nav-overlay .mobile-connect-links {
+  display: flex;
+  gap: 24px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--divider);
+}
+
+.mobile-nav-overlay .mobile-connect-links a {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 16px 24px; }
+  .nav.scrolled { padding: 12px 24px; }
+  .nav-right { display: none; }
+  .mobile-menu-toggle { display: flex; }
+  .cs-meta-bar { flex-wrap: wrap; gap: 24px; }
+  .cs-header { padding: 100px 24px 40px; }
+  .cs-body { padding: 40px 24px 80px; }
+  .cs-nav { left: 24px; top: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ======== NAV ======== -->
+<nav class="nav" id="nav">
+  <span class="nav-logo">Emma Moystner</span>
+  <div class="nav-right">
+    <a href="index.html">Work</a>
+    <a href="#" onclick="event.preventDefault(); openPlayground();">Play</a>
+    <a href="#" onclick="event.preventDefault(); openInfo();">About</a>
+    <a href="Resume.EmmaMoystner.pdf" target="_blank">Resume</a>
+  </div>
+  <button class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-nav-overlay" id="mobile-nav-overlay">
+  <a href="index.html">Work</a>
+  <a href="#" onclick="event.preventDefault(); toggleMobileMenu(); openPlayground();">Play</a>
+  <a href="#" onclick="event.preventDefault(); toggleMobileMenu(); openInfo();">About</a>
+  <a href="Resume.EmmaMoystner.pdf" target="_blank">Resume</a>
+  <div class="mobile-connect-links">
+    <a href="mailto:emmamoystner.design@gmail.com">Email</a>
+    <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
+  </div>
+</div>
+
+<!-- ======== HERO INTRO ======== -->
+<section class="hero-intro reveal-up">
+  <p class="hero-eyebrow">Interaction Designer &middot; ArtCenter M.Des</p>
+  <h1 class="hero-statement">Hey, I'm Emma. A designer who loves real people, messy problems, and chasing the next adventure.</h1>
+</section>
+
+<!-- ======== WORK GRID ======== -->
+<main id="work-grid">
+  <div class="grid-inner">
+
+    <!-- 01 · Airline Interaction Design 2036 -->
+    <div class="work-tile reveal-up" onclick="openCaseStudy('airline-futures')">
+      <div class="tile-media" style="aspect-ratio:3/2;">
+        <img src="images/airline%202036/airline%20coverphoto.png" alt="Airline Interaction Design 2036 cover" loading="lazy">
+        <div class="tile-overlay">
+          <span class="tile-pill tile-pill-name">Airline Interaction Design 2036</span>
+          <span class="tile-pill tile-pill-tag">Aviation &middot; Futures / Service Design</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 · Solace Health -->
+    <div class="work-tile reveal-up" onclick="openCaseStudy('solace-health')">
+      <div class="tile-media" style="aspect-ratio:1/1;">
+        <img src="images/solace/tool-v2-pulse.png" alt="Solace Health alignment pulse tool" loading="lazy">
+        <div class="tile-overlay">
+          <span class="tile-pill tile-pill-name">Solace Health</span>
+          <span class="tile-pill tile-pill-tag">Healthcare &middot; Systems / Process</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 · COROS -->
+    <div class="work-tile reveal-up" onclick="openCaseStudy('coros')">
+      <div class="tile-media contain" style="background:#1C1C1E; aspect-ratio:4/5;">
+        <img src="images/coros/image24.png" alt="COROS cycle-aware training dashboard" loading="lazy">
+        <div class="tile-overlay">
+          <span class="tile-pill tile-pill-name">COROS</span>
+          <span class="tile-pill tile-pill-tag">Wellness &middot; Service Design</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 · Airbnb Group Booking -->
+    <div class="work-tile reveal-up" onclick="openCaseStudy('airbnb')">
+      <div class="tile-media" style="aspect-ratio:16/10;">
+        <img src="images/airbnb/screens-overview.png" alt="Airbnb group booking screens overview" loading="lazy">
+        <div class="tile-overlay">
+          <span class="tile-pill tile-pill-name">Airbnb Group Booking</span>
+          <span class="tile-pill tile-pill-tag">Travel &middot; Concept Redesign</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 · WorkTrip -->
+    <!-- Swap placeholder for: <video src="assets/tiles/worktrip.mp4" autoplay muted loop playsinline></video> -->
+    <div class="work-tile reveal-up" onclick="openCaseStudy('worktrip')">
+      <div class="tile-media" style="aspect-ratio:3/4;">
+        <div class="tile-placeholder" style="background:#775D0F;">
+          <span class="ph-note" style="color:#FAF8F5;">Coming soon</span>
+        </div>
+        <div class="tile-overlay">
+          <span class="tile-pill tile-pill-name">WorkTrip</span>
+          <span class="tile-pill tile-pill-tag">Enterprise &middot; Self-Initiated</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ======== FOOTER ======== -->
+<footer class="footer">
+  <a href="mailto:emmamoystner.design@gmail.com">Contact</a>
+  <span>&copy; 2026 Emma Moystner</span>
+</footer>
+
+<!-- ============ INFO OVERLAY ============ -->
+<div class="case-study-page" id="info-page">
+  <nav class="playground-topnav">
+    <a class="pg-logo" onclick="closeInfo()">Emma Moystner</a>
+    <div class="pg-topnav-right">
+      <a onclick="closeInfo()">Work</a>
+      <a onclick="closeInfo(); openPlayground();">Play</a>
+      <a class="active">About</a>
+      <a href="Resume.EmmaMoystner.pdf" target="_blank">Resume</a>
+    </div>
+  </nav>
+  <!-- HERO -->
+  <section class="about-hero">
+    <img src="Headshot_Moystner.jpg" alt="Emma Moystner" class="about-hero-photo">
+    <h1 class="about-hero-title">Hi, I'm <span class="accent">Emma.</span></h1>
+  </section>
+
+  <!-- STORY -->
+  <section class="about-story">
+    <div class="about-story-inner">
+      <div>
+        <div class="section-label">A Little About Me</div>
+        <h2 class="about-story-heading">I didn't start in design. I started by trying to understand <strong>people.</strong></h2>
+      </div>
+      <div class="about-story-text">
+        <p>I studied international business and cultures at Tennessee Tech, with minors in Spanish and religious studies. I've always been fascinated by how people see the world differently, and how the systems around us either support them or let them down.</p>
+        <p>After graduating, I spent four years as a project coordinator at an architecture and engineering firm, where I got to see firsthand how design decisions ripple through real projects and real people's lives. Somewhere along the way, I realized I wanted to be the one <span class="highlight">making those decisions.</span></p>
+        <p>Now I'm finishing my M.Des in Interaction Design at ArtCenter College of Design. I think in systems, I care about the details, and I'm looking for my first role as a product designer.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEYOND THE PIXELS -->
+  <section class="about-personal">
+    <div class="about-personal-inner">
+      <div class="personal-carousel">
+        <img src="personal%20photos/emma.JPEG" alt="Emma" class="active" onerror="this.style.display='none'">
+        <img src="personal%20photos/redwoods.jpg" alt="Emma in the redwoods" onerror="this.style.display='none'">
+        <img src="personal%20photos/surf.jpg" alt="Emma surfing" data-caption="Went on a surf trip, got zero photos. This was me showing my friends how you surf after." onerror="this.style.display='none'">
+        <img src="personal%20photos/waterfall.jpg" alt="Emma at a waterfall" onerror="this.style.display='none'">
+        <img src="personal%20photos/bike.jpg" alt="Emma biking" onerror="this.style.display='none'">
+        <img src="personal%20photos/run.jpg" alt="Emma running" onerror="this.style.display='none'">
+        <img src="personal%20photos/hike.jpg" alt="Emma hiking" onerror="this.style.display='none'">
+        <img src="personal%20photos/travel.JPG" alt="Emma traveling" onerror="this.style.display='none'">
+        <img src="personal%20photos/sanfran.jpg" alt="Emma exploring" onerror="this.style.display='none'">
+        <img src="personal%20photos/tj.JPG" alt="Emma under a rainbow" onerror="this.style.display='none'">
+        <img src="personal%20photos/home.JPG" alt="Emma at home" onerror="this.style.display='none'">
+        <div class="personal-carousel-caption"></div>
+        <div class="personal-carousel-dots">
+          <span class="active"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="personal-text">
+        <h3>Beyond the pixels.</h3>
+        <p>I'm someone who loves adventure and play in equal measure. I surf (poorly but enthusiastically), climb, run, and I'm always ready to pick up whatever hobby catches my eye next.</p>
+        <p>When I'm not designing, you'll probably find me with a matcha in hand and a book I can't put down. If you have a recommendation, seriously, send it my way.</p>
+        <p>I believe the best work comes from people who love the little things in life. I'm always down for a new challenge, a new city, a new conversation. Let's go.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROACH -->
+  <section class="about-approach">
+    <div class="about-approach-inner">
+      <div class="section-label">How I Work</div>
+      <h2 class="about-approach-heading">What I bring to a team.</h2>
+      <div class="approach-grid">
+        <div class="approach-item">
+          <h4>Big Picture First</h4>
+          <p>I want to understand the business, the users, and the whole system before designing any one part of it. Strategy and design aren't separate for me.</p>
+        </div>
+        <div class="approach-item">
+          <h4>Comfortable In Between</h4>
+          <p>Business, culture, tech, people. My background means I can move between disciplines and talk to anyone in the room.</p>
+        </div>
+        <div class="approach-item">
+          <h4>Design That Matters</h4>
+          <p>I'm drawn to problems where getting it right actually changes someone's day. Work that carries real weight.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="about-education">
+    <div class="about-education-inner">
+      <div class="section-label">Education</div>
+      <div class="education-grid">
+        <div class="education-item">
+          <h4>Graduate</h4>
+          <h3>ArtCenter College of Design</h3>
+          <p>M.Des in Interaction Design, Expected August 2026</p>
+          <p>Systems design, service design, futures thinking, and design research.</p>
+        </div>
+        <div class="education-item">
+          <h4>Undergraduate</h4>
+          <h3>Tennessee Technological University</h3>
+          <p>B.S. International Business &amp; Cultures, 2021</p>
+          <p>Minors in Spanish and Religious Studies.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONNECT -->
+  <section class="about-connect">
+    <div class="about-connect-inner">
+      <div class="connect-photo">
+        <img src="Headshot_Moystner.jpg" alt="Emma Moystner">
+      </div>
+      <h2 class="connect-heading">Let's<br>work<br>together.</h2>
+      <div class="connect-text">
+        <p>I'm looking for my first product design role somewhere that cares about doing good work. If that sounds like your team, I'd love to chat.</p>
+        <div class="connect-links">
+          <a href="mailto:emmamoystner.design@gmail.com" class="connect-btn connect-btn-primary">Get in Touch</a>
+          <a href="https://www.linkedin.com/in/emmamoystner" target="_blank" class="connect-btn connect-btn-outline">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PLAYGROUND ============ -->
+<div class="playground-page" id="playground-page">
+  <nav class="playground-topnav">
+    <a class="pg-logo" onclick="closePlayground()">Emma Moystner</a>
+    <div class="pg-topnav-right">
+      <a onclick="closePlayground()">Work</a>
+      <a class="active">Play</a>
+      <a onclick="closePlayground(); openInfo();">About</a>
+      <a href="Resume.EmmaMoystner.pdf" target="_blank">Resume</a>
+    </div>
+  </nav>
+
+  <div class="playground-body" style="padding-top:100px;">
+    <div class="playground-grid">
+
+      <div class="playground-card" onclick="openCaseStudy('hand-tetris')">
+        <div class="playground-card-image" style="aspect-ratio:16/9;">
+          <img src="images/play/hand%20tetris/UI.png" alt="Hand Tetris, a Tetris board overlaid on a webcam feed, controlled by hand gestures" loading="lazy">
+        </div>
+        <div class="playground-card-info">
+          <span class="playground-card-title">Hand Tetris</span>
+          <span class="playground-card-tag">p5.js &middot; ML5</span>
+        </div>
+      </div>
+
+      <div class="playground-card" onclick="window.open('https://emoystner.github.io/onebutton/','_blank','noopener')">
+        <div class="playground-card-image" style="aspect-ratio:2298/1598; background:#0a0a0a;">
+          <video src="images/play/cymatics-cover.mp4" poster="images/play/cymatics-cover-poster.jpg" autoplay muted loop playsinline></video>
+        </div>
+        <div class="playground-card-info">
+          <span class="playground-card-title">Cymatics</span>
+          <span class="playground-card-tag">Web &middot; Sound</span>
+        </div>
+      </div>
+
+      <div class="playground-card" onclick="window.open('https://emoystner.github.io/os/ecm-design-os','_blank','noopener')">
+        <div class="playground-card-image" style="aspect-ratio:2704/1630; background:#F7F6F3;">
+          <img src="images/play/designos.gif" alt="Design Operating System — a split-flap departures board reading Craft in service of systems" loading="lazy">
+        </div>
+        <div class="playground-card-info">
+          <span class="playground-card-title">Design Operating System</span>
+          <span class="playground-card-tag">Web &middot; Manifesto</span>
+        </div>
+      </div>
+
+      <div class="playground-card tennis-card" id="tennis-card">
+        <div class="tennis-canvas-wrap" id="tennis-wrap">
+          <canvas id="playground-canvas"></canvas>
+          <div class="tennis-score" id="playground-score">0 · 0</div>
+          <button class="tennis-pause" id="playground-pause" onclick="toggleTennisPause()">
+            <svg viewBox="0 0 24 24" id="pause-icon"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          </button>
+        </div>
+        <div class="playground-card-info">
+          <span class="playground-card-title">Tennis</span>
+          <span class="playground-card-tag">Canvas Game</span>
+        </div>
+      </div>
+
+      <div class="playground-card">
+        <div class="playground-card-image" style="aspect-ratio:910/812;">
+          <img src="images/play/newton%20pendulum.gif" alt="Newton's pendulum simulation" loading="lazy">
+        </div>
+        <div class="playground-card-info">
+          <span class="playground-card-title">Newton's Pendulum</span>
+          <span class="playground-card-tag">Unity</span>
+        </div>
+      </div>
+
+      <div class="playground-card photo-toss-card" onclick="openPhotoGallery()">
+        <div class="photo-stage">
+          <div class="photo-deck">
+            <img class="photo-print" src="images/play/photography/thumbs/DSCF1290.jpg" alt="Photography" loading="lazy">
+            <img class="photo-print portrait" src="images/play/photography/thumbs/DSCF1154.jpg" alt="Photography" loading="lazy">
+            <img class="photo-print" src="images/play/photography/thumbs/DSCF2435.jpg" alt="Photography" loading="lazy">
+            <img class="photo-print portrait" src="images/play/photography/thumbs/DSCF0105.jpg" alt="Photography" loading="lazy">
+            <img class="photo-print" src="images/play/photography/thumbs/DSCF1046.jpg" alt="Photography" loading="lazy">
+            <img class="photo-print portrait" src="images/play/photography/thumbs/DSCF2882.jpg" alt="Photography" loading="lazy">
+            <img class="photo-print" src="images/play/photography/thumbs/DSCF2436.jpg" alt="Photography" loading="lazy">
+          </div>
+        </div>
+        <div class="playground-card-info">
+          <span class="playground-card-title">Photography</span>
+          <span class="playground-card-tag">Stills</span>
+        </div>
+      </div>
+
+      <div class="playground-card">
+        <div class="playground-card-image" style="aspect-ratio:1082/612; background:#0a0a0a;">
+          <img src="images/play/videography/videography-cover.png" alt="Videography — The Wedding of Ian & Sam title card" loading="lazy">
+        </div>
+        <div class="playground-card-info">
+          <span class="playground-card-title">Videography</span>
+          <span class="playground-card-tag">Motion</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Tennis fullscreen overlay (inside playground page) -->
+  <div class="tennis-fullscreen-overlay" id="tennis-fullscreen">
+    <canvas id="tennis-fs-canvas"></canvas>
+    <div class="tennis-score" id="tennis-fs-score">0 · 0</div>
+    <button class="tennis-close" onclick="closeTennisFullscreen()">Esc · Close</button>
+    <button class="tennis-pause" id="tennis-fs-pause" onclick="toggleTennisPause()">
+      <svg viewBox="0 0 24 24" id="fs-pause-icon"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ============ PHOTOGRAPHY GALLERY PAGE ============ -->
+<div class="photo-gallery-page" id="photo-gallery">
+  <div class="pgal-topnav">
+    <span class="pgal-back" onclick="closePhotoGallery()">&larr; Back</span>
+    <span class="pgal-title">Photography</span>
+    <span class="pgal-tag">Stills</span>
+  </div>
+  <div class="pgal-body">
+    <div class="pgal-grid">
+      <figure class="pgal-item" onclick="openLightbox(0)"><img src="images/play/photography/thumbs/DSCF1290.jpg" alt="Photography" loading="lazy"></figure>
+      <figure class="pgal-item" onclick="openLightbox(1)"><img src="images/play/photography/thumbs/DSCF1154.jpg" alt="Photography" loading="lazy"></figure>
+      <figure class="pgal-item" onclick="openLightbox(2)"><img src="images/play/photography/thumbs/DSCF2435.jpg" alt="Photography" loading="lazy"></figure>
+      <figure class="pgal-item" onclick="openLightbox(3)"><img src="images/play/photography/thumbs/DSCF0105.jpg" alt="Photography" loading="lazy"></figure>
+      <figure class="pgal-item" onclick="openLightbox(4)"><img src="images/play/photography/thumbs/DSCF1046.jpg" alt="Photography" loading="lazy"></figure>
+      <figure class="pgal-item" onclick="openLightbox(5)"><img src="images/play/photography/thumbs/DSCF2882.jpg" alt="Photography" loading="lazy"></figure>
+      <figure class="pgal-item" onclick="openLightbox(6)"><img src="images/play/photography/thumbs/DSCF2436.jpg" alt="Photography" loading="lazy"></figure>
+    </div>
+  </div>
+  <div class="pgal-lightbox" id="pgal-lightbox" onclick="if(event.target===this)closeLightbox()">
+    <button class="pgal-lb-close" onclick="closeLightbox()">Esc · Close</button>
+    <button class="pgal-lb-nav prev" onclick="lightboxStep(-1)" aria-label="Previous">&larr;</button>
+    <img class="pgal-lb-img" id="pgal-lb-img" src="" alt="Photography">
+    <button class="pgal-lb-nav next" onclick="lightboxStep(1)" aria-label="Next">&rarr;</button>
+    <div class="pgal-lb-count" id="pgal-lb-count"></div>
+  </div>
+</div>
+
+<!-- ============ CASE STUDY PAGES ============ -->
+<div class="case-study-page" id="cs-airline-futures">
+  <div class="cs-nav"><button onclick="closeCaseStudy()">&larr; Back</button></div>
+  <div class="cs-header">
+    <div class="cs-label">01 · Case Study</div>
+    <h1 class="cs-title">Airline Interaction Design 2036</h1>
+    <p class="cs-subtitle">When the airline knows what you need before you do, who is really in control? Designing the interaction layer for a future where AI-driven anticipation has replaced most active passenger decision-making.</p>
+    <div class="cs-meta-bar">
+      <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Sole Designer & Researcher</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Domain</span><span class="cs-meta-value">Aviation</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value">14 weeks</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Methods</span><span class="cs-meta-value">Futures, Service Design, Sci-Fi Prototyping</span></div>
+    </div>
+  </div>
+  <div class="cs-body">
+    <div class="cs-section">
+      <div class="cs-section-label">Problem Space</div>
+      <p>Airlines are investing heavily in anticipatory technology (AI rebooking engines, biometric identity, ambient spatial interfaces), but they're designing for efficiency, not trust. Delta's AI concierge can already rebook you during disruptions. Biometric gates are rolling out globally. Parallel Reality displays at Detroit show personalized information to 100 passengers on a single screen.</p>
+      <p>The technology is arriving. The question is less about what it can do — it's what it should feel like. Imagine a system that acts on your behalf and leaves you feeling more in control, not less: it books the trip, clears the morning, routes around the delay you hadn't noticed yet, and not once do you feel watched. The difference between served and surveilled was never capability. It's legibility — whether you can always see what it's doing, and why. That's the future worth designing.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Research & Foresight</div>
+      <p>I conducted a STEEPX analysis mapping emerging signals across social, technological, economic, environmental, political, and experiential dimensions. A Causal Layered Analysis dug beneath the surface-level technology trends to identify deeper structural beliefs.</p>
+      <div class="cs-image">
+        <img src="images/airline%202036/steepx.png" alt="STEEPX analysis mapping signals across social, technological, economic, environmental, political, and experiential dimensions" loading="lazy">
+        <div class="cs-image-caption">STEEPX: mapping the forces shaping airline interaction by 2036</div>
+      </div>
+      <div class="quote-block">Every signal converged on the same finding: the barrier to anticipatory systems isn't technology. It's trust.</div>
+      <p>Socially, post-pandemic travel anxiety is baseline. Technologically, the capability exists but adoption moves at the speed of trust, not innovation. Economically, dynamic pricing makes passengers feel surveilled, not served. Politically, biometric consent is now legally mandated interaction design. Experientially, passengers benchmark against Amazon and Apple Pay, not other airlines, that gap is structural.</p>
+      <div class="cs-image">
+        <img src="images/airline%202036/CLA%20map.png" alt="Causal Layered Analysis map digging beneath technology trends through litany, systems, discourse, and myths" loading="lazy">
+        <div class="cs-image-caption">Causal Layered Analysis: from the surface litany down to the underlying myths</div>
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Design Mechanisms</div>
+      <p>The CLA and service blueprint surfaced three design mechanisms that became the project's backbone:</p>
+      <p><strong>Adjustable autonomy.</strong> The system proposes, the passenger decides, and it remembers your preference. Not a binary on/off for AI, but a spectrum of control the passenger can move along.</p>
+      <p><strong>Explainability.</strong> Every AI decision shows its reasoning in plain language. When a flight cancels, the system offers three reroute options with tradeoffs: fastest arrival, best seat, most flexibility. It shows its work.</p>
+      <p><strong>Resourcefulness.</strong> The system doesn't just recover from disruption. It finds new possibilities within it. Trust is earned not just by explaining and offering choices, but by being genuinely resourceful when things break.</p>
+      <div class="cs-image">
+        <img src="images/airline%202036/servicedesign%20blueprint.png" alt="Service blueprint mapping the passenger journey, system actions, and backstage processes" loading="lazy">
+        <div class="cs-image-caption">Service blueprint: where the three mechanisms surface across the journey</div>
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Design Position</div>
+      <div class="quote-block">The airline isn't trying to be invisible. It's trying to be a good host.</div>
+      <p>This thesis directly challenges the prevailing UX orthodoxy that the best technology is invisible. A good host is present but not intrusive, explains without lecturing, anticipates without presuming.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Final Deliverables</div>
+      <div class="cs-image">
+        <video controls preload="metadata" poster="images/airline%202036/airline-2036-poster.jpg" style="width:100%;height:auto;display:block;">
+          <source src="images/airline%202036/airline-2036-film.mp4" type="video/mp4">
+          Your browser does not support embedded video. <a href="images/airline%202036/airline-2036-film.mp4">Download the film</a>.
+        </video>
+        <div class="cs-image-caption">Narrated speculative film: Noah's journey, Portland → Chicago → D.C.</div>
+      </div>
+      <p>The project culminated in a <strong>narrated speculative film</strong> following Noah Almeida, an urban resilience planner flying Portland → Chicago → D.C. for a federal grant review. A storm cancels his Chicago connection. Under today's system, that's a rebooking desk, hold music, and a missed meeting. Under the 2036 system, the airline preemptively reroutes him through JFK, books an air taxi to D.C., adjusts his hotel, and sets his alarm, all while explaining what it's doing and giving him the choice to override.</p>
+      <p>Each scene was designed to test a different design mechanism: adjustable autonomy during the reroute, explainability when options are presented, resourcefulness when the system finds the air taxi alternative.</p>
+      <p>Supporting deliverables included the STEEPX analysis, Causal Layered Analysis, a future persona, a service blueprint, an Actor-Network Theory map, and five speculative design briefs.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Reflection</div>
+      <p>The hardest design decision was resisting the urge to make the system invisible. The instinct in anticipatory design is to remove friction entirely, to make things "just work." But the CLA's deepest layer revealed that human agency is non-negotiable. A system that acts perfectly but invisibly isn't a good host. It's a benevolent captor.</p>
+      <p>The project's core argument: technology that anticipates your needs isn't enough. It has to <span class="highlight">show its work, give you choices, and be genuinely resourceful when things break</span>. That's not invisible technology. That's a good host.</p>
+    </div>
+  </div>
+</div>
+
+<div class="case-study-page" id="cs-solace-health">
+  <div class="cs-nav"><button onclick="closeCaseStudy()">&larr; Back</button></div>
+  <div class="cs-header">
+    <div class="cs-label">02 · Case Study</div>
+    <h1 class="cs-title">Solace Health</h1>
+    <p class="cs-subtitle">Designing the collaboration system, not just the interface. A multi-city expansion framework that makes misalignment visible before it compounds into delays, rework, and launches that miss the market.</p>
+    <div class="cs-meta-bar">
+      <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Framework Design Lead</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Domain</span><span class="cs-meta-value">Healthcare</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Team</span><span class="cs-meta-value">4 Designers</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Methods</span><span class="cs-meta-value">Systems Design, Process Design</span></div>
+    </div>
+  </div>
+  <div class="cs-body">
+    <div class="cs-section">
+      <div class="cs-section-label">The Problem</div>
+      <p>Solace Health is a women's healthcare startup expanding from Austin across five cities. Growth exposed a structural problem: every city has different regulations, demographics, and clinical needs, and Austin's core team was making product decisions in isolation.</p>
+      <p>Six months before a new-city launch, three critical breakdowns were already in motion. The PM drafts roadmaps without cross-city input. Engineering hits architectural conflicts mid-sprint. Design discovers city-specific requirements after designs are already approved. The result: <strong>6-8 month launch delays</strong> and <strong>$1.5M+ in wasted labor</strong> on rework alone.</p>
+      <div class="cs-image">
+        <img src="images/solace/problem-timeline.png" alt="Problem timeline showing delays and rework costs" loading="lazy">
+        <div class="cs-image-caption">Breakdowns compound across the launch cycle</div>
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Research</div>
+      <p>We surveyed and interviewed 13 engineers, product managers, and designers across companies including Meta, Netflix, TikTok, Indeed, Walmart, and SAP. The synthesis surfaced a core tension: everyone is drowning in communication but starving for context.</p>
+      <div class="quote-block">When feasibility, direction, and customer value are answered early, all three disciplines are energized. But clarity is never spoon-fed — alignment has to be forged collectively.</div>
+      <p>Decisions happen without the people closest to the problem. The tools aren't broken; the gaps between them are. No tool bridged the space between disciplines, forcing teams to rely on meetings and tribal knowledge to stay aligned.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">The Design: A Three-Part System</div>
+      <p>The solution isn't a single artifact; it's a system. Three interconnected layers, each reinforcing the others.</p>
+      <p><strong>1. The Ritual: Pre-Kickoff Alignment Call.</strong> A structured 60-minute call before every city launch. The local PM presents first: local context, clinical constraints, demographic insights. Austin listens before it leads. A weekly async City Pulse Check keeps alignment alive between calls.</p>
+      <p><strong>2. The Framework: Launch Readiness Canvas + Decision Context Log.</strong> Every section has a named owner. The Canvas captures decisions and local adaptations during weekly calls. The Decision Context Log persists across launches, the next city inherits it. It's required reading before any new PRD.</p>
+      <div class="cs-image">
+        <img src="images/solace/launch-readiness-canvas.png" alt="Launch Readiness Canvas and Sprint Ticket Panel" loading="lazy">
+        <div class="cs-image-caption">Launch Readiness Canvas with Sprint Ticket Panel</div>
+      </div>
+      <p><strong>3. The Tool: Sprint Ticket Panel.</strong> A lightweight plugin that connects across Jira, Slack, and Notion. In Jira, a side panel provides sprint visibility with active blockers and team health. In Slack, it generates dedicated channels for each ticket. An AI Health Summary suggests actions without deciding for you.</p>
+      <div class="cs-image-grid cols-2">
+        <img src="images/solace/tool-v2-jira.png" alt="Sprint Ticket Panel in Jira" loading="lazy">
+        <img src="images/solace/tool-v2-slack.png" alt="Sprint Ticket Panel in Slack" loading="lazy">
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">How the System Works</div>
+      <p>Teri is a designer on the Chicago expansion. Early in sprint, she catches an assumption that doesn't hold in this market. Under the old way, that flag gets buried. The sprint ships. The wrong assumption goes with it.</p>
+      <p>But here's what happens instead: Teri flags it right where she's working. Her flag surfaces in the weekly async. The right people see it. If it needs a decision, it routes to the alignment call. The decision lands in the Decision Context Log, documented, not lost. The log feeds the retro. The learnings shape the next cycle.</p>
+      <p>That's the point. Not to eliminate the hard decisions, but to <span class="highlight">catch misalignment early</span> — before it compounds.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Testing & Iteration</div>
+      <p>We conducted two rounds of usability testing with EPD professionals. The most telling finding: people didn't reject AI assistance; they rejected AI that didn't give them a reason to trust it. Auto-scheduling was universally rejected. We moved the AI Health Summary into the Sprint Ticket Panel and provided two recommendation options instead of one, giving users agency.</p>
+      <div class="cs-image">
+        <img src="images/solace/usability-testing.png" alt="Usability testing findings" loading="lazy">
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Reflection</div>
+      <p>This project changed how I think about what designers can, and should, design. Working at the systems level meant designing rituals, decision flows, and knowledge structures instead of screens.</p>
+      <p>The core insight: <strong>psychological safety isn't just a value to aspire to — it's designable.</strong> The Pre-Kickoff Alignment Call puts the local PM first so Austin listens before it leads. The City Pulse Check makes flags visible without requiring someone to interrupt a meeting. The Decision Context Log means a designer can see what happened to her flag without asking. These are psychological safety mechanisms, not just principles.</p>
+      <p>Team culture isn't a soft problem separate from the "real" design work. It <em>is</em> the design work.</p>
+    </div>
+  </div>
+</div>
+
+<div class="case-study-page" id="cs-coros">
+  <div class="cs-nav"><button onclick="closeCaseStudy()">&larr; Back</button></div>
+  <div class="cs-header">
+    <div class="cs-label">03 · Case Study</div>
+    <h1 class="cs-title">COROS Menstrual Cycle Redesign</h1>
+    <p class="cs-subtitle">What if a fitness tracker actually understood your cycle and used it to make you a better athlete?</p>
+    <div class="cs-meta-bar">
+      <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Service Designer</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Type</span><span class="cs-meta-value">Solo Project</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value">One Term</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Tools</span><span class="cs-meta-value">Figma, Miro</span></div>
+    </div>
+  </div>
+  <div class="cs-body">
+    <div class="cs-section">
+      <div class="cs-section-label">The Problem</div>
+      <p>I'm a COROS user and a believer in women's health. When I started this project, COROS didn't have menstrual cycle tracking at all. I wanted to explore what it would look like if a fitness tracker actually connected cycle data to training, instead of treating it as a separate calendar.</p>
+      <p>Midway through, COROS launched their version. It confirmed the gap: a basic period calendar, inaccurate ovulation predictions, and nothing tying the data back to how you train.</p>
+      <div class="cs-image-wide">
+        <img src="images/coros/old%20screens.png" alt="Current COROS cycle tracking screens" loading="lazy">
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Service Audit</div>
+      <p>I mapped the current service from frontstage to backstage to understand where the experience breaks down and why. The biggest finding: there are no feedback loops. Data goes in, but nothing useful comes back to the user.</p>
+      <div class="cs-image-wide">
+        <img src="images/coros/oldblueprint.png" alt="Current service blueprint" loading="lazy">
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Competitive Analysis</div>
+      <p>I compared five players: COROS, Garmin, WHOOP, Oura, and Fitbit. COROS is best-in-class for training load and recovery intelligence, but competitors are ahead at turning physiological data into daily coaching. The opportunity is right there.</p>
+      <div class="cs-image-wide">
+        <img src="images/coros/Competitive%3Acomparative%20analysis.png" alt="Competitive analysis matrix" loading="lazy">
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Ideal Service Blueprint</div>
+      <p>I redesigned the full service so that every touchpoint connects cycle data to training guidance. The backstage systems now learn from user behavior, feed useful insights back to the athlete, and adapt predictions over time.</p>
+      <div class="cs-image-wide">
+        <img src="images/coros/IDEALCOROSService%20blueprint.png" alt="Ideal service blueprint" loading="lazy">
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Onboarding Redesign</div>
+      <p>This is where trust gets built or broken. Most cycle trackers drop you into a calendar with no context. I designed an onboarding that educates first: walking users through each cycle phase with hormone curves, explaining what the data means for training, sleep, and recovery, and setting realistic expectations about prediction accuracy.</p>
+      <div class="cs-prototype-embed">
+        <iframe style="border: none;" width="100%" height="860" src="https://embed.figma.com/proto/WnDNZFlLCoLhrQKNh6WrQ8/Menstrual-Cycle?node-id=559-355&scaling=scale-down&content-scaling=fixed&page-id=442%3A138&embed-host=share" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Updated Dashboard</div>
+      <p>Phase Insights moves from buried at the bottom to a prominent card in the Today view, showing current phase, cycle day, and tolerance indicators for sleep, strain, and stress.</p>
+      <div class="cs-phone-mockup">
+        <div class="cs-phone-frame">
+          <div class="cs-phone-notch"></div>
+          <img src="images/coros/image24.png" alt="Redesigned Today screen" loading="lazy">
+        </div>
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Reflection</div>
+      <p>I started this project because I care about women's health and believe athletes deserve tools that understand their physiology. When COROS launched their version mid-project, I got to compare my research-driven approach against what a real product team shipped. That was humbling and validating at the same time.</p>
+      <p>The biggest thing I took away: mapping the full service forced me to think beyond the screen. The data pipelines, the CS workflows, the PM tradeoffs that shape what a user actually sees. I think about every design problem differently now because of this project.</p>
+    </div>
+  </div>
+</div>
+
+<div class="case-study-page" id="cs-airbnb">
+  <div class="cs-nav"><button onclick="closeCaseStudy()">&larr; Back</button></div>
+  <div class="cs-header">
+    <div class="cs-label">04 · Case Study</div>
+    <h1 class="cs-title">Airbnb Group Booking</h1>
+    <p class="cs-subtitle">Group trips shouldn't fall apart before they start. We redesigned how Airbnb handles the hardest part — the money.</p>
+    <div class="cs-meta-bar">
+      <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Product Designer</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Team</span><span class="cs-meta-value">Emma Moystner, Kate Foote</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value">4 Weeks</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Type</span><span class="cs-meta-value">Concept Redesign</span></div>
+    </div>
+  </div>
+  <div class="cs-body">
+    <div class="cs-section">
+      <div class="cs-section-label">Overview</div>
+      <p>Airbnb's lack of streamlined group booking puts the entire financial and logistical burden on one person, making trip planning and payments harder for everyone involved. We redesigned the group booking experience from research through high-fidelity prototype, introducing shared trip planning, flexible cost-splitting, and a centralized group hub that gives every traveler visibility and agency, not just the person holding the credit card.</p>
+      <div class="cs-image">
+        <img src="images/airbnb/screens-overview.png" alt="Airbnb group booking screens overview" loading="lazy">
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Research</div>
+      <p>We designed and distributed a structured survey to gather insights on how people currently navigate group bookings, not just the functional pain points, but the social and emotional friction.</p>
+      <p><strong>82% of respondents wanted to split costs "fairly"</strong>, but "fairly" meant different things to different groups. Some wanted even splits. Others wanted to pay proportionally based on room size or arrival dates. The current system supports none of this.</p>
+      <p><strong>63% wanted payment reminders</strong>, not because they're forgetful, but because asking friends for money is uncomfortable. People wanted the platform to handle the follow-up so they didn't have to.</p>
+      <p><strong>71% wanted to share the planning workload</strong>: the organizer role is exhausting. Respondents wanted tools that distributed this work across the group.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Design Decisions</div>
+      <p><strong>Splitting Method.</strong> We designed three cost-splitting modes (EvenSplit, FairValue, and PayManage) so groups can choose the model that matches their dynamic. An even split for close friends going halves. FairValue for proportional splits based on room or group size. PayManage for custom contribution amounts.</p>
+      <div class="cs-phone-grid small">
+        <img src="images/airbnb/Splitting Methods.png" alt="Splitting method selection" loading="lazy">
+        <img src="images/airbnb/PayMange Screen.png" alt="PayManage screen" loading="lazy">
+        <img src="images/airbnb/Wishlist Admin View - Budget.png" alt="Wishlist admin budget view" loading="lazy">
+      </div>
+      <p><strong>Group Trip Hub.</strong> A centralized space where the group can save listings to a shared wishlist, vote on favorites, and track the trip from planning through booking. Approvals are required to book, no one person can commit the group without consensus.</p>
+      <div class="cs-phone-grid small">
+        <img src="images/airbnb/hifi-wishlist-onboarding.png" alt="Wishlist onboarding" loading="lazy">
+        <img src="images/airbnb/Wishlist Admin View.png" alt="Wishlist admin view" loading="lazy">
+        <img src="images/airbnb/hifi-approvals.png" alt="Approvals screen" loading="lazy">
+        <img src="images/airbnb/hifi-trip-details.png" alt="Trip details" loading="lazy">
+      </div>
+      <p><strong>In-App Messaging.</strong> Rather than forcing coordination into iMessage or WhatsApp, we built group messaging directly into the trip flow with notification categories scoped to the trip.</p>
+      <div class="cs-phone-grid small">
+        <img src="images/airbnb/hifi-messages.png" alt="Messages overview" loading="lazy">
+        <img src="images/airbnb/hifi-messages-thread.png" alt="Message thread" loading="lazy">
+        <img src="images/airbnb/hifi-group-join.png" alt="Group join" loading="lazy">
+        <img src="images/airbnb/hifi-payment-join.png" alt="Payment join" loading="lazy">
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Validation</div>
+      <p><strong>Seamless Group Onboarding.</strong> Integrating the group feature into the wishlist flow made it intuitive for users to invite others. Users naturally understood how to start a group trip.</p>
+      <p><strong>Clarity Drives Confidence.</strong> EvenSplit and FairValue were well-received for their simplicity. PayManage caused hesitation: users weren't sure who could see what, pointing to a need for clearer affordances around privacy and transparency.</p>
+      <p><strong>Feedback & Visibility Matter.</strong> Users missed key elements like the comments section and expected notifications for group actions. When someone joins, approves, or pays, the group should know.</p>
+    </div>
+  </div>
+</div>
+
+<div class="case-study-page" id="cs-worktrip">
+  <div class="cs-nav"><button onclick="closeCaseStudy()">&larr; Back</button></div>
+  <div class="cs-header">
+    <div class="cs-label">05 · Case Study</div>
+    <h1 class="cs-title">WorkTrip</h1>
+    <p class="cs-subtitle">I saw a broken process at my own company — paper forms, lost requests, frustrated employees — and designed the fix.</p>
+    <div class="cs-meta-bar">
+      <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Product Designer</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Company</span><span class="cs-meta-value">Barge Design Solutions</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Type</span><span class="cs-meta-value">Self-Initiated / Internal Tool</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Status</span><span class="cs-meta-value">Solo Project</span></div>
+    </div>
+  </div>
+  <div class="cs-body">
+    <div class="cs-section">
+      <div class="cs-section-label">Overview</div>
+      <p>As a Project Administrator at Barge Design Solutions (an architecture and engineering firm), I had a front-row seat to how broken the company's travel process was. Trip requests were paper-based. Mileage tracking was manual and inconsistent. Employees had no visibility into whether their request was submitted, in review, or booked. Admins drowned in email chains and paper reports.</p>
+      <p>I identified the problem, pitched the solution, and designed WorkTrip, an internal app that streamlines travel requests, gives employees real-time visibility, and provides admins with cleaner, more efficient data.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Research</div>
+      <p>I conducted interviews and observed the existing workflow. Three pain points dominated:</p>
+      <p><strong>Unclear Booking Status.</strong> Employees struggled to track the status of travel requests due to fragmented communication and no centralized view. People submitted requests and then waited in the dark.</p>
+      <p><strong>Inconsistent Mileage Tracking.</strong> Mileage reporting was manual, prone to errors, and led to delays and distrust in reimbursements. Employees wanted a seamless, built-in way to track mileage on the go rather than reconstructing trips after the fact.</p>
+      <p><strong>Manual Admin Processes.</strong> Admins relied on paper-based reports and email chains. Without centralized digital tracking, pulling reports or verifying bookings was tedious and error-prone.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Design: Two Iterations</div>
+      <p><strong>Version 1</strong> focused on getting the core workflow right: a home page with quick access to key actions, easy access to company car information, and a summary page to review submitted data. This version validated the basic flow, employees could submit and track requests digitally for the first time.</p>
+      <p><strong>Version 2</strong> incorporated feedback and added progress tracking (a progress line showing where users are in the submission process), a redesigned home page as a centralized info hub, and a vehicle inspection checklist built directly into the app flow, a safety compliance initiative integrated without adding friction.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Validation</div>
+      <p><strong>Submission Without Struggle.</strong> All testers successfully submitted a report without needing help. The digital process was immediately faster and less error-prone than paper.</p>
+      <p><strong>Status Tracker = Instant Reassurance.</strong> The status tracker stood out as the favorite feature: users felt more in control knowing exactly where their request was in the process. The anxiety of "did my request go through?" disappeared.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Reflection</div>
+      <p>WorkTrip stayed as a prototype: leadership was excited about it, but internal politics made implementation difficult. That tension taught me something important: solving the design problem is only half the work. <span class="highlight">Navigating organizational dynamics to get solutions adopted is its own design challenge.</span></p>
+      <p>This project also shows something I value: I don't wait for a brief. I identified a broken process in my own workplace and designed the fix. That instinct, seeing systems that could work better and doing something about it, is what drew me to interaction design.</p>
+    </div>
+  </div>
+</div>
+
+<div class="case-study-page" id="cs-hand-tetris">
+  <div class="cs-nav"><button onclick="closeCaseStudy()">&larr; Back</button></div>
+  <div class="cs-header">
+    <div class="cs-label">Play · Gesture Prototype</div>
+    <h1 class="cs-title">Hand Tetris</h1>
+    <p class="cs-subtitle">Tetris where your webcam is the controller. Built with p5.js and ML5.js handpose — no keys, no props, just gestures (and a green hand skeleton straight out of Spy Kids).</p>
+    <div class="cs-meta-bar">
+      <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Solo Build</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Tools</span><span class="cs-meta-value">p5.js &middot; ML5.js Handpose</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Context</span><span class="cs-meta-value">Interaction Design</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Type</span><span class="cs-meta-value">Computer-Vision Prototype</span></div>
+    </div>
+  </div>
+  <div class="cs-body">
+
+    <div class="cs-section">
+      <div class="cs-section-label">Play It</div>
+      <p>Allow camera access, then click into the frame. Move your whole hand left or right to slide the piece, bend your index or ring finger to nudge one tile, pinch to rotate, and drop your fingers below your wrist to hard-drop. Good lighting helps the tracking. Keyboard backups: arrow keys, space, and R.</p>
+      <div class="tetris-demo" id="tetris-demo">
+        <a class="tetris-launch" href="https://editor.p5js.org/emoystner/full/aq_l2cmPV" target="_blank" rel="noopener">
+          <img src="images/play/hand%20tetris/intro.png" alt="Hand Tetris intro screen with How to Play instructions">
+          <span class="tetris-launch-label">&#9654;&nbsp; Play in a new tab &middot; uses your webcam</span>
+        </a>
+      </div>
+      <div class="tetris-demo-note">Opens the live sketch in a new tab. Camera stays on your device.</div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">The Idea</div>
+      <p>It started as object recognition — controlling a game with cups and lids. I stripped the props out entirely and let the body become the controller. The interesting design question wasn't "can a hand control Tetris," it was what happens to play when the input is <span class="highlight">noisy, physical, and imperfect</span>. Instead of hiding the jitter and latency of computer vision, the prototype leans into it. Your hand is never perfectly still, and the game has to make peace with that.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Gesture Controls</div>
+      <p>Five gestures map to the whole game. <strong>Hold hand left / right</strong> slides the piece. <strong>Index-finger bend</strong> nudges one tile; <strong>ring-finger bend</strong> nudges the other way. <strong>Pinch</strong> rotates. <strong>Fingers dropped below the wrist</strong> hard-drops. ML5's handpose gives 21 landmarks per hand, and I drew a live green skeleton over the camera so I could see, in real time, that the model was actually locked onto my hand.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Taming the Jitter</div>
+      <p>The first working build was unplayable: far too sensitive. Even when I thought my hand was still, tiny wrist tremors read as movement, so the piece drifted on its own. The root cause: I was mapping wrist position to movement <em>every single frame</em>, and handpose updates many times a second, so any micro-variation flipped the "move" state. Noise was being treated as intent.</p>
+      <p>The fix was three layers of stabilization, which together turned movement into a tiny state machine. A <strong>deadzone</strong> ignores small drift around center, so the wrist has to travel a real distance before it counts as a direction. A <strong>delay</strong> proves intent, the first move fires instantly, but repeats only start after you've held a direction briefly, so a quick lean doesn't run the piece away. And a <strong>repeat rate</strong> makes held movement slide at a predictable speed instead of stuttering frame-by-frame.</p>
+      <div class="quote-block">The change matched the reality of how people actually hold their hands in front of a camera. Movement finally felt intentional instead of twitchy — and that one fix made the whole thing feel "playable."</div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">When the Skeleton Wouldn't Line Up</div>
+      <p>The biggest visual bug: my green skeleton drifted off my actual hand. The camera was being drawn "cover style", scaled and cropped to fill the screen, but I was plotting landmarks in raw video coordinates, so the overlay never matched the transformed feed. I computed a matching cover transform (scale plus draw-offset) and ran every landmark through it before drawing, then flipped X because the camera is mirrored. After that, the skeleton locked onto my hand.</p>
+      <div class="cs-image-grid cols-3">
+        <img src="images/play/hand%20tetris/overlay.png" alt="Overlay misalignment, the start of the problem" loading="lazy">
+        <img src="images/play/hand%20tetris/overlaynotworking.png" alt="Overlay still drifting, frustration building" loading="lazy">
+        <img src="images/play/hand%20tetris/overlaysuccess.png" alt="Green hand skeleton finally locked onto the hand" loading="lazy">
+      </div>
+      <div class="cs-image-caption">The start of the problem &rarr; frustration building &rarr; success.</div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Making Invisible Input Visible</div>
+      <p>Gesture control has a learnability problem: a successful gesture is invisible, so when something happens you don't know <em>why</em>. I added lightweight floating emoji that confirm what the model thinks you just did, a rotate symbol on a pinch, finger symbols with a direction on nudges, an upside-down hand on a drop. They act like a receipt for your intent, which dramatically cut the "wait, why did it move?" confusion during testing.</p>
+      <p>The feedback also exposed a hidden bug I'd never been able to see. Every pinch-rotation was often followed by an accidental index-bend nudge, one intent producing two actions. The emoji made the conflict obvious for the first time.</p>
+      <div class="cs-image">
+        <img src="images/play/hand%20tetris/newprob.png" alt="Emoji feedback revealing a gesture-conflict bug" loading="lazy">
+        <div class="cs-image-caption">The feedback system surfacing a gesture conflict</div>
+      </div>
+      <p>The fix was <strong>gesture arbitration</strong>: pinch-rotate became the higher-priority gesture, and firing it sets a short time-based lockout that blocks the lower-priority finger bends. Rotation stopped dragging the piece sideways. It still isn't perfect, but the controls started enforcing a rule people assume naturally, <span class="highlight">one gesture, one action</span>.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Framing It Like a Product</div>
+      <p>I treated the p5 sketch as one component inside a designed interface, not "just a canvas." A clear hierarchy (title, instructions, live prototype) plus an onboarding screen that tells you what to try first while the camera initializes. The HUD always narrates what the system believes is happening ("hand detected" / "no hand"), so a missed hand or a lighting change reads as feedback instead of a mystery. I also dialed the webcam down to 640&times;480 on purpose: less pixel data per frame meant steadier tracking, a worthwhile trade for a slightly softer image.</p>
+      <div class="cs-image-grid cols-2">
+        <img src="images/play/hand%20tetris/intro.png" alt="Onboarding How to Play screen" loading="lazy">
+        <img src="images/play/hand%20tetris/UI.png" alt="Final game UI with board, score, and gesture legend over the camera feed" loading="lazy">
+      </div>
+      <div class="cs-image-caption">Onboarding screen and the final designed UI</div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Reflection</div>
+      <p>Hand Tetris reframes gameplay as a negotiation between human motion and machine interpretation. Rather than optimizing for perfection, the system makes visible how our bodies adapt to imperfect sensing — and how much of "good" interaction is really just matching the machine's behavior to what people already expect their hands to do.</p>
+      <p>Also, I have to say: I love the drawn green hand. It makes me feel like I'm in Spy Kids. Just needed to profess that.</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ======================================
+// LENIS SMOOTH SCROLL
+// ======================================
+let lenis;
+let lenisRafId;
+
+function initLenis() {
+  lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smooth: true,
+  });
+
+  lenis.on('scroll', ScrollTrigger.update);
+
+  function raf(time) {
+    lenis.raf(time);
+    lenisRafId = requestAnimationFrame(raf);
+  }
+  lenisRafId = requestAnimationFrame(raf);
+}
+
+initLenis();
+gsap.ticker.lagSmoothing(0);
+
+// ======================================
+// STICKY TILE PILLS · move to top-left when the card's bottom is below the fold
+// ======================================
+(function initStickyPills() {
+  const cards = Array.from(document.querySelectorAll('.work-tile, .playground-card'));
+  if (!cards.length) return;
+  let ticking = false;
+
+  function update() {
+    ticking = false;
+    const vh = window.innerHeight;
+    for (const card of cards) {
+      const r = card.getBoundingClientRect();
+      const inView = r.top < vh && r.bottom > 0;
+      const bottomBelowFold = r.bottom > vh - 8;
+      card.classList.toggle('pills-top', inView && bottomBelowFold);
+    }
+  }
+  function onScroll() {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  window.addEventListener('load', update);
+  // Playground opens as a fixed, internally-scrolling overlay
+  const pg = document.getElementById('playground-page');
+  if (pg) pg.addEventListener('scroll', onScroll, { passive: true });
+  update();
+})();
+
+// ======================================
+// PHOTOGRAPHY TILE · prints toss out of the stack on hover
+// ======================================
+(function initPhotoToss() {
+  const card = document.querySelector('.photo-toss-card');
+  if (!card) return;
+  const stage = card.querySelector('.photo-stage');
+  const prints = Array.from(card.querySelectorAll('.photo-print'));
+  if (!stage || !prints.length) return;
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const n = prints.length;
+
+  function layout() {
+    const W = stage.clientWidth || 440;
+    const H = stage.clientHeight || 293;
+    prints.forEach((p, i) => {
+      const d = i - (n - 1) / 2;
+      p.style.setProperty('--rest', (d * 3).toFixed(2) + 'deg');
+      p.style.setProperty('--tx', (rand(-0.40, 0.40) * W).toFixed(1) + 'px');
+      p.style.setProperty('--ty', (rand(-0.34, 0.34) * H).toFixed(1) + 'px');
+      p.style.setProperty('--rot', rand(-22, 22).toFixed(1) + 'deg');
+      p.style.zIndex = i;
+    });
+    // send the two end prints toward the edges so they clip off-frame
+    prints[0].style.setProperty('--tx', (0.54 * W).toFixed(1) + 'px');
+    prints[0].style.setProperty('--ty', (rand(-0.22, 0.08) * H).toFixed(1) + 'px');
+    prints[n - 1].style.setProperty('--tx', (-0.54 * W).toFixed(1) + 'px');
+    prints[n - 1].style.setProperty('--ty', (rand(-0.08, 0.22) * H).toFixed(1) + 'px');
+  }
+
+  layout();
+  window.addEventListener('resize', layout, { passive: true });
+  // reshuffle the toss after the cursor leaves, so the next spill differs
+  card.addEventListener('mouseleave', () => setTimeout(layout, 600));
+})();
+
+// ======================================
+// NAVIGATION
+// ======================================
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (el && lenis) lenis.scrollTo(el, { offset: -80 });
+}
+
+// Connect dropdown
+function toggleConnectDropdown(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const dropdown = document.getElementById('connect-dropdown');
+  dropdown.classList.toggle('open');
+}
+
+function toggleMobileMenu() {
+  const btn = document.getElementById('mobile-menu-toggle');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  btn.classList.toggle('open');
+  overlay.classList.toggle('open');
+  document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
+}
+
+document.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('connect-dropdown');
+  const wrap = e.target.closest('.nav-connect-wrap');
+  if (!wrap && dropdown) dropdown.classList.remove('open');
+});
+
+function openCaseStudy(id) {
+  document.querySelectorAll('.case-study-page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById('cs-' + id);
+  if (page) { page.classList.add('active'); page.scrollTop = 0; }
+  if (lenis) { lenis.destroy(); lenis = null; }
+  if (lenisRafId) { cancelAnimationFrame(lenisRafId); lenisRafId = null; }
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCaseStudy() {
+  document.querySelectorAll('.case-study-page').forEach(p => p.classList.remove('active'));
+  document.body.style.overflow = '';
+  history.replaceState(null, '', window.location.pathname);
+  initLenis();
+}
+
+// Open case study if arriving via ?cs= param
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const cs = params.get('cs');
+  if (cs) { setTimeout(() => openCaseStudy(cs), 300); }
+})();
+
+// ======================================
+// PLAYGROUND
+// ======================================
+let playgroundInitialized = false;
+
+function openPlayground() {
+  const page = document.getElementById('playground-page');
+  page.classList.add('active');
+  page.scrollTop = 0;
+  if (lenis) { lenis.destroy(); lenis = null; }
+  if (lenisRafId) { cancelAnimationFrame(lenisRafId); lenisRafId = null; }
+  document.body.style.overflow = 'hidden';
+  if (!playgroundInitialized) { initPlaygroundScene(); playgroundInitialized = true; }
+}
+
+function closePlayground() {
+  document.getElementById('playground-page').classList.remove('active');
+  document.body.style.overflow = '';
+  initLenis();
+}
+
+// ======================================
+// PHOTOGRAPHY GALLERY
+// ======================================
+const PGAL_PHOTOS = [
+  'DSCF1290','DSCF1154','DSCF2435','DSCF0105','DSCF1046','DSCF2882','DSCF2436'
+];
+let pgalLightboxIndex = -1;
+
+function openPhotoGallery() {
+  const page = document.getElementById('photo-gallery');
+  if (!page) return;
+  page.classList.add('active');
+  page.scrollTop = 0;
+  // playground sits underneath at a lower z-index; keep scroll locked
+  document.body.style.overflow = 'hidden';
+}
+
+function closePhotoGallery() {
+  closeLightbox();
+  document.getElementById('photo-gallery').classList.remove('active');
+  // playground is still open beneath us, so leave scroll locked for it
+}
+
+function openLightbox(i) {
+  pgalLightboxIndex = i;
+  const lb = document.getElementById('pgal-lightbox');
+  const img = document.getElementById('pgal-lb-img');
+  img.src = 'images/play/photography/large/' + PGAL_PHOTOS[i] + '.jpg';
+  document.getElementById('pgal-lb-count').textContent =
+    (i + 1) + ' / ' + PGAL_PHOTOS.length;
+  lb.classList.add('active');
+}
+
+function closeLightbox() {
+  pgalLightboxIndex = -1;
+  document.getElementById('pgal-lightbox').classList.remove('active');
+}
+
+function lightboxStep(d) {
+  if (pgalLightboxIndex < 0) return;
+  const n = PGAL_PHOTOS.length;
+  openLightbox((pgalLightboxIndex + d + n) % n);
+}
+
+document.addEventListener('keydown', (e) => {
+  const lbOpen = pgalLightboxIndex >= 0;
+  const galOpen = document.getElementById('photo-gallery')?.classList.contains('active');
+  if (lbOpen) {
+    if (e.key === 'Escape') closeLightbox();
+    else if (e.key === 'ArrowRight') lightboxStep(1);
+    else if (e.key === 'ArrowLeft') lightboxStep(-1);
+  } else if (galOpen && e.key === 'Escape') {
+    closePhotoGallery();
+  }
+});
+
+let tennisFullscreen = false;
+let tennisGame = null;
+
+function initPlaygroundScene() {
+  const fsOverlay = document.getElementById('tennis-fullscreen');
+  const cardWrap = document.getElementById('tennis-wrap');
+  const cardCanvas = document.getElementById('playground-canvas');
+  const fsCanvas = document.getElementById('tennis-fs-canvas');
+  const cardScore = document.getElementById('playground-score');
+  const fsScore = document.getElementById('tennis-fs-score');
+
+  let canvas = cardCanvas;
+  let wrap = cardWrap;
+  let ctx = canvas.getContext('2d');
+  const fsCtx = fsCanvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio, 2);
+
+  let w, h;
+  function resize() {
+    w = wrap.clientWidth;
+    h = wrap.clientHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+
+  const SURROUND = '#C75A4A';
+  const GREEN_L = '#6E9450';
+  const GREEN_R = '#7BA35A';
+  const LINE = 'rgba(255,255,255,0.92)';
+  const SHADOW = 'rgba(0,0,0,0.18)';
+  const BALL_COL = '#D4E34C';
+
+  let playerPoints = 0, botPoints = 0;
+  let playerGames = 0, botGames = 0;
+  let mouseX = w * 0.15, mouseY = h / 2;
+  let serving = true, serveTimer = 0;
+  let paused = false;
+  let waitingForServe = true;
+
+  const POINT_NAMES = ['Love', '15', '30', '40'];
+
+  function getScoreText() {
+    const gameText = `Games: ${playerGames} · ${botGames}`;
+    if (playerPoints < 3 || botPoints < 3) {
+      return `${POINT_NAMES[playerPoints] || playerPoints} · ${POINT_NAMES[botPoints] || botPoints}\n${gameText}`;
+    }
+    if (playerPoints === botPoints) return `Deuce\n${gameText}`;
+    if (playerPoints === botPoints + 1) return `Ad · You\n${gameText}`;
+    if (botPoints === playerPoints + 1) return `Ad · Bot\n${gameText}`;
+    return `${playerPoints} · ${botPoints}\n${gameText}`;
+  }
+
+  function updateScoreDisplay() {
+    const html = getScoreText().replace('\n', '<br>');
+    cardScore.innerHTML = html;
+    fsScore.innerHTML = html;
+  }
+
+  function switchToFullscreen() {
+    tennisFullscreen = true;
+    fsOverlay.classList.add('active');
+    canvas = fsCanvas;
+    wrap = fsOverlay;
+    ctx = fsCtx;
+    resize();
+    initPositions();
+  }
+
+  function switchToCard() {
+    tennisFullscreen = false;
+    fsOverlay.classList.remove('active');
+    canvas = cardCanvas;
+    wrap = cardWrap;
+    ctx = cardCanvas.getContext('2d');
+    resize();
+    initPositions();
+  }
+
+  cardWrap.addEventListener('click', (e) => {
+    if (e.target.closest('.tennis-pause')) return;
+    switchToFullscreen();
+  });
+
+  window.closeTennisFullscreen = switchToCard;
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Escape' && tennisFullscreen) {
+      switchToCard();
+    }
+    if (e.code === 'Space' && tennisFullscreen && document.getElementById('playground-page').classList.contains('active')) {
+      e.preventDefault();
+      triggerPlayerServe();
+    }
+  });
+
+  function court() {
+    const courtRatio = 2.17;
+    let cw = w * 0.55;
+    let ch = cw / courtRatio;
+    if (ch > h * 0.6) { ch = h * 0.6; cw = ch * courtRatio; }
+    const cx = (w - cw) / 2;
+    const cy = (h - ch) / 2;
+    const alley = ch * 0.125;
+    return { cx, cy, cw, ch, midX: cx + cw / 2, alley };
+  }
+
+  const ball = { x: 0, y: 0, vx: 0, vy: 0, radius: 6, trail: [], active: false, bounces: 0, lastHitBy: 'none', landed: false };
+  const player = { x: 0, y: 0, swing: 0 };
+  const bot = { x: 0, y: 0, swing: 0 };
+  let serverIs = 'player';
+  const HIT_RADIUS = 35;
+  const bounceRings = [];
+  let announcement = { text: '', timer: 0 };
+  let rallyCount = 0;
+
+  function resetBall() {
+    const c = court();
+    ball.trail = []; ball.active = false; ball.bounces = 0;
+    ball.lastHitBy = 'none'; ball.landed = false; serving = true;
+    if (serverIs === 'player') {
+      waitingForServe = true; serveTimer = 0;
+      ball.x = c.cx - 15; ball.y = c.cy + c.ch / 2;
+      ball.vx = 0; ball.vy = 0; ball.lastHitBy = 'player';
+    } else {
+      waitingForServe = false; serveTimer = 70;
+      ball.x = c.cx + c.cw + 15;
+      ball.y = c.cy + c.ch / 2 + (Math.random() - 0.5) * c.ch * 0.3;
+      ball.vx = -(3.5 + Math.random() * 0.5);
+      ball.vy = (Math.random() - 0.5) * 1.5;
+      ball.lastHitBy = 'bot';
+    }
+  }
+
+  function triggerPlayerServe() {
+    if (!waitingForServe || !serving) return;
+    waitingForServe = false;
+    ball.x = player.x - 10; ball.y = player.y;
+    ball.vx = 3.5 + Math.random() * 0.5;
+    ball.vy = (Math.random() - 0.5) * 1.5;
+    ball.lastHitBy = 'player'; ball.active = true;
+    serving = false; player.swing = 1.0;
+  }
+
+  function scorePoint(winner, reason) {
+    if (winner === 'player') playerPoints++; else botPoints++;
+    let callout = '';
+    if (reason === 'ace') callout = 'Ace!';
+    else if (reason === 'out') callout = 'Out!';
+    else if (rallyCount >= 6) callout = 'Great rally!';
+    else if (winner === 'player') callout = 'Point!';
+    else callout = 'Fault';
+    if (playerPoints >= 4 && playerPoints - botPoints >= 2) {
+      callout = 'Game · You!'; playerGames++; playerPoints = 0; botPoints = 0;
+      serverIs = serverIs === 'player' ? 'bot' : 'player';
+    } else if (botPoints >= 4 && botPoints - playerPoints >= 2) {
+      callout = 'Game · Bot'; botGames++; playerPoints = 0; botPoints = 0;
+      serverIs = serverIs === 'player' ? 'bot' : 'player';
+    } else if (playerPoints >= 3 && botPoints >= 3 && playerPoints === botPoints) {
+      callout = 'Deuce';
+    }
+    announcement = { text: callout, timer: 90 };
+    rallyCount = 0; updateScoreDisplay(); resetBall();
+  }
+
+  function initPositions() {
+    const c = court();
+    player.x = c.cx + 35; player.y = c.cy + c.ch / 2;
+    bot.x = c.cx + c.cw - 35; bot.y = c.cy + c.ch / 2;
+    resetBall();
+  }
+  initPositions();
+
+  fsOverlay.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+  cardWrap.addEventListener('mousemove', (e) => {
+    const rect = cardWrap.getBoundingClientRect();
+    mouseX = e.clientX - rect.left; mouseY = e.clientY - rect.top;
+  });
+
+  function drawCourt() {
+    const c = court();
+    const { cx, cy, cw, ch, midX, alley } = c;
+    const midY = cy + ch / 2;
+    ctx.fillStyle = SURROUND; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = GREEN_L; ctx.fillRect(cx, cy, cw / 2, ch);
+    ctx.fillStyle = GREEN_R; ctx.fillRect(midX, cy, cw / 2, ch);
+    ctx.strokeStyle = LINE; ctx.lineWidth = 2;
+    ctx.strokeRect(cx, cy, cw, ch);
+    ctx.beginPath(); ctx.moveTo(cx, cy + alley); ctx.lineTo(cx + cw, cy + alley); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx, cy + ch - alley); ctx.lineTo(cx + cw, cy + ch - alley); ctx.stroke();
+    const serviceDist = cw * 0.27;
+    ctx.beginPath(); ctx.moveTo(midX - serviceDist, cy + alley); ctx.lineTo(midX - serviceDist, cy + ch - alley); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(midX + serviceDist, cy + alley); ctx.lineTo(midX + serviceDist, cy + ch - alley); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(midX - serviceDist, midY); ctx.lineTo(midX + serviceDist, midY); ctx.stroke();
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx, midY); ctx.lineTo(cx + 6, midY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx + cw, midY); ctx.lineTo(cx + cw - 6, midY); ctx.stroke();
+    ctx.save(); ctx.strokeStyle = 'rgba(20,20,20,0.55)'; ctx.lineWidth = 2.5; ctx.setLineDash([5, 3]);
+    ctx.beginPath(); ctx.moveTo(midX, cy - 10); ctx.lineTo(midX, cy + ch + 10); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(20,20,20,0.7)';
+    ctx.beginPath(); ctx.arc(midX, cy - 5, 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(midX, cy + ch + 5, 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = 'rgba(0,0,0,0.04)'; ctx.fillRect(midX + 2, cy, 4, ch);
+  }
+
+  function drawFigure(px, py, color, facingRight, swing) {
+    const dir = facingRight ? 1 : -1;
+    const swingAngle = swing > 0 ? (-1.0 + swing * 2.2) * dir : 0;
+    ctx.fillStyle = SHADOW; ctx.beginPath(); ctx.ellipse(px + 5, py + 4, 12, 8, 0.15, 0, Math.PI * 2); ctx.fill();
+    ctx.save(); ctx.translate(px, py); ctx.rotate(swing * 0.15 * dir);
+    ctx.fillStyle = color; ctx.beginPath(); ctx.ellipse(0, 0, 10, 7, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#F0DCC8'; ctx.beginPath(); ctx.arc(dir * 6, 0, 5, 0, Math.PI * 2); ctx.fill();
+    const shoulderX = dir * 6, shoulderY = -1, armLen = 16;
+    const racketBaseAngle = facingRight ? -0.3 : Math.PI + 0.3;
+    const finalAngle = racketBaseAngle + swingAngle;
+    const elbowX = shoulderX + Math.cos(finalAngle) * armLen;
+    const elbowY = shoulderY + Math.sin(finalAngle) * armLen;
+    ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(shoulderX, shoulderY); ctx.lineTo(elbowX, elbowY); ctx.stroke();
+    const racketX = elbowX + Math.cos(finalAngle) * 7;
+    const racketY = elbowY + Math.sin(finalAngle) * 7;
+    ctx.strokeStyle = '#555'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.ellipse(racketX, racketY, 6, 5, finalAngle, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = 'rgba(85,85,85,0.3)'; ctx.lineWidth = 0.5; ctx.beginPath();
+    ctx.moveTo(racketX - Math.cos(finalAngle + 1.57) * 4, racketY - Math.sin(finalAngle + 1.57) * 4);
+    ctx.lineTo(racketX + Math.cos(finalAngle + 1.57) * 4, racketY + Math.sin(finalAngle + 1.57) * 4); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawBall() {
+    if (!ball.active && serving) return;
+    for (let i = 0; i < ball.trail.length; i++) {
+      const t = ball.trail[i]; const alpha = (i / ball.trail.length) * 0.12;
+      const size = ball.radius * (0.4 + (i / ball.trail.length) * 0.6);
+      ctx.fillStyle = `rgba(212,227,76,${alpha})`; ctx.beginPath(); ctx.arc(t.x, t.y, size, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.beginPath(); ctx.ellipse(ball.x + 3, ball.y + 3, ball.radius, ball.radius * 0.6, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = BALL_COL; ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.beginPath(); ctx.arc(ball.x - 1.5, ball.y - 1.5, ball.radius * 0.35, 0, Math.PI * 2); ctx.fill();
+  }
+
+  function updateGame() {
+    if (!tennisFullscreen) return;
+    const c = court(); const midY = c.cy + c.ch / 2;
+    player.x += (Math.max(20, Math.min(w - 20, mouseX)) - player.x) * 0.14;
+    player.y += (Math.max(20, Math.min(h - 20, mouseY)) - player.y) * 0.14;
+    if (serving) {
+      if (waitingForServe) { ball.x = player.x - 10; ball.y = player.y; return; }
+      serveTimer--;
+      if (serverIs === 'bot' && serveTimer <= 0) { ball.active = true; serving = false; }
+      return;
+    }
+    ball.vx *= 0.998; ball.vy *= 0.998; ball.x += ball.vx; ball.y += ball.vy;
+    ball.trail.push({ x: ball.x, y: ball.y }); if (ball.trail.length > 12) ball.trail.shift();
+    const speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+    if (!ball.landed && speed < 2.8 && ball.lastHitBy !== 'none') {
+      ball.landed = true; ball.bounces++; ball.vx *= 0.65; ball.vy *= 0.65;
+      bounceRings.push({ x: ball.x, y: ball.y, radius: 5, maxRadius: 25, alpha: 0.6 });
+    }
+    if (ball.landed && speed > 3.2) ball.landed = false;
+    if (ball.bounces >= 2) { scorePoint(ball.lastHitBy === 'player' ? 'player' : 'bot', 'double'); return; }
+    if (ball.x < -120 || ball.x > w + 120 || ball.y < -120 || ball.y > h + 120) {
+      if (ball.lastHitBy === 'player') { scorePoint(ball.x > w + 50 ? 'player' : 'bot', ball.x > w + 50 ? (rallyCount === 0 ? 'ace' : 'winner') : 'out'); }
+      else { scorePoint(ball.x < -50 ? 'bot' : 'player', ball.x < -50 ? (rallyCount === 0 ? 'ace' : 'winner') : 'out'); }
+      return;
+    }
+    if (speed < 0.3 && ball.bounces >= 1) { scorePoint(ball.lastHitBy === 'player' ? 'player' : 'bot', 'winner'); return; }
+    const playerIsReceiver = serverIs === 'bot' && rallyCount === 0;
+    const playerCanHit = !playerIsReceiver || ball.bounces >= 1;
+    const pdist = Math.sqrt((ball.x - player.x) ** 2 + (ball.y - player.y) ** 2);
+    if (pdist < HIT_RADIUS && ball.lastHitBy !== 'player' && playerCanHit) {
+      ball.vx = Math.abs(3.8 + Math.random() * 0.8);
+      ball.vy = (ball.y - player.y) * 0.03 * 10 + (Math.random() - 0.5) * 1.2;
+      ball.lastHitBy = 'player'; ball.bounces = 0; ball.landed = false; player.swing = 1.0; rallyCount++;
+    }
+    if (ball.vx > 0 && ball.lastHitBy === 'player') {
+      const timeToArrive = Math.max(1, (bot.x - ball.x) / Math.max(ball.vx, 0.5));
+      const predictY = ball.y + ball.vy * timeToArrive * 0.7;
+      bot.x += (Math.max(c.midX + 20, ball.x + ball.vx * 3) - bot.x) * 0.08;
+      bot.y += (predictY - bot.y) * 0.09;
+    } else {
+      bot.x += (c.cx + c.cw * 0.82 - bot.x) * 0.04;
+      bot.y += (midY + Math.sin(Date.now() * 0.0007) * 20 - bot.y) * 0.04;
+    }
+    bot.x = Math.max(c.midX, Math.min(w - 15, bot.x));
+    bot.y = Math.max(15, Math.min(h - 15, bot.y));
+    const botIsReceiver = serverIs === 'player' && rallyCount === 0;
+    const botCanHit = !botIsReceiver || ball.bounces >= 1;
+    const bdist = Math.sqrt((ball.x - bot.x) ** 2 + (ball.y - bot.y) ** 2);
+    if (bdist < HIT_RADIUS && ball.lastHitBy !== 'bot' && botCanHit) {
+      ball.vx = -Math.abs(3.5 + Math.random() * 0.8);
+      ball.vy = (ball.y - bot.y) * 0.025 * 8 + (Math.random() - 0.5) * 1.5;
+      ball.lastHitBy = 'bot'; ball.bounces = 0; ball.landed = false; bot.swing = 1.0; rallyCount++;
+    }
+    if (speed > 5.5) { ball.vx *= 5.5 / speed; ball.vy *= 5.5 / speed; }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+    drawCourt();
+    if (!paused) {
+      updateGame();
+      player.swing *= 0.88; bot.swing *= 0.88;
+      if (player.swing < 0.01) player.swing = 0;
+      if (bot.swing < 0.01) bot.swing = 0;
+      for (let i = bounceRings.length - 1; i >= 0; i--) {
+        const r = bounceRings[i]; r.radius += 1.2; r.alpha -= 0.015;
+        if (r.alpha <= 0) bounceRings.splice(i, 1);
+      }
+      if (announcement.timer > 0) announcement.timer--;
+    }
+    bounceRings.forEach(r => {
+      ctx.strokeStyle = `rgba(255,255,255,${r.alpha})`; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2); ctx.stroke();
+    });
+    drawFigure(bot.x, bot.y, '#2C2B28', false, bot.swing);
+    drawBall();
+    drawFigure(player.x, player.y, '#E15304', true, player.swing);
+
+    if (announcement.timer > 0) {
+      const fadeIn = Math.min(1, (90 - announcement.timer + 1) / 10);
+      const fadeOut = Math.min(1, announcement.timer / 15);
+      const alpha = Math.min(fadeIn, fadeOut);
+      ctx.save(); ctx.globalAlpha = alpha;
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.font = '500 ' + Math.min(w * 0.03, 22) + 'px Inter, sans-serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(announcement.text, w / 2, h / 2 + (1 - fadeIn) * 10);
+      ctx.restore();
+    }
+
+    if (tennisFullscreen && waitingForServe && !paused) {
+      const pulse = 0.5 + 0.3 * Math.sin(Date.now() * 0.003);
+      ctx.save(); ctx.globalAlpha = pulse;
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.font = '500 ' + Math.min(w * 0.02, 14) + 'px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('PRESS SPACE TO SERVE', w / 2, h * 0.88);
+      ctx.restore();
+    }
+
+    if (!tennisFullscreen) {
+      ctx.save();
+      ctx.fillStyle = 'rgba(0,0,0,0.15)'; ctx.fillRect(0, 0, w, h);
+      ctx.globalAlpha = 0.6 + 0.2 * Math.sin(Date.now() * 0.002);
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.font = '500 ' + Math.min(w * 0.035, 13) + 'px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('CLICK TO PLAY', w / 2, h / 2);
+      ctx.restore();
+    }
+
+    if (paused && tennisFullscreen) {
+      ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      ctx.font = '300 ' + Math.min(w * 0.04, 28) + 'px Inter, sans-serif';
+      ctx.textAlign = 'center'; ctx.fillText('PAUSED', w / 2, h / 2);
+      ctx.font = '400 ' + Math.min(w * 0.015, 11) + 'px "JetBrains Mono", monospace';
+      ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.fillText('CLICK TO RESUME', w / 2, h / 2 + 28);
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  tennisGame = {
+    togglePause() {
+      paused = !paused;
+      [document.getElementById('pause-icon'), document.getElementById('fs-pause-icon')].forEach(icon => {
+        if (!icon) return;
+        icon.innerHTML = paused
+          ? '<polygon points="8,5 19,12 8,19"/>'
+          : '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+      });
+    }
+  };
+
+  requestAnimationFrame(animate);
+  updateScoreDisplay();
+  window.addEventListener('resize', () => { resize(); initPositions(); });
+}
+
+function toggleTennisPause() {
+  if (tennisGame) tennisGame.togglePause();
+}
+
+// Nav frosted glass on scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// ======================================
+// ANIMATIONS
+// ======================================
+gsap.registerPlugin(ScrollTrigger);
+
+// Entrance · nav fades in, tiles handled by reveal-up below
+gsap.to('.nav-logo', { opacity: 1, duration: 0.6, ease: 'power2.out', delay: 0.15 });
+gsap.to('.nav-right', { opacity: 1, duration: 0.6, ease: 'power2.out', delay: 0.3 });
+
+// Reveal-up for all sections
+gsap.utils.toArray('.reveal-up').forEach((el) => {
+  gsap.to(el, {
+    opacity: 1,
+    y: 0,
+    duration: 0.5,
+    ease: 'power2.out',
+    scrollTrigger: {
+      trigger: el,
+      start: 'top 93%',
+      toggleActions: 'play none none none'
+    }
+  });
+});
+
+// ======================================
+// INFO OVERLAY
+// ======================================
+function openInfo() {
+  document.querySelectorAll('.case-study-page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById('info-page');
+  if (page) { page.classList.add('active'); page.scrollTop = 0; }
+  if (lenis) { lenis.destroy(); lenis = null; }
+  if (lenisRafId) { cancelAnimationFrame(lenisRafId); lenisRafId = null; }
+  document.body.style.overflow = 'hidden';
+}
+
+function closeInfo() { closeCaseStudy(); }
+
+// Personal photo carousel (About overlay)
+(function() {
+  const carousel = document.querySelector('#info-page .personal-carousel');
+  if (!carousel) return;
+  const imgs = carousel.querySelectorAll('img');
+  const dots = carousel.querySelectorAll('.personal-carousel-dots span');
+  const captionEl = carousel.querySelector('.personal-carousel-caption');
+  const loaded = [];
+  imgs.forEach((img, i) => {
+    if (img.complete && img.naturalWidth > 0) loaded.push(i);
+    img.addEventListener('load', () => { if (!loaded.includes(i)) loaded.push(i); });
+  });
+  let current = 0;
+  let timer;
+
+  function updateCaption() {
+    const img = imgs[loaded[current]];
+    const caption = img && img.dataset.caption;
+    if (caption) { captionEl.textContent = caption; captionEl.classList.add('active'); }
+    else { captionEl.classList.remove('active'); }
+  }
+  function goTo(idx) {
+    if (loaded.length <= 1) return;
+    imgs[loaded[current]].classList.remove('active');
+    dots[loaded[current]].classList.remove('active');
+    current = idx % loaded.length;
+    imgs[loaded[current]].classList.add('active');
+    dots[loaded[current]].classList.add('active');
+    updateCaption();
+  }
+  function advance() { goTo(current + 1); }
+  function resetTimer() { clearInterval(timer); timer = setInterval(advance, 3500); }
+
+  carousel.addEventListener('click', (e) => {
+    if (e.target.closest('.personal-carousel-dots')) return;
+    const rect = carousel.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    if (clickX > rect.width / 2) goTo(current + 1);
+    else goTo((current - 1 + loaded.length) % loaded.length);
+    resetTimer();
+  });
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      const idx = loaded.indexOf(i);
+      if (idx !== -1) { goTo(idx); resetTimer(); }
+    });
+  });
+  carousel.style.cursor = 'pointer';
+  updateCaption();
+  timer = setInterval(advance, 3500);
+})();
+
+// Open playground if arriving via #playground hash
+if (window.location.hash === '#playground') {
+  openPlayground();
+}
+
+</script>
+</body>
+</html>
