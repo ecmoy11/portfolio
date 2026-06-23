@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emma Moystner · Portfolio</title>
 
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
@@ -1794,8 +1798,8 @@ a { color: inherit; text-decoration: none; }
 
     <!-- 03 · COROS -->
     <div class="work-tile reveal-up" onclick="openCaseStudy('coros')">
-      <div class="tile-media contain" style="background:#FFFAFA; aspect-ratio:4/5;">
-        <img src="images/coros/headerphoto.COROS.png" alt="COROS cycle-aware training dashboard" loading="lazy">
+      <div class="tile-media contain" style="background:#1C1C1E; aspect-ratio:4/5;">
+        <img src="images/coros/image24.png" alt="COROS cycle-aware training dashboard" loading="lazy">
         <div class="tile-overlay">
           <span class="tile-pill tile-pill-name">COROS</span>
           <span class="tile-pill tile-pill-tag">Wellness &middot; Service Design</span>
@@ -1814,15 +1818,12 @@ a { color: inherit; text-decoration: none; }
       </div>
     </div>
 
-    <!-- 05 · WorkTrip -->
-    <!-- Swap placeholder for: <video src="assets/tiles/worktrip.mp4" autoplay muted loop playsinline></video> -->
-    <div class="work-tile reveal-up" onclick="openCaseStudy('worktrip')">
+    <!-- 05 · Gauge -->
+    <div class="work-tile reveal-up" onclick="openCaseStudy('gauge')">
       <div class="tile-media" style="aspect-ratio:3/4;">
-        <div class="tile-placeholder" style="background:#775D0F;">
-          <span class="ph-note" style="color:#FAF8F5;">Coming soon</span>
-        </div>
+        <img src="images/gauge/bargeapp.png" alt="Gauge — Vehicle Report App" style="width:100%;height:100%;object-fit:cover;">
         <div class="tile-overlay">
-          <span class="tile-pill tile-pill-name">WorkTrip</span>
+          <span class="tile-pill tile-pill-name">Gauge</span>
           <span class="tile-pill tile-pill-tag">Enterprise &middot; Self-Initiated</span>
         </div>
       </div>
@@ -2381,12 +2382,12 @@ a { color: inherit; text-decoration: none; }
   </div>
 </div>
 
-<div class="case-study-page" id="cs-worktrip">
+<div class="case-study-page" id="cs-gauge">
   <div class="cs-nav"><button onclick="closeCaseStudy()">&larr; Back</button></div>
   <div class="cs-header">
     <div class="cs-label">05 · Case Study</div>
-    <h1 class="cs-title">WorkTrip</h1>
-    <p class="cs-subtitle">I saw a broken process at my own company — paper forms, lost requests, frustrated employees — and designed the fix.</p>
+    <h1 class="cs-title">Gauge</h1>
+    <p class="cs-subtitle">I saw a broken process at my own company — paper forms, lost mileage reports, frustrated employees — and designed the fix.</p>
     <div class="cs-meta-bar">
       <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Product Designer</span></div>
       <div class="cs-meta-item"><span class="cs-meta-label">Company</span><span class="cs-meta-value">Barge Design Solutions</span></div>
@@ -2395,36 +2396,42 @@ a { color: inherit; text-decoration: none; }
     </div>
   </div>
   <div class="cs-body">
+    <div class="cs-full-image">
+      <img src="images/gauge/bargeapp.png" alt="Gauge app screens" style="width:100%;border-radius:12px;">
+    </div>
+
     <div class="cs-section">
       <div class="cs-section-label">Overview</div>
-      <p>As a Project Administrator at Barge Design Solutions (an architecture and engineering firm), I had a front-row seat to how broken the company's travel process was. Trip requests were paper-based. Mileage tracking was manual and inconsistent. Employees had no visibility into whether their request was submitted, in review, or booked. Admins drowned in email chains and paper reports.</p>
-      <p>I identified the problem, pitched the solution, and designed WorkTrip, an internal app that streamlines travel requests, gives employees real-time visibility, and provides admins with cleaner, more efficient data.</p>
+      <p>As a Project Administrator at Barge Design Solutions (an architecture and engineering firm), I had a front-row seat to how broken the company's vehicle reporting process was. Mileage tracking was manual and inconsistent. Vehicle inspections were paper-based. Employees had no clear way to log trips or flag vehicle issues, and admins drowned in email chains and paper reports.</p>
+      <p>I identified the problem, pitched the solution, and designed Gauge — an internal vehicle report app that lets field employees scan a vehicle's QR code, complete inspections, log journeys, and automatically bill trip mileage to the right project.</p>
     </div>
 
     <div class="cs-section">
       <div class="cs-section-label">Research</div>
       <p>I conducted interviews and observed the existing workflow. Three pain points dominated:</p>
-      <p><strong>Unclear Booking Status.</strong> Employees struggled to track the status of travel requests due to fragmented communication and no centralized view. People submitted requests and then waited in the dark.</p>
       <p><strong>Inconsistent Mileage Tracking.</strong> Mileage reporting was manual, prone to errors, and led to delays and distrust in reimbursements. Employees wanted a seamless, built-in way to track mileage on the go rather than reconstructing trips after the fact.</p>
-      <p><strong>Manual Admin Processes.</strong> Admins relied on paper-based reports and email chains. Without centralized digital tracking, pulling reports or verifying bookings was tedious and error-prone.</p>
+      <p><strong>No Vehicle Inspection Process.</strong> Pre-trip inspections were either skipped entirely or done on paper that got lost. There was no consistent record of vehicle condition, creating liability gaps.</p>
+      <p><strong>Manual Admin Processes.</strong> Admins relied on paper-based reports and email chains. Without centralized digital tracking, pulling reports or verifying trip data was tedious and error-prone.</p>
     </div>
 
     <div class="cs-section">
-      <div class="cs-section-label">Design: Two Iterations</div>
-      <p><strong>Version 1</strong> focused on getting the core workflow right: a home page with quick access to key actions, easy access to company car information, and a summary page to review submitted data. This version validated the basic flow, employees could submit and track requests digitally for the first time.</p>
-      <p><strong>Version 2</strong> incorporated feedback and added progress tracking (a progress line showing where users are in the submission process), a redesigned home page as a centralized info hub, and a vehicle inspection checklist built directly into the app flow, a safety compliance initiative integrated without adding friction.</p>
+      <div class="cs-section-label">Design Evolution</div>
+      <p><strong>Version 1</strong> focused on getting the core workflow right: a home page with quick access to key actions, easy access to company car information, and a summary page to review submitted data. This version validated the basic flow — employees could submit and track vehicle reports digitally for the first time.</p>
+      <p><strong>Version 2</strong> got the job done but overbuilt it. A new safety compliance requirement meant adding vehicle inspections to the flow, and accommodating that made the design bulky — too many screens, too many steps. Users could complete the process, but testing revealed frustration. The app felt heavier than the paper version it was replacing.</p>
+      <p><strong>Version 3</strong> stripped it back. QR code scanning auto-fills vehicle information so users skip manual entry entirely. Trip mileage is the hero metric — it's the number that gets billed to projects, so it belongs front and center. The inspection checklist became a single tappable screen with flag capabilities. Fewer screens, smoother transitions, and micro-interactions that make the flow feel fast rather than bureaucratic.</p>
     </div>
 
     <div class="cs-section">
       <div class="cs-section-label">Validation</div>
       <p><strong>Submission Without Struggle.</strong> All testers successfully submitted a report without needing help. The digital process was immediately faster and less error-prone than paper.</p>
-      <p><strong>Status Tracker = Instant Reassurance.</strong> The status tracker stood out as the favorite feature: users felt more in control knowing exactly where their request was in the process. The anxiety of "did my request go through?" disappeared.</p>
+      <p><strong>QR Scan = Instant Confidence.</strong> Auto-filling vehicle details via QR code eliminated a major friction point. Users no longer had to remember or look up plate numbers and odometer readings from memory.</p>
+      <p><strong>Mileage Billing Clarity.</strong> Surfacing trip mileage as the hero number with a "Billed to project" badge gave employees confidence that their travel costs were being tracked and attributed correctly.</p>
     </div>
 
     <div class="cs-section">
       <div class="cs-section-label">Reflection</div>
-      <p>WorkTrip stayed as a prototype: leadership was excited about it, but internal politics made implementation difficult. That tension taught me something important: solving the design problem is only half the work. <span class="highlight">Navigating organizational dynamics to get solutions adopted is its own design challenge.</span></p>
-      <p>This project also shows something I value: I don't wait for a brief. I identified a broken process in my own workplace and designed the fix. That instinct, seeing systems that could work better and doing something about it, is what drew me to interaction design.</p>
+      <p>Gauge stayed as a prototype: leadership was excited about it, but internal politics made implementation difficult. That tension taught me something important — solving the design problem is only half the work. <span class="highlight">Navigating organizational dynamics to get solutions adopted is its own design challenge.</span></p>
+      <p>This project also shows something I value: I don't wait for a brief. I identified a broken process in my own workplace and designed the fix. That instinct — seeing systems that could work better and doing something about it — is what drew me to interaction design.</p>
     </div>
   </div>
 </div>
