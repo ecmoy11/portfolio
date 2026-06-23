@@ -7,6 +7,5 @@
       }
     </style>
   </defs>
-  <rect width="32" height="32" rx="6" fill="#FAF8F5"/>
-  <text x="16" y="22" font-family="Lennon" font-size="15" fill="#E15304" text-anchor="middle">EM</text>
+  <text x="16" y="23" font-family="Lennon" font-size="17" fill="#E15304" text-anchor="middle">EM</text>
 </svg>
