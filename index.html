@@ -371,6 +371,14 @@ a { color: inherit; text-decoration: none; }
   bottom: auto;
 }
 
+/* Mobile: keep tile labels pinned at the bottom (no top-jump on scroll) */
+@media (max-width: 700px) {
+  .work-tile.pills-top .tile-overlay {
+    top: auto;
+    bottom: 14px;
+  }
+}
+
 .tile-pill {
   display: inline-flex;
   align-items: center;
