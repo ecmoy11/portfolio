@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Client Portal — Emma Moystner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --cream:#f5f1e6; --cream-deep:#ebe4d3; --paper:#faf7ef;
+    --sky:#a4b4bd; --sky-soft:#c3cfd5; --sky-wash:#e9eef0;
+    --azul:#5f7c88; --ink:#20232e; --muted:#888d99; --line:#ddd6c6;
+    --ok:#3f8f5f; --warn:#b5602a;
+    --display:'Fraunces',Georgia,serif; --sans:'Jost','Helvetica Neue',Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  img{display:block}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 28px}
+
+  /* header */
+  header{border-bottom:1px solid var(--line);padding:20px 0;position:sticky;top:0;background:rgba(250,247,239,.92);backdrop-filter:blur(12px);z-index:50}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .brand{display:flex;flex-direction:column;line-height:1}
+  .brand .name{font-family:var(--display);font-size:1.3rem;font-weight:500;color:var(--ink)}
+  .brand .role{font-size:.6rem;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+  .nav-right{display:flex;align-items:center;gap:22px}
+  .nav-right a,.nav-right button{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;font-family:var(--sans);transition:color .3s}
+  .nav-right a:hover,.nav-right button:hover{color:var(--azul)}
+
+  /* generic */
+  .page{min-height:calc(100vh - 160px);padding:70px 0 90px}
+  h1.title{font-family:var(--display);font-weight:300;font-size:clamp(2.4rem,6vw,4rem);line-height:1;letter-spacing:-.01em;margin-bottom:14px}
+  h1.title em{font-style:italic;color:var(--azul)}
+  .kicker{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--sky);margin-bottom:18px}
+  .lead{color:var(--muted);max-width:520px;margin-bottom:38px}
+
+  .btn{font-family:var(--sans);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;padding:14px 28px;border-radius:999px;cursor:pointer;border:1px solid var(--azul);background:var(--azul);color:var(--paper);transition:.3s;display:inline-flex;align-items:center;gap:9px;justify-content:center}
+  .btn:hover{background:transparent;color:var(--azul)}
+  .btn.ghost{background:transparent;color:var(--azul)}
+  .btn.ghost:hover{background:var(--azul);color:var(--paper)}
+  .btn.sm{padding:9px 16px;font-size:.66rem}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn.danger{border-color:var(--warn);background:transparent;color:var(--warn)}
+  .btn.danger:hover{background:var(--warn);color:var(--paper)}
+
+  input{font-family:var(--sans);font-weight:300;font-size:1rem;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:14px 16px;width:100%;transition:border-color .3s}
+  input:focus{outline:none;border-color:var(--sky)}
+  label{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+  .field{margin-bottom:18px}
+
+  .card-box{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:34px}
+  .narrow{max-width:440px}
+
+  .msg{font-size:.86rem;margin-top:14px;min-height:1.2em}
+  .msg.err{color:var(--warn)}
+  .msg.ok{color:var(--ok)}
+
+  /* config warning */
+  .banner{background:#fff5e6;border:1px solid #e9cfa0;color:#7a4f17;border-radius:10px;padding:18px 22px;margin-bottom:30px;font-size:.9rem}
+  .banner b{font-weight:500}
+  .banner code{font-family:ui-monospace,Menlo,monospace;background:#f4e3c6;padding:1px 6px;border-radius:4px;font-size:.82rem}
+
+  /* gallery grid */
+  .gal{columns:4;column-gap:14px}
+  @media(max-width:860px){.gal{columns:3}}
+  @media(max-width:560px){.gal{columns:2}}
+  .ph{break-inside:avoid;margin-bottom:14px;position:relative;border-radius:6px;overflow:hidden;background:var(--cream-deep)}
+  .ph img{width:100%;cursor:pointer;transition:transform .5s}
+  .ph:hover img{transform:scale(1.04)}
+  .ph .ph-tools{position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(32,35,46,.7));opacity:0;transition:opacity .3s;display:flex;align-items:flex-end;justify-content:space-between;padding:12px;gap:8px}
+  .ph:hover .ph-tools{opacity:1}
+  .ph .ph-tools a,.ph .ph-tools button{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.18);border:none;border-radius:999px;padding:7px 12px;cursor:pointer;backdrop-filter:blur(4px);transition:background .3s}
+  .ph .ph-tools a:hover,.ph .ph-tools button:hover{background:rgba(255,255,255,.34)}
+
+  /* admin layout */
+  .admin-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:34px}
+  .g-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-bottom:14px}
+  .g-item{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:22px;cursor:pointer;transition:.25s}
+  .g-item:hover{border-color:var(--sky);transform:translateY(-2px)}
+  .g-item h3{font-family:var(--display);font-weight:400;font-size:1.4rem;margin-bottom:6px}
+  .g-item .meta{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .g-item .code{display:inline-block;margin-top:12px;font-family:ui-monospace,Menlo,monospace;background:var(--sky-wash);color:var(--azul);padding:4px 10px;border-radius:6px;font-size:.82rem;letter-spacing:.08em}
+
+  .dropzone{border:2px dashed var(--sky-soft);border-radius:12px;padding:46px 24px;text-align:center;color:var(--muted);transition:.25s;cursor:pointer;background:var(--cream)}
+  .dropzone.drag{border-color:var(--azul);background:var(--sky-wash);color:var(--azul)}
+  .dropzone strong{color:var(--ink);font-weight:400}
+
+  .bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:24px 0}
+  .pill{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .progress{height:4px;background:var(--cream-deep);border-radius:999px;overflow:hidden;flex:1;min-width:160px;display:none}
+  .progress.on{display:block}
+  .progress span{display:block;height:100%;width:0;background:var(--azul);transition:width .2s}
+
+  .row-link{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--sky-wash);border:1px solid var(--sky-soft);border-radius:10px;padding:14px 18px;margin-bottom:26px;font-size:.9rem}
+  .row-link code{font-family:ui-monospace,Menlo,monospace;color:var(--azul);word-break:break-all}
+
+  /* lightbox */
+  .lb{position:fixed;inset:0;background:rgba(32,35,46,.93);z-index:200;display:none;align-items:center;justify-content:center;padding:40px;backdrop-filter:blur(4px)}
+  .lb.open{display:flex}
+  .lb img{max-width:92%;max-height:88vh;border-radius:4px}
+  .lb .x{position:absolute;top:24px;right:30px;color:#fff;font-size:2rem;background:none;border:none;cursor:pointer}
+
+  .hidden{display:none!important}
+  .center{text-align:center}
+  .spinner{display:inline-block;width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:var(--muted);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <span class="name">Emma Moystner</span>
+      <span class="role">Client Portal</span>
+    </div>
+    <div class="nav-right">
+      <button id="toAdmin">Photographer login</button>
+      <button id="signOut" class="hidden">Sign out</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap page">
+
+  <!-- config not set -->
+  <div id="needsConfig" class="banner hidden">
+    <b>Almost there.</b> This portal isn't connected to a backend yet. Open <code>supabase-config.js</code>
+    and paste in your Supabase <code>Project URL</code> and <code>anon</code> key, then run
+    <code>supabase-setup.sql</code> in your Supabase SQL editor. Full steps are in <code>PORTAL-SETUP.md</code>.
+  </div>
+
+  <!-- ===================== CLIENT VIEW ===================== -->
+  <section id="clientView">
+    <!-- code entry -->
+    <div id="codeEntry" class="card-box narrow" style="margin:40px auto">
+      <p class="kicker">Client Gallery</p>
+      <h1 class="title">Your <em>photos.</em></h1>
+      <p class="lead" style="margin-bottom:26px">Enter the access code from your email to view and download your gallery.</p>
+      <div class="field">
+        <label for="codeInput">Access code</label>
+        <input id="codeInput" placeholder="e.g. HANNAH26" autocomplete="off" />
+      </div>
+      <button id="codeBtn" class="btn" style="width:100%">View gallery</button>
+      <div id="codeMsg" class="msg"></div>
+    </div>
+
+    <!-- gallery -->
+    <div id="clientGallery" class="hidden">
+      <div class="admin-head">
+        <div>
+          <p class="kicker">Client Gallery</p>
+          <h1 class="title" id="cgName">Gallery</h1>
+          <p class="pill" id="cgCount"></p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button id="cgDownloadAll" class="btn">Download all (.zip)</button>
+          <button id="cgBack" class="btn ghost">Use another code</button>
+        </div>
+      </div>
+      <div class="progress" id="zipProgress"><span></span></div>
+      <div class="gal" id="cgGrid"></div>
+      <p id="cgEmpty" class="center lead hidden" style="margin:60px auto">No photos in this gallery yet — check back soon.</p>
+    </div>
+  </section>
+
+  <!-- ===================== ADMIN LOGIN ===================== -->
+  <section id="adminLogin" class="hidden">
+    <div class="card-box narrow" style="margin:40px auto">
+      <p class="kicker">Photographer</p>
+      <h1 class="title">Sign <em>in.</em></h1>
+      <p class="lead" style="margin-bottom:26px">For Emma only. Manage client galleries and uploads.</p>
+      <form id="loginForm">
+        <div class="field"><label for="email">Email</label><input id="email" type="email" required /></div>
+        <div class="field"><label for="pass">Password</label><input id="pass" type="password" required /></div>
+        <button class="btn" style="width:100%" type="submit" id="loginBtn">Sign in</button>
+      </form>
+      <div id="loginMsg" class="msg"></div>
+    </div>
+  </section>
+
+  <!-- ===================== ADMIN DASHBOARD ===================== -->
+  <section id="adminDash" class="hidden">
+
+    <!-- gallery list -->
+    <div id="dashList">
+      <div class="admin-head">
+        <div>
+          <p class="kicker">Photographer</p>
+          <h1 class="title">Your <em>galleries.</em></h1>
+        </div>
+        <button id="newGalleryBtn" class="btn">+ New gallery</button>
+      </div>
+
+      <div id="newGalleryBox" class="card-box hidden" style="margin-bottom:26px;max-width:560px">
+        <div class="field"><label for="ngName">Client / event name</label><input id="ngName" placeholder="e.g. Hannah & Theo — Wedding" /></div>
+        <div class="field"><label for="ngCode">Access code <span style="text-transform:none;letter-spacing:0">(clients type this — leave blank to auto-generate)</span></label><input id="ngCode" placeholder="HANNAH26" autocomplete="off" /></div>
+        <div style="display:flex;gap:10px">
+          <button id="ngCreate" class="btn">Create gallery</button>
+          <button id="ngCancel" class="btn ghost">Cancel</button>
+        </div>
+        <div id="ngMsg" class="msg"></div>
+      </div>
+
+      <div class="g-list" id="galleryList"></div>
+      <p id="noGalleries" class="lead hidden">No galleries yet. Create one to start uploading.</p>
+    </div>
+
+    <!-- single gallery manage -->
+    <div id="dashManage" class="hidden">
+      <button class="btn ghost sm" id="mgBack" style="margin-bottom:24px">← All galleries</button>
+      <div class="admin-head">
+        <div>
+          <p class="kicker">Managing</p>
+          <h1 class="title" id="mgName">Gallery</h1>
+        </div>
+        <button class="btn danger sm" id="mgDelete">Delete gallery</button>
+      </div>
+
+      <div class="row-link">
+        <span class="pill">Client link</span>
+        <code id="mgLink"></code>
+        <button class="btn sm ghost" id="mgCopy">Copy</button>
+      </div>
+
+      <div class="dropzone" id="dropzone">
+        <p><strong>Drop photos here</strong> or click to choose files</p>
+        <p style="font-size:.82rem;margin-top:8px">JPG, PNG, HEIC, WEBP — you can select many at once</p>
+        <input type="file" id="fileInput" accept="image/*" multiple class="hidden" />
+      </div>
+
+      <div class="bar">
+        <span class="pill" id="mgCount"></span>
+        <div class="progress" id="upProgress"><span></span></div>
+        <span class="pill" id="upStatus"></span>
+      </div>
+
+      <div class="gal" id="mgGrid"></div>
+      <p id="mgEmpty" class="center lead hidden" style="margin:50px auto">No photos uploaded yet.</p>
+    </div>
+
+  </section>
+</main>
+
+<div class="lb" id="lb"><button class="x" id="lbX">&times;</button><img id="lbImg" src="" alt="" /></div>
+
+<footer>© 2026 Emma Moystner Photography</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="supabase-config.js"></script>
+<script>
+(function(){
+  const cfg = window.SUPABASE_CONFIG || {};
+  const configured = cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY
+    && !cfg.SUPABASE_URL.includes("PASTE_") && !cfg.SUPABASE_ANON_KEY.includes("PASTE_");
+  const BUCKET = "photos";
+  let sb = null, currentGallery = null;
+
+  const $ = s => document.querySelector(s);
+  const show = (el,on=true)=>el.classList.toggle("hidden",!on);
+  const pubUrl = path => sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+
+  if(!configured){ show($("#needsConfig"),true); }
+  else { sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY); }
+
+  // ---------- view switching ----------
+  function showClient(){ show($("#clientView"),true); show($("#adminLogin"),false); show($("#adminDash"),false); }
+  function showLogin(){ show($("#clientView"),false); show($("#adminLogin"),true); show($("#adminDash"),false); }
+  function showDash(){ show($("#clientView"),false); show($("#adminLogin"),false); show($("#adminDash"),true); }
+
+  $("#toAdmin").addEventListener("click", async ()=>{
+    if(!sb) return;
+    const { data:{ session } } = await sb.auth.getSession();
+    if(session){ showDash(); loadGalleries(); } else { showLogin(); }
+  });
+  $("#signOut").addEventListener("click", async ()=>{ await sb.auth.signOut(); show($("#signOut"),false); showClient(); });
+
+  // =====================================================================
+  // CLIENT SIDE
+  // =====================================================================
+  async function openClientGallery(code){
+    const msg = $("#codeMsg"); msg.textContent=""; msg.className="msg";
+    if(!sb){ msg.textContent="Portal not connected yet."; msg.className="msg err"; return; }
+    if(!code){ msg.textContent="Please enter your access code."; msg.className="msg err"; return; }
+    $("#codeBtn").disabled = true; $("#codeBtn").innerHTML='<span class="spinner"></span>';
+    const { data:g, error:ge } = await sb.rpc("resolve_gallery",{ p_code: code });
+    $("#codeBtn").disabled=false; $("#codeBtn").textContent="View gallery";
+    if(ge || !g || !g.length){ msg.textContent="No gallery found for that code. Double-check the spelling."; msg.className="msg err"; return; }
+    const gallery = g[0];
+    const { data:photos } = await sb.rpc("list_gallery_photos",{ p_code: code });
+    renderClientGallery(gallery, photos||[]);
+  }
+
+  function renderClientGallery(gallery, photos){
+    show($("#codeEntry"),false); show($("#clientGallery"),true);
+    $("#cgName").textContent = gallery.name;
+    $("#cgCount").textContent = photos.length + (photos.length===1?" photo":" photos");
+    const grid = $("#cgGrid"); grid.innerHTML="";
+    show($("#cgEmpty"), photos.length===0);
+    $("#cgDownloadAll").disabled = photos.length===0;
+    window.__clientPhotos = photos;
+    photos.forEach(p=>{
+      const url = pubUrl(p.path);
+      const d=document.createElement("div"); d.className="ph";
+      d.innerHTML=`<img src="${url}" alt="${p.name}" loading="lazy" />
+        <div class="ph-tools"><span></span><a href="${url}" download="${p.name}">Download</a></div>`;
+      d.querySelector("img").addEventListener("click",()=>openLb(url));
+      grid.appendChild(d);
+    });
+    $("#cgDownloadAll").onclick = ()=>downloadAll(gallery.name, photos);
+  }
+
+  async function downloadAll(name, photos){
+    if(!photos.length) return;
+    const btn=$("#cgDownloadAll"); btn.disabled=true; const orig=btn.textContent; btn.textContent="Zipping…";
+    const prog=$("#zipProgress"); prog.classList.add("on"); const bar=prog.querySelector("span");
+    try{
+      const zip=new JSZip(); let done=0;
+      for(const p of photos){
+        const res=await fetch(pubUrl(p.path)); const blob=await res.blob();
+        zip.file(p.name, blob); done++; bar.style.width=(done/photos.length*60)+"%";
+      }
+      const content=await zip.generateAsync({type:"blob"},m=>{ bar.style.width=(60+m.percent*0.4)+"%"; });
+      const a=document.createElement("a"); a.href=URL.createObjectURL(content);
+      a.download=(name||"gallery").replace(/[^a-z0-9]+/gi,"-").toLowerCase()+".zip"; a.click();
+      URL.revokeObjectURL(a.href);
+    }catch(e){ alert("Could not build the zip. You can still download photos individually."); }
+    finally{ btn.disabled=false; btn.textContent=orig; setTimeout(()=>{prog.classList.remove("on");bar.style.width="0";},800); }
+  }
+
+  $("#codeBtn").addEventListener("click",()=>openClientGallery($("#codeInput").value.trim()));
+  $("#codeInput").addEventListener("keydown",e=>{ if(e.key==="Enter") $("#codeBtn").click(); });
+  $("#cgBack").addEventListener("click",()=>{ show($("#clientGallery"),false); show($("#codeEntry"),true); $("#codeInput").value=""; });
+
+  // =====================================================================
+  // ADMIN SIDE
+  // =====================================================================
+  $("#loginForm").addEventListener("submit", async e=>{
+    e.preventDefault();
+    const msg=$("#loginMsg"); msg.textContent=""; msg.className="msg";
+    const btn=$("#loginBtn"); btn.disabled=true; btn.innerHTML='<span class="spinner"></span>';
+    const { error } = await sb.auth.signInWithPassword({ email:$("#email").value, password:$("#pass").value });
+    btn.disabled=false; btn.textContent="Sign in";
+    if(error){ msg.textContent=error.message; msg.className="msg err"; return; }
+    show($("#signOut"),true); showDash(); loadGalleries();
+  });
+
+  async function loadGalleries(){
+    show($("#dashManage"),false); show($("#dashList"),true);
+    const { data, error } = await sb.from("galleries").select("*, photos(count)").order("created_at",{ascending:false});
+    const list=$("#galleryList"); list.innerHTML="";
+    if(error){ list.innerHTML=`<p class="msg err">${error.message}</p>`; return; }
+    show($("#noGalleries"), !data.length);
+    data.forEach(g=>{
+      const n = (g.photos && g.photos[0] && g.photos[0].count) || 0;
+      const el=document.createElement("div"); el.className="g-item";
+      el.innerHTML=`<h3>${g.name}</h3><div class="meta">${n} photo${n===1?"":"s"}</div><span class="code">${g.code}</span>`;
+      el.addEventListener("click",()=>manageGallery(g));
+      list.appendChild(el);
+    });
+  }
+
+  // new gallery
+  $("#newGalleryBtn").addEventListener("click",()=>show($("#newGalleryBox"),true));
+  $("#ngCancel").addEventListener("click",()=>{ show($("#newGalleryBox"),false); $("#ngMsg").textContent=""; });
+  function genCode(){ const c="ABCDEFGHJKMNPQRSTUVWXYZ23456789"; let s=""; for(let i=0;i<6;i++)s+=c[Math.floor(Math.random()*c.length)]; return s; }
+  $("#ngCreate").addEventListener("click", async ()=>{
+    const msg=$("#ngMsg"); msg.textContent=""; msg.className="msg";
+    const name=$("#ngName").value.trim(); let code=$("#ngCode").value.trim().toUpperCase();
+    if(!name){ msg.textContent="Give the gallery a name."; msg.className="msg err"; return; }
+    if(!code) code=genCode();
+    const { data, error } = await sb.from("galleries").insert({ name, code }).select().single();
+    if(error){ msg.textContent = error.message.includes("duplicate")? "That access code is already taken — try another." : error.message; msg.className="msg err"; return; }
+    $("#ngName").value=""; $("#ngCode").value=""; show($("#newGalleryBox"),false);
+    manageGallery(data);
+  });
+
+  // manage one gallery
+  async function manageGallery(g){
+    currentGallery=g;
+    show($("#dashList"),false); show($("#dashManage"),true);
+    $("#mgName").textContent=g.name;
+    const link = location.origin && location.origin!=="null"
+      ? `${location.origin}${location.pathname}?code=${g.code}`
+      : `portal.html?code=${g.code}`;
+    $("#mgLink").textContent=link;
+    $("#mgCopy").onclick=()=>{ navigator.clipboard.writeText(link); $("#mgCopy").textContent="Copied"; setTimeout(()=>$("#mgCopy").textContent="Copy",1500); };
+    await loadManagePhotos();
+  }
+  $("#mgBack").addEventListener("click",loadGalleries);
+
+  async function loadManagePhotos(){
+    const { data, error } = await sb.from("photos").select("*").eq("gallery_id",currentGallery.id).order("created_at");
+    const grid=$("#mgGrid"); grid.innerHTML="";
+    const photos=data||[];
+    $("#mgCount").textContent = photos.length + (photos.length===1?" photo":" photos");
+    show($("#mgEmpty"), photos.length===0);
+    photos.forEach(p=>{
+      const url=pubUrl(p.path);
+      const d=document.createElement("div"); d.className="ph";
+      d.innerHTML=`<img src="${url}" alt="${p.name}" loading="lazy" />
+        <div class="ph-tools"><button data-id="${p.id}" data-path="${p.path}">Delete</button><a href="${url}" download="${p.name}">Open</a></div>`;
+      d.querySelector("img").addEventListener("click",()=>openLb(url));
+      d.querySelector("button").addEventListener("click",()=>delPhoto(p));
+      grid.appendChild(d);
+    });
+  }
+
+  async function delPhoto(p){
+    if(!confirm("Delete this photo?")) return;
+    await sb.storage.from(BUCKET).remove([p.path]);
+    await sb.from("photos").delete().eq("id",p.id);
+    loadManagePhotos();
+  }
+
+  // uploads
+  const dz=$("#dropzone"), fileInput=$("#fileInput");
+  dz.addEventListener("click",()=>fileInput.click());
+  fileInput.addEventListener("change",()=>{ if(fileInput.files.length) uploadFiles([...fileInput.files]); fileInput.value=""; });
+  ["dragenter","dragover"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add("drag");}));
+  ["dragleave","drop"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove("drag");}));
+  dz.addEventListener("drop",e=>{ const f=[...e.dataTransfer.files].filter(f=>f.type.startsWith("image/")); if(f.length) uploadFiles(f); });
+
+  async function uploadFiles(files){
+    const prog=$("#upProgress"); prog.classList.add("on"); const bar=prog.querySelector("span");
+    const status=$("#upStatus"); let done=0;
+    for(const file of files){
+      status.textContent=`Uploading ${done+1} of ${files.length}…`;
+      const safe=file.name.replace(/[^a-z0-9._-]+/gi,"_");
+      const path=`${currentGallery.id}/${Date.now()}-${safe}`;
+      const { error:ue } = await sb.storage.from(BUCKET).upload(path,file,{cacheControl:"3600",upsert:false});
+      if(ue){ status.textContent="Error: "+ue.message; continue; }
+      await sb.from("photos").insert({ gallery_id:currentGallery.id, name:file.name, path });
+      done++; bar.style.width=(done/files.length*100)+"%";
+    }
+    status.textContent=`Uploaded ${done} photo${done===1?"":"s"}.`;
+    setTimeout(()=>{prog.classList.remove("on");bar.style.width="0";status.textContent="";},2500);
+    loadManagePhotos();
+  }
+
+  // delete gallery
+  $("#mgDelete").addEventListener("click", async ()=>{
+    if(!confirm(`Delete "${currentGallery.name}" and all its photos? This cannot be undone.`)) return;
+    const { data:ps } = await sb.from("photos").select("path").eq("gallery_id",currentGallery.id);
+    if(ps && ps.length) await sb.storage.from(BUCKET).remove(ps.map(p=>p.path));
+    await sb.from("galleries").delete().eq("id",currentGallery.id);
+    loadGalleries();
+  });
+
+  // lightbox
+  const lb=$("#lb");
+  function openLb(url){ $("#lbImg").src=url; lb.classList.add("open"); }
+  $("#lbX").addEventListener("click",()=>lb.classList.remove("open"));
+  lb.addEventListener("click",e=>{ if(e.target===lb) lb.classList.remove("open"); });
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape") lb.classList.remove("open"); });
+
+  // ---------- boot ----------
+  (async function boot(){
+    showClient();
+    const code=new URLSearchParams(location.search).get("code");
+    if(code && sb){ $("#codeInput").value=code; openClientGallery(code.trim()); }
+    if(sb){ const { data:{ session } } = await sb.auth.getSession(); if(session) show($("#signOut"),true); }
+  })();
+})();
+</script>
+</body>
+</html>
