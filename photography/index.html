@@ -163,14 +163,27 @@
   .foot-links a:hover { color: var(--azul); }
   .foot .copy { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); width: 100%; margin-top: 10px; }
 
-  /* ---------- Lightbox ---------- */
-  .lightbox { position: fixed; inset: 0; background: rgba(32,35,46,.93); z-index: 200; display: none; align-items: center; justify-content: center; padding: 40px; backdrop-filter: blur(4px); }
+  /* ---------- Lightbox / carousel ---------- */
+  .lightbox { position: fixed; inset: 0; background: rgba(26,28,38,.96); z-index: 200; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 64px 28px 22px; backdrop-filter: blur(6px); }
   .lightbox.open { display: flex; }
-  .lightbox img { max-width: 90%; max-height: 86vh; border-radius: 3px; box-shadow: 0 40px 80px -20px rgba(0,0,0,.6); }
-  .lb-close { position: absolute; top: 26px; right: 34px; color: #fff; font-size: 2rem; cursor: pointer; background: none; border: none; line-height: 1; }
-  .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,.12); border: none; color: #fff; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 1.4rem; transition: background .3s; }
-  .lb-nav:hover { background: rgba(255,255,255,.25); }
-  .lb-prev { left: 30px; } .lb-next { right: 30px; }
+  .lb-stage { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 0; gap: 16px; }
+  .lb-stage img { max-width: 92vw; max-height: 76vh; object-fit: contain; border-radius: 3px; box-shadow: 0 40px 90px -20px rgba(0,0,0,.7); }
+  .lb-stage img.swap { animation: lbFade .4s ease; }
+  @keyframes lbFade { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: none; } }
+  .lb-cap { color: rgba(255,255,255,.72); font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; }
+  .lb-counter { position: absolute; top: 26px; left: 34px; color: rgba(255,255,255,.6); font-size: .78rem; letter-spacing: .14em; }
+  .lb-close { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 2rem; cursor: pointer; background: none; border: none; line-height: 1; z-index: 3; }
+  .lb-nav { position: absolute; top: 46%; transform: translateY(-50%); background: rgba(255,255,255,.1); border: none; color: #fff; width: 54px; height: 54px; border-radius: 50%; cursor: pointer; font-size: 1.5rem; transition: background .3s; z-index: 3; }
+  .lb-nav:hover { background: rgba(255,255,255,.26); }
+  .lb-prev { left: 24px; } .lb-next { right: 24px; }
+  .lb-strip { display: flex; gap: 10px; padding: 6px 4px; max-width: 92vw; overflow-x: auto; scrollbar-width: thin; }
+  .lb-strip::-webkit-scrollbar { height: 6px; }
+  .lb-strip::-webkit-scrollbar-thumb { background: rgba(255,255,255,.25); border-radius: 999px; }
+  .lb-thumb { flex: 0 0 auto; width: 64px; height: 64px; padding: 0; border: none; border-radius: 3px; overflow: hidden; cursor: pointer; opacity: .42; transition: opacity .3s, outline-color .3s; outline: 2px solid transparent; outline-offset: 1px; background: none; }
+  .lb-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .lb-thumb:hover { opacity: .8; }
+  .lb-thumb.on { opacity: 1; outline-color: #fff; }
+  @media (max-width: 560px) { .lightbox { padding: 54px 10px 14px; } .lb-nav { width: 44px; height: 44px; } .lb-thumb { width: 52px; height: 52px; } }
 
   /* ---------- Reveal ---------- */
   .reveal { opacity: 0; transform: translateY(26px); transition: opacity .9s ease, transform .9s ease; }
@@ -345,12 +358,17 @@
   </div>
 </footer>
 
-<!-- LIGHTBOX -->
+<!-- LIGHTBOX / CAROUSEL -->
 <div class="lightbox" id="lightbox">
+  <div class="lb-counter" id="lbCounter"></div>
   <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
   <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous">&#8249;</button>
-  <img src="" alt="Enlarged photograph" id="lbImg" />
+  <figure class="lb-stage">
+    <img src="" alt="" id="lbImg" />
+    <figcaption class="lb-cap" id="lbCap"></figcaption>
+  </figure>
   <button class="lb-nav lb-next" id="lbNext" aria-label="Next">&#8250;</button>
+  <div class="lb-strip" id="lbStrip"></div>
 </div>
 
 <script>
@@ -405,18 +423,46 @@
     document.querySelectorAll('.card').forEach(card => card.classList.toggle('hide', !(c === 'all' || card.dataset.cat === c)));
   }));
 
-  // ---------- Lightbox ----------
+  // ---------- Lightbox / carousel ----------
   const lb = document.getElementById('lightbox'), lbImg = document.getElementById('lbImg');
+  const lbCap = document.getElementById('lbCap'), lbCounter = document.getElementById('lbCounter'), lbStrip = document.getElementById('lbStrip');
   let vis = [], cur = 0;
-  function openLb(card) { vis = [...document.querySelectorAll('.card:not(.hide)')]; cur = vis.indexOf(card); lbImg.src = card.dataset.full; lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
-  function step(d) { cur = (cur + d + vis.length) % vis.length; lbImg.src = vis[cur].dataset.full; }
+  function render() {
+    const card = vis[cur], cap = card.querySelector('img').alt;
+    lbImg.classList.remove('swap'); void lbImg.offsetWidth; lbImg.classList.add('swap');
+    lbImg.src = card.dataset.full; lbImg.alt = cap;
+    lbCap.textContent = cap;
+    lbCounter.textContent = (cur + 1) + ' / ' + vis.length;
+    [...lbStrip.children].forEach((t, i) => t.classList.toggle('on', i === cur));
+    const active = lbStrip.children[cur];
+    if (active) active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+  }
+  function buildStrip() {
+    lbStrip.innerHTML = '';
+    vis.forEach((card, i) => {
+      const t = document.createElement('button');
+      t.className = 'lb-thumb';
+      t.innerHTML = `<img src="${card.querySelector('img').src}" alt="" />`;
+      t.addEventListener('click', () => { cur = i; render(); });
+      lbStrip.appendChild(t);
+    });
+  }
+  function openLb(card) { vis = [...document.querySelectorAll('.card:not(.hide)')]; cur = vis.indexOf(card); buildStrip(); render(); lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function step(d) { cur = (cur + d + vis.length) % vis.length; render(); }
   function closeLb() { lb.classList.remove('open'); document.body.style.overflow = ''; }
   grid.addEventListener('click', e => { const c = e.target.closest('.card'); if (c) openLb(c); });
   document.getElementById('lbClose').addEventListener('click', closeLb);
   document.getElementById('lbNext').addEventListener('click', () => step(1));
   document.getElementById('lbPrev').addEventListener('click', () => step(-1));
-  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+  lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('lb-stage')) closeLb(); });
   document.addEventListener('keydown', e => { if (!lb.classList.contains('open')) return; if (e.key === 'Escape') closeLb(); if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); });
+  // scroll to move through photos
+  let wheelLock = false;
+  lb.addEventListener('wheel', e => { e.preventDefault(); if (wheelLock) return; wheelLock = true; step(e.deltaY > 0 ? 1 : -1); setTimeout(() => wheelLock = false, 320); }, { passive: false });
+  // swipe on touch
+  let tx = 0;
+  lb.addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
+  lb.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1); });
 
   // ---------- Testimonials ----------
   const quotes = [...document.querySelectorAll('.quote')], qDots = document.getElementById('qDots');
