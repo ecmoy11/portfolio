@@ -66,7 +66,7 @@
 
   /* gallery grid — justified rows, chronological left-to-right */
   .gal{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start}
-  .ph{position:relative;border-radius:6px;overflow:hidden;background:var(--cream-deep);width:240px;height:180px;flex:0 0 auto}
+  .ph{position:relative;border-radius:6px;overflow:hidden;background:var(--cream-deep);width:240px;height:180px;flex:0 0 auto;cursor:pointer}
   .ph img{width:100%;height:100%;object-fit:cover;cursor:pointer;transition:transform .5s}
   .ph:hover img{transform:scale(1.04)}
   .ph .ph-tools{position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(32,35,46,.7));opacity:0;transition:opacity .3s;display:flex;align-items:flex-end;justify-content:space-between;padding:12px;gap:8px}
@@ -365,8 +365,9 @@
       d.innerHTML=`<img src="${url}" alt="${p.name}" loading="lazy" />
         <div class="ph-tools"><span></span><a href="${url}" download="${p.name}">Download</a></div>`;
       const im=d.querySelector("img");
-      im.addEventListener("click",()=>openLb(list,i));
       im.addEventListener("load", scheduleRelayout);
+      d.addEventListener("click",()=>openLb(list,i));
+      d.querySelector("a").addEventListener("click",e=>e.stopPropagation());
       grid.appendChild(d);
     });
     scheduleRelayout();
@@ -465,9 +466,10 @@
       d.innerHTML=`<img src="${url}" alt="${p.name}" loading="lazy" />
         <div class="ph-tools"><button data-id="${p.id}" data-path="${p.path}">Delete</button><a href="${url}" download="${p.name}">Open</a></div>`;
       const im=d.querySelector("img");
-      im.addEventListener("click",()=>openLb(list,i));
       im.addEventListener("load", scheduleRelayout);
-      d.querySelector("button").addEventListener("click",()=>delPhoto(p));
+      d.addEventListener("click",()=>openLb(list,i));
+      d.querySelector("button").addEventListener("click",e=>{ e.stopPropagation(); delPhoto(p); });
+      d.querySelector("a").addEventListener("click",e=>e.stopPropagation());
       grid.appendChild(d);
     });
     scheduleRelayout();
