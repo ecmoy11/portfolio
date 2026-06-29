@@ -64,12 +64,10 @@
   .banner b{font-weight:500}
   .banner code{font-family:ui-monospace,Menlo,monospace;background:#f4e3c6;padding:1px 6px;border-radius:4px;font-size:.82rem}
 
-  /* gallery grid */
-  .gal{columns:4;column-gap:14px}
-  @media(max-width:860px){.gal{columns:3}}
-  @media(max-width:560px){.gal{columns:2}}
-  .ph{break-inside:avoid;margin-bottom:14px;position:relative;border-radius:6px;overflow:hidden;background:var(--cream-deep)}
-  .ph img{width:100%;cursor:pointer;transition:transform .5s}
+  /* gallery grid — justified rows, chronological left-to-right */
+  .gal{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start}
+  .ph{position:relative;border-radius:6px;overflow:hidden;background:var(--cream-deep);width:240px;height:180px;flex:0 0 auto}
+  .ph img{width:100%;height:100%;object-fit:cover;cursor:pointer;transition:transform .5s}
   .ph:hover img{transform:scale(1.04)}
   .ph .ph-tools{position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(32,35,46,.7));opacity:0;transition:opacity .3s;display:flex;align-items:flex-end;justify-content:space-between;padding:12px;gap:8px}
   .ph:hover .ph-tools{opacity:1}
@@ -293,6 +291,34 @@
   const show = (el,on=true)=>el.classList.toggle("hidden",!on);
   const pubUrl = path => sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
 
+  // ---------- justified gallery layout (left-to-right rows, no crop) ----------
+  function rowTarget(){ const w=innerWidth; return w<560?150:(w<900?200:250); }
+  function justify(container, targetH){
+    const items=[...container.children]; if(!items.length) return;
+    const gap=10, W=container.clientWidth; if(W<=0) return;
+    let row=[], sumA=0;
+    const flush=(last)=>{
+      if(!row.length) return;
+      const totalGap=gap*(row.length-1);
+      let h=(W-totalGap)/sumA;
+      if(last && h>targetH) h=targetH;
+      row.forEach(it=>{ it.el.style.width=Math.floor(h*it.a)+"px"; it.el.style.height=Math.floor(h)+"px"; });
+      row=[]; sumA=0;
+    };
+    items.forEach(el=>{
+      const img=el.querySelector("img");
+      const a=(img&&img.naturalWidth&&img.naturalHeight)? img.naturalWidth/img.naturalHeight : 1.5;
+      row.push({el,a}); sumA+=a;
+      const projH=(W-gap*(row.length-1))/sumA;
+      if(projH<=targetH) flush(false);
+    });
+    flush(true);
+  }
+  let relT;
+  function relayout(){ document.querySelectorAll(".gal").forEach(g=>{ if(g.offsetParent!==null && g.children.length) justify(g, rowTarget()); }); }
+  function scheduleRelayout(){ clearTimeout(relT); relT=setTimeout(relayout,80); }
+  window.addEventListener("resize", scheduleRelayout);
+
   if(!configured){ show($("#needsConfig"),true); }
   else { sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY); }
 
@@ -338,9 +364,12 @@
       const d=document.createElement("div"); d.className="ph";
       d.innerHTML=`<img src="${url}" alt="${p.name}" loading="lazy" />
         <div class="ph-tools"><span></span><a href="${url}" download="${p.name}">Download</a></div>`;
-      d.querySelector("img").addEventListener("click",()=>openLb(list,i));
+      const im=d.querySelector("img");
+      im.addEventListener("click",()=>openLb(list,i));
+      im.addEventListener("load", scheduleRelayout);
       grid.appendChild(d);
     });
+    scheduleRelayout();
     $("#cgDownloadAll").onclick = ()=>downloadAll(gallery.name, photos);
   }
 
@@ -435,10 +464,13 @@
       const d=document.createElement("div"); d.className="ph";
       d.innerHTML=`<img src="${url}" alt="${p.name}" loading="lazy" />
         <div class="ph-tools"><button data-id="${p.id}" data-path="${p.path}">Delete</button><a href="${url}" download="${p.name}">Open</a></div>`;
-      d.querySelector("img").addEventListener("click",()=>openLb(list,i));
+      const im=d.querySelector("img");
+      im.addEventListener("click",()=>openLb(list,i));
+      im.addEventListener("load", scheduleRelayout);
       d.querySelector("button").addEventListener("click",()=>delPhoto(p));
       grid.appendChild(d);
     });
+    scheduleRelayout();
   }
 
   async function delPhoto(p){
