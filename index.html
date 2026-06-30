@@ -1795,7 +1795,7 @@ a { color: inherit; text-decoration: none; }
   <div class="grid-inner">
 
     <!-- Capstone & Thesis (teaser) -->
-    <div class="work-tile reveal-up">
+    <div class="work-tile reveal-up" onclick="openCaseStudy('capstone')">
       <div class="tile-media" style="aspect-ratio:4/5;">
         <video src="images/capstone/capstoneteaser.mp4" autoplay muted loop playsinline></video>
         <div class="tile-overlay">
@@ -2458,6 +2458,41 @@ a { color: inherit; text-decoration: none; }
       <div class="cs-section-label">Reflection</div>
       <p>Gauge stayed as a prototype: leadership was excited about it, but internal politics made implementation difficult. That tension taught me something important — solving the design problem is only half the work. <span class="highlight">Navigating organizational dynamics to get solutions adopted is its own design challenge.</span></p>
       <p>This project also shows something I value: I don't wait for a brief. I identified a broken process in my own workplace and designed the fix. That instinct — seeing systems that could work better and doing something about it — is what drew me to interaction design.</p>
+    </div>
+  </div>
+</div>
+
+<div class="case-study-page" id="cs-capstone">
+  <div class="cs-nav"><button onclick="closeCaseStudy()">&larr; Back</button></div>
+  <div class="cs-header">
+    <div class="cs-label">Capstone &amp; Thesis · In Progress</div>
+    <h1 class="cs-title">Active Autonomy Companion</h1>
+    <p class="cs-subtitle">A digital nurse navigator that helps emergency room patients understand where they are, why they're waiting, and what happens next, in plain language.</p>
+    <div class="cs-meta-bar">
+      <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Sole Designer &amp; Researcher</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Domain</span><span class="cs-meta-value">Healthcare · Emergency Care</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Methods</span><span class="cs-meta-value">Service Design, Prototyping, A/B Testing</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Status</span><span class="cs-meta-value">In progress · 2026</span></div>
+    </div>
+  </div>
+  <div class="cs-body">
+    <div class="cs-section">
+      <div class="cs-section-label">The Work</div>
+      <p>The emergency department is disorienting. You're anxious, often in pain, and rarely sure what's happening or how long it will take. <span class="highlight">Active Autonomy Companion</span> is a digital nurse navigator that meets patients there. It explains where they are, why they're waiting, what their triage level means, who's on their care team, and what comes next, all in plain language.</p>
+      <p>The thesis: an anticipatory, AI-driven system should make people feel more in control, not less. It never hides what it's doing. It shows its work, sets honest expectations about wait times, and keeps patients oriented from check-in to discharge.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Three Threads I'm Working On Now</div>
+      <p><strong>The patient experience under high cognitive load.</strong> The ER is a high-stress moment. People are anxious, in pain, and in no state to absorb complexity. I'm designing the screens that carry patients through a visit (the waiting view, journey timeline, care team, and discharge summary) to keep them calm and oriented, and A/B testing layout and navigation variations to find the clearest version.</p>
+      <p><strong>Safe handling of patient data.</strong> Every screen touches protected health information, so I'm also writing the spec for handling it safely under HIPAA. The principle: treat the model as untrusted, and enforce anything that matters legally or clinically in code, not in a prompt.</p>
+      <p><strong>AI that belongs in high-stakes spaces.</strong> The bigger question underneath it all: how do we design AI for environments like the ER so it's genuinely safe, helpful, and beneficial, rather than one more thing to manage?</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Where It's Headed</div>
+      <div class="quote-block">More to come. This is my capstone, and it's actively in progress.</div>
+      <p>The full case study, prototype, and final deliverables will land here as it comes together.</p>
     </div>
   </div>
 </div>
