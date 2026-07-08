@@ -330,6 +330,9 @@ a { color: inherit; text-decoration: none; }
 /* After landing: transitions off so dragging is 1:1 */
 .photo-scatter.landed .ps-item { transition: none; }
 
+/* After the fall, unclip the section so dragged photos can spill past its edges */
+.about-personal.spill { overflow: visible; }
+
 .photo-scatter .ps-item.dragging { cursor: grabbing; z-index: 4; }
 .ps-item:hover { z-index: 3; }
 
@@ -1169,12 +1172,16 @@ document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     scatter.classList.remove('pre');
     scatter.classList.add('landed');
+    section.classList.add('spill');
   } else {
     new IntersectionObserver((entries, obs) => {
       entries.forEach(e => {
         if (!e.isIntersecting) return;
         requestAnimationFrame(() => scatter.classList.remove('pre'));
-        setTimeout(() => scatter.classList.add('landed'), 2100);
+        setTimeout(() => {
+          scatter.classList.add('landed');
+          section.classList.add('spill');   // dragged photos can now overhang
+        }, 2100);
         obs.disconnect();
       });
     }, { threshold: 0.18 }).observe(section);
