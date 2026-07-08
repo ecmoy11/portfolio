@@ -69,6 +69,16 @@ a { color: inherit; text-decoration: none; }
   border-bottom-color: rgba(0,0,0,0.06);
 }
 
+/* Over the orange hero (before scrolling): white nav text */
+.nav:not(.scrolled) .nav-logo { color: var(--white); }
+.nav:not(.scrolled) .nav-right a:not(.nav-cta) { color: rgba(255, 255, 255, 0.75); }
+.nav:not(.scrolled) .nav-right a:not(.nav-cta):hover,
+.nav:not(.scrolled) .nav-right a.active { color: var(--white); }
+.nav:not(.scrolled) .nav-cta { background: var(--white); color: var(--orange) !important; }
+.nav:not(.scrolled) .nav-cta:hover { background: var(--bg-warm); }
+.nav:not(.scrolled) .mobile-menu-toggle span { background: var(--white); }
+.mobile-menu-toggle.open span { background: var(--text-dark) !important; }
+
 .nav-logo {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -184,11 +194,18 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  gap: 48px;
+  justify-content: center;
+  gap: clamp(48px, 8vw, 110px);
   padding: 120px 48px 80px;
   position: relative;
   background: var(--orange);
+  overflow: hidden;
+}
+
+.hero-photo-wrap {
+  order: 2;
+  flex-shrink: 0;
+  perspective: 900px;
 }
 
 .about-hero-photo {
@@ -196,8 +213,11 @@ a { color: inherit; text-decoration: none; }
   height: 320px;
   border-radius: 16px;
   object-fit: cover;
-  flex-shrink: 0;
-  order: 2;
+  display: block;
+  transform-style: preserve-3d;
+  transition: transform 0.18s ease-out;
+  will-change: transform;
+  box-shadow: 0 24px 60px rgba(65, 0, 22, 0.25);
 }
 
 .about-hero-title {
@@ -271,90 +291,102 @@ a { color: inherit; text-decoration: none; }
 .about-personal {
   background: var(--orange);
   color: var(--white);
-  padding: 120px 48px;
+  padding: 110px 48px 120px;
+  position: relative;
+  overflow: hidden;
 }
 
 .about-personal-inner {
-  max-width: 1100px;
+  max-width: 780px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 360px 1fr;
-  gap: 64px;
-  align-items: center;
-}
-
-.personal-carousel {
   position: relative;
-  width: 360px;
-  height: 360px;
-  border-radius: 12px;
-  overflow: hidden;
-  flex-shrink: 0;
+  z-index: 2;
 }
 
-.personal-carousel img {
+/* Photos scattered in the margins around the text */
+.photo-scatter {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.photo-scatter .ps-item {
+  position: absolute;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  transform: translate(var(--dx, 0px), var(--dy, 0px));
+  transition: transform 1.1s cubic-bezier(0.22, 1.08, 0.36, 1);
+  transition-delay: var(--d, 0s);
+}
+
+/* Before the section is reached: parked above, ready to fall in */
+.photo-scatter.pre .ps-item {
+  transform: translate(var(--dx, 0px), calc(var(--dy, 0px) - 80vh));
+  transition: none;
+}
+
+/* After landing: transitions off so dragging is 1:1 */
+.photo-scatter.landed .ps-item { transition: none; }
+
+.photo-scatter .ps-item.dragging { cursor: grabbing; z-index: 4; }
+.ps-item:hover { z-index: 3; }
+
+.photo-scatter img {
+  display: block;
+  width: 150px;
+  height: 175px;
   object-fit: cover;
-  opacity: 0;
-  transition: opacity 1s ease;
+  border-radius: 2px;
+  box-shadow: 0 6px 18px rgba(65, 0, 22, 0.3);
+  transform: rotate(var(--r, 0deg));
+  transition: transform 0.35s cubic-bezier(0.3, 1.2, 0.5, 1), box-shadow 0.35s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
 }
 
-.personal-carousel img.active {
-  opacity: 1;
+.ps-item.lg img { width: 185px; height: 212px; }
+.ps-item.sm img { width: 128px; height: 150px; }
+
+/* A few read as polaroids: white frame with a chin */
+.ps-item.polaroid img {
+  border: 9px solid var(--white);
+  border-bottom-width: 36px;
+  border-radius: 1px;
 }
 
-.personal-carousel-caption {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-family: var(--font-primary);
-  font-size: 0.8rem;
-  font-weight: 300;
-  font-style: italic;
-  color: var(--white);
-  padding: 14px 20px;
-  background: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  z-index: 2;
+.photo-scatter .ps-item:hover img {
+  transform: rotate(calc(var(--r, 0deg) * 0.6)) translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 24px rgba(65, 0, 22, 0.34);
 }
 
-.personal-carousel-caption.active {
-  opacity: 1;
+.ps-item.dragging img {
+  transform: rotate(calc(var(--r, 0deg) * 0.4)) scale(1.05);
+  box-shadow: 0 16px 34px rgba(65, 0, 22, 0.4);
 }
 
-.personal-carousel-dots {
-  position: absolute;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-  z-index: 2;
+@media (prefers-reduced-motion: reduce) {
+  .photo-scatter.pre .ps-item {
+    transform: translate(var(--dx, 0px), var(--dy, 0px));
+  }
 }
 
-.personal-carousel-dots span {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.4);
-  transition: background 0.3s;
+/* Room for the scatter to breathe on desktop */
+@media (min-width: 1251px) {
+  .about-personal { min-height: 660px; }
 }
 
-.personal-carousel-dots span.active {
-  background: var(--white);
-}
+/* Flip-stack arrows: only exist on tablet/mobile */
+.stack-arrows { display: none; }
 
 .personal-text h3 {
-  font-family: var(--font-serif);
-  font-size: clamp(1.6rem, 2.5vw, 2rem);
-  font-weight: 400;
+  font-family: var(--font-primary);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
   margin-bottom: 24px;
 }
 
@@ -708,6 +740,65 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ============ RESPONSIVE ============ */
+@media (max-width: 1250px) {
+  /* Not enough side room to scatter — photos become a flip-through stack */
+  .photo-scatter {
+    position: relative;
+    height: 360px;
+    margin: 0 auto 36px;
+    max-width: 780px;
+  }
+  .photo-scatter .ps-item {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    right: auto !important;
+    bottom: auto !important;
+    cursor: default;
+    touch-action: auto;
+    transform: translate(-50%, -50%) rotate(var(--sr, 0deg));
+    /* settle: long decelerating glide back into the pile */
+    transition: transform 0.55s cubic-bezier(0.5, 0.05, 0.15, 1);
+  }
+  /* Pulled out to the side, mid-move to/from the back of the pile */
+  .photo-scatter .ps-item.aside-right,
+  .photo-scatter .ps-item.aside-left {
+    /* pull-out: eases out with a touch of overshoot, like it's plucked */
+    transition: transform 0.45s cubic-bezier(0.3, 1.18, 0.45, 1);
+  }
+  .photo-scatter .ps-item.aside-right {
+    transform: translate(calc(-50% + 150px), -52%) rotate(7deg) scale(1.04);
+  }
+  .photo-scatter .ps-item.aside-left {
+    transform: translate(calc(-50% - 150px), -52%) rotate(-7deg) scale(1.04);
+  }
+  /* Bare arrows flanking the stack */
+  .stack-arrows { display: contents; }
+  .stack-arrow {
+    pointer-events: auto;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1; /* photos always ride above the arrows */
+    background: none;
+    border: none;
+    padding: 8px 12px;
+    color: var(--white);
+    font-size: 44px;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+  .stack-arrow:hover { opacity: 1; }
+  #stack-prev { left: calc(50% - 195px); }
+  #stack-next { right: calc(50% - 195px); }
+  .photo-scatter img { width: 200px; height: 235px; }
+  .ps-item.lg img { width: 220px; height: 255px; }
+  .ps-item.sm img { width: 180px; height: 210px; }
+}
+
 @media (max-width: 1000px) {
   .about-story-inner { grid-template-columns: 1fr; gap: 48px; }
   .about-connect-inner { grid-template-columns: 1fr; gap: 48px; }
@@ -725,21 +816,22 @@ a { color: inherit; text-decoration: none; }
   .nav-right { display: none; }
   .mobile-menu-toggle { display: flex; }
   .about-hero { padding: 100px 24px 56px; flex-direction: column; align-items: center; gap: 32px; text-align: center; }
-  .about-hero-photo { width: 220px; height: 220px; order: 1; }
+  .about-hero-photo { width: 220px; height: 220px; }
+  .hero-photo-wrap { order: 1; }
   .about-hero-title { order: 2; }
   .about-story, .about-approach, .about-connect { padding: 100px 24px; }
   .about-education { padding: 0 24px 100px; }
-  .about-personal { padding: 80px 24px; }
-  .about-personal-inner {
-    grid-template-columns: 1fr;
-    gap: 40px;
-    text-align: center;
-  }
-  .personal-carousel {
-    width: 280px;
-    height: 280px;
-    margin: 0 auto;
-  }
+  .about-personal { padding: 72px 24px 90px; }
+  .photo-scatter { height: 300px; }
+  .photo-scatter img { width: 165px; height: 195px; }
+  .ps-item.lg img { width: 180px; height: 210px; }
+  .ps-item.sm img { width: 150px; height: 175px; }
+  .ps-item.polaroid img { border-width: 7px; border-bottom-width: 28px; }
+  .photo-scatter .ps-item.aside-right { transform: translate(calc(-50% + 105px), -52%) rotate(7deg) scale(1.04); }
+  .photo-scatter .ps-item.aside-left { transform: translate(calc(-50% - 105px), -52%) rotate(-7deg) scale(1.04); }
+  .stack-arrow { font-size: 36px; padding: 6px 8px; }
+  #stack-prev { left: calc(50% - 150px); }
+  #stack-next { right: calc(50% - 150px); }
   .footer { padding: 56px 24px 32px; }
   .footer-bottom { flex-direction: column; gap: 8px; }
 }
@@ -786,8 +878,10 @@ a { color: inherit; text-decoration: none; }
 </div>
 
 <!-- ======== HERO ======== -->
-<section class="about-hero">
-  <img src="Headshot_Moystner.jpg" alt="Emma Moystner" class="about-hero-photo">
+<section class="about-hero" id="about-hero">
+  <div class="hero-photo-wrap">
+    <img src="Headshot_Moystner.jpg" alt="Emma Moystner" class="about-hero-photo" id="hero-photo">
+  </div>
   <h1 class="about-hero-title">
     Hi, I'm <span class="accent">Emma.</span>
   </h1>
@@ -811,34 +905,27 @@ a { color: inherit; text-decoration: none; }
 
 <!-- ======== BEYOND THE SCREEN ======== -->
 <section class="about-personal">
-  <div class="about-personal-inner reveal">
-    <div class="personal-carousel">
-      <img src="personal%20photos/emma.JPEG" alt="Emma" class="active" onerror="this.style.display='none'">
-      <img src="personal%20photos/redwoods.jpg" alt="Emma in the redwoods" onerror="this.style.display='none'">
-      <img src="personal%20photos/surf.jpg" alt="Emma surfing the counter" data-caption="Went on a surf trip, got zero photos. This was me showing my friends how you surf after." onerror="this.style.display='none'">
-      <img src="personal%20photos/waterfall.jpg" alt="Emma at a waterfall" onerror="this.style.display='none'">
-      <img src="personal%20photos/bike.jpg" alt="Emma biking" onerror="this.style.display='none'">
-      <img src="personal%20photos/run.jpg" alt="Emma running" onerror="this.style.display='none'">
-      <img src="personal%20photos/hike.jpg" alt="Emma hiking" onerror="this.style.display='none'">
-      <img src="personal%20photos/travel.JPG" alt="Emma traveling" onerror="this.style.display='none'">
-      <img src="personal%20photos/sanfran.jpg" alt="Emma exploring" onerror="this.style.display='none'">
-      <img src="personal%20photos/tj.JPG" alt="Emma under a rainbow" onerror="this.style.display='none'">
-      <img src="personal%20photos/home.JPG" alt="Emma at home" onerror="this.style.display='none'">
-      <div class="personal-carousel-caption"></div>
-      <div class="personal-carousel-dots">
-        <span class="active"></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+  <div class="photo-scatter pre" aria-label="Personal photos — drag them around">
+    <div class="ps-item polaroid lg" style="top:4%; left:16px; --d:0s"><img src="personal%20photos/emma.JPEG" alt="Emma" style="--r:-5deg" onerror="this.parentElement.style.display='none'"></div>
+    <div class="ps-item" style="top:10%; right:24px; --d:.12s"><img src="personal%20photos/redwoods.jpg" alt="Emma in the redwoods" style="--r:4deg" onerror="this.parentElement.style.display='none'"></div>
+    <div class="ps-item polaroid" style="top:29%; left:48px; --d:.3s"><img src="personal%20photos/surf.jpg" alt="Emma surfing the counter" title="Went on a surf trip, got zero photos. This was me showing my friends how you surf after." style="--r:3deg" onerror="this.parentElement.style.display='none'"></div>
+    <div class="ps-item lg" style="top:34%; right:40px; --d:.05s"><img src="personal%20photos/waterfall.jpg" alt="Emma at a waterfall" style="--r:-6deg" onerror="this.parentElement.style.display='none'"></div>
+    <div class="ps-item sm" style="top:54%; left:12px; --d:.45s"><img src="personal%20photos/bike.jpg" alt="Emma biking" style="--r:-3deg" onerror="this.parentElement.style.display='none'"></div>
+    <div class="ps-item" style="top:57%; right:16px; --d:.2s"><img src="personal%20photos/run.jpg" alt="Emma running" style="--r:5deg" onerror="this.parentElement.style.display='none'"></div>
+    <div class="ps-item polaroid" style="bottom:5%; left:40px; --d:.4s"><img src="personal%20photos/hike.jpg" alt="Emma hiking" style="--r:6deg" onerror="this.parentElement.style.display='none'"></div>
+    <div class="ps-item lg" style="bottom:7%; right:44px; --d:.15s"><img src="personal%20photos/travel.JPG" alt="Emma traveling" style="--r:-4deg" onerror="this.parentElement.style.display='none'"></div>
+    <div class="ps-item sm" style="top:76%; left:96px; --d:.5s"><img src="personal%20photos/sanfran.jpg" alt="Emma exploring" style="--r:-7deg" onerror="this.parentElement.style.display='none'"></div>
+    <div class="ps-item polaroid" style="top:79%; right:100px; --d:.25s"><img src="personal%20photos/tj.JPG" alt="Emma under a rainbow" style="--r:4deg" onerror="this.parentElement.style.display='none'"></div>
+    <div class="ps-item sm" style="top:1%; right:120px; --d:.35s"><img src="personal%20photos/home.JPG" alt="Emma at home" style="--r:-6deg" onerror="this.parentElement.style.display='none'"></div>
+    <div class="ps-item" style="top:17%; left:64px; --d:.55s"><img src="personal%20photos/pup.jpg" alt="Dog on the windowsill among the plants" style="--r:4deg; width:164px; height:123px" onerror="this.parentElement.style.display='none'"></div>
+    <div class="ps-item polaroid" style="top:44%; right:64px; --d:.6s"><img src="personal%20photos/beach.jpg" alt="Emma at the beach, October 2019" style="--r:-4deg" onerror="this.parentElement.style.display='none'"></div>
+    <div class="ps-item" style="top:64%; right:72px; --d:.65s"><img src="personal%20photos/friends.jpg" alt="Emma and friends dressed up" style="--r:5deg; width:176px; height:132px" onerror="this.parentElement.style.display='none'"></div>
+    <div class="stack-arrows">
+      <button class="stack-arrow" id="stack-prev" aria-label="Previous photo">&#8249;</button>
+      <button class="stack-arrow" id="stack-next" aria-label="Next photo">&#8250;</button>
     </div>
+  </div>
+  <div class="about-personal-inner reveal">
     <div class="personal-text">
       <h3>Beyond the pixels.</h3>
       <p>I'm someone who loves adventure and play in equal measure. I surf (poorly but enthusiastically), climb, run, and I'm always ready to pick up whatever hobby catches my eye next.</p>
@@ -948,73 +1035,175 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// Personal photo carousel
+// ===== Hero bio photo: cursor tilt =====
 (function() {
-  const carousel = document.querySelector('.personal-carousel');
-  if (!carousel) return;
-  const imgs = carousel.querySelectorAll('img');
-  const dots = carousel.querySelectorAll('.personal-carousel-dots span');
-  const captionEl = carousel.querySelector('.personal-carousel-caption');
-  const loaded = [];
-  imgs.forEach((img, i) => {
-    if (img.complete && img.naturalWidth > 0) loaded.push(i);
-    img.addEventListener('load', () => { if (!loaded.includes(i)) loaded.push(i); });
-  });
-  let current = 0;
-  let timer;
+  const hero = document.getElementById('about-hero');
+  const photo = document.getElementById('hero-photo');
+  if (!hero || !photo) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  function updateCaption() {
-    const img = imgs[loaded[current]];
-    const caption = img.dataset.caption;
-    if (caption) {
-      captionEl.textContent = caption;
-      captionEl.classList.add('active');
-    } else {
-      captionEl.classList.remove('active');
-    }
-  }
-
-  function goTo(idx) {
-    if (loaded.length <= 1) return;
-    imgs[loaded[current]].classList.remove('active');
-    dots[loaded[current]].classList.remove('active');
-    current = idx % loaded.length;
-    imgs[loaded[current]].classList.add('active');
-    dots[loaded[current]].classList.add('active');
-    updateCaption();
-  }
-
-  function advance() { goTo(current + 1); }
-
-  function resetTimer() {
-    clearInterval(timer);
-    timer = setInterval(advance, 3500);
-  }
-
-  // Click right half to advance, left half to go back
-  carousel.addEventListener('click', (e) => {
-    if (e.target.closest('.personal-carousel-dots')) return;
-    const rect = carousel.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    if (clickX > rect.width / 2) {
-      goTo(current + 1);
-    } else {
-      goTo((current - 1 + loaded.length) % loaded.length);
-    }
-    resetTimer();
+  hero.addEventListener('mousemove', (e) => {
+    const rect = photo.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / (window.innerWidth / 2);
+    const dy = (e.clientY - cy) / (window.innerHeight / 2);
+    const rotY = Math.max(-5, Math.min(5, dx * 6));
+    const rotX = Math.max(-5, Math.min(5, -dy * 6));
+    photo.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
   });
 
-  // Click on dots to jump to that photo
-  dots.forEach((dot, i) => {
-    dot.addEventListener('click', () => {
-      const idx = loaded.indexOf(i);
-      if (idx !== -1) { goTo(idx); resetTimer(); }
+  hero.addEventListener('mouseleave', () => {
+    photo.style.transform = 'rotateX(0deg) rotateY(0deg)';
+  });
+})();
+
+// ===== Scattered photos: random layout each load, fall in, drag =====
+(function() {
+  const scatter = document.querySelector('.photo-scatter');
+  const section = document.querySelector('.about-personal');
+  if (!scatter || !section) return;
+
+  // Scatter mode and stack mode are set up once per page load,
+  // so reload if the window crosses the breakpoint
+  const stackMq = window.matchMedia('(max-width: 1250px)');
+  const initialStack = stackMq.matches;
+  stackMq.addEventListener('change', (e) => {
+    if (e.matches !== initialStack) location.reload();
+  });
+
+  // Tablet/mobile: flip-through stack with arrows — no scatter, fall, or drag
+  if (initialStack) {
+    setupStack();
+    return;
+  }
+
+  function setupStack() {
+    scatter.classList.remove('pre');
+    scatter.classList.add('landed');
+    const items = [...scatter.querySelectorAll('.ps-item')]
+      .filter(el => el.style.display !== 'none');
+    let order = items.slice().sort(() => Math.random() - 0.5);
+    let busy = false;
+
+    function render() {
+      order.forEach((item, i) => {
+        item.style.zIndex = order.length - i + 2; // min 3, always above the arrows (z 1)
+        // top card sits straight; cards behind peek out at alternating angles
+        const angle = i === 0 ? 0 : (i % 2 ? 1 : -1) * (2.5 + Math.min(i, 4) * 1.8);
+        item.style.setProperty('--sr', angle.toFixed(1) + 'deg');
+      });
+    }
+    render();
+
+    // Right arrow: lift the front photo out to the right, tuck it behind
+    document.getElementById('stack-next').addEventListener('click', () => {
+      if (busy) return; busy = true;
+      const top = order[0];
+      top.classList.add('aside-right');           // slide out
+      setTimeout(() => {
+        order.push(order.shift());
+        render();                                  // z-index drops to the back
+        top.classList.remove('aside-right');       // slides back in, behind
+        setTimeout(() => { busy = false; }, 560);
+      }, 430);
     });
-  });
 
-  carousel.style.cursor = 'pointer';
-  updateCaption();
-  timer = setInterval(advance, 3500);
+    // Left arrow: pull the back photo out to the left, place it on top
+    document.getElementById('stack-prev').addEventListener('click', () => {
+      if (busy) return; busy = true;
+      const bottom = order[order.length - 1];
+      bottom.classList.add('aside-left');          // slide out from the back
+      setTimeout(() => {
+        order.unshift(order.pop());
+        render();                                  // z-index rises to the top
+        bottom.classList.remove('aside-left');     // settles onto the pile
+        setTimeout(() => { busy = false; }, 560);
+      }, 430);
+    });
+  }
+
+  // Random-but-tidy layout: shuffled every visit, but every photo is
+  // guaranteed fully inside the section and out of the text column.
+  function layoutScatter() {
+    if (!window.matchMedia('(min-width: 1251px)').matches) return;
+    const inner = section.querySelector('.about-personal-inner');
+    const secR = section.getBoundingClientRect();
+    const innR = inner.getBoundingClientRect();
+    const secH = section.clientHeight;
+    const leftGap = innR.left - secR.left;
+    const rightGap = secR.right - innR.right;
+
+    const items = [...scatter.querySelectorAll('.ps-item')]
+      .filter(el => el.style.display !== 'none');
+    const shuffled = items.slice().sort(() => Math.random() - 0.5);
+    placeColumn(shuffled.filter((_, i) => i % 2 === 0), leftGap, 'left');
+    placeColumn(shuffled.filter((_, i) => i % 2 === 1), rightGap, 'right');
+
+    function placeColumn(col, gapW, side) {
+      const pad = 14;
+      const slotH = (secH - pad * 2) / col.length;
+      col.forEach((item, i) => {
+        const w = item.offsetWidth, h = item.offsetHeight;
+        // vertical: one photo per slot, jittered, clamped inside the section
+        const jitter = Math.max(0, slotH - h);
+        const top = Math.max(pad, Math.min(secH - h - pad,
+          pad + i * slotH + Math.random() * jitter));
+        // horizontal: random within the side margin, never touching the text
+        const xMax = Math.max(0, gapW - w - 16);
+        const x = xMax < 24
+          ? (i % 2) * xMax                      // tight: alternate so all peek out
+          : 8 + Math.random() * (xMax - 8);
+        item.style.top = top + 'px';
+        item.style.bottom = 'auto';
+        item.style[side] = x + 'px';
+        item.style[side === 'left' ? 'right' : 'left'] = 'auto';
+        item.querySelector('img').style.setProperty('--r',
+          (Math.random() * 12 - 6).toFixed(1) + 'deg');
+      });
+    }
+  }
+  layoutScatter();
+
+  // Fall in when the section scrolls into view (staggered via --d delays)
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    scatter.classList.remove('pre');
+    scatter.classList.add('landed');
+  } else {
+    new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        requestAnimationFrame(() => scatter.classList.remove('pre'));
+        setTimeout(() => scatter.classList.add('landed'), 2100);
+        obs.disconnect();
+      });
+    }, { threshold: 0.18 }).observe(section);
+  }
+
+  // Click and drag to move photos around
+  scatter.querySelectorAll('.ps-item').forEach(item => {
+    let dragging = false, sx = 0, sy = 0, ox = 0, oy = 0;
+
+    item.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      item.setPointerCapture(e.pointerId);
+      sx = e.clientX; sy = e.clientY;
+      ox = parseFloat(item.style.getPropertyValue('--dx')) || 0;
+      oy = parseFloat(item.style.getPropertyValue('--dy')) || 0;
+      item.classList.add('dragging');
+      e.preventDefault();
+    });
+
+    item.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      item.style.setProperty('--dx', (ox + e.clientX - sx) + 'px');
+      item.style.setProperty('--dy', (oy + e.clientY - sy) + 'px');
+    });
+
+    const end = () => { dragging = false; item.classList.remove('dragging'); };
+    item.addEventListener('pointerup', end);
+    item.addEventListener('pointercancel', end);
+  });
 })();
 
 function toggleConnectDropdown(e) {
