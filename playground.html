@@ -313,14 +313,16 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
 }
 
-.playground-card-image img {
+.playground-card-image img,
+.playground-card-image video {
   width: 100%;
   height: auto;
   display: block;
   transition: transform 0.5s ease;
 }
 
-.playground-card:hover .playground-card-image img {
+.playground-card:hover .playground-card-image img,
+.playground-card:hover .playground-card-image video {
   transform: scale(1.03);
 }
 
@@ -340,16 +342,23 @@ a { color: inherit; text-decoration: none; }
   color: rgba(255,255,255,0.2);
 }
 
-/* Hover-reveal label */
+/* Playground captions as frosted pills, revealed on hover */
 .playground-card-info {
-  padding: 12px 4px 4px;
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2;
+  padding: 0;
   display: flex;
-  gap: 8px;
-  align-items: baseline;
+  flex-direction: row;
   flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .playground-card:hover .playground-card-info {
@@ -357,20 +366,245 @@ a { color: inherit; text-decoration: none; }
   transform: translateY(0);
 }
 
+/* When the card's bottom is below the fold, pin pills to the top-left */
+.playground-card.pills-top .playground-card-info {
+  top: 14px;
+  bottom: auto;
+}
+
+/* Mobile: keep playground labels pinned at the bottom (no top-jump on scroll) */
+@media (max-width: 700px) {
+  .playground-card.pills-top .playground-card-info {
+    top: auto;
+    bottom: 14px;
+  }
+}
+
+.playground-card-title,
+.playground-card-tag {
+  background: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.16);
+}
+
 .playground-card-title {
+  padding: 7px 13px;
+  border-radius: 12px;
   font-family: var(--font-primary);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 400;
+  letter-spacing: -0.01em;
   color: var(--text-dark);
 }
 
 .playground-card-tag {
+  padding: 5px 11px;
+  border-radius: 10px;
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: 0.5rem;
   font-weight: 400;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  color: #5F594F;
+}
+
+/* ---- Photography tile · stack of prints that toss out on hover ---- */
+.photo-toss-card .photo-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: linear-gradient(155deg, #F4EDE5 0%, #E9DDD0 100%);
+  isolation: isolate;
+}
+.photo-toss-card .photo-deck {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.photo-toss-card .photo-print {
+  position: absolute;
+  width: 46%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  padding: 5px;
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: 0 8px 22px rgba(44, 43, 40, 0.28);
+  transform: rotate(var(--rest, 0deg));
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.25, 1), box-shadow 0.4s ease;
+  will-change: transform;
+}
+.photo-toss-card .photo-print.portrait {
+  width: 33%;
+  aspect-ratio: 2 / 3;
+}
+.photo-toss-card:hover .photo-print {
+  transform: translate(var(--tx, 0px), var(--ty, 0px)) rotate(var(--rot, 0deg));
+  box-shadow: 0 16px 34px rgba(44, 43, 40, 0.34);
+}
+.photo-toss-card .playground-card-info {
+  z-index: 5;
+}
+@media (hover: none) {
+  .photo-toss-card .photo-print { transform: rotate(var(--rest, 0deg)); }
+}
+
+/* ============ PHOTOGRAPHY GALLERY PAGE ============ */
+.photo-gallery-page {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--bg-cream);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  z-index: 260;
+}
+.photo-gallery-page.active { opacity: 1; pointer-events: auto; }
+
+.pgal-topnav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 261;
+  padding: 16px 48px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.pgal-back {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dark);
+  cursor: pointer;
+  padding: 8px 20px;
+  border: 1px solid var(--divider);
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+.pgal-back:hover { color: var(--orange); border-color: var(--orange); }
+.pgal-title {
+  margin-left: 8px;
+  font-family: var(--font-primary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+.pgal-tag {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   color: var(--text-muted);
+}
+
+.pgal-body {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 110px 16px 100px;
+}
+.pgal-grid { columns: 3; column-gap: 12px; }
+.pgal-item {
+  break-inside: avoid;
+  margin: 0 0 12px;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: zoom-in;
+  background: var(--bg-warm);
+}
+.pgal-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pgal-item:hover img { transform: scale(1.03); }
+
+@media (max-width: 900px) { .pgal-grid { columns: 2; } }
+@media (max-width: 600px) {
+  .pgal-grid { columns: 1; }
+  .pgal-topnav { padding: 14px 24px; }
+  .pgal-body { padding: 96px 12px 80px; }
+}
+
+/* lightbox */
+.pgal-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 270;
+  background: rgba(26, 24, 21, 0.94);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.pgal-lightbox.active { display: flex; }
+.pgal-lb-img {
+  max-width: 88vw;
+  max-height: 86vh;
+  border-radius: 4px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  user-select: none;
+}
+.pgal-lb-close {
+  position: absolute;
+  top: 24px; right: 32px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  background: none;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.pgal-lb-close:hover { color: #fff; border-color: rgba(255,255,255,0.6); }
+.pgal-lb-nav {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.3s ease;
+}
+.pgal-lb-nav:hover { background: rgba(255,255,255,0.22); }
+.pgal-lb-nav.prev { left: 32px; }
+.pgal-lb-nav.next { right: 32px; }
+.pgal-lb-count {
+  position: absolute;
+  bottom: 28px; left: 50%; transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.7);
+}
+@media (max-width: 600px) {
+  .pgal-lb-nav { width: 40px; height: 40px; }
+  .pgal-lb-nav.prev { left: 12px; }
+  .pgal-lb-nav.next { right: 12px; }
 }
 
 /* ============ FOOTER ============ */
@@ -587,13 +821,33 @@ a { color: inherit; text-decoration: none; }
 <div class="playground-body">
   <div class="playground-grid">
 
-    <div class="playground-card">
-      <div class="playground-card-image placeholder" style="aspect-ratio:4/5; background:#1C1C1E;">
-        <span>Preview</span>
+    <div class="playground-card" onclick="window.location.href='index.html?cs=hand-tetris'">
+      <div class="playground-card-image" style="aspect-ratio:16/9;">
+        <img src="images/play/hand%20tetris/UI.png" alt="Hand Tetris, a Tetris board overlaid on a webcam feed, controlled by hand gestures" loading="lazy">
       </div>
       <div class="playground-card-info">
-        <span class="playground-card-title">One-Button Sound</span>
-        <span class="playground-card-tag">Unity</span>
+        <span class="playground-card-title">Hand Tetris</span>
+        <span class="playground-card-tag">p5.js &middot; ML5</span>
+      </div>
+    </div>
+
+    <div class="playground-card" onclick="window.open('https://emoystner.github.io/onebutton/','_blank','noopener')">
+      <div class="playground-card-image" style="aspect-ratio:2298/1598; background:#0a0a0a;">
+        <video src="images/play/cymatics-cover.mp4" poster="images/play/cymatics-cover-poster.jpg" autoplay muted loop playsinline></video>
+      </div>
+      <div class="playground-card-info">
+        <span class="playground-card-title">Cymatics</span>
+        <span class="playground-card-tag">Web &middot; Sound</span>
+      </div>
+    </div>
+
+    <div class="playground-card" onclick="window.open('https://emoystner.github.io/os/ecm-design-os','_blank','noopener')">
+      <div class="playground-card-image" style="aspect-ratio:2704/1630; background:#F7F6F3;">
+        <img src="images/play/designos.gif" alt="Design Operating System — a split-flap departures board reading Craft in service of systems" loading="lazy">
+      </div>
+      <div class="playground-card-info">
+        <span class="playground-card-title">Design Operating System</span>
+        <span class="playground-card-tag">Web &middot; Manifesto</span>
       </div>
     </div>
 
@@ -612,75 +866,70 @@ a { color: inherit; text-decoration: none; }
     </div>
 
     <div class="playground-card">
-      <div class="playground-card-image placeholder" style="aspect-ratio:1/1; background:var(--lavender);">
-        <span>Preview</span>
+      <div class="playground-card-image" style="aspect-ratio:910/812;">
+        <img src="images/play/newton%20pendulum.gif" alt="Newton's pendulum simulation" loading="lazy">
       </div>
       <div class="playground-card-info">
         <span class="playground-card-title">Newton's Pendulum</span>
-        <span class="playground-card-tag">Blender</span>
+        <span class="playground-card-tag">Unity</span>
+      </div>
+    </div>
+
+    <div class="playground-card photo-toss-card" onclick="openPhotoGallery()">
+      <div class="photo-stage">
+        <div class="photo-deck">
+          <img class="photo-print" src="images/play/photography/thumbs/DSCF1290.jpg" alt="Photography" loading="lazy">
+          <img class="photo-print portrait" src="images/play/photography/thumbs/DSCF1154.jpg" alt="Photography" loading="lazy">
+          <img class="photo-print" src="images/play/photography/thumbs/DSCF2435.jpg" alt="Photography" loading="lazy">
+          <img class="photo-print portrait" src="images/play/photography/thumbs/DSCF0105.jpg" alt="Photography" loading="lazy">
+          <img class="photo-print" src="images/play/photography/thumbs/DSCF1046.jpg" alt="Photography" loading="lazy">
+          <img class="photo-print portrait" src="images/play/photography/thumbs/DSCF2882.jpg" alt="Photography" loading="lazy">
+          <img class="photo-print" src="images/play/photography/thumbs/DSCF2436.jpg" alt="Photography" loading="lazy">
+        </div>
+      </div>
+      <div class="playground-card-info">
+        <span class="playground-card-title">Photography</span>
+        <span class="playground-card-tag">Stills</span>
       </div>
     </div>
 
     <div class="playground-card">
-      <div class="playground-card-image placeholder" style="aspect-ratio:3/4; background:var(--burgundy);">
-        <span>Preview</span>
+      <div class="playground-card-image" style="aspect-ratio:1082/612; background:#0a0a0a;">
+        <img src="images/play/videography/videography-cover.png" alt="Videography — The Wedding of Ian & Sam title card" loading="lazy">
       </div>
       <div class="playground-card-info">
-        <span class="playground-card-title">Project Title</span>
-        <span class="playground-card-tag">Prototype</span>
+        <span class="playground-card-title">Videography</span>
+        <span class="playground-card-tag">Motion</span>
       </div>
     </div>
 
-    <div class="playground-card">
-      <div class="playground-card-image placeholder" style="aspect-ratio:16/9; background:#1C1C1E;">
-        <span>Preview</span>
-      </div>
-      <div class="playground-card-info">
-        <span class="playground-card-title">Project Title</span>
-        <span class="playground-card-tag">Code</span>
-      </div>
-    </div>
+  </div>
+</div>
 
-    <div class="playground-card">
-      <div class="playground-card-image placeholder" style="aspect-ratio:4/3; background:var(--peach);">
-        <span>Preview</span>
-      </div>
-      <div class="playground-card-info">
-        <span class="playground-card-title">Project Title</span>
-        <span class="playground-card-tag">Interaction</span>
-      </div>
+<!-- ============ PHOTOGRAPHY GALLERY PAGE ============ -->
+<div class="photo-gallery-page" id="photo-gallery">
+  <div class="pgal-topnav">
+    <span class="pgal-back" onclick="closePhotoGallery()">&larr; Back</span>
+    <span class="pgal-title">Photography</span>
+    <span class="pgal-tag">Stills</span>
+  </div>
+  <div class="pgal-body">
+    <div class="pgal-grid">
+      <figure class="pgal-item" onclick="openLightbox(0)"><img src="images/play/photography/thumbs/DSCF1290.jpg" alt="Photography" loading="lazy"></figure>
+      <figure class="pgal-item" onclick="openLightbox(1)"><img src="images/play/photography/thumbs/DSCF1154.jpg" alt="Photography" loading="lazy"></figure>
+      <figure class="pgal-item" onclick="openLightbox(2)"><img src="images/play/photography/thumbs/DSCF2435.jpg" alt="Photography" loading="lazy"></figure>
+      <figure class="pgal-item" onclick="openLightbox(3)"><img src="images/play/photography/thumbs/DSCF0105.jpg" alt="Photography" loading="lazy"></figure>
+      <figure class="pgal-item" onclick="openLightbox(4)"><img src="images/play/photography/thumbs/DSCF1046.jpg" alt="Photography" loading="lazy"></figure>
+      <figure class="pgal-item" onclick="openLightbox(5)"><img src="images/play/photography/thumbs/DSCF2882.jpg" alt="Photography" loading="lazy"></figure>
+      <figure class="pgal-item" onclick="openLightbox(6)"><img src="images/play/photography/thumbs/DSCF2436.jpg" alt="Photography" loading="lazy"></figure>
     </div>
-
-    <div class="playground-card">
-      <div class="playground-card-image placeholder" style="aspect-ratio:3/2; background:var(--olive);">
-        <span>Preview</span>
-      </div>
-      <div class="playground-card-info">
-        <span class="playground-card-title">Project Title</span>
-        <span class="playground-card-tag">Experiment</span>
-      </div>
-    </div>
-
-    <div class="playground-card">
-      <div class="playground-card-image placeholder" style="aspect-ratio:1/1; background:#1C1C1E;">
-        <span>Preview</span>
-      </div>
-      <div class="playground-card-info">
-        <span class="playground-card-title">Project Title</span>
-        <span class="playground-card-tag">3D</span>
-      </div>
-    </div>
-
-    <div class="playground-card">
-      <div class="playground-card-image placeholder" style="aspect-ratio:4/5; background:var(--orange);">
-        <span>Preview</span>
-      </div>
-      <div class="playground-card-info">
-        <span class="playground-card-title">Project Title</span>
-        <span class="playground-card-tag">Side Quest</span>
-      </div>
-    </div>
-
+  </div>
+  <div class="pgal-lightbox" id="pgal-lightbox" onclick="if(event.target===this)closeLightbox()">
+    <button class="pgal-lb-close" onclick="closeLightbox()">Esc &middot; Close</button>
+    <button class="pgal-lb-nav prev" onclick="lightboxStep(-1)" aria-label="Previous">&larr;</button>
+    <img class="pgal-lb-img" id="pgal-lb-img" src="" alt="Photography">
+    <button class="pgal-lb-nav next" onclick="lightboxStep(1)" aria-label="Next">&rarr;</button>
+    <div class="pgal-lb-count" id="pgal-lb-count"></div>
   </div>
 </div>
 
@@ -1363,6 +1612,124 @@ function toggleMobileMenu() {
   overlay.classList.toggle('open');
   document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
 }
+
+// ======================================
+// STICKY TILE PILLS · move to top-left when the card's bottom is below the fold
+// ======================================
+(function initStickyPills() {
+  const cards = Array.from(document.querySelectorAll('.playground-card'));
+  if (!cards.length) return;
+  let ticking = false;
+
+  function update() {
+    ticking = false;
+    const vh = window.innerHeight;
+    for (const card of cards) {
+      const r = card.getBoundingClientRect();
+      const inView = r.top < vh && r.bottom > 0;
+      const bottomBelowFold = r.bottom > vh - 8;
+      card.classList.toggle('pills-top', inView && bottomBelowFold);
+    }
+  }
+  function onScroll() {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  window.addEventListener('load', update);
+  update();
+})();
+
+// ======================================
+// PHOTOGRAPHY TILE · prints toss out of the stack on hover
+// ======================================
+(function initPhotoToss() {
+  const card = document.querySelector('.photo-toss-card');
+  if (!card) return;
+  const stage = card.querySelector('.photo-stage');
+  const prints = Array.from(card.querySelectorAll('.photo-print'));
+  if (!stage || !prints.length) return;
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const n = prints.length;
+
+  function layout() {
+    const W = stage.clientWidth || 440;
+    const H = stage.clientHeight || 293;
+    prints.forEach((p, i) => {
+      const d = i - (n - 1) / 2;
+      p.style.setProperty('--rest', (d * 3).toFixed(2) + 'deg');
+      p.style.setProperty('--tx', (rand(-0.40, 0.40) * W).toFixed(1) + 'px');
+      p.style.setProperty('--ty', (rand(-0.34, 0.34) * H).toFixed(1) + 'px');
+      p.style.setProperty('--rot', rand(-22, 22).toFixed(1) + 'deg');
+      p.style.zIndex = i;
+    });
+    // send the two end prints toward the edges so they clip off-frame
+    prints[0].style.setProperty('--tx', (0.54 * W).toFixed(1) + 'px');
+    prints[0].style.setProperty('--ty', (rand(-0.22, 0.08) * H).toFixed(1) + 'px');
+    prints[n - 1].style.setProperty('--tx', (-0.54 * W).toFixed(1) + 'px');
+    prints[n - 1].style.setProperty('--ty', (rand(-0.08, 0.22) * H).toFixed(1) + 'px');
+  }
+
+  layout();
+  window.addEventListener('resize', layout, { passive: true });
+  // reshuffle the toss after the cursor leaves, so the next spill differs
+  card.addEventListener('mouseleave', () => setTimeout(layout, 600));
+})();
+
+// ======================================
+// PHOTOGRAPHY GALLERY
+// ======================================
+const PGAL_PHOTOS = [
+  'DSCF1290','DSCF1154','DSCF2435','DSCF0105','DSCF1046','DSCF2882','DSCF2436'
+];
+let pgalLightboxIndex = -1;
+
+function openPhotoGallery() {
+  const page = document.getElementById('photo-gallery');
+  if (!page) return;
+  page.classList.add('active');
+  page.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function closePhotoGallery() {
+  closeLightbox();
+  document.getElementById('photo-gallery').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function openLightbox(i) {
+  pgalLightboxIndex = i;
+  const lb = document.getElementById('pgal-lightbox');
+  const img = document.getElementById('pgal-lb-img');
+  img.src = 'images/play/photography/large/' + PGAL_PHOTOS[i] + '.jpg';
+  document.getElementById('pgal-lb-count').textContent =
+    (i + 1) + ' / ' + PGAL_PHOTOS.length;
+  lb.classList.add('active');
+}
+
+function closeLightbox() {
+  pgalLightboxIndex = -1;
+  document.getElementById('pgal-lightbox').classList.remove('active');
+}
+
+function lightboxStep(d) {
+  if (pgalLightboxIndex < 0) return;
+  const n = PGAL_PHOTOS.length;
+  openLightbox((pgalLightboxIndex + d + n) % n);
+}
+
+document.addEventListener('keydown', (e) => {
+  const lbOpen = pgalLightboxIndex >= 0;
+  const galOpen = document.getElementById('photo-gallery')?.classList.contains('active');
+  if (lbOpen) {
+    if (e.key === 'Escape') closeLightbox();
+    else if (e.key === 'ArrowRight') lightboxStep(1);
+    else if (e.key === 'ArrowLeft') lightboxStep(-1);
+  } else if (galOpen && e.key === 'Escape') {
+    closePhotoGallery();
+  }
+});
 </script>
 
 </body>
