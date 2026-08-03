@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Airbnb Group Booking · Emma Moystner</title>
+<meta name="description" content="Airbnb Group Booking. A case study by Emma Moystner.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/case-study.css">
+</head>
+<body>
+<nav class="nav" id="nav">
+  <span class="nav-logo">Emma Moystner</span>
+  <div class="nav-right">
+    <a href="index.html">Work</a>
+    <a href="playground.html">Play</a>
+    <a href="about.html">About</a>
+    <a href="resume.moystner.pdf" target="_blank">Resume</a>
+  </div>
+  <button class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="case-study-page" id="cs-airbnb">
+  
+  <div class="cs-header">
+    <a href="index.html" class="cs-back">&larr;&nbsp; All work</a>
+    <div class="cs-label">04 · Case Study</div>
+    <h1 class="cs-title">Airbnb Group Booking</h1>
+    <p class="cs-subtitle">Group trips shouldn't fall apart before they start. We redesigned how Airbnb handles the hardest part — the money.</p>
+    <div class="cs-meta-bar">
+      <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Product Designer</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Team</span><span class="cs-meta-value">Emma Moystner, Kate Foote</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value">4 Weeks</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Type</span><span class="cs-meta-value">Concept Redesign</span></div>
+    </div>
+  </div>
+  <div class="cs-body">
+    <div class="cs-tldr">
+      <div class="cs-tldr-row"><div class="cs-tldr-label">Problem</div><div class="cs-tldr-text">Group trips put the entire financial and logistical burden on <strong>one person</strong> &mdash; the one holding the credit card &mdash; making planning harder for everyone.</div></div>
+      <div class="cs-tldr-row"><div class="cs-tldr-label">Insight</div><div class="cs-tldr-text">82% wanted to split &ldquo;fairly,&rdquo; but <strong>fair meant different things to different groups</strong>. Any single split model would alienate two-thirds of users, so the real decision was to let each group declare its own definition of fair up front.</div></div>
+      <div class="cs-tldr-row"><div class="cs-tldr-label">Outcome</div><div class="cs-tldr-text">A group hub with three splitting modes, group sign-off before booking, and in-app messaging &mdash; moving power <strong>off the cardholder and onto the group</strong>. Testing validated the onboarding and flagged a need for clearer privacy affordances.</div></div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Overview</div>
+      <p>Airbnb's lack of streamlined group booking puts the entire financial and logistical burden on one person, making trip planning and payments harder for everyone involved. We redesigned the group booking experience from research through high-fidelity prototype, introducing shared trip planning, flexible cost-splitting, and a centralized group hub that gives every traveler visibility and agency, not just the person holding the credit card.</p>
+      <div class="cs-image">
+        <img src="images/airbnb/screens-overview.png" alt="Airbnb group booking screens overview" loading="lazy">
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Research</div>
+      <p>We designed and distributed a structured survey to gather insights on how people currently navigate group bookings, not just the functional pain points, but the social and emotional friction.</p>
+      <p><strong>82% of respondents wanted to split costs "fairly"</strong>, but "fairly" meant different things to different groups. Some wanted even splits. Others wanted to pay proportionally based on room size or arrival dates. The current system supports none of this.</p>
+      <p><strong>63% wanted payment reminders</strong>, not because they're forgetful, but because asking friends for money is uncomfortable. People wanted the platform to handle the follow-up so they didn't have to.</p>
+      <p><strong>71% wanted to share the planning workload</strong>: the organizer role is exhausting. Respondents wanted tools that distributed this work across the group.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Design Decisions</div>
+      <p><strong>Splitting Method: three modes, not one.</strong> The survey killed the obvious solution first. 82% wanted to split "fairly," but fair meant even splits to some, proportional-by-room to others, and custom amounts to a third group. Any single split model would have alienated two-thirds of users no matter which one we picked. So the real decision wasn't which split is correct; it was to let each group declare its own definition of fair up front: EvenSplit for friends going halves, FairValue for proportional splits, PayManage for custom amounts.</p>
+      <div class="cs-phone-grid small">
+        <img src="images/airbnb/Splitting Methods.png" alt="Splitting method selection" loading="lazy">
+        <img src="images/airbnb/PayMange Screen.png" alt="PayManage screen" loading="lazy">
+        <img src="images/airbnb/Wishlist Admin View - Budget.png" alt="Wishlist admin budget view" loading="lazy">
+      </div>
+      <p><strong>Group Trip Hub: approvals as the fix, not a feature.</strong> If the core problem is that one person carries the whole trip, then one person also shouldn't be able to commit the group to it. The hub gives everyone a shared wishlist, voting, and end-to-end visibility, and requires group sign-off before anything books. That's a deliberate bit of friction: slower to commit, but it moves the power off the cardholder and onto the group.</p>
+      <div class="cs-phone-grid small">
+        <img src="images/airbnb/hifi-wishlist-onboarding.png" alt="Wishlist onboarding" loading="lazy">
+        <img src="images/airbnb/Wishlist Admin View.png" alt="Wishlist admin view" loading="lazy">
+        <img src="images/airbnb/hifi-approvals.png" alt="Approvals screen" loading="lazy">
+        <img src="images/airbnb/hifi-trip-details.png" alt="Trip details" loading="lazy">
+      </div>
+      <p><strong>In-App Messaging: keep coordination where the trip lives.</strong> Group trips normally get planned in a WhatsApp thread while the booking happens somewhere else, so context splits in two. We pulled messaging into the trip flow itself, with notifications scoped to the trip, so the conversation and the decision finally sit in the same place.</p>
+      <div class="cs-phone-grid small">
+        <img src="images/airbnb/hifi-messages.png" alt="Messages overview" loading="lazy">
+        <img src="images/airbnb/hifi-messages-thread.png" alt="Message thread" loading="lazy">
+        <img src="images/airbnb/hifi-group-join.png" alt="Group join" loading="lazy">
+        <img src="images/airbnb/hifi-payment-join.png" alt="Payment join" loading="lazy">
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Validation</div>
+      <p><strong>Seamless Group Onboarding.</strong> Integrating the group feature into the wishlist flow made it intuitive for users to invite others. Users naturally understood how to start a group trip.</p>
+      <p><strong>Clarity Drives Confidence.</strong> EvenSplit and FairValue were well-received for their simplicity. PayManage caused hesitation: users weren't sure who could see what, pointing to a need for clearer affordances around privacy and transparency.</p>
+      <p><strong>Feedback & Visibility Matter.</strong> Users missed key elements like the comments section and expected notifications for group actions. When someone joins, approves, or pays, the group should know.</p>
+    </div>
+  </div>
+</div>
+<footer class="footer">
+  <a href="mailto:emmamoystner.design@gmail.com">Contact</a>
+  <span>&copy; 2026 Emma Moystner</span>
+</footer>
+</body>
+</html>

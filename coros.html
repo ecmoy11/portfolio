@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COROS Menstrual Cycle Redesign · Emma Moystner</title>
+<meta name="description" content="COROS Menstrual Cycle Redesign. A case study by Emma Moystner.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/case-study.css">
+</head>
+<body>
+<nav class="nav" id="nav">
+  <span class="nav-logo">Emma Moystner</span>
+  <div class="nav-right">
+    <a href="index.html">Work</a>
+    <a href="playground.html">Play</a>
+    <a href="about.html">About</a>
+    <a href="resume.moystner.pdf" target="_blank">Resume</a>
+  </div>
+  <button class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="case-study-page" id="cs-coros">
+  
+  <div class="cs-header">
+    <a href="index.html" class="cs-back">&larr;&nbsp; All work</a>
+    <div class="cs-label">03 &middot; Case Study</div>
+    <h1 class="cs-title">COROS Menstrual Cycle Redesign</h1>
+    <p class="cs-subtitle">What if a fitness tracker actually understood your cycle and used it to make you a better athlete?</p>
+    <div class="cs-meta-bar">
+      <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Service Designer</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Type</span><span class="cs-meta-value">Solo Project</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value">One Term</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Tools</span><span class="cs-meta-value">Figma, Miro</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Deliverables</span><span class="cs-meta-value">Service blueprints, competitive audit, phone &amp; watch UI, clickable prototype</span></div>
+    </div>
+  </div>
+  <div class="cs-body">
+    <div class="cs-tldr">
+      <div class="cs-tldr-row"><div class="cs-tldr-label">Problem</div><div class="cs-tldr-text">COROS reads the body better than almost anyone: training load, recovery, HRV. It never clocked where you are in your cycle. The app can call you 100% recovered on a morning you feel like 20%, and nothing in the system accounts for the gap.</div></div>
+      <div class="cs-tldr-row"><div class="cs-tldr-label">Insight</div><div class="cs-tldr-text">&ldquo;Too individual to predict&rdquo; is why wearables leave the cycle out. But COROS already solves that problem everywhere else: HRV, sleep and recovery are all noisy and personal, and the whole product is built on learning your baseline over time. They had the method. They never pointed it at the cycle. The nuance was never the reason to skip it. It was the brief: learn the individual instead of averaging her, and guide instead of prescribing.</div></div>
+      <div class="cs-tldr-row"><div class="cs-tldr-label">Outcome</div><div class="cs-tldr-text">Watch and phone screens that connect the cycle to training and teach as you go, instead of a calendar that only tracks a period. Concept work. If it shipped, I&rsquo;d watch retention and engagement at three months.</div></div>
+    </div>
+
+    <!-- ===== The Problem : pinned text, photo cluster scrolls ===== -->
+    <div class="cs-section cs-sticky left-text">
+      <div class="cs-sticky-text">
+        <div class="cs-pin"><div class="cs-pin-inner">
+          <div class="cs-step solo">
+            <div class="cs-section-label">The Problem</div>
+            <p>Hormones move on a roughly 28-day cycle, and those shifts change how you recover, how you sleep, and how training feels. The effect is real and it&rsquo;s individual, which is exactly the excuse most wearables use to leave it out. COROS reads the body better than almost anyone: training load, recovery, HRV. It never clocked the one variable that reshapes all of those readings every month. The app can tell you you&rsquo;re 100% recovered on a morning you feel like 20%. Wearables still default to the male body, and the cycle is exactly what that default leaves out.</p>
+            <p>Midway through, COROS shipped their own version. It confirmed what I&rsquo;d wagered on: predictions that were visibly off, nothing to learn from, and no line drawn between the cycle and how you actually train. It tracks a period, not a cycle. The capability was there. The connection wasn&rsquo;t.</p>
+          </div>
+        </div></div>
+      </div>
+      <div class="cs-sticky-media"><div class="cs-collage old">
+        <div class="pcol" data-rate="0.35">
+          <div class="tiltwrap"><img class="tilt" src="images/coros/screens/old%20screens/IMG_7437%202%201.png" alt="COROS Today screen, cycle buried at the bottom of the list" loading="lazy"></div>
+          <div class="tiltwrap"><img class="tilt" src="images/coros/screens/old%20screens/IMG_7442%202%201.png" alt="Ovulation Phase, Day 10, with a wall of undifferentiated text" loading="lazy"></div>
+        </div>
+        <div class="pcol" data-rate="-0.35">
+          <div class="tiltwrap"><img class="tilt" src="images/coros/screens/old%20screens/IMG_7438%202%201.png" alt="The Menstrual Cycle card, a period counter with nothing attached to training" loading="lazy"></div>
+          <div class="tiltwrap"><img class="tilt" src="images/coros/screens/old%20screens/IMG_7440%202%201.png" alt="COROS cycle tracking settings and the Learn more explainer" loading="lazy"></div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">The Core Flaw: No Feedback Loop</div>
+      <p>Working from the outside, I mapped the service as best I could: the frontstage from the app itself, the backstage inferred from how it behaves. Even at that resolution, it broke in the same place everywhere: there&rsquo;s no loop. Data flows in (cycle length, symptoms, sleep) and nothing meaningful flows back out. The user does all the logging and gets a calendar in return. That single structural gap became the thing the entire redesign had to fix; every decision below traces back to it.</p>
+      <div class="cs-image-wide"><img src="images/coros/maps/17.png" alt="Service blueprint of the current experience" loading="lazy"></div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">The Real Opportunity</div>
+      <p>I benchmarked COROS against Garmin, WHOOP, Oura, and Fitbit, but the read that mattered wasn&rsquo;t the feature grid. COROS is genuinely strong at the hard part: training load and recovery intelligence. Where it falls behind, and where most trackers do, is the last mile: turning that physiology into something a woman can act on this morning. So I didn&rsquo;t set out to design a new feature. I set out to build the bridge between the intelligence COROS already has and a decision the female athlete can actually make today.</p>
+      <div class="cs-image-wide"><img src="images/coros/maps/14.png" alt="Competitive analysis against Garmin, WHOOP, Oura and Fitbit" loading="lazy"></div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">The Redesign: Closing the Loop</div>
+      <p>I rebuilt the service so every touchpoint has to earn its place by connecting cycle data to a training decision. The backstage stops being a passive store: it learns from behavior, sharpens its predictions over time, and finally closes the loop the audit exposed: data in, guidance back.</p>
+      <div class="cs-image-wide"><img src="images/coros/maps/19.png" alt="Redesigned service blueprint, the ideal state" loading="lazy"></div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-split">
+        <div>
+          <div class="cs-section-label tight">Where Education Belongs</div>
+          <p>My first instinct was to teach everything up front. If hormones reshape training, the app should explain the whole cycle before you start, so I built a heavy educational onboarding: phase by phase, hormone curves, the works. It tested clunky. Nobody wants a biology lecture between turning the feature on and using it, and by the time people reached the dashboard they&rsquo;d forgotten most of it anyway.</p>
+          <p>So I cut onboarding down to what genuinely has to happen before you can start: one idea and two questions. The intro teaches a single principle, &ldquo;work with your body, not against it.&rdquo; The setup asks only for your last period and average cycle length. Everything else moved into the app itself, surfaced the moment it&rsquo;s useful.</p>
+          <p>Education is still the whole point; I just stopped front-loading it. The phase insights are the part I&rsquo;m proudest of: each phase explained right where you&rsquo;ll use it, and honest enough to hand authority back to your own body instead of the calendar.</p>
+        </div>
+        <div class="cs-prototype-embed">
+          <iframe style="border:none;" width="100%" height="820" src="https://embed.figma.com/proto/WnDNZFlLCoLhrQKNh6WrQ8/Menstrual-Cycle?node-id=559-355&amp;scaling=scale-down&amp;content-scaling=fixed&amp;page-id=442%3A138&amp;embed-host=share" allowfullscreen title="COROS redesign prototype"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Final Designs : two columns drifting at different rates, nothing fades ===== -->
+    <div class="cs-section cs-fd">
+      <div class="cs-fd-media">
+        <div class="pcol" data-rate="0.30">
+          <div class="tiltwrap" data-fig="Iphone%2014%20-%201" style="--l:8.734%;--t:0.206%;--w:37.698%;--dx:0%;--dy:0%"><img class="tilt" src="images/coros/screens/new%20screens/Iphone%2014%20-%201.png" alt="Redesigned Today screen with the Phase Insights card" loading="lazy"></div>
+          <div class="tiltwrap" data-fig="Iphone%2014%20-%203" style="--l:9.824%;--t:58.355%;--w:37.728%;--dx:0%;--dy:0%"><img class="tilt" src="images/coros/screens/new%20screens/Iphone%2014%20-%203.png" alt="Phase Insights for ovulation, with guidance for mood, sleep, training and food" loading="lazy"></div>
+          <div class="tiltwrap" data-fig="Group%201" style="--l:50.054%;--t:64.821%;--w:26.891%;--dx:0%;--dy:0%"><img class="tilt" src="images/coros/screens/new%20screens/trimmed/Group%201.png" alt="COROS watch confirming a period logged from the wrist" loading="lazy"></div>
+        </div>
+        <div class="pcol" data-rate="-0.30">
+          <div class="tiltwrap" data-fig="Iphone%2014%20-%202" style="--l:53.064%;--t:6.569%;--w:37.733%;--dx:0%;--dy:0%"><img class="tilt" src="images/coros/screens/new%20screens/Iphone%2014%20-%202.png" alt="Cycle Insights: current day, predictions and the hormone curve" loading="lazy"></div>
+          <div class="tiltwrap" data-fig="Group%202" style="--l:63.697%;--t:50.056%;--w:32.532%;--dx:0%;--dy:0%"><img class="tilt" src="images/coros/screens/new%20screens/trimmed/Group%202.png" alt="COROS watch face showing cycle day 27 and the luteal phase" loading="lazy"></div>
+        </div>
+      </div>
+
+      <div class="cs-fd-text">
+        <div class="cs-fd-block">
+          <div class="cs-section-label tight">Final Designs</div>
+          <p>Three moves carry the whole redesign. In the current app there&rsquo;s no phase insight on the dashboard at all: to learn about your phase you open the cycle tracker and read a wall of text, in one place, while your training lives in another. Everything here exists to close that distance.</p>
+        </div>
+        <div class="cs-fd-block" data-fd-step="1">
+          <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-1">01 &middot; Cycle First</div>
+          <div class="cs-fd-body" id="fd-body-1"><div><p>The Phase Insights card sits directly under your daily activity and above the training calendar. Placement is the argument. The card doesn&rsquo;t ask to be visited, it sits in the path you were already walking. It names the phase in plain language, gives you sleep, strain and stress tolerance in one glance, and states the day and its confidence honestly, so a wrong prediction reads as a system still learning rather than a system that&rsquo;s wrong about you. You don&rsquo;t go find the connection. It&rsquo;s already made.</p></div></div>
+        </div>
+        <div class="cs-fd-block" data-fd-step="2">
+          <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-2">02 &middot; Educational, In Context</div>
+          <div class="cs-fd-body" id="fd-body-2"><div><p>The original feature tracked a period. It didn&rsquo;t teach you anything about the cycle driving it, so education stopped being an onboarding lecture and became part of the app. Tap a phase and you get the hormone curve, what it means for sleep, strain and stress tolerance, and what to do with that today. Every phase says the same four things, so you learn the pattern once and read it forever.</p></div></div>
+        </div>
+        <div class="cs-fd-block" data-fd-step="3">
+          <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-3">03 &middot; Log It From Your Wrist</div>
+          <div class="cs-fd-body" id="fd-body-3"><div><p>The loop only works if the data keeps coming, and the phone is the wrong place to ask for it. A cycle screen on the watch shows the day and the phase at a glance, and takes a period log in two taps. Logging now happens wherever you already are, which is the difference between a feature people try and a feature people keep.</p></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">Reflection</div>
+      <p>I started this project because I care about women&rsquo;s health and believe athletes deserve tools that understand their physiology. When COROS shipped their version mid-project, I got to test my research-driven approach against what a real product team actually built. Humbling and validating at the same time.</p>
+      <p>This one stretched me. Service design was the part I didn&rsquo;t expect. I&rsquo;m not inside the company, so I had to read the backstage from the outside, infer it from how the product behaves, and stay honest about the parts I couldn&rsquo;t know. Working at that resolution was humbling in the useful way.</p>
+      <p>It also forced me to think past the screen: the data pipelines, the CS workflows, the PM tradeoffs that quietly decide what a user ever sees. Screens were the last thing I drew, not the first. I approach every design problem differently now because of it.</p>
+      <p>If I picked it back up, the next thing I&rsquo;d pressure-test is the prediction model with real users. Everything here rests on the app getting accurate enough to earn trust by cycle three, and that&rsquo;s the one assumption I can&rsquo;t validate alone.</p>
+      <p>This one stayed a concept, so I never got live numbers. But if it shipped, the metric I&rsquo;d watch isn&rsquo;t downloads; it&rsquo;s whether people are still logging in month three. That&rsquo;s the only real proof the loop gives something back.</p>
+    </div>
+  </div>
+</div>
+<footer class="footer">
+  <a href="mailto:emmamoystner.design@gmail.com">Contact</a>
+  <span>&copy; 2026 Emma Moystner</span>
+</footer>
+<script>
+/* ---- photo columns drift at different rates ---- */
+var pcolGroups = [].slice.call(document.querySelectorAll('.cs-collage.old, .cs-fd-media'));
+
+function csDrift(){
+  pcolGroups.forEach(function(group){
+    var r = group.getBoundingClientRect();
+    var t = (window.innerHeight / 2 - (r.top + r.height / 2)) / window.innerHeight;
+    [].slice.call(group.querySelectorAll('.pcol')).forEach(function(c){
+      c.style.transform = 'translateY(' + (t * parseFloat(c.getAttribute('data-rate')) * 170).toFixed(1) + 'px)';
+    });
+  });
+}
+
+var ticking = false;
+function csOnScroll(){
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(function(){ csDrift(); ticking = false; });
+}
+document.addEventListener('scroll', csOnScroll, true);
+window.addEventListener('resize', csOnScroll);
+csDrift();
+
+/* ---- Final Designs: progressive disclosure driven by scroll position ----
+   Titles never move or fade. Only one body is open at a time, chosen by how far
+   through the media canvas you are, so scrolling back up reopens the previous
+   one. Clicking a title pins it open, which is the escape hatch for anyone who
+   scrolls past faster than they can read. */
+(function(){
+  var fd = document.querySelector('.cs-fd');
+  if (!fd) return;
+  var media  = fd.querySelector('.cs-fd-media') || fd;
+  var blocks = [].slice.call(fd.querySelectorAll('.cs-fd-block[data-fd-step]'));
+  if (!blocks.length) return;
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var narrow = window.matchMedia('(max-width:1100px)');
+  var pinned = null;
+
+  function mark(el, on){
+    el.classList.toggle('is-open', on);
+    var lab = el.querySelector('.cs-section-label');
+    if (lab) lab.setAttribute('aria-expanded', on ? 'true' : 'false');
+  }
+  function activate(i){ blocks.forEach(function(b, k){ mark(b, k === i); }); }
+  function openAll(){ blocks.forEach(function(b){ mark(b, true); }); }
+
+  function current(){
+    var r = media.getBoundingClientRect();
+    if (!r.height) return 0;
+    /* 0 when the canvas top reaches the middle of the screen, 1 at its bottom */
+    var p = (window.innerHeight * 0.5 - r.top) / r.height;
+    p = Math.max(0, Math.min(0.99999, p));
+    return Math.floor(p * blocks.length);
+  }
+
+  function update(){
+    if (reduce.matches || narrow.matches){ openAll(); return; }
+    activate(pinned === null ? current() : pinned);
+  }
+
+  blocks.forEach(function(b, i){
+    var lab = b.querySelector('.cs-section-label');
+    if (!lab) return;
+    function toggle(){
+      if (narrow.matches || reduce.matches) return;
+      pinned = (pinned === i) ? null : i;   /* click the open one again to hand control back to scroll */
+      update();
+    }
+    lab.addEventListener('click', toggle);
+    lab.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+    });
+  });
+
+  var pending = false;
+  function onScroll(){
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(function(){ update(); pending = false; });
+  }
+  document.addEventListener('scroll', onScroll, true);
+  window.addEventListener('resize', onScroll);
+  if (narrow.addEventListener) narrow.addEventListener('change', update);
+  update();
+})();
+
+/* ================= Final Designs layout editor =================
+   Open coros.html?edit=1 . Drag to move, Shift-drag or scroll to resize.
+   Everything is stored as a % of the canvas, so it stays responsive. */
+(function(){
+  if (new URLSearchParams(location.search).get('edit') !== '1') return;
+  document.body.classList.add('fd-edit');
+
+  var canvas = document.querySelector('.cs-fd-media');
+  if (!canvas) return;
+  var wraps = [].slice.call(document.querySelectorAll('.cs-fd-media .tiltwrap'));
+  if (!wraps.length) return;
+
+  var sel = null, drag = null;
+
+  /* editor-only chrome, injected so it lives with the editor and not in the stylesheet */
+  var css = document.createElement('style');
+  css.textContent =
+    '.cs-fd-media .tiltwrap.fd-sel{outline:2px solid var(--orange,#E15304) !important;outline-offset:6px;z-index:50;}' +
+    '#fd-panel .fd-layers{display:flex;flex-direction:column;gap:4px;margin:10px 0 6px;}' +
+    '#fd-panel .fd-layer{display:flex;justify-content:space-between;gap:10px;align-items:center;' +
+      'background:rgba(255,255,255,.07);border:1px solid transparent;color:inherit;font:inherit;' +
+      'text-align:left;padding:5px 8px;border-radius:5px;cursor:pointer;}' +
+    '#fd-panel .fd-layer:hover{background:rgba(255,255,255,.14);}' +
+    '#fd-panel .fd-layer.on{border-color:var(--orange,#E15304);background:rgba(225,83,4,.22);}' +
+    '#fd-panel .fd-layer i{font-style:normal;opacity:.6;}';
+  document.head.appendChild(css);
+
+  function pct(el, prop){ return parseFloat(el.style.getPropertyValue(prop)) || 0; }
+  function box(){ return canvas.getBoundingClientRect(); }
+  function label(el){ try { return decodeURIComponent(el.dataset.fig || ''); } catch(e){ return el.dataset.fig || 'layer'; } }
+
+  function readout(el){
+    var img = el.querySelector('img'); if (!img) return;
+    var r = img.getBoundingClientRect();
+    el.setAttribute('data-readout', label(el) + ' · ' + Math.round(r.width) + 'px');
+  }
+  function refresh(){ wraps.forEach(readout); syncPanel(); }
+
+  /* ---------- alpha-aware hit testing ----------
+     The exported PNGs carry a lot of transparent padding, so the wrap rectangles
+     overlap heavily. Without this, the topmost box swallows every click and the
+     layers underneath can never be grabbed. Falls back to plain box hits if the
+     canvas is tainted (e.g. opened over file://). */
+  var hitCache = new WeakMap(), tainted = false;
+  function opaqueAt(img, u, v){
+    if (tainted) return true;
+    try {
+      var c = hitCache.get(img);
+      if (!c){
+        if (!img.naturalWidth) return true;
+        var W = 140, H = Math.max(1, Math.round(W * img.naturalHeight / img.naturalWidth));
+        c = document.createElement('canvas'); c.width = W; c.height = H;
+        c.getContext('2d').drawImage(img, 0, 0, W, H);
+        hitCache.set(img, c);
+      }
+      var x = Math.max(0, Math.min(c.width  - 1, Math.round(u * c.width)));
+      var y = Math.max(0, Math.min(c.height - 1, Math.round(v * c.height)));
+      return c.getContext('2d').getImageData(x, y, 1, 1).data[3] > 24;
+    } catch(err){ tainted = true; return true; }
+  }
+
+  function pick(e){
+    for (var i = wraps.length - 1; i >= 0; i--){
+      var el = wraps[i], img = el.querySelector('img');
+      if (!img) continue;
+      var r = img.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) continue;
+      if (opaqueAt(img, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height)) return el;
+    }
+    return null;
+  }
+  function inBox(el, e){
+    if (!el) return false;
+    var r = el.getBoundingClientRect();
+    return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+  }
+
+  function select(el){
+    sel = el;
+    wraps.forEach(function(w){ w.classList.toggle('fd-sel', w === el); });
+    syncPanel();
+  }
+
+  function resizeTo(el, w){
+    var w0 = pct(el, '--w');
+    w = Math.max(4, w);
+    el.style.setProperty('--w', w.toFixed(3) + '%');
+    el.style.setProperty('--l', (pct(el, '--l') - (w - w0) / 2).toFixed(3) + '%');
+    readout(el); save();
+  }
+
+  /* ---------- pointer ---------- */
+  canvas.addEventListener('mousedown', function(e){
+    var hit = pick(e);
+    if (!hit && sel && inBox(sel, e)) hit = sel;   /* escape hatch: drag the selected layer from its box */
+    if (!hit){ select(null); return; }
+    e.preventDefault();
+    select(hit);
+    drag = { el: hit, x: e.clientX, y: e.clientY,
+             l: pct(hit, '--l'), t: pct(hit, '--t'), w: pct(hit, '--w'), resize: e.shiftKey };
+    hit.classList.add('dragging');
+  });
+
+  window.addEventListener('mousemove', function(e){
+    if (!drag) return;
+    var b = box();
+    if (drag.resize){
+      var w = Math.max(4, drag.w + (e.clientX - drag.x) / b.width * 100);
+      drag.el.style.setProperty('--w', w.toFixed(3) + '%');
+      drag.el.style.setProperty('--l', (drag.l - (w - drag.w) / 2).toFixed(3) + '%');
+    } else {
+      drag.el.style.setProperty('--l', (drag.l + (e.clientX - drag.x) / b.width  * 100).toFixed(3) + '%');
+      drag.el.style.setProperty('--t', (drag.t + (e.clientY - drag.y) / b.height * 100).toFixed(3) + '%');
+    }
+    readout(drag.el);
+  });
+
+  window.addEventListener('mouseup', function(){
+    if (!drag) return;
+    drag.el.classList.remove('dragging'); drag = null; save(); syncPanel();
+  });
+
+  /* scroll resizes only the layer actually under the cursor, so the page still scrolls elsewhere */
+  canvas.addEventListener('wheel', function(e){
+    var hit = pick(e) || (inBox(sel, e) ? sel : null);
+    if (!hit) return;
+    e.preventDefault();
+    select(hit);
+    resizeTo(hit, pct(hit, '--w') - e.deltaY * 0.03);
+  }, {passive:false});
+
+  /* ---------- keyboard: nudge and resize the selected layer ---------- */
+  window.addEventListener('keydown', function(e){
+    if (!sel) return;
+    var tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea') return;
+    var step = e.shiftKey ? 1 : 0.25, used = true;
+    switch (e.key){
+      case 'ArrowLeft':  sel.style.setProperty('--l', (pct(sel,'--l') - step).toFixed(3) + '%'); break;
+      case 'ArrowRight': sel.style.setProperty('--l', (pct(sel,'--l') + step).toFixed(3) + '%'); break;
+      case 'ArrowUp':    sel.style.setProperty('--t', (pct(sel,'--t') - step).toFixed(3) + '%'); break;
+      case 'ArrowDown':  sel.style.setProperty('--t', (pct(sel,'--t') + step).toFixed(3) + '%'); break;
+      case '-': case '_': resizeTo(sel, pct(sel,'--w') - (e.shiftKey ? 2 : 0.5)); break;
+      case '=': case '+': resizeTo(sel, pct(sel,'--w') + (e.shiftKey ? 2 : 0.5)); break;
+      case 'Escape': select(null); break;
+      default: used = false;
+    }
+    if (used){ e.preventDefault(); readout(sel); save(); }
+  });
+
+  window.addEventListener('resize', refresh);
+
+  function values(){
+    var o = {};
+    wraps.forEach(function(el){
+      o[el.dataset.fig] = {l:el.style.getPropertyValue('--l').trim(),
+                           t:el.style.getPropertyValue('--t').trim(),
+                           w:el.style.getPropertyValue('--w').trim()};
+    });
+    return o;
+  }
+  function save(){ try{ localStorage.setItem('fdLayout', JSON.stringify(values())); }catch(err){} }
+
+  var panel = document.createElement('div');
+  panel.id = 'fd-panel';
+  panel.innerHTML = '<b>Final Designs layout</b>' +
+    '<div class="hint">Click a layer below, or click it on the page.<br>' +
+    'Drag to move · Shift-drag or scroll to resize<br>' +
+    'Arrows nudge · +/− resize · Shift for bigger steps</div>' +
+    '<div class="fd-layers"></div>' +
+    '<button id="fd-copy">Copy CSS</button>' +
+    '<button id="fd-reset" class="ghost">Reset</button>';
+  document.body.appendChild(panel);
+
+  var list = panel.querySelector('.fd-layers');
+  wraps.forEach(function(el){
+    var b = document.createElement('button');
+    b.className = 'fd-layer';
+    b.innerHTML = '<span>' + label(el) + '</span><i></i>';
+    b.onclick = function(){ select(el); el.scrollIntoView({block:'center', behavior:'smooth'}); };
+    b._for = el;
+    list.appendChild(b);
+  });
+
+  function syncPanel(){
+    [].slice.call(list.children).forEach(function(b){
+      b.classList.toggle('on', b._for === sel);
+      var img = b._for.querySelector('img');
+      b.querySelector('i').textContent = img ? Math.round(img.getBoundingClientRect().width) + 'px' : '';
+    });
+  }
+
+  document.getElementById('fd-copy').onclick = function(){
+    var v = values(), out = '';
+    for (var k in v) out += '[data-fig="' + k + '"]{--l:' + v[k].l + ';--t:' + v[k].t + ';--w:' + v[k].w + ';}\n';
+    var btn = document.getElementById('fd-copy');
+    function fallback(){
+      var ta = document.getElementById('fd-out') || document.createElement('textarea');
+      ta.id = 'fd-out'; ta.value = out; ta.readOnly = true;
+      if (!ta.parentNode) panel.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); btn.textContent = 'Copied'; }
+      catch(e){ btn.textContent = 'Select + copy below'; }
+      setTimeout(function(){ btn.textContent = 'Copy CSS'; }, 1800);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(out).then(function(){
+        btn.textContent = 'Copied';
+        setTimeout(function(){ btn.textContent = 'Copy CSS'; }, 1400);
+      }).catch(fallback);
+    } else { fallback(); }
+  };
+  document.getElementById('fd-reset').onclick = function(){
+    try{ localStorage.removeItem('fdLayout'); }catch(err){}
+    location.reload();
+  };
+
+  window.addEventListener('load', refresh);
+  refresh();
+})();
+
+/* saved tweaks apply on the normal page too, so you can preview without ?edit=1 */
+(function applySaved(){
+  var raw; try{ raw = localStorage.getItem('fdLayout'); }catch(err){ return; }
+  if (!raw) return;
+  var v = JSON.parse(raw);
+  Object.keys(v).forEach(function(k){
+    var el = document.querySelector('.cs-fd-media .tiltwrap[data-fig="' + k + '"]');
+    if (!el) return;
+    ['l','t','w'].forEach(function(p){ if (v[k][p]) el.style.setProperty('--' + p, v[k][p]); });
+  });
+})();
+
+/* ---- cursor tilt, lifted from the About hero photo ---- */
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  [].slice.call(document.querySelectorAll('.tiltwrap')).forEach(function(wrap){
+    var img = wrap.querySelector('.tilt');
+    if (!img) return;
+    wrap.addEventListener('mousemove', function(e){
+      var rect = img.getBoundingClientRect();
+      var dx = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+      var dy = (e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
+      var rotY = Math.max(-5, Math.min(5, dx * 6));
+      var rotX = Math.max(-5, Math.min(5, -dy * 6));
+      img.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+    });
+    wrap.addEventListener('mouseleave', function(){
+      img.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+  });
+})();
+</script>
+</body>
+</html>
