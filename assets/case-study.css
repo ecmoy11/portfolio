@@ -1763,3 +1763,11 @@ body.fd-edit .cs-fd-media .tiltwrap::after{content:attr(data-readout);position:a
 @media (prefers-reduced-motion:reduce){
   .cs-fd-body{transition:none;}
 }
+
+/* ================= site nav on case study pages =================
+   .nav-logo and .nav-right ship at opacity:0 and are faded in by the intro
+   reveal, which only runs on index.html. On a standalone case study page that
+   JS never runs, so the whole nav stayed invisible. Force it visible here —
+   this stylesheet is only loaded by case study pages. */
+.nav-logo,
+.nav-right { opacity: 1 !important; }
