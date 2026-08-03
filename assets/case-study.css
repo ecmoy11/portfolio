@@ -1771,3 +1771,7 @@ body.fd-edit .cs-fd-media .tiltwrap::after{content:attr(data-readout);position:a
    this stylesheet is only loaded by case study pages. */
 .nav-logo,
 .nav-right { opacity: 1 !important; }
+
+/* A touch more air between the Final Designs collage and Reflection —
+   the collage's last screens sit low, so 64px read tight. */
+.cs-fd + .cs-section { margin-top: 16px; }
