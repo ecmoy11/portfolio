@@ -243,6 +243,9 @@ a { color: inherit; text-decoration: none; }
 }
 
 .work-tile {
+  display: block;
+  color: inherit;
+  text-decoration: none;
   position: relative;
   cursor: pointer;
   break-inside: avoid;
@@ -1185,6 +1188,41 @@ a { color: inherit; text-decoration: none; }
   border-bottom: 1px solid var(--divider);
 }
 
+.cs-tldr {
+  border-left: 2px solid var(--orange);
+  padding: 4px 0 6px 32px;
+  margin-bottom: 52px;
+}
+
+.cs-tldr-row { padding: 14px 0; }
+.cs-tldr-row:first-of-type { padding-top: 0; }
+.cs-tldr-row:last-of-type { padding-bottom: 0; }
+
+.cs-tldr-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 7px;
+}
+
+.cs-tldr-text {
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--text-dark);
+}
+
+.cs-tldr-text strong { font-weight: 600; }
+
+@media (max-width: 640px) {
+  .cs-tldr { padding-left: 24px; }
+}
+
+
 .cs-section p {
   font-size: 0.95rem;
   line-height: 1.85;
@@ -1559,6 +1597,57 @@ a { color: inherit; text-decoration: none; }
   color: var(--text-muted);
 }
 
+
+/* ============ COROS case study: wide Figma layout ============ */
+#cs-coros .cs-header{max-width:1240px;padding:140px 80px 56px;}
+#cs-coros .cs-body{max-width:1240px;padding:56px 80px 100px;}
+#cs-coros .cs-subtitle{max-width:620px;}
+#cs-coros .cs-tldr{max-width:1610px;}
+#cs-coros .cs-section p{max-width:none;}
+
+/* sticky sections: pinned text beside a scrolling collage */
+.cs-sticky{display:grid;gap:64px;margin-bottom:64px;}
+.cs-sticky.left-text{grid-template-columns:1.3fr 1fr;width:calc(100% + 160px);margin-left:-80px;}  /* The Problem   */
+.cs-sticky.left-media{grid-template-columns:1.8fr 1fr;width:calc(100% + 260px);margin-left:-130px;} /* Final Designs */
+.cs-pin{position:sticky;top:0;height:100vh;display:flex;align-items:center;}
+.cs-pin-inner{display:grid;width:100%;}
+.cs-step{grid-area:1/1;opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease;pointer-events:none;}
+.cs-step.on,.cs-step.solo{opacity:1;transform:none;pointer-events:auto;}
+.cs-step p{font-size:0.95rem;line-height:1.85;color:var(--text-light);font-weight:300;margin-bottom:1rem;}
+.cs-step p:last-child{margin-bottom:0;}
+.cs-step p strong{color:var(--text-dark);font-weight:500;}
+
+/* collages, geometry taken from the Figma frames */
+.cs-collage{position:relative;width:100%;}
+.cs-collage img{position:absolute;}
+.cs-collage.old{padding-bottom:232.7%;margin:52vh 0 18vh;}   /* Figma 54:327; big top offset so the copy lands first */
+.cs-collage.new{padding-bottom:537%;margin:8vh 0 8vh;}       /* screens at 70% of the column; taller so they stay big */
+
+/* Where Education Belongs: copy beside the live prototype */
+.cs-split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;margin-top:32px;}
+.cs-split .cs-prototype-embed{margin:0;}
+
+@media (max-width:1024px){
+  .cs-sticky{grid-template-columns:1fr !important;gap:0;width:100% !important;margin-left:0 !important;}
+  .cs-pin{position:static;height:auto;display:block;}
+  .cs-pin-inner{display:block;}
+  .cs-step{grid-area:auto;opacity:1;transform:none;pointer-events:auto;margin-bottom:28px;}
+  .cs-collage{padding-bottom:0 !important;margin:0 0 24px !important;}
+  .cs-collage img{position:static;left:auto !important;top:auto !important;}
+  .cs-sticky.left-text .cs-collage{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;}
+  .cs-sticky.left-text .cs-collage img{width:46% !important;}
+  .cs-sticky.left-media .cs-sticky-media,.cs-sticky.left-media .cs-sticky-text,
+  .cs-sticky.left-media .cs-pin,.cs-sticky.left-media .cs-pin-inner,
+  .cs-sticky.left-media .cs-collage{display:contents;}
+  .cs-sticky.left-media .cs-collage img{order:var(--o,0);width:74% !important;max-width:290px;margin:0 auto 24px;}
+  .cs-sticky.left-media .cs-step{order:var(--o,0);}
+  .cs-split{grid-template-columns:1fr;gap:32px;}
+}
+@media (max-width:768px){
+  #cs-coros .cs-header{padding:100px 24px 40px;}
+  #cs-coros .cs-body{padding:40px 24px 80px;}
+}
+
 @media (max-width: 768px) {
   .nav { padding: 16px 24px; }
   .nav.scrolled { padding: 12px 24px; }
@@ -1609,7 +1698,7 @@ a { color: inherit; text-decoration: none; }
   <div class="grid-inner">
 
     <!-- Capstone & Thesis (teaser) -->
-    <div class="work-tile reveal-up" onclick="window.location.href='capstone.html'">
+    <a class="work-tile reveal-up" href="capstone.html">
       <div class="tile-media" style="aspect-ratio:4/5;">
         <video src="images/capstone/capstoneteaser.mp4" autoplay muted loop playsinline></video>
         <div class="tile-overlay">
@@ -1617,10 +1706,10 @@ a { color: inherit; text-decoration: none; }
           <span class="tile-pill tile-pill-tag">In Progress</span>
         </div>
       </div>
-    </div>
+    </a>
 
     <!-- 01 · Airline Interaction Design 2036 -->
-    <div class="work-tile reveal-up" onclick="window.location.href='airline-2036.html'">
+    <a class="work-tile reveal-up" href="airline-2036.html">
       <div class="tile-media" style="aspect-ratio:3/2;">
         <img src="images/airline%202036/airline%20coverphoto.png" alt="Airline Interaction Design 2036 cover" loading="lazy">
         <div class="tile-overlay">
@@ -1628,10 +1717,10 @@ a { color: inherit; text-decoration: none; }
           <span class="tile-pill tile-pill-tag">Aviation &middot; Futures / Service Design</span>
         </div>
       </div>
-    </div>
+    </a>
 
     <!-- 02 · Solace Health -->
-    <div class="work-tile reveal-up" onclick="window.location.href='solace.html'">
+    <a class="work-tile reveal-up" href="solace.html">
       <div class="tile-media" style="aspect-ratio:1/1;background:#dfdee1;">
         <img src="images/solace/Solace%20-%20MacBook%20Air%20M2.png" alt="Solace Health: Sprint Ticket Panel" style="object-fit:contain;" loading="lazy">
         <div class="tile-overlay">
@@ -1639,10 +1728,10 @@ a { color: inherit; text-decoration: none; }
           <span class="tile-pill tile-pill-tag">Healthcare &middot; Systems / Process</span>
         </div>
       </div>
-    </div>
+    </a>
 
     <!-- 03 · COROS -->
-    <div class="work-tile reveal-up" onclick="window.location.href='coros.html'">
+    <a class="work-tile reveal-up" href="coros.html">
       <div class="tile-media" style="aspect-ratio:4/5;">
         <img src="images/coros/headerphoto.COROS.png" alt="COROS cycle-aware training dashboard" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
         <div class="tile-overlay">
@@ -1650,10 +1739,10 @@ a { color: inherit; text-decoration: none; }
           <span class="tile-pill tile-pill-tag">Wellness &middot; Service Design</span>
         </div>
       </div>
-    </div>
+    </a>
 
     <!-- 04 · Airbnb Group Booking -->
-    <div class="work-tile reveal-up" onclick="window.location.href='airbnb.html'">
+    <a class="work-tile reveal-up" href="airbnb.html">
       <div class="tile-media" style="aspect-ratio:16/10;">
         <img src="images/airbnb/screens-overview.png" alt="Airbnb group booking screens overview" loading="lazy">
         <div class="tile-overlay">
@@ -1661,10 +1750,10 @@ a { color: inherit; text-decoration: none; }
           <span class="tile-pill tile-pill-tag">Travel &middot; Concept Redesign</span>
         </div>
       </div>
-    </div>
+    </a>
 
     <!-- 05 · Gauge -->
-    <div class="work-tile reveal-up" onclick="window.location.href='gauge.html'">
+    <a class="work-tile reveal-up" href="gauge.html">
       <div class="tile-media" style="aspect-ratio:16/9;">
         <img src="images/gauge/bargeapp.png" alt="Gauge: Vehicle Report App" class="zoom-crop" style="width:100%;height:100%;object-fit:cover;">
         <div class="tile-overlay">
@@ -1672,7 +1761,7 @@ a { color: inherit; text-decoration: none; }
           <span class="tile-pill tile-pill-tag">Enterprise &middot; Self-Initiated</span>
         </div>
       </div>
-    </div>
+    </a>
 
   </div>
 </main>
@@ -1685,12 +1774,6 @@ a { color: inherit; text-decoration: none; }
 
 <!-- ============ INFO OVERLAY ============ -->
 <!-- ============ CASE STUDY PAGES ============ -->
-
-
-
-
-
-
 <div class="case-study-page" id="cs-hand-tetris">
   <div class="cs-nav"><button onclick="closeCaseStudy()">&larr; Back</button></div>
   <div class="cs-header">
@@ -1705,6 +1788,12 @@ a { color: inherit; text-decoration: none; }
     </div>
   </div>
   <div class="cs-body">
+    <div class="cs-tldr">
+      <div class="cs-tldr-row"><div class="cs-tldr-label">Problem</div><div class="cs-tldr-text">Control a game with your bare hands over a webcam &mdash; no keys, no props. But computer-vision input is <strong>noisy, physical, and imperfect</strong>; your hand is never perfectly still.</div></div>
+      <div class="cs-tldr-row"><div class="cs-tldr-label">Insight</div><div class="cs-tldr-text">The interesting question wasn&rsquo;t &ldquo;can a hand control Tetris.&rdquo; It was what happens to play when the input is imperfect &mdash; so instead of hiding the jitter, <strong>lean into it</strong> and match the machine&rsquo;s behavior to what hands already do.</div></div>
+      <div class="cs-tldr-row"><div class="cs-tldr-label">Outcome</div><div class="cs-tldr-text">A genuinely playable gesture controller: deadzone/delay/repeat stabilization, gesture arbitration enforcing <strong>one gesture, one action</strong>, and floating emoji &ldquo;receipts&rdquo; that make invisible input visible (and surfaced a hidden bug).</div></div>
+    </div>
+
 
     <div class="cs-section">
       <div class="cs-section-label">Play It</div>
@@ -1902,6 +1991,7 @@ function openCaseStudy(id) {
   document.querySelectorAll('.case-study-page').forEach(p => p.classList.remove('active'));
   const page = document.getElementById('cs-' + id);
   if (page) { page.classList.add('active'); page.scrollTop = 0; }
+  if (window.csSyncSteps) requestAnimationFrame(window.csSyncSteps);
   if (lenis) { lenis.destroy(); lenis = null; }
   if (lenisRafId) { cancelAnimationFrame(lenisRafId); lenisRafId = null; }
   document.body.style.overflow = 'hidden';
@@ -1914,11 +2004,12 @@ function closeCaseStudy() {
   initLenis();
 }
 
-// Open case study if arriving via ?cs= param
+// Legacy ?cs= links redirect to the real page
 (function() {
-  const params = new URLSearchParams(window.location.search);
-  const cs = params.get('cs');
-  if (cs) { setTimeout(() => openCaseStudy(cs), 300); }
+  var map = {'airline-futures':'airline-2036.html','solace-health':'solace.html','coros':'coros.html',
+             'airbnb':'airbnb.html','gauge':'gauge.html','capstone':'capstone.html'};
+  var cs = new URLSearchParams(window.location.search).get('cs');
+  if (cs && map[cs]) window.location.replace(map[cs]);
 })();
 
 // ======================================
@@ -2412,6 +2503,41 @@ if (window.location.hash === '#playground') {
   openPlayground();
 }
 
+</script>
+<script>
+/* ---- COROS sticky sections: swap the pinned copy as each screen passes centre ---- */
+window.window.csScrollies = [].slice.call(document.querySelectorAll('.cs-sticky[data-steps]')).map(function(sc){
+  return {
+    figs: [].slice.call(sc.querySelectorAll('[data-step]:not(.cs-step)')),
+    pans: [].slice.call(sc.querySelectorAll('.cs-step[data-step]')),
+    cur: null
+  };
+}).filter(function(s){ return s.figs.length && s.pans.length; });
+
+window.csSyncSteps = function(){
+  var mid = window.innerHeight / 2;
+  window.csScrollies.forEach(function(s){
+    var step, best = 1e9;
+    if (s.figs[0].getBoundingClientRect().top > mid) {
+      step = 'intro';
+    } else {
+      s.figs.forEach(function(f){
+        var r = f.getBoundingClientRect();
+        var d = Math.abs(r.top + r.height / 2 - mid);
+        if (d < best) { best = d; step = f.getAttribute('data-step'); }
+      });
+    }
+    if (s.cur === step) return;
+    s.cur = step;
+    s.pans.forEach(function(pn){ pn.classList.toggle('on', pn.getAttribute('data-step') === step); });
+  });
+};
+if (window.csScrollies.length) {
+  /* the case study overlay is its own scroll container, so listen in the capture phase */
+  document.addEventListener('scroll', window.csSyncSteps, true);
+  window.addEventListener('resize', window.csSyncSteps);
+  window.csSyncSteps();
+}
 </script>
 </body>
 </html>

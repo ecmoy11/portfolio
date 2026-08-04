@@ -8,6 +8,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/case-study.css">
 </head>
 <body>
@@ -23,6 +24,12 @@
     <span></span><span></span><span></span>
   </button>
 </nav>
+<div class="mobile-nav-overlay" id="mobile-nav-overlay">
+  <a href="index.html">Work</a>
+  <a href="playground.html">Play</a>
+  <a href="about.html">About</a>
+  <a href="resume.moystner.pdf" target="_blank">Resume</a>
+</div>
 <div class="case-study-page" id="cs-coros">
   
   <div class="cs-header">
@@ -33,9 +40,10 @@
     <div class="cs-meta-bar">
       <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Service Designer</span></div>
       <div class="cs-meta-item"><span class="cs-meta-label">Type</span><span class="cs-meta-value">Solo Project</span></div>
-      <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value">One Term</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value">12 Weeks</span></div>
       <div class="cs-meta-item"><span class="cs-meta-label">Tools</span><span class="cs-meta-value">Figma, Miro</span></div>
-      <div class="cs-meta-item"><span class="cs-meta-label">Deliverables</span><span class="cs-meta-value">Service blueprints, competitive audit, phone &amp; watch UI, clickable prototype</span></div>
+      <div class="cs-meta-item half"><span class="cs-meta-label">Methods</span><span class="cs-meta-value">Service Design, Competitive Audit, Prototyping</span></div>
+      <div class="cs-meta-item half"><span class="cs-meta-label">Deliverables</span><span class="cs-meta-value">Service blueprints, competitive audit, phone &amp; watch UI, clickable prototype</span></div>
     </div>
   </div>
   <div class="cs-body">
@@ -56,14 +64,14 @@
           </div>
         </div></div>
       </div>
-      <div class="cs-sticky-media"><div class="cs-collage old">
+      <div class="cs-sticky-media"><div class="cs-collage old" data-drift="170">
         <div class="pcol" data-rate="0.35">
-          <div class="tiltwrap"><img class="tilt" src="images/coros/screens/old%20screens/IMG_7437%202%201.png" alt="COROS Today screen, cycle buried at the bottom of the list" loading="lazy"></div>
-          <div class="tiltwrap"><img class="tilt" src="images/coros/screens/old%20screens/IMG_7442%202%201.png" alt="Ovulation Phase, Day 10, with a wall of undifferentiated text" loading="lazy"></div>
+          <div class="tiltwrap"><img class="tilt" src="images/coros/screens/old%20screens/IMG_7437.PNG" alt="COROS Today screen, cycle buried at the bottom of the list" loading="lazy"><span class="cs-shot-tag"><b>Not my design</b><i>COROS screen 12.14.2025</i></span></div>
+          <div class="tiltwrap"><img class="tilt" src="images/coros/screens/old%20screens/IMG_7442.PNG" alt="Ovulation Phase, Day 10, with a wall of undifferentiated text" loading="lazy"><span class="cs-shot-tag"><b>Not my design</b><i>COROS screen 12.14.2025</i></span></div>
         </div>
         <div class="pcol" data-rate="-0.35">
-          <div class="tiltwrap"><img class="tilt" src="images/coros/screens/old%20screens/IMG_7438%202%201.png" alt="The Menstrual Cycle card, a period counter with nothing attached to training" loading="lazy"></div>
-          <div class="tiltwrap"><img class="tilt" src="images/coros/screens/old%20screens/IMG_7440%202%201.png" alt="COROS cycle tracking settings and the Learn more explainer" loading="lazy"></div>
+          <div class="tiltwrap"><img class="tilt" src="images/coros/screens/old%20screens/IMG_7438.PNG" alt="The Menstrual Cycle card, a period counter with nothing attached to training" loading="lazy"><span class="cs-shot-tag"><b>Not my design</b><i>COROS screen 12.14.2025</i></span></div>
+          <div class="tiltwrap"><img class="tilt" src="images/coros/screens/old%20screens/IMG_7440.PNG" alt="COROS cycle tracking settings and the Learn more explainer" loading="lazy"><span class="cs-shot-tag"><b>Not my design</b><i>COROS screen 12.14.2025</i></span></div>
         </div>
       </div></div>
     </div>
@@ -86,31 +94,82 @@
       <div class="cs-image-wide"><img src="images/coros/maps/19.png" alt="Redesigned service blueprint, the ideal state" loading="lazy"></div>
     </div>
 
-    <div class="cs-section">
-      <div class="cs-split">
-        <div>
-          <div class="cs-section-label tight">Where Education Belongs</div>
-          <p>My first instinct was to teach everything up front. If hormones reshape training, the app should explain the whole cycle before you start, so I built a heavy educational onboarding: phase by phase, hormone curves, the works. It tested clunky. Nobody wants a biology lecture between turning the feature on and using it, and by the time people reached the dashboard they&rsquo;d forgotten most of it anyway.</p>
-          <p>So I cut onboarding down to what genuinely has to happen before you can start: one idea and two questions. The intro teaches a single principle, &ldquo;work with your body, not against it.&rdquo; The setup asks only for your last period and average cycle length. Everything else moved into the app itself, surfaced the moment it&rsquo;s useful.</p>
-          <p>Education is still the whole point; I just stopped front-loading it. The phase insights are the part I&rsquo;m proudest of: each phase explained right where you&rsquo;ll use it, and honest enough to hand authority back to your own body instead of the calendar.</p>
+    <!-- ===== beat 5 : the first pass, the iterations that lost ===== -->
+    <div class="cs-alt">
+      <div class="cs-section-label">The First Pass</div>
+
+      <div class="cs-alt-media is-strip">
+        <div class="cs-filmstrip-wrap" style="--frame-w:190px">
+          <button class="cs-strip-btn is-prev" aria-label="Scroll left">&#8249;</button>
+          <div class="cs-filmstrip">
+          <figure class="cs-frame" data-caption="01 &middot; Start" data-full="images/coros/screens/old%20onboarding/1onboarding%20start.png">
+            <img src="images/coros/screens/old%20onboarding/1onboarding%20start.png" alt="Where the old onboarding opened" loading="lazy">
+            <figcaption><b>01</b> Start</figcaption>
+          </figure>
+          <figure class="cs-frame" data-caption="02 &middot; Menstrual" data-full="images/coros/screens/old%20onboarding/2Menstrual.png">
+            <img src="images/coros/screens/old%20onboarding/2Menstrual.png" alt="A full teaching screen for the menstrual phase" loading="lazy">
+            <figcaption><b>02</b> Menstrual</figcaption>
+          </figure>
+          <figure class="cs-frame" data-caption="03 &middot; Follicular" data-full="images/coros/screens/old%20onboarding/3Folicular.png">
+            <img src="images/coros/screens/old%20onboarding/3Folicular.png" alt="The same treatment again for the follicular phase" loading="lazy">
+            <figcaption><b>03</b> Follicular</figcaption>
+          </figure>
+          <figure class="cs-frame" data-caption="04 &middot; Ovulation" data-full="images/coros/screens/old%20onboarding/4Ovulation.png">
+            <img src="images/coros/screens/old%20onboarding/4Ovulation.png" alt="And again for ovulation" loading="lazy">
+            <figcaption><b>04</b> Ovulation</figcaption>
+          </figure>
+          <figure class="cs-frame" data-caption="05 &middot; Luteal" data-full="images/coros/screens/old%20onboarding/5Luteal.png">
+            <img src="images/coros/screens/old%20onboarding/5Luteal.png" alt="And again for the luteal phase" loading="lazy">
+            <figcaption><b>05</b> Luteal</figcaption>
+          </figure>
+          <figure class="cs-frame" data-caption="06 &middot; Get started" data-full="images/coros/screens/old%20onboarding/6get%20started.png">
+            <img src="images/coros/screens/old%20onboarding/6get%20started.png" alt="The end of the sequence, six screens before the app" loading="lazy">
+            <figcaption><b>06</b> Get started</figcaption>
+          </figure>
+          </div>
+          <button class="cs-strip-btn is-next" aria-label="Scroll right">&#8250;</button>
         </div>
-        <div class="cs-prototype-embed">
-          <iframe style="border:none;" width="100%" height="820" src="https://embed.figma.com/proto/WnDNZFlLCoLhrQKNh6WrQ8/Menstrual-Cycle?node-id=559-355&amp;scaling=scale-down&amp;content-scaling=fixed&amp;page-id=442%3A138&amp;embed-host=share" allowfullscreen title="COROS redesign prototype"></iframe>
+        <p class="cs-strip-hint">Six screens before the app. Click any to read it</p>
+      </div>
+      <div class="cs-alt-copy">
+        <span class="cs-alt-entry-label">01 &middot; Onboarding</span>
+        <div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>My first instinct was to teach everything up front. If hormones reshape training, the app should explain the whole cycle before you start, so I built a heavy educational onboarding: phase by phase, hormone curves, the works.</p></div>
+        <div class="cs-alt-row"><span class="cs-alt-label">Why it lost</span><p>It tested clunky. Nobody wants a biology lecture between turning the feature on and using it, and by the time people reached the dashboard they&rsquo;d forgotten most of it anyway. Education wasn&rsquo;t the mistake. Front-loading it was.</p></div>
+        <div class="cs-alt-row"><span class="cs-alt-label">What replaced it</span><p>Onboarding got cut to what genuinely has to happen first: one idea and two questions. The intro teaches a single principle, &ldquo;work with your body, not against it.&rdquo; Setup asks only for your last period and average cycle length. Everything else moved into the app, surfaced the moment it&rsquo;s useful. The phase insights are the part I&rsquo;m proudest of: each phase explained right where you&rsquo;ll use it, and honest enough to hand authority back to your own body instead of the calendar.</p></div>
+      </div>
+
+      <div class="cs-alt-media is-compare">
+        <div class="cs-compare is-watch" style="--compare-max:340px" data-compare="50" data-compare-label="Drag to compare the dotted watch face against the arc I kept">
+          <img src="images/coros/screens/new%20screens/trimmed/cycle%20day%20final.png" alt="The watch face I kept: four solid arc segments with a marker for today" loading="lazy">
+          <div class="cs-compare-over">
+            <img src="images/coros/screens/new%20screens/trimmed/cycle%20day%20test.png" alt="The rejected watch face: 28 same-size circles round the bezel, one per cycle day, with the fertile days hatched" loading="lazy">
+          </div>
+          <span class="cs-compare-tag is-left">Cut</span>
+          <span class="cs-compare-tag is-right">Kept</span>
+          <div class="cs-compare-bar"></div>
+          <div class="cs-compare-grip"></div>
         </div>
+        <p class="cs-compare-hint">Drag to compare</p>
+      </div>
+      <div class="cs-alt-copy">
+        <span class="cs-alt-entry-label">02 &middot; The Watch Face</span>
+        <div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>A ring of 28 circles instead of a solid arc, one per day of the cycle. Colour carried the phase and fill carried time: solid for the days you&rsquo;d already lived, outlines for the ones still ahead, and a small marker on today. The fertile days got a hatched treatment so they read like a cell instead of a swatch. That was the part I liked.</p></div>
+        <div class="cs-alt-row"><span class="cs-alt-label">Why it lost</span><p>Though it was a fun idea, it did not survive the size of the screen. At watch scale the circles collapsed into noise, the boundaries between phases stopped being readable at a glance, and the palette I needed to tell four phases apart in dots failed visibility and color contrast standards. A watch face gets about a second of attention. Anything that needs a second look has already failed.</p></div>
+        <div class="cs-alt-row"><span class="cs-alt-label">What replaced it</span><p>The continuous arc: four solid segments, one marker for today, and the phase named in plain text underneath. It gives up the hatching, and it passes contrast and stays legible in daylight on a wrist, which is the only condition this screen is ever read in.</p></div>
       </div>
     </div>
 
     <!-- ===== Final Designs : two columns drifting at different rates, nothing fades ===== -->
     <div class="cs-section cs-fd">
-      <div class="cs-fd-media">
+      <div class="cs-fd-media" data-drift="170" data-drift-anchor="sticky">
         <div class="pcol" data-rate="0.30">
           <div class="tiltwrap" data-fig="Iphone%2014%20-%201" style="--l:8.734%;--t:0.206%;--w:37.698%;--dx:0%;--dy:0%"><img class="tilt" src="images/coros/screens/new%20screens/Iphone%2014%20-%201.png" alt="Redesigned Today screen with the Phase Insights card" loading="lazy"></div>
           <div class="tiltwrap" data-fig="Iphone%2014%20-%203" style="--l:9.577%;--t:46.507%;--w:37.728%;--dx:0%;--dy:0%"><img class="tilt" src="images/coros/screens/new%20screens/Iphone%2014%20-%203.png" alt="Phase Insights for ovulation, with guidance for mood, sleep, training and food" loading="lazy"></div>
-          <div class="tiltwrap" data-fig="Group%201" style="--l:54.838%;--t:77.049%;--w:23.263%;--dx:0%;--dy:0%"><img class="tilt" src="images/coros/screens/new%20screens/trimmed/Group%201.png" alt="COROS watch confirming a period logged from the wrist" loading="lazy"></div>
+          <div class="tiltwrap" data-fig="Group%201" style="--l:54.838%;--t:77.049%;--w:23.263%;--dx:0%;--dy:0%;--rot:-6deg"><img class="tilt" src="images/coros/screens/new%20screens/trimmed/period%20logged.png" alt="COROS watch confirming a period logged from the wrist" loading="lazy"></div>
         </div>
         <div class="pcol" data-rate="-0.30">
-          <div class="tiltwrap" data-fig="Iphone%2014%20-%202" style="--l:53.311%;--t:9.673%;--w:37.733%;--dx:0%;--dy:0%"><img class="tilt" src="images/coros/screens/new%20screens/Iphone%2014%20-%202.png" alt="Cycle Insights: current day, predictions and the hormone curve" loading="lazy"></div>
-          <div class="tiltwrap" data-fig="Group%202" style="--l:67.483%;--t:59.306%;--w:30.402%;--dx:0%;--dy:0%"><img class="tilt" src="images/coros/screens/new%20screens/trimmed/Group%202.png" alt="COROS watch face showing cycle day 27 and the luteal phase" loading="lazy"></div>
+          <div class="tiltwrap" data-fig="Iphone%2014%20-%202" style="--l:53.311%;--t:0.206%;--w:37.733%;--dx:0%;--dy:0%"><img class="tilt" src="images/coros/screens/new%20screens/Iphone%2014%20-%202.png" alt="Cycle Insights: current day, predictions and the hormone curve" loading="lazy"></div>
+          <div class="tiltwrap" data-fig="Group%202" style="--l:67.483%;--t:59.306%;--w:30.402%;--dx:0%;--dy:0%;--rot:5deg"><img class="tilt" src="images/coros/screens/new%20screens/trimmed/cycle%20day.png" alt="COROS watch face showing cycle day 27 and the luteal phase" loading="lazy"></div>
         </div>
       </div>
 
@@ -134,6 +193,22 @@
       </div>
     </div>
 
+    <!-- ===== Try It Out : copy on one side, live prototype on the other ===== -->
+    <div class="cs-section cs-split center">
+      <div>
+        <div class="cs-section-label">Try It Out</div>
+        <p>The onboarding I landed on, plus the phase insights it hands off to. Two questions, one principle, and then out of your way.</p>
+        <p>Start on the intro, set your last period and cycle length, and the dashboard opens on the phase you&rsquo;re actually in. The Phase Insights card is where the whole argument lives, so tap through to a phase and read what it tells you to do today.</p>
+      </div>
+      <div class="cs-prototype-embed">
+        <div class="cs-proto-frame">
+        <iframe style="border:none;" width="100%" height="820" src="https://embed.figma.com/proto/WnDNZFlLCoLhrQKNh6WrQ8/Menstrual-Cycle?node-id=559-355&amp;scaling=scale-down&amp;content-scaling=fixed&amp;page-id=442%3A138&amp;embed-host=share" allowfullscreen title="COROS redesign prototype"></iframe>
+        <a class="cs-proto-fallback" href="https://www.figma.com/proto/WnDNZFlLCoLhrQKNh6WrQ8/Menstrual-Cycle?node-id=559-355" target="_blank" rel="noopener">Prototype not loading? Open it in Figma &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+
     <div class="cs-section">
       <div class="cs-section-label">Reflection</div>
       <p>I started this project because I care about women&rsquo;s health and believe athletes deserve tools that understand their physiology. When COROS shipped their version mid-project, I got to test my research-driven approach against what a real product team actually built. Humbling and validating at the same time.</p>
@@ -148,94 +223,8 @@
   <a href="mailto:emmamoystner.design@gmail.com">Contact</a>
   <span>&copy; 2026 Emma Moystner</span>
 </footer>
+<script src="assets/case-study.js"></script>
 <script>
-/* ---- photo columns drift at different rates ---- */
-var pcolGroups = [].slice.call(document.querySelectorAll('.cs-collage.old, .cs-fd-media'));
-
-function csDrift(){
-  pcolGroups.forEach(function(group){
-    var r = group.getBoundingClientRect();
-    var t = (window.innerHeight / 2 - (r.top + r.height / 2)) / window.innerHeight;
-    [].slice.call(group.querySelectorAll('.pcol')).forEach(function(c){
-      c.style.transform = 'translateY(' + (t * parseFloat(c.getAttribute('data-rate')) * 170).toFixed(1) + 'px)';
-    });
-  });
-}
-
-var ticking = false;
-function csOnScroll(){
-  if (ticking) return;
-  ticking = true;
-  requestAnimationFrame(function(){ csDrift(); ticking = false; });
-}
-document.addEventListener('scroll', csOnScroll, true);
-window.addEventListener('resize', csOnScroll);
-csDrift();
-
-/* ---- Final Designs: progressive disclosure driven by scroll position ----
-   Titles never move or fade. Only one body is open at a time, chosen by how far
-   through the media canvas you are, so scrolling back up reopens the previous
-   one. Clicking a title pins it open, which is the escape hatch for anyone who
-   scrolls past faster than they can read. */
-(function(){
-  var fd = document.querySelector('.cs-fd');
-  if (!fd) return;
-  var media  = fd.querySelector('.cs-fd-media') || fd;
-  var blocks = [].slice.call(fd.querySelectorAll('.cs-fd-block[data-fd-step]'));
-  if (!blocks.length) return;
-
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var narrow = window.matchMedia('(max-width:1100px)');
-  var pinned = null;
-
-  function mark(el, on){
-    el.classList.toggle('is-open', on);
-    var lab = el.querySelector('.cs-section-label');
-    if (lab) lab.setAttribute('aria-expanded', on ? 'true' : 'false');
-  }
-  function activate(i){ blocks.forEach(function(b, k){ mark(b, k === i); }); }
-  function openAll(){ blocks.forEach(function(b){ mark(b, true); }); }
-
-  function current(){
-    var r = media.getBoundingClientRect();
-    if (!r.height) return 0;
-    /* 0 when the canvas top reaches the middle of the screen, 1 at its bottom */
-    var p = (window.innerHeight * 0.5 - r.top) / r.height;
-    p = Math.max(0, Math.min(0.99999, p));
-    return Math.floor(p * blocks.length);
-  }
-
-  function update(){
-    if (reduce.matches || narrow.matches){ openAll(); return; }
-    activate(pinned === null ? current() : pinned);
-  }
-
-  blocks.forEach(function(b, i){
-    var lab = b.querySelector('.cs-section-label');
-    if (!lab) return;
-    function toggle(){
-      if (narrow.matches || reduce.matches) return;
-      pinned = (pinned === i) ? null : i;   /* click the open one again to hand control back to scroll */
-      update();
-    }
-    lab.addEventListener('click', toggle);
-    lab.addEventListener('keydown', function(e){
-      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
-    });
-  });
-
-  var pending = false;
-  function onScroll(){
-    if (pending) return;
-    pending = true;
-    requestAnimationFrame(function(){ update(); pending = false; });
-  }
-  document.addEventListener('scroll', onScroll, true);
-  window.addEventListener('resize', onScroll);
-  if (narrow.addEventListener) narrow.addEventListener('change', update);
-  update();
-})();
-
 /* ================= Final Designs layout editor =================
    Open coros.html?edit=1 . Drag to move, Shift-drag or scroll to resize.
    Everything is stored as a % of the canvas, so it stays responsive. */
@@ -469,25 +458,6 @@ csDrift();
   });
 })();
 
-/* ---- cursor tilt, lifted from the About hero photo ---- */
-(function(){
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  [].slice.call(document.querySelectorAll('.tiltwrap')).forEach(function(wrap){
-    var img = wrap.querySelector('.tilt');
-    if (!img) return;
-    wrap.addEventListener('mousemove', function(e){
-      var rect = img.getBoundingClientRect();
-      var dx = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
-      var dy = (e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
-      var rotY = Math.max(-5, Math.min(5, dx * 6));
-      var rotX = Math.max(-5, Math.min(5, -dy * 6));
-      img.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
-    });
-    wrap.addEventListener('mouseleave', function(){
-      img.style.transform = 'rotateX(0deg) rotateY(0deg)';
-    });
-  });
-})();
 </script>
 </body>
 </html>

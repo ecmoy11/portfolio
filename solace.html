@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Solace Health · Emma Moystner</title>
+<title>Solace Health &middot; Emma Moystner</title>
 <meta name="description" content="Solace Health. A case study by Emma Moystner.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/case-study.css">
 </head>
 <body>
@@ -23,80 +24,128 @@
     <span></span><span></span><span></span>
   </button>
 </nav>
+<div class="mobile-nav-overlay" id="mobile-nav-overlay">
+  <a href="index.html">Work</a>
+  <a href="playground.html">Play</a>
+  <a href="about.html">About</a>
+  <a href="resume.moystner.pdf" target="_blank">Resume</a>
+</div>
 <div class="case-study-page" id="cs-solace-health">
-  
+
   <div class="cs-header">
     <a href="index.html" class="cs-back">&larr;&nbsp; All work</a>
-    <div class="cs-label">02 · Case Study</div>
+    <div class="cs-label">02 &middot; Case Study</div>
     <h1 class="cs-title">Solace Health</h1>
     <p class="cs-subtitle">Designing the collaboration system, not just the interface. A multi-city expansion framework that makes misalignment visible before it compounds into delays, rework, and launches that miss the market.</p>
     <div class="cs-meta-bar">
       <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Framework Design Lead</span></div>
-      <div class="cs-meta-item"><span class="cs-meta-label">Domain</span><span class="cs-meta-value">Healthcare</span></div>
-      <div class="cs-meta-item"><span class="cs-meta-label">Team</span><span class="cs-meta-value">4 Designers</span></div>
-      <div class="cs-meta-item"><span class="cs-meta-label">Methods</span><span class="cs-meta-value">Systems Design, Process Design</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Type</span><span class="cs-meta-value todo">Fill in</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value todo">Fill in</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Tools</span><span class="cs-meta-value todo">Fill in</span></div>
+      <div class="cs-meta-item half"><span class="cs-meta-label">Methods</span><span class="cs-meta-value">Systems Design, Process Design, Usability Testing</span></div>
+      <div class="cs-meta-item half"><span class="cs-meta-label">Deliverables</span><span class="cs-meta-value">Pre-Kickoff Alignment Call ritual, Launch Readiness Canvas, Decision Context Log, Sprint Ticket Panel prototype</span></div>
     </div>
   </div>
   <div class="cs-body">
     <div class="cs-tldr">
-      <div class="cs-tldr-row"><div class="cs-tldr-label">Problem</div><div class="cs-tldr-text">A women&rsquo;s-health startup expanding across five cities was making product decisions from Austin in isolation. The cost: <strong>6&ndash;8 month launch delays and $1.5M+ in rework</strong>.</div></div>
-      <div class="cs-tldr-row"><div class="cs-tldr-label">Insight</div><div class="cs-tldr-text">Everyone was drowning in communication but <strong>starving for context</strong>. The problem was never too few messages &mdash; it&rsquo;s that none carried the context a decision needed, and decisions kept happening without the people closest to the problem.</div></div>
-      <div class="cs-tldr-row"><div class="cs-tldr-label">Outcome</div><div class="cs-tldr-text">A three-part collaboration system &mdash; a pre-kickoff ritual, a decision-context framework, and a lightweight tool &mdash; that catches misalignment before it compounds. The bet: <strong>psychological safety is designable</strong>, not just aspirational.</div></div>
+      <div class="cs-tldr-row"><div class="cs-tldr-label">Problem</div><div class="cs-tldr-text">A women&rsquo;s-health startup expanding across five cities was making product decisions from Austin in isolation. The cost: <strong>6 to 8 month launch delays and $1.5M+ in rework</strong>.</div></div>
+      <div class="cs-tldr-row"><div class="cs-tldr-label">Insight</div><div class="cs-tldr-text">Everyone was drowning in communication but <strong>starving for context</strong>. The problem was never too few messages. It&rsquo;s that none carried the context a decision needed, and decisions kept happening without the people closest to the problem.</div></div>
+      <div class="cs-tldr-row"><div class="cs-tldr-label">Outcome</div><div class="cs-tldr-text">A three-part collaboration system, a pre-kickoff ritual, a decision-context framework and a lightweight tool, that catches misalignment before it compounds. The bet: <strong>psychological safety is designable</strong>, not just aspirational.</div></div>
     </div>
-
-    <div class="cs-section">
-      <div class="cs-section-label">The Problem</div>
-      <p>Solace Health is a women's healthcare startup expanding from Austin across five cities. Growth exposed a structural problem: every city has different regulations, demographics, and clinical needs, and Austin's core team was making product decisions in isolation.</p>
-      <p>Six months before a new-city launch, three critical breakdowns were already in motion. The PM drafts roadmaps without cross-city input. Engineering hits architectural conflicts mid-sprint. Design discovers city-specific requirements after designs are already approved. The result: <strong>6-8 month launch delays</strong> and <strong>$1.5M+ in wasted labor</strong> on rework alone.</p>
-      <div class="cs-image">
-        <img src="images/solace/problem-timeline.png" alt="Problem timeline showing delays and rework costs" loading="lazy">
-        <div class="cs-image-caption">Breakdowns compound across the launch cycle</div>
+    <!-- ===== beat 2 : the problem. copy pins, media drifts ===== -->
+    <div class="cs-section cs-sticky left-text">
+      <div class="cs-sticky-text">
+        <div class="cs-pin"><div class="cs-pin-inner">
+          <div class="cs-step solo">
+            <div class="cs-section-label">The Problem</div>
+            <p>Solace Health is a women&rsquo;s healthcare startup expanding from Austin across five cities. Growth exposed a structural problem: every city has different regulations, demographics and clinical needs, and Austin&rsquo;s core team was making product decisions in isolation.</p>
+            <p>Six months before a new-city launch, three critical breakdowns were already in motion. The PM drafts roadmaps without cross-city input. Engineering hits architectural conflicts mid-sprint. Design discovers city-specific requirements after designs are already approved.</p>
+            <p>The result: <strong>6 to 8 month launch delays</strong> and <strong>$1.5M+ in wasted labor</strong> on rework alone. None of it was anyone&rsquo;s fault, which is exactly what makes it a structural problem rather than a people problem.</p>
+          </div>
+        </div></div>
       </div>
+      <div class="cs-sticky-media"><div class="cs-collage stack wide" data-drift="170">
+        <div class="pcol" data-rate="0.35">
+          <div class="tiltwrap"><img class="tilt" src="images/solace/problem-timeline.png" alt="Problem timeline showing how delays and rework costs compound" loading="lazy"></div>
+        </div>
+        <div class="pcol" data-rate="-0.35">
+          <div class="tiltwrap"><img class="tilt" src="images/solace/breakdown-patterns.png" alt="The recurring breakdown patterns across product, engineering and design" loading="lazy"></div>
+        </div>
+      </div></div>
     </div>
-
     <div class="cs-section">
       <div class="cs-section-label">What 13 Interviews Surfaced</div>
-      <p>We surveyed and interviewed 13 engineers, product managers, and designers across companies including Meta, Netflix, TikTok, Indeed, Walmart, and SAP. The synthesis surfaced a core tension that reframed the whole brief: everyone is drowning in communication but starving for context. The problem was never too few messages; it was that none of them carried the context a decision actually needed.</p>
-      <div class="quote-block">When feasibility, direction, and customer value are answered early, all three disciplines are energized. But clarity is never spoon-fed; alignment has to be forged collectively.</div>
-      <p>Decisions happen without the people closest to the problem. The tools aren't broken; the gaps between them are. No tool bridged the space between disciplines, forcing teams to rely on meetings and tribal knowledge to stay aligned.</p>
+      <p>We surveyed and interviewed 13 engineers, product managers and designers across companies including Meta, Netflix, TikTok, Indeed, Walmart and SAP. The synthesis surfaced a core tension that reframed the whole brief: everyone is drowning in communication but starving for context. The problem was never too few messages; it was that none of them carried the context a decision actually needed.</p>
+      <div class="quote-block">When feasibility, direction and customer value are answered early, all three disciplines are energized. But clarity is never spoon-fed; alignment has to be forged collectively.</div>
+      <p>Decisions happen without the people closest to the problem. The tools aren&rsquo;t broken; the gaps between them are. No tool bridged the space between disciplines, forcing teams to rely on meetings and tribal knowledge to stay aligned.</p>
     </div>
-
     <div class="cs-section">
       <div class="cs-section-label">The Design: A Three-Part System</div>
-      <p>The solution isn't a single artifact; it's a system. Three interconnected layers, each reinforcing the others.</p>
-      <p><strong>1. The Ritual: Pre-Kickoff Alignment Call.</strong> A structured 60-minute call before every city launch. The local PM presents first: local context, clinical constraints, demographic insights. Austin listens before it leads. A weekly async City Pulse Check keeps alignment alive between calls.</p>
-      <p><strong>2. The Framework: Launch Readiness Canvas + Decision Context Log.</strong> Every section has a named owner. The Canvas captures decisions and local adaptations during weekly calls. The Decision Context Log persists across launches, the next city inherits it. It's required reading before any new PRD.</p>
-      <div class="cs-image">
-        <img src="images/solace/launch-readiness-canvas.png" alt="Launch Readiness Canvas and Sprint Ticket Panel" loading="lazy">
-        <div class="cs-image-caption">Launch Readiness Canvas with Sprint Ticket Panel</div>
+      <p>The solution isn&rsquo;t a single artifact; it&rsquo;s a system. Three interconnected layers, each one covering a gap the other two leave open. A ritual creates the moment alignment can happen, a framework gives that moment somewhere to live, and a tool keeps it alive between moments.</p>
+      <div class="cs-image-wide"><img src="images/solace/framework-canvas-detail.png" alt="Detail of the Launch Readiness Canvas and how ownership is assigned" loading="lazy">
+        <div class="cs-image-caption">Every section of the canvas has a named owner</div></div>
+      <p>Teri is a designer on the Chicago expansion. Early in the sprint she catches an assumption that doesn&rsquo;t hold in this market. Under the old way, that flag gets buried, the sprint ships, and the wrong assumption goes with it. Here, she flags it where she&rsquo;s already working, it surfaces in the weekly async, and if it needs a decision it routes to the alignment call. The decision lands in the Decision Context Log, documented rather than lost. The log feeds the retro. The learnings shape the next cycle.</p>
+      <p>That&rsquo;s the point. Not to eliminate the hard decisions, but to <span class="highlight">catch misalignment early</span>, before it compounds.</p>
+    </div>
+    <!-- ===== beat 5 : the first pass, the iteration that lost ===== -->
+    <!-- ===== beat 5 : the first pass, the iteration that lost ===== -->
+    <div class="cs-alt">
+      <div class="cs-section-label">The First Pass</div>
+      <div class="cs-alt-media">
+        <img src="images/solace/tool-v1-jira.png" alt="Version 1 of the Sprint Ticket Panel in Jira" loading="lazy">
+        <img src="images/solace/tool-v1-slack.png" alt="Version 1 of the Sprint Ticket Panel in Slack" loading="lazy">
+        <span class="cs-alt-tag">Cut</span>
       </div>
-      <p><strong>3. The Tool: Sprint Ticket Panel.</strong> A lightweight plugin that connects across Jira, Slack, and Notion. In Jira, a side panel provides sprint visibility with active blockers and team health. In Slack, it generates dedicated channels for each ticket. An AI Health Summary suggests actions without deciding for you.</p>
-      <div class="cs-image-grid cols-2">
-        <img src="images/solace/tool-v2-jira.png" alt="Sprint Ticket Panel in Jira" loading="lazy">
-        <img src="images/solace/tool-v2-slack.png" alt="Sprint Ticket Panel in Slack" loading="lazy">
+      <div class="cs-alt-copy" data-placeholder="Placeholder &middot; replace">
+        <div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. The v1 tool screens are already in the media slot, so this is the section about what that version did and why you built it that way.</p></div>
+        <div class="cs-alt-row"><span class="cs-alt-label">Why it lost</span><p>Sed do eiusmod tempor incididunt ut labore. Your note about auto-scheduling being universally rejected in testing belongs here, in your words.</p></div>
+        <div class="cs-alt-row"><span class="cs-alt-label">What replaced it</span><p>Ut enim ad minim veniam, quis nostrud exercitation. What the v2 panel does instead, and why that posture change was the real fix.</p></div>
       </div>
     </div>
+    <!-- ===== beat 6 : final designs. columns drift, copy pins ===== -->
+    <div class="cs-section cs-fd">
+      <div class="cs-fd-media flow" data-drift="150">
+        <div class="pcol" data-rate="0.30">
+          <div class="tiltwrap"><img class="tilt" src="images/solace/launch-readiness-canvas.png" alt="Launch Readiness Canvas with Sprint Ticket Panel" loading="lazy"></div>
+          <div class="tiltwrap"><img class="tilt" src="images/solace/tool-v2-jira.png" alt="Sprint Ticket Panel in Jira" loading="lazy"></div>
+        </div>
+        <div class="pcol" data-rate="-0.30">
+          <div class="tiltwrap"><img class="tilt" src="images/solace/tool-v2-slack.png" alt="Sprint Ticket Panel in Slack" loading="lazy"></div>
+          <div class="tiltwrap"><img class="tilt" src="images/solace/tool-v2-ai-summary.png" alt="AI Health Summary offering two recommendations" loading="lazy"></div>
+          <div class="tiltwrap"><img class="tilt" src="images/solace/tool-v2-pulse.png" alt="Weekly async City Pulse Check" loading="lazy"></div>
+        </div>
+      </div>
 
+      <div class="cs-fd-text">
+        <div class="cs-fd-block">
+          <div class="cs-section-label tight">Final Designs</div>
+          <p>Three layers, each one reinforcing the others. The ritual makes alignment happen, the framework gives it a place to live, and the tool keeps it visible between the moments when everyone is in the same room.</p>
+        </div>
+        <div class="cs-fd-block" data-fd-step="1">
+          <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-1">01 &middot; The Ritual: Pre-Kickoff Alignment Call</div>
+          <div class="cs-fd-body" id="fd-body-1"><div><p>A structured 60-minute call before every city launch. The local PM presents first: local context, clinical constraints, demographic insights. Austin listens before it leads, and that ordering is the whole design. A weekly async City Pulse Check keeps alignment alive between calls.</p></div></div>
+        </div>
+        <div class="cs-fd-block" data-fd-step="2">
+          <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-2">02 &middot; The Framework: Canvas and Decision Log</div>
+          <div class="cs-fd-body" id="fd-body-2"><div><p>Every section of the Launch Readiness Canvas has a named owner. The Canvas captures decisions and local adaptations during weekly calls. The Decision Context Log persists across launches so the next city inherits it, and it&rsquo;s required reading before any new PRD.</p></div></div>
+        </div>
+        <div class="cs-fd-block" data-fd-step="3">
+          <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-3">03 &middot; The Tool: Sprint Ticket Panel</div>
+          <div class="cs-fd-body" id="fd-body-3"><div><p>A lightweight plugin connecting Jira, Slack and Notion. In Jira, a side panel gives sprint visibility with active blockers and team health. In Slack, it generates a dedicated channel per ticket. The AI Health Summary suggests actions without deciding for you.</p></div></div>
+        </div>
+      </div>
+    </div>
     <div class="cs-section">
-      <div class="cs-section-label">How the System Works</div>
-      <p>Teri is a designer on the Chicago expansion. Early in sprint, she catches an assumption that doesn't hold in this market. Under the old way, that flag gets buried. The sprint ships. The wrong assumption goes with it.</p>
-      <p>But here's what happens instead: Teri flags it right where she's working. Her flag surfaces in the weekly async. The right people see it. If it needs a decision, it routes to the alignment call. The decision lands in the Decision Context Log, documented, not lost. The log feeds the retro. The learnings shape the next cycle.</p>
-      <p>That's the point. Not to eliminate the hard decisions, but to <span class="highlight">catch misalignment early</span>, before it compounds.</p>
+      <div class="cs-section-label">What Testing Changed</div>
+      <p>Two rounds of usability testing with EPD professionals. The most telling finding was about posture rather than features: people didn&rsquo;t reject AI assistance, they rejected AI that didn&rsquo;t give them a reason to trust it. Every change we made afterwards moved the system from acting to proposing.</p>
+      <div class="cs-image-wide"><img src="images/solace/usability-testing.png" alt="Usability testing synthesis across two rounds" loading="lazy">
+        <div class="cs-image-caption">Where the two rounds of testing pushed the system</div></div>
     </div>
-
-    <div class="cs-section">
-      <div class="cs-section-label">Testing & Iteration</div>
-      <p>We conducted two rounds of usability testing with EPD professionals. The most telling finding: people didn't reject AI assistance; they rejected AI that didn't give them a reason to trust it. Auto-scheduling was universally rejected. We moved the AI Health Summary into the Sprint Ticket Panel and provided two recommendation options instead of one, giving users agency.</p>
-      <div class="cs-image">
-        <img src="images/solace/solace-card-v2.png" alt="Sprint Ticket Panel: Solace Health" loading="lazy">
-      </div>
-    </div>
-
     <div class="cs-section">
       <div class="cs-section-label">Reflection</div>
-      <p>This project changed how I think about what designers can, and should, design. Working at the systems level meant designing rituals, decision flows, and knowledge structures instead of screens.</p>
-      <p>The core insight: <strong>psychological safety isn't just a value to aspire to — it's designable.</strong> The Pre-Kickoff Alignment Call puts the local PM first so Austin listens before it leads. The City Pulse Check makes flags visible without requiring someone to interrupt a meeting. The Decision Context Log means a designer can see what happened to her flag without asking. These are psychological safety mechanisms, not just principles.</p>
-      <p>Team culture isn't a soft problem separate from the "real" design work. It <em>is</em> the design work.</p>
+      <p>This project changed how I think about what designers can, and should, design. Working at the systems level meant designing rituals, decision flows and knowledge structures instead of screens.</p>
+      <p>The core insight: <strong>psychological safety isn&rsquo;t just a value to aspire to, it&rsquo;s designable.</strong> The Pre-Kickoff Alignment Call puts the local PM first so Austin listens before it leads. The City Pulse Check makes flags visible without requiring someone to interrupt a meeting. The Decision Context Log means a designer can see what happened to her flag without asking. These are psychological safety mechanisms, not just principles.</p>
+      <p>Team culture isn&rsquo;t a soft problem separate from the real design work. It <em>is</em> the design work.</p>
     </div>
   </div>
 </div>
@@ -104,5 +153,6 @@
   <a href="mailto:emmamoystner.design@gmail.com">Contact</a>
   <span>&copy; 2026 Emma Moystner</span>
 </footer>
+<script src="assets/case-study.js"></script>
 </body>
 </html>
