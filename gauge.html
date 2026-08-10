@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/case-study.css">
+<link rel="stylesheet" href="assets/case-study-rail.css">
 </head>
 <body>
 <nav class="nav" id="nav">
@@ -30,112 +31,146 @@
   <a href="about.html">About</a>
   <a href="resume.moystner.pdf" target="_blank">Resume</a>
 </div>
-<div class="case-study-page" id="cs-gauge">
+<div class="csr-shell" id="cs-gauge-rail">
 
-  <div class="cs-header">
-    <a href="index.html" class="cs-back">&larr;&nbsp; All work</a>
-    <div class="cs-label">05 &middot; Case Study</div>
-    <h1 class="cs-title">Gauge</h1>
-    <p class="cs-subtitle">I saw a broken process at my own company (paper forms, lost mileage reports, frustrated employees) and designed the fix.</p>
-    <div class="cs-meta-bar">
-      <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Product Designer</span></div>
-      <div class="cs-meta-item"><span class="cs-meta-label">Type</span><span class="cs-meta-value">Self-Initiated / Internal Tool</span></div>
-      <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value todo">Fill in</span></div>
-      <div class="cs-meta-item"><span class="cs-meta-label">Tools</span><span class="cs-meta-value todo">Fill in</span></div>
-      <div class="cs-meta-item half"><span class="cs-meta-label">Methods</span><span class="cs-meta-value">Employee Interviews, Workflow Shadowing, Usability Testing</span></div>
-      <div class="cs-meta-item half"><span class="cs-meta-label">Deliverables</span><span class="cs-meta-value">Three design iterations, QR inspection flow, mileage logging prototype, admin reporting view</span></div>
-    </div>
-  </div>
-  <div class="cs-body">
-    <div class="cs-tldr">
-      <div class="cs-tldr-row"><div class="cs-tldr-label">Problem</div><div class="cs-tldr-text">At my own company, vehicle reporting was paper forms, lost mileage reports and email chains. Employees couldn&rsquo;t reliably log trips; admins drowned in reconstructing them.</div></div>
-      <div class="cs-tldr-row"><div class="cs-tldr-label">Insight</div><div class="cs-tldr-text">The real product wasn&rsquo;t a digital form, it was removing the friction paper hid. <strong>Trip mileage is the number billed to projects</strong>, so it had to be the hero, and the flow had to feel faster than paper rather than heavier.</div></div>
-      <div class="cs-tldr-row"><div class="cs-tldr-label">Outcome</div><div class="cs-tldr-text">Gauge: QR-scan inspections, one-tap logging, auto-billed mileage. It stayed a prototype for organizational rather than design reasons, which taught me that <strong>getting a solution adopted is its own design challenge</strong>.</div></div>
-    </div>
-    <!-- ===== beat 2 : the problem. copy pins, media drifts ===== -->
-    <div class="cs-section cs-sticky left-text">
-      <div class="cs-sticky-text">
-        <div class="cs-pin"><div class="cs-pin-inner">
-          <div class="cs-step solo">
-            <div class="cs-section-label">What Was Actually Broken</div>
-            <p>As a Project Administrator at Barge Design Solutions, an architecture and engineering firm, I had a front-row seat to how broken the company&rsquo;s vehicle reporting process was. I interviewed employees and shadowed the existing workflow, and the same three failures kept surfacing, each one a place where paper quietly cost the company time or trust.</p>
-            <p><strong>Inconsistent mileage tracking.</strong> Reporting was manual and error-prone, which led to delays and distrust in reimbursements. Employees wanted to track mileage as they drove rather than reconstructing trips from memory a week later.</p>
-            <p><strong>No real inspection process.</strong> Pre-trip inspections were either skipped or done on paper that got lost. There was no consistent record of vehicle condition, which is a liability gap before it&rsquo;s a design one.</p>
-            <p><strong>Manual admin work.</strong> Admins relied on paper reports and email chains. Without centralized digital tracking, pulling a report or verifying trip data was tedious and unreliable.</p>
-          </div>
-        </div></div>
-      </div>
-      <div class="cs-sticky-media"><div class="cs-collage stack wide" data-drift="170">
-        <div class="pcol" data-rate="0.35">
-          <div class="tiltwrap"><img class="tilt" src="images/gauge/bargeapptrans.png" alt="Gauge app screens, the vehicle reporting flow" loading="lazy"></div>
-        </div>
-      </div></div>
-    </div>
-    <div class="cs-section">
-      <div class="cs-section-label">The Number That Mattered</div>
-      <p>Shadowing the workflow changed what I thought I was designing. The paper form wasn&rsquo;t the problem; it was a symptom. The thing the company actually ran on was trip mileage, because that number gets billed to a project, and every failure in the process traced back to mileage being captured late, captured wrong, or not captured at all.</p>
-      <p>That reframed the brief. A digital version of the same form would have been a faithful translation of a broken process. What the design had to do was make the billed number the easiest thing in the app to produce, and make everything around it cheap enough that people would still bother.</p>
-    </div>
-    <!-- ===== beat 5 : the first pass, the iteration that lost ===== -->
-    <div class="cs-alt">
-      <div class="cs-section-label">The First Pass</div>
-      <div class="cs-alt-media">
-        <div class="cs-alt-media empty">Version 2 screens need exporting<br>from the original file</div>
-        <span class="cs-alt-tag">Cut</span>
-      </div>
-      <div class="cs-alt-copy">
-        <div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>Version 2. A new safety compliance requirement meant adding vehicle inspections to the flow, and I accommodated it the obvious way: more screens, more steps, a full inspection sequence sitting between the employee and the thing they actually came to do.</p></div>
-        <div class="cs-alt-row"><span class="cs-alt-label">Why it lost</span><p>It worked and people hated it. Users could complete the process, but testing surfaced real frustration: the app now felt heavier than the paper version it was replacing. Compliance had been satisfied and the product had been made worse, which is the trade I should have caught before building it.</p></div>
-        <div class="cs-alt-row"><span class="cs-alt-label">What replaced it</span><p>Version 3 stripped it back. QR scanning auto-fills the vehicle so manual entry disappears, the inspection checklist collapses into a single tappable screen with flagging, and trip mileage moves to the front as the hero number. Fewer screens, and micro-interactions that make the flow feel fast rather than bureaucratic.</p></div>
-      </div>
-    </div>
-    <!-- ===== beat 6 : final designs. columns drift, copy pins ===== -->
-    <div class="cs-section cs-fd">
-      <div class="cs-fd-media flow wide" data-drift="150">
-        <div class="pcol" data-rate="0.30">
-          <div class="tiltwrap"><img class="tilt" src="images/gauge/bargeapp.png" alt="Gauge screens, version 3" loading="lazy"></div>
-        </div>
-        <div class="pcol" data-rate="-0.30">
-          <div class="cs-alt-media empty">More version 3 screens<br>to export</div>
-        </div>
-      </div>
+    <aside class="csr-rail">
+      <a href="index.html" class="csr-back">&larr;&nbsp; All work</a>
+      <div class="csr-eyebrow" style="margin-bottom:10px">05 · Case Study</div>
+      <div class="csr-railtitle">Gauge</div>
+      <nav class="csr-jump" id="csr-jump">
+        <a href="#tldr">TLDR;</a>
+        <a href="#what-was-actually-broken">What Was Actually Broken</a>
+        <a href="#the-number-that-mattered">The Number That Mattered</a>
+        <a href="#the-first-pass">The First Pass</a>
+        <a href="#final-designs">Final Designs</a>
+        <a href="#what-testing-changed">What Testing Changed</a>
+        <a href="#reflection">Reflection</a>
+      </nav>
+    </aside>
 
-      <div class="cs-fd-text">
-        <div class="cs-fd-block">
-          <div class="cs-section-label tight">Final Designs</div>
-          <p>Version 3 is built around one rule: every interaction either produces the billed number or gets out of its way.</p>
-        </div>
-        <div class="cs-fd-block" data-fd-step="1">
-          <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-1">01 &middot; Scan Instead of Type</div>
-          <div class="cs-fd-body" id="fd-body-1"><div><p>QR code scanning auto-fills the vehicle information, so the employee never types a plate number or an odometer reading from memory. It removes the single largest source of bad data in the old process and it makes starting a report take about two seconds.</p></div></div>
-        </div>
-        <div class="cs-fd-block" data-fd-step="2">
-          <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-2">02 &middot; Mileage as the Hero</div>
-          <div class="cs-fd-body" id="fd-body-2"><div><p>Trip mileage is the number billed to projects, so it sits front and center with a Billed to project badge attached. Surfacing it gave employees confidence their travel costs were being attributed correctly, which was as much a trust problem as an accuracy one.</p></div></div>
-        </div>
-        <div class="cs-fd-block" data-fd-step="3">
-          <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-3">03 &middot; One Screen for Inspection</div>
-          <div class="cs-fd-body" id="fd-body-3"><div><p>The compliance checklist became a single tappable screen with flag capability rather than a sequence. Same coverage, a fraction of the friction, and flagging a problem is now faster than ignoring it was on paper.</p></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="cs-section">
-      <div class="cs-section-label">What Testing Changed</div>
-      <p><strong>Submission without struggle.</strong> Every tester submitted a report unassisted. The digital process was immediately faster and less error-prone than paper.</p>
-      <p><strong>QR scan equals instant confidence.</strong> Auto-filling vehicle details removed the friction point users complained about most, and it changed their posture toward the whole app.</p>
-      <p><strong>Mileage billing clarity.</strong> The hero number plus the Billed to project badge was the detail testers mentioned unprompted. It answered a question the old process left open.</p>
-    </div>
-    <div class="cs-section">
-      <div class="cs-section-label">Reflection</div>
-      <p>Gauge stayed a prototype. Leadership was excited about it, but internal politics made implementation difficult. That tension taught me something important: solving the design problem is only half the work. <span class="highlight">Navigating organizational dynamics to get solutions adopted is its own design challenge.</span></p>
-      <p>This project also shows something I value. I don&rsquo;t wait for a brief. I identified a broken process in my own workplace and designed the fix. That instinct, seeing systems that could work better and doing something about it, is what drew me to interaction design.</p>
-    </div>
-  </div>
+    <main class="csr-content cs-body" style="margin:0;padding:0;">
+
+      <!-- ---------- TLDR ---------- -->
+      <section class="csr-sec" id="tldr" data-csr-section>
+        <div class="csr-eyebrow">TLDR;</div>
+        <h2 class="csr-display">Overview</h2>
+        <p class="csr-lede">I saw a broken process at my own company (paper forms, lost mileage reports, frustrated employees) and designed the fix.</p>
+
+          <div class="cs-tldr"><div class="cs-tldr-row"><div class="cs-tldr-label">Problem</div><div class="cs-tldr-text">At my own company, vehicle reporting was paper forms, lost mileage reports and email chains. Employees couldn’t reliably log trips; admins drowned in reconstructing them.</div></div>
+<div class="cs-tldr-row"><div class="cs-tldr-label">Insight</div><div class="cs-tldr-text">The real product wasn’t a digital form, it was removing the friction paper hid. <strong>Trip mileage is the number billed to projects</strong>, so it had to be the hero, and the flow had to feel faster than paper rather than heavier.</div></div>
+<div class="cs-tldr-row"><div class="cs-tldr-label">Outcome</div><div class="cs-tldr-text">Gauge: QR-scan inspections, one-tap logging, auto-billed mileage. It stayed a prototype for organizational rather than design reasons, which taught me that <strong>getting a solution adopted is its own design challenge</strong>.</div></div></div>
+
+        <dl class="csr-meta">
+            <div><dt>Role</dt><dd>Product Designer</dd></div>
+            <div><dt>Type</dt><dd>Self-Initiated / Internal Tool</dd></div>
+            <div><dt>Duration</dt><dd>Fill in</dd></div>
+            <div><dt>Tools</dt><dd>Fill in</dd></div>
+            <div class="half"><dt>Methods</dt><dd>Employee Interviews, Workflow Shadowing, Usability Testing</dd></div>
+            <div class="half"><dt>Deliverables</dt><dd>Three design iterations, QR inspection flow, mileage logging prototype, admin reporting view</dd></div>
+          </dl>
+      </section>
+
+      <!-- ---------- WHAT WAS ACTUALLY BROKEN ---------- -->
+      <section class="csr-sec cs-sticky left-text" id="what-was-actually-broken" data-csr-section>
+        <div class="csr-eyebrow">What Was Actually Broken</div>
+        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
+        <div class="cs-sticky-text">
+<div class="cs-pin"><div class="cs-pin-inner">
+<div class="cs-step solo">
+
+<p>As a Project Administrator at Barge Design Solutions, an architecture and engineering firm, I had a front-row seat to how broken the company’s vehicle reporting process was. I interviewed employees and shadowed the existing workflow, and the same three failures kept surfacing, each one a place where paper quietly cost the company time or trust.</p>
+<p><strong>Inconsistent mileage tracking.</strong> Reporting was manual and error-prone, which led to delays and distrust in reimbursements. Employees wanted to track mileage as they drove rather than reconstructing trips from memory a week later.</p>
+<p><strong>No real inspection process.</strong> Pre-trip inspections were either skipped or done on paper that got lost. There was no consistent record of vehicle condition, which is a liability gap before it’s a design one.</p>
+<p><strong>Manual admin work.</strong> Admins relied on paper reports and email chains. Without centralized digital tracking, pulling a report or verifying trip data was tedious and unreliable.</p>
 </div>
+</div></div>
+</div>
+<div class="cs-sticky-media"><div class="cs-collage stack wide" data-drift="170">
+<div class="pcol" data-rate="0.35">
+<div class="tiltwrap"><img alt="Gauge app screens, the vehicle reporting flow" class="tilt" loading="lazy" src="images/gauge/bargeapptrans.png"/></div>
+</div>
+</div></div>
+      </section>
+
+      <!-- ---------- THE NUMBER THAT MATTERED ---------- -->
+      <section class="csr-sec" id="the-number-that-mattered" data-csr-section>
+        <div class="csr-eyebrow">The Number That Mattered</div>
+        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
+        <p>Shadowing the workflow changed what I thought I was designing. The paper form wasn’t the problem; it was a symptom. The thing the company actually ran on was trip mileage, because that number gets billed to a project, and every failure in the process traced back to mileage being captured late, captured wrong, or not captured at all.</p>
+<p>That reframed the brief. A digital version of the same form would have been a faithful translation of a broken process. What the design had to do was make the billed number the easiest thing in the app to produce, and make everything around it cheap enough that people would still bother.</p>
+      </section>
+
+      <!-- ---------- THE FIRST PASS ---------- -->
+      <section class="csr-sec cs-alt" id="the-first-pass" data-csr-section>
+        <div class="csr-eyebrow">The First Pass</div>
+        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
+        <div class="cs-alt-media">
+<div class="cs-alt-media empty">Version 2 screens need exporting<br/>from the original file</div>
+<span class="cs-alt-tag">Cut</span>
+</div>
+<div class="cs-alt-copy">
+<div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>Version 2. A new safety compliance requirement meant adding vehicle inspections to the flow, and I accommodated it the obvious way: more screens, more steps, a full inspection sequence sitting between the employee and the thing they actually came to do.</p></div>
+<div class="cs-alt-row"><span class="cs-alt-label">Why it lost</span><p>It worked and people hated it. Users could complete the process, but testing surfaced real frustration: the app now felt heavier than the paper version it was replacing. Compliance had been satisfied and the product had been made worse, which is the trade I should have caught before building it.</p></div>
+<div class="cs-alt-row"><span class="cs-alt-label">What replaced it</span><p>Version 3 stripped it back. QR scanning auto-fills the vehicle so manual entry disappears, the inspection checklist collapses into a single tappable screen with flagging, and trip mileage moves to the front as the hero number. Fewer screens, and micro-interactions that make the flow feel fast rather than bureaucratic.</p></div>
+</div>
+      </section>
+
+      <!-- ---------- FINAL DESIGNS ---------- -->
+      <section class="csr-sec cs-fd" id="final-designs" data-csr-section>
+        <div class="csr-eyebrow">Final Designs</div>
+        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
+        <div class="cs-fd-media flow wide" data-drift="150">
+<div class="pcol" data-rate="0.30">
+<div class="tiltwrap"><img alt="Gauge screens, version 3" class="tilt" loading="lazy" src="images/gauge/bargeapp.png"/></div>
+</div>
+<div class="pcol" data-rate="-0.30">
+<div class="cs-alt-media empty">More version 3 screens<br/>to export</div>
+</div>
+</div>
+<div class="cs-fd-text">
+<div class="cs-fd-block">
+
+<p>Version 3 is built around one rule: every interaction either produces the billed number or gets out of its way.</p>
+</div>
+<div class="cs-fd-block" data-fd-step="1">
+<div aria-controls="fd-body-1" aria-expanded="false" class="cs-section-label tight" role="button" tabindex="0">01 · Scan Instead of Type</div>
+<div class="cs-fd-body" id="fd-body-1"><div><p>QR code scanning auto-fills the vehicle information, so the employee never types a plate number or an odometer reading from memory. It removes the single largest source of bad data in the old process and it makes starting a report take about two seconds.</p></div></div>
+</div>
+<div class="cs-fd-block" data-fd-step="2">
+<div aria-controls="fd-body-2" aria-expanded="false" class="cs-section-label tight" role="button" tabindex="0">02 · Mileage as the Hero</div>
+<div class="cs-fd-body" id="fd-body-2"><div><p>Trip mileage is the number billed to projects, so it sits front and center with a Billed to project badge attached. Surfacing it gave employees confidence their travel costs were being attributed correctly, which was as much a trust problem as an accuracy one.</p></div></div>
+</div>
+<div class="cs-fd-block" data-fd-step="3">
+<div aria-controls="fd-body-3" aria-expanded="false" class="cs-section-label tight" role="button" tabindex="0">03 · One Screen for Inspection</div>
+<div class="cs-fd-body" id="fd-body-3"><div><p>The compliance checklist became a single tappable screen with flag capability rather than a sequence. Same coverage, a fraction of the friction, and flagging a problem is now faster than ignoring it was on paper.</p></div></div>
+</div>
+</div>
+      </section>
+
+      <!-- ---------- WHAT TESTING CHANGED ---------- -->
+      <section class="csr-sec" id="what-testing-changed" data-csr-section>
+        <div class="csr-eyebrow">What Testing Changed</div>
+        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
+        <p><strong>Submission without struggle.</strong> Every tester submitted a report unassisted. The digital process was immediately faster and less error-prone than paper.</p>
+<p><strong>QR scan equals instant confidence.</strong> Auto-filling vehicle details removed the friction point users complained about most, and it changed their posture toward the whole app.</p>
+<p><strong>Mileage billing clarity.</strong> The hero number plus the Billed to project badge was the detail testers mentioned unprompted. It answered a question the old process left open.</p>
+      </section>
+
+      <!-- ---------- REFLECTION ---------- -->
+      <section class="csr-sec" id="reflection" data-csr-section>
+        <div class="csr-eyebrow">Reflection</div>
+        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
+        <p>Gauge stayed a prototype. Leadership was excited about it, but internal politics made implementation difficult. That tension taught me something important: solving the design problem is only half the work. <span class="highlight">Navigating organizational dynamics to get solutions adopted is its own design challenge.</span></p>
+<p>This project also shows something I value. I don’t wait for a brief. I identified a broken process in my own workplace and designed the fix. That instinct, seeing systems that could work better and doing something about it, is what drew me to interaction design.</p>
+      </section>
+
+    </main>
+  </div>
 <footer class="footer">
   <a href="mailto:emmamoystner.design@gmail.com">Contact</a>
   <span>&copy; 2026 Emma Moystner</span>
 </footer>
 <script src="assets/case-study.js"></script>
+<script src="assets/case-study-rail.js"></script>
 </body>
 </html>
