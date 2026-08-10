@@ -13,12 +13,26 @@
 </head>
 <body>
 <nav class="nav" id="nav">
-  <span class="nav-logo">Emma Moystner</span>
+  <a href="index.html" class="nav-logo">Emma Moystner</a>
   <div class="nav-right">
     <a href="index.html">Work</a>
     <a href="playground.html">Play</a>
     <a href="about.html">About</a>
     <a href="resume.moystner.pdf" target="_blank">Resume</a>
+    <div class="nav-connect-wrap">
+      <a href="#" class="nav-cta" id="connect-toggle" onclick="toggleConnectDropdown(event)">Connect</a>
+      <div class="connect-dropdown" id="connect-dropdown">
+        <a href="mailto:emmamoystner.design@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
+          Email me
+        </a>
+        <div class="connect-dropdown-divider"></div>
+        <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
   </div>
   <button class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -29,6 +43,10 @@
   <a href="playground.html">Play</a>
   <a href="about.html">About</a>
   <a href="resume.moystner.pdf" target="_blank">Resume</a>
+  <div class="mobile-connect-links">
+    <a href="mailto:emmamoystner.design@gmail.com">Email</a>
+    <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
+  </div>
 </div>
 <div class="case-study-page" id="cs-coros">
   

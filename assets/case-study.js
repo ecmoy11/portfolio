@@ -354,3 +354,19 @@
   bindFilmstrips();
   frame();
 })();
+
+/* ---------------------------------------------------------------------
+   Connect dropdown. The nav markup calls toggleConnectDropdown() inline,
+   the same way the hamburger calls toggleMobileMenu(), so it has to hang
+   off window. index.html has its own copy; this is the case-study one.
+   --------------------------------------------------------------------- */
+window.toggleConnectDropdown = function (e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  var dropdown = document.getElementById('connect-dropdown');
+  if (dropdown) dropdown.classList.toggle('open');
+};
+
+document.addEventListener('click', function (e) {
+  var dropdown = document.getElementById('connect-dropdown');
+  if (dropdown && !e.target.closest('.nav-connect-wrap')) dropdown.classList.remove('open');
+});

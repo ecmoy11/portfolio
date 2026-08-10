@@ -1676,6 +1676,15 @@ a { color: inherit; text-decoration: none; }
 
 /* full site nav on standalone case study pages (the logo waits on a GSAP intro that only runs on index) */
 .nav-logo{opacity:1 !important;}
+/* index.html fades BOTH halves of the nav in with GSAP, so the base rules start
+   .nav-logo AND .nav-right at opacity:0. That intro never runs on a standalone
+   case study page. Only the logo was being forced back, which is why the
+   wordmark showed and Work/Play/About/Resume did not. */
+.nav-right{opacity:1 !important;}
+/* the wordmark is an <a> now, so it needs the link reset */
+.nav-logo{text-decoration:none;}
+a.nav-logo{transition:color .3s ease;}
+a.nav-logo:hover{color:var(--orange);}
 .cs-back{display:none;}
 
 /* ---- label variant that hugs the copy under it (rule spans its own column only) ---- */
@@ -2171,3 +2180,44 @@ body.cs-lightbox-open{overflow:hidden;}
   text-transform:uppercase;color:var(--text-muted);text-decoration:none;
   border-bottom:1px solid var(--divider);padding-bottom:2px;}
 .cs-proto-fallback:hover{color:var(--orange,#E15304);border-bottom-color:currentColor;}
+
+
+/* =====================================================================
+   SITE FOOTER  (the bare "Contact / (c) 2026" one)
+   ---------------------------------------------------------------------
+   This had NO css anywhere in the repo, so it rendered at browser-default
+   16px Inter, flush to the left edge, no rule and no padding. It read as
+   leftover markup rather than a footer. Now it is a colophon: small mono
+   caps under a hairline, centred, with the copyright set quieter than the
+   Contact link so the eye lands on the one thing that is clickable.
+   NOTE: about.html / playground.html carry a different, richer .footer
+   (tagline + columns) with their own styles. This block only ships in
+   case-study.css and index.html, which is where the bare footer lives.
+   ===================================================================== */
+.footer{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:20px;
+  padding:72px 48px 52px;
+  margin-top:80px;
+  border-top:1px solid var(--divider);
+  font-family:var(--font-mono);
+  font-size:9.5px;
+  font-weight:400;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  line-height:1;
+}
+.footer a{color:var(--text-muted);text-decoration:none;transition:color .3s ease;}
+.footer a:hover{color:var(--orange);}
+.footer span{position:relative;color:var(--text-muted);opacity:.5;}
+.footer span::before{
+  content:'';position:absolute;left:-11px;top:50%;
+  width:3px;height:3px;border-radius:50%;
+  background:currentColor;transform:translateY(-50%);
+}
+@media (max-width:768px){
+  .footer{padding:52px 24px 40px;margin-top:56px;gap:16px;font-size:9px;letter-spacing:0.18em;}
+  .footer span::before{left:-9px;}
+}

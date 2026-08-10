@@ -1658,13 +1658,29 @@ a { color: inherit; text-decoration: none; }
   .cs-body { padding: 40px 24px 80px; }
   .cs-nav { left: 24px; top: 16px; }
 }
+
+/* ===== SITE FOOTER (bare Contact / copyright variant) =====
+   Kept in sync with the same block in assets/case-study.css. */
+.footer{display:flex;align-items:center;justify-content:center;gap:20px;
+  padding:72px 48px 52px;margin-top:80px;border-top:1px solid var(--divider);
+  font-family:var(--font-mono);font-size:9.5px;font-weight:400;
+  letter-spacing:0.22em;text-transform:uppercase;line-height:1;}
+.footer a{color:var(--text-muted);text-decoration:none;transition:color .3s ease;}
+.footer a:hover{color:var(--orange);}
+.footer span{position:relative;color:var(--text-muted);opacity:.5;}
+.footer span::before{content:'';position:absolute;left:-11px;top:50%;width:3px;height:3px;
+  border-radius:50%;background:currentColor;transform:translateY(-50%);}
+@media (max-width:768px){
+  .footer{padding:52px 24px 40px;margin-top:56px;gap:16px;font-size:9px;letter-spacing:0.18em;}
+  .footer span::before{left:-9px;}
+}
 </style>
 </head>
 <body>
 
 <!-- ======== NAV ======== -->
 <nav class="nav" id="nav">
-  <span class="nav-logo">Emma Moystner</span>
+  <a href="index.html" class="nav-logo">Emma Moystner</a>
   <div class="nav-right">
     <a href="index.html">Work</a>
     <a href="playground.html">Play</a>
