@@ -73,7 +73,7 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
 /* ---------- full-bleed hero ---------- */
 .csr-hero{
   margin-top:76px;padding:96px 40px 88px;
-  background:#EADFD6 url('images/coros/hero-pixel.webp') center top / cover no-repeat;
+  background:#EADFD6 url('../images/shared/mosaic-desert.webp') center top / cover no-repeat;
   display:flex;justify-content:center;align-items:flex-end;gap:clamp(16px,4vw,64px);
 }
 .csr-hero img{
@@ -339,3 +339,16 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
 .csr-content .cs-step:last-child{margin-bottom:0;}
 .csr-content .cs-alt{grid-template-columns:1fr;gap:30px;}
 .csr-content .cs-image-wide{width:100% !important;margin-left:0 !important;}
+
+/* ---------- photo-only hero band ----------
+   For case studies with no screens to stand on the photo (capstone has no
+   images at all, gauge only has two). Shorter than the full hero, because
+   nothing sits on it. */
+.csr-hero--photo{
+  display:block;padding:0;
+  height:clamp(240px,32vh,400px);
+  /* a 280px band off 'center top' is all sky; bias down so the mesa
+     line and the warm rock band are what you actually see */
+  background-position:center 62% !important;
+}
+@media (max-width:760px){ .csr-hero--photo{height:200px;} }
