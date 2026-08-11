@@ -340,6 +340,25 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
 .csr-content .cs-alt{grid-template-columns:1fr;gap:30px;}
 .csr-content .cs-image-wide{width:100% !important;margin-left:0 !important;}
 
+/* ---------- First Pass: artefact beside its reasoning ----------
+   The old 1240px canvas ran .cs-alt as media-left / copy-right, and that
+   pairing is the point of the section: you read "why it lost" next to the
+   thing that lost. The rule above flattens it because 780px cannot carry two
+   columns. So take the bleed back, and only claim the second column once the
+   copy track is still a reading measure (~480px+) — hence the 1200px gate
+   rather than applying this at every width. */
+@media (min-width:1200px){
+  .csr-content .cs-alt{
+    grid-template-columns:minmax(0,0.8fr) minmax(0,1fr);
+    gap:72px 52px;
+    width:calc(100% + var(--csr-bleed));
+  }
+  /* the other five pages put the section eyebrow INSIDE .cs-alt as a first
+     child. Harmless in one column; in two it eats the first cell and knocks
+     every media/copy pair out of alignment. */
+  .csr-content .cs-alt > .csr-eyebrow{grid-column:1 / -1;margin-bottom:-40px;}
+}
+
 /* ---------- photo-only hero band ----------
    For case studies with no screens to stand on the photo (capstone has no
    images at all, gauge only has two). Shorter than the full hero, because
