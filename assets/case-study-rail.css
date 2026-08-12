@@ -516,3 +516,16 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
    .two is for a paired before/after, like the two testing rounds. */
 .csr-content .csr-cols.two{grid-template-columns:repeat(2,minmax(0,1fr));gap:44px;}
 @media (max-width:820px){.csr-content .csr-cols.two{grid-template-columns:1fr;gap:28px;}}
+
+/* ---------- hero variant: one full-bleed cover render ----------
+   Airline 2036 opens on a wide scene, not a row of phone screens. The base
+   hero caps every img at 250px and stands it on the mosaic band, which is
+   exactly wrong for a single cinematic frame. The composition also runs the
+   full height of the frame (news panel left, reroute card top to bottom on
+   the right), so any band crop cuts the argument out of the picture. Let it
+   be tall; cap and centre it so it doesn't balloon on a wide display. */
+.csr-hero--cover{display:block;padding:0;background:#171512;}
+.csr-hero--cover img{
+  width:100%;max-width:1600px;height:auto;display:block;
+  margin:0 auto;filter:none;
+}
