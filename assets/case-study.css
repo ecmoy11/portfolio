@@ -2149,6 +2149,21 @@ body.fd-edit .cs-fd-media .tiltwrap::after{content:attr(data-readout);position:a
 .cs-lightbox-btn.is-next{right:8px;top:50%;transform:translateY(-50%);}
 body.cs-lightbox-open{overflow:hidden;}
 
+/* scroll-to-read mode, opt in per figure with data-zoom-fit="width".
+   For a board taller than the viewport, max-height:100vh shrinks it to roughly
+   what it already was on the page, so "see it closer" delivers nothing. This
+   fills the width and scrolls instead. Chrome ignores bottom padding on a
+   scrolling flex container, hence the ::after spacer. */
+.cs-lightbox.is-fitwidth{align-items:flex-start;overflow-y:auto;overflow-x:hidden;}
+.cs-lightbox.is-fitwidth img{max-width:100%;width:100%;max-height:none;height:auto;
+  border-radius:6px;box-shadow:none;}
+.cs-lightbox.is-fitwidth::after{content:'';flex:0 0 44px;}
+/* the chrome has to stay put while the board scrolls under it */
+.cs-lightbox.is-fitwidth .cs-lightbox-cap,
+.cs-lightbox.is-fitwidth .cs-lightbox-btn{position:fixed;}
+.cs-lightbox.is-fitwidth .cs-lightbox-cap{
+  bottom:0;padding:12px 0 14px;background:linear-gradient(to top,rgba(20,19,17,.92),rgba(20,19,17,0));}
+
 @media (max-width:1024px){
   .cs-frame{width:var(--frame-w-sm,164px);}
   .cs-strip-btn{display:none;}

@@ -291,6 +291,12 @@
         lbVid.play().catch(function(){});
       }
       else { lbImg.src = m.currentSrc || m.src; lbImg.alt = m.alt || ''; }
+      /* a tall research board is unreadable when it's fit to viewport height,
+         which defeats the point of opening it. data-zoom-fit="width" fills the
+         viewport width instead and lets the lightbox scroll. show() runs on
+         every open and every prev/next, so the toggle is always correct. */
+      lb.classList.toggle('is-fitwidth', group[idx].getAttribute('data-zoom-fit') === 'width');
+      lb.scrollTop = 0;
       var cap = group[idx].getAttribute('data-caption') || m.getAttribute('alt') ||
                 m.getAttribute('aria-label') || '';
       lbCap.textContent = group.length > 1 ? cap + '   ' + (idx + 1) + ' / ' + group.length : cap;
