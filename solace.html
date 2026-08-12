@@ -49,10 +49,18 @@
     <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
   </div>
 </div>
-<div class="csr-hero">
-    <img src="images/solace/launch-readiness-canvas.png" alt="Launch Readiness Canvas with Sprint Ticket Panel">
-    <img src="images/solace/tool-v2-jira.png" alt="Sprint Ticket Panel in Jira">
-    <img src="images/solace/tool-v2-slack.png" alt="Sprint Ticket Panel in Slack">
+<div class="csr-hero csr-hero--system">
+    <div class="csr-hero-in">
+      <div class="csr-hero-card">
+        <div class="csr-hero-eyebrow">A three-part system</div>
+        <div class="csr-layers">
+          <div class="csr-layer"><span class="n">01</span><span class="t">The Ritual</span><span class="d">Pre-kickoff alignment call</span></div>
+          <div class="csr-layer"><span class="n">02</span><span class="t">The Framework</span><span class="d">Canvas and decision log</span></div>
+          <div class="csr-layer"><span class="n">03</span><span class="t">The Tool</span><span class="d">Sprint ticket panel</span></div>
+        </div>
+      </div>
+      <img src="images/solace/solace-hero.png" alt="The Sprint Ticket Panel running alongside Slack: a blocked ticket, a City Pulse Check post, and the sprint&rsquo;s rituals listed down the right">
+    </div>
   </div>
 
   <div class="csr-shell" id="cs-solace-health-rail">
@@ -64,12 +72,11 @@
       <nav class="csr-jump" id="csr-jump">
         <a href="#tldr">TLDR;</a>
         <a href="#the-problem">The Problem</a>
-        <a href="#what-13-interviews-surfaced">What 13 Interviews Surfaced</a>
+        <a href="#user-research">User Research</a>
         <a href="#the-design-a-three-part-system">The Design: A Three-Part System</a>
-        <a href="#the-first-pass">The First Pass</a>
-        <a href="#final-designs">Final Designs</a>
         <a href="#what-testing-changed">What Testing Changed</a>
-        <a href="#reflection">Reflection</a>
+        <a href="#measuring-success">Measuring Success</a>
+        <a href="#learnings">Learnings</a>
       </nav>
     </aside>
 
@@ -79,26 +86,35 @@
       <section class="csr-sec" id="tldr" data-csr-section>
         <div class="csr-eyebrow">TLDR;</div>
         <h2 class="csr-display">Overview</h2>
-        <p class="csr-lede">Designing the collaboration system, not just the interface. A multi-city expansion framework that makes misalignment visible before it compounds into delays, rework, and launches that miss the market.</p>
-
-          <div class="cs-tldr"><div class="cs-tldr-row"><div class="cs-tldr-label">Problem</div><div class="cs-tldr-text">A women’s-health startup expanding across five cities was making product decisions from Austin in isolation. The cost: <strong>6 to 8 month launch delays and $1.5M+ in rework</strong>.</div></div>
-<div class="cs-tldr-row"><div class="cs-tldr-label">Insight</div><div class="cs-tldr-text">Everyone was drowning in communication but <strong>starving for context</strong>. The problem was never too few messages. It’s that none carried the context a decision needed, and decisions kept happening without the people closest to the problem.</div></div>
-<div class="cs-tldr-row"><div class="cs-tldr-label">Outcome</div><div class="cs-tldr-text">A three-part collaboration system, a pre-kickoff ritual, a decision-context framework and a lightweight tool, that catches misalignment before it compounds. The bet: <strong>psychological safety is designable</strong>, not just aspirational.</div></div></div>
+        <p>Twelve weeks on one question: how do engineering, product and design actually work together, and where does that break down? We invented a company to test it on. Solace Health is a women&rsquo;s healthcare startup expanding out of Austin, and every new city multiplies the number of handoffs between the three disciplines. What we designed isn&rsquo;t the product. It&rsquo;s the collaboration system around it, from pre-kickoff to launch: the ritual that starts a city, the framework that holds the decisions, and the tool that keeps all three disciplines looking at the same thing in between.</p>
 
         <dl class="csr-meta">
             <div><dt>Role</dt><dd>Framework Design Lead</dd></div>
-            <div><dt>Type</dt><dd>Fill in</dd></div>
-            <div><dt>Duration</dt><dd>Fill in</dd></div>
-            <div><dt>Tools</dt><dd>Fill in</dd></div>
+            <div><dt>Type</dt><dd>Group Project</dd></div>
+            <div><dt>Duration</dt><dd>12 Weeks</dd></div>
+            <div><dt>Tools</dt><dd>Figma</dd></div>
             <div class="half"><dt>Methods</dt><dd>Systems Design, Process Design, Usability Testing</dd></div>
             <div class="half"><dt>Deliverables</dt><dd>Pre-Kickoff Alignment Call ritual, Launch Readiness Canvas, Decision Context Log, Sprint Ticket Panel prototype</dd></div>
           </dl>
       </section>
 
       <!-- ---------- THE PROBLEM ---------- -->
-      <section class="csr-sec cs-sticky left-text" id="the-problem" data-csr-section>
-        <div class="csr-eyebrow">The Problem</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
+      <section class="csr-sec" id="the-problem" data-csr-section>
+        <div class="csr-problem">
+          <div class="csr-eyebrow">The Problem</div>
+          <h2 class="csr-stmt">Invent a company, then design how its engineers, PMs and designers work together.</h2>
+          <p class="csr-q">Where does a launch actually break, and can you catch it before it costs anyone six months?</p>
+        </div>
+
+        <p>That was the brief, and the open middle of it was the point.</p>
+
+        <div class="quote-block">Pick an industry, product and company that doesn&rsquo;t exist. Create a new collaboration workflow, from pre-project kickoff to final delivery, plus the rituals and a tool, to help EPD teams collaborate more effectively.</div>
+
+        <p>The one hard constraint was that the problem couldn&rsquo;t be invented alongside the company. We had to go to working engineers, product managers and designers, ask what breaks in their collaboration, and design against what they told us. It ends in a working prototype and usability results rather than a diagram of a process.</p>
+
+        <p>We picked women&rsquo;s healthcare and built Solace Health around the hardest version of the problem we could give ourselves: not one team in one office, but a team scaling into cities it has never worked in.</p>
+
+        <div class="cs-section cs-sticky left-text">
         <div class="cs-sticky-text">
 <div class="cs-pin"><div class="cs-pin-inner">
 <div class="cs-step solo">
@@ -111,19 +127,18 @@
 </div>
 <div class="cs-sticky-media"><div class="cs-collage stack wide" data-drift="170">
 <div class="pcol" data-rate="0.35">
-<div class="tiltwrap"><img alt="Problem timeline showing how delays and rework costs compound" class="tilt" loading="lazy" src="images/solace/problem-timeline.png"/></div>
+<div class="tiltwrap" data-zoom data-caption="Where the six months before a city launch actually go"><img alt="Problem diagnosis: where the six months before a city launch go, and what the misalignment costs" loading="lazy" src="images/solace/problemdiagnosis.png"/></div>
 </div>
-<div class="pcol" data-rate="-0.35">
-<div class="tiltwrap"><img alt="The recurring breakdown patterns across product, engineering and design" class="tilt" loading="lazy" src="images/solace/breakdown-patterns.png"/></div>
-</div>
+<p class="csr-zoomhint">Click to see it closer</p>
 </div></div>
+        </div>
       </section>
 
-      <!-- ---------- WHAT 13 INTERVIEWS SURFACED ---------- -->
-      <section class="csr-sec" id="what-13-interviews-surfaced" data-csr-section>
-        <div class="csr-eyebrow">What 13 Interviews Surfaced</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <p>We surveyed and interviewed 13 engineers, product managers and designers across companies including Meta, Netflix, TikTok, Indeed, Walmart and SAP. The synthesis surfaced a core tension that reframed the whole brief: everyone is drowning in communication but starving for context. The problem was never too few messages; it was that none of them carried the context a decision actually needed.</p>
+      <!-- ---------- USER RESEARCH ---------- -->
+      <section class="csr-sec" id="user-research" data-csr-section>
+        <div class="csr-eyebrow">User Research</div>
+        <h2 class="csr-display">The problem was never too few messages.</h2>
+        <p>We surveyed and interviewed 13 engineers, product managers and designers across companies including Meta, Netflix, TikTok, Indeed, Walmart and SAP. The synthesis surfaced a tension that reframed the whole brief: everyone is drowning in communication and starving for context. Not one of those messages carried what a decision actually needed.</p>
 <div class="quote-block">When feasibility, direction and customer value are answered early, all three disciplines are energized. But clarity is never spoon-fed; alignment has to be forged collectively.</div>
 <p>Decisions happen without the people closest to the problem. The tools aren’t broken; the gaps between them are. No tool bridged the space between disciplines, forcing teams to rely on meetings and tribal knowledge to stay aligned.</p>
       </section>
@@ -131,50 +146,20 @@
       <!-- ---------- THE DESIGN: A THREE-PART SYSTEM ---------- -->
       <section class="csr-sec" id="the-design-a-three-part-system" data-csr-section>
         <div class="csr-eyebrow">The Design: A Three-Part System</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <p>The solution isn’t a single artifact; it’s a system. Three interconnected layers, each one covering a gap the other two leave open. A ritual creates the moment alignment can happen, a framework gives that moment somewhere to live, and a tool keeps it alive between moments.</p>
-<div class="cs-image-wide"><img alt="Detail of the Launch Readiness Canvas and how ownership is assigned" loading="lazy" src="images/solace/framework-canvas-detail.png"/>
-<div class="cs-image-caption">Every section of the canvas has a named owner</div></div>
-<p>Teri is a designer on the Chicago expansion. Early in the sprint she catches an assumption that doesn’t hold in this market. Under the old way, that flag gets buried, the sprint ships, and the wrong assumption goes with it. Here, she flags it where she’s already working, it surfaces in the weekly async, and if it needs a decision it routes to the alignment call. The decision lands in the Decision Context Log, documented rather than lost. The log feeds the retro. The learnings shape the next cycle.</p>
-<p>That’s the point. Not to eliminate the hard decisions, but to <span class="highlight">catch misalignment early</span>, before it compounds.</p>
-      </section>
+        <h2 class="csr-display">Alignment needs a moment, a place to live, and something keeping it alive in between.</h2>
+        <p>Teri is a designer on the Chicago expansion. Early in the sprint she catches an assumption that doesn&rsquo;t hold in this market. Under the old way, that flag gets buried, the sprint ships, and the wrong assumption goes with it. Here, she flags it where she&rsquo;s already working, it surfaces in the weekly async, and if it needs a decision it routes to the alignment call. The decision lands in the Decision Context Log, documented rather than lost. The log feeds the retro. The learnings shape the next cycle.</p>
+        <p>That&rsquo;s the point. Not to eliminate the hard decisions, but to <span class="highlight">catch misalignment early</span>, before it compounds.</p>
 
-      <!-- ---------- THE FIRST PASS ---------- -->
-      <section class="csr-sec cs-alt" id="the-first-pass" data-csr-section>
-        <div class="csr-eyebrow">The First Pass</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <div class="cs-alt-media">
-<img alt="Version 1 of the Sprint Ticket Panel in Jira" loading="lazy" src="images/solace/tool-v1-jira.png"/>
-<img alt="Version 1 of the Sprint Ticket Panel in Slack" loading="lazy" src="images/solace/tool-v1-slack.png"/>
-<span class="cs-alt-tag">Cut</span>
+        <div class="cs-section cs-fd">
+        <div class="cs-fd-media flow is-single" data-drift="150">
+<div class="pcol" data-rate="0.18">
+<div class="tiltwrap" data-zoom data-zoom-group="design" data-caption="01 &middot; The Ritual: Pre-Kickoff Alignment Call"><img alt="The Pre-Kickoff Alignment Call: a seven-part agenda, with purpose, psychological safety and shared identity called out beneath it" loading="lazy" src="images/solace/ritual.png"/></div>
+<div class="tiltwrap is-portrait" data-zoom data-zoom-group="design" data-caption="02 &middot; The Framework: Launch Readiness Canvas"><img alt="The Launch Readiness Canvas, every section with a named owner" loading="lazy" src="images/solace/launch.readiness.canvas.png"/></div>
+<div class="tiltwrap" data-zoom data-zoom-group="design" data-caption="03 &middot; The Tool: Sprint Ticket Panel"><video src="images/solace/solace.livedemo.mp4" width="1838" height="1208" autoplay muted loop playsinline preload="metadata" aria-label="Live demo of the Sprint Ticket Panel running in Jira and Slack"></video></div>
 </div>
-<div class="cs-alt-copy" data-placeholder="Placeholder · replace">
-<div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. The v1 tool screens are already in the media slot, so this is the section about what that version did and why you built it that way.</p></div>
-<div class="cs-alt-row"><span class="cs-alt-label">Why it lost</span><p>Sed do eiusmod tempor incididunt ut labore. Your note about auto-scheduling being universally rejected in testing belongs here, in your words.</p></div>
-<div class="cs-alt-row"><span class="cs-alt-label">What replaced it</span><p>Ut enim ad minim veniam, quis nostrud exercitation. What the v2 panel does instead, and why that posture change was the real fix.</p></div>
-</div>
-      </section>
-
-      <!-- ---------- FINAL DESIGNS ---------- -->
-      <section class="csr-sec cs-fd" id="final-designs" data-csr-section>
-        <div class="csr-eyebrow">Final Designs</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <div class="cs-fd-media flow" data-drift="150">
-<div class="pcol" data-rate="0.30">
-<div class="tiltwrap"><img alt="Launch Readiness Canvas with Sprint Ticket Panel" class="tilt" loading="lazy" src="images/solace/launch-readiness-canvas.png"/></div>
-<div class="tiltwrap"><img alt="Sprint Ticket Panel in Jira" class="tilt" loading="lazy" src="images/solace/tool-v2-jira.png"/></div>
-</div>
-<div class="pcol" data-rate="-0.30">
-<div class="tiltwrap"><img alt="Sprint Ticket Panel in Slack" class="tilt" loading="lazy" src="images/solace/tool-v2-slack.png"/></div>
-<div class="tiltwrap"><img alt="AI Health Summary offering two recommendations" class="tilt" loading="lazy" src="images/solace/tool-v2-ai-summary.png"/></div>
-<div class="tiltwrap"><img alt="Weekly async City Pulse Check" class="tilt" loading="lazy" src="images/solace/tool-v2-pulse.png"/></div>
-</div>
+<p class="csr-zoomhint">Click any of these to see it closer</p>
 </div>
 <div class="cs-fd-text">
-<div class="cs-fd-block">
-
-<p>Three layers, each one reinforcing the others. The ritual makes alignment happen, the framework gives it a place to live, and the tool keeps it visible between the moments when everyone is in the same room.</p>
-</div>
 <div class="cs-fd-block" data-fd-step="1">
 <div aria-controls="fd-body-1" aria-expanded="false" class="cs-section-label tight" role="button" tabindex="0">01 · The Ritual: Pre-Kickoff Alignment Call</div>
 <div class="cs-fd-body" id="fd-body-1"><div><p>A structured 60-minute call before every city launch. The local PM presents first: local context, clinical constraints, demographic insights. Austin listens before it leads, and that ordering is the whole design. A weekly async City Pulse Check keeps alignment alive between calls.</p></div></div>
@@ -188,24 +173,100 @@
 <div class="cs-fd-body" id="fd-body-3"><div><p>A lightweight plugin connecting Jira, Slack and Notion. In Jira, a side panel gives sprint visibility with active blockers and team health. In Slack, it generates a dedicated channel per ticket. The AI Health Summary suggests actions without deciding for you.</p></div></div>
 </div>
 </div>
+        </div>
       </section>
 
       <!-- ---------- WHAT TESTING CHANGED ---------- -->
       <section class="csr-sec" id="what-testing-changed" data-csr-section>
         <div class="csr-eyebrow">What Testing Changed</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <p>Two rounds of usability testing with EPD professionals. The most telling finding was about posture rather than features: people didn’t reject AI assistance, they rejected AI that didn’t give them a reason to trust it. Every change we made afterwards moved the system from acting to proposing.</p>
-<div class="cs-image-wide"><img alt="Usability testing synthesis across two rounds" loading="lazy" src="images/solace/usability-testing.png"/>
-<div class="cs-image-caption">Where the two rounds of testing pushed the system</div></div>
+        <h2 class="csr-display">People didn&rsquo;t reject AI assistance. They rejected AI that gave them no reason to trust it.</h2>
+        <p>Two rounds of usability testing with EPD professionals. The most telling finding was about posture rather than features, and every change we made afterwards moved the system from acting to proposing.</p>
+
+        <div class="csr-cols two">
+          <div>
+            <span class="csr-num">Round 01</span>
+            <h4>What we found</h4>
+            <ul>
+              <li>Isolated signal labels didn&rsquo;t communicate meaning</li>
+              <li>AI recommendations felt coercive and forced</li>
+              <li>Time zone and availability weren&rsquo;t considered in automated scheduling</li>
+              <li>Auto-scheduling was universally rejected</li>
+            </ul>
+          </div>
+          <div>
+            <span class="csr-num">Round 02</span>
+            <h4>What we changed</h4>
+            <ul>
+              <li>Moved the AI Health Summary into the Sprint Ticket Panel instead of a dedicated pop-up</li>
+              <li>Two recommendation options instead of one, so the choice stays with the person</li>
+              <li>Consolidated the interface and cut what wasn&rsquo;t earning its place</li>
+              <li>Added dark mode</li>
+            </ul>
+          </div>
+        </div>
       </section>
 
-      <!-- ---------- REFLECTION ---------- -->
-      <section class="csr-sec" id="reflection" data-csr-section>
-        <div class="csr-eyebrow">Reflection</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
+      <!-- ---------- MEASURING SUCCESS ---------- -->
+      <section class="csr-sec" id="measuring-success" data-csr-section>
+        <div class="csr-eyebrow">Measuring Success</div>
+        <h2 class="csr-display">How we&rsquo;d know it worked.</h2>
+        <p>None of this ran for real, so these are the signals we would watch rather than results we got. Three of them, ordered from the easiest to count to the hardest.</p>
+
+        <div class="csr-cols">
+          <div>
+            <span class="csr-num">01</span>
+            <h4>Speed</h4>
+            <ul>
+              <li>Rework time cut in half by the third city launch</li>
+              <li>40% less wasted labor by the fifth city</li>
+              <li>Teams shipping at the same pace regardless of city</li>
+            </ul>
+          </div>
+          <div>
+            <span class="csr-num">02</span>
+            <h4>Credibility</h4>
+            <ul>
+              <li>Every project has named owners before work begins</li>
+              <li>No mid-sprint surprises that send teams back to square one</li>
+              <li>Stakeholders aligned before anything is drafted</li>
+            </ul>
+          </div>
+          <div>
+            <span class="csr-num">03</span>
+            <h4>Belonging</h4>
+            <ul>
+              <li>New city teams raising issues early, not after the fact</li>
+              <li>Local input shapes at least one decision per launch</li>
+              <li>Teams saying &ldquo;we&rdquo; rather than &ldquo;they&rdquo;</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- LEARNINGS ---------- -->
+      <section class="csr-sec" id="learnings" data-csr-section>
+        <div class="csr-eyebrow">Learnings</div>
+        <h2 class="csr-display">What this one changed about how I work</h2>
         <p>This project changed how I think about what designers can, and should, design. Working at the systems level meant designing rituals, decision flows and knowledge structures instead of screens.</p>
-<p>The core insight: <strong>psychological safety isn’t just a value to aspire to, it’s designable.</strong> The Pre-Kickoff Alignment Call puts the local PM first so Austin listens before it leads. The City Pulse Check makes flags visible without requiring someone to interrupt a meeting. The Decision Context Log means a designer can see what happened to her flag without asking. These are psychological safety mechanisms, not just principles.</p>
-<p>Team culture isn’t a soft problem separate from the real design work. It <em>is</em> the design work.</p>
+
+        <div class="csr-learn">
+          <div>
+            <h4>Psychological safety isn&rsquo;t something you hope for</h4>
+            <p>The Pre-Kickoff Alignment Call puts the local PM first so Austin listens before it leads. The City Pulse Check makes flags visible without anyone having to interrupt a meeting. The Decision Context Log means a designer can see what happened to her flag without asking. Mechanisms, not principles.</p>
+          </div>
+          <div>
+            <h4>&ldquo;We&rdquo; instead of &ldquo;they&rdquo; was the metric I cared most about</h4>
+            <p>We measured speed and credibility because they&rsquo;re countable. The signal that actually mattered was whether local teams described the product as theirs. Hardest to measure, most important, and I&rsquo;d still choose it.</p>
+          </div>
+          <div>
+            <h4>Team culture is the design work</h4>
+            <p>How people collaborate, who speaks first, who owns what, where knowledge lives, decides whether the product succeeds more than any interface decision does.</p>
+          </div>
+          <div>
+            <h4>You can design the conditions for trust, not trust itself</h4>
+            <p>Testing kept pointing at agency rather than features. The system had to support a decision without making it, and that shaped the tool more than any requirement did.</p>
+          </div>
+        </div>
       </section>
 
     </main>

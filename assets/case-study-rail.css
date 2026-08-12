@@ -331,6 +331,31 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
   grid-template-columns:1fr !important;gap:34px;
   width:100% !important;margin-left:0 !important;
 }
+/* The 44vh/16vh margins on .cs-collage.stack are COROS-canvas spacing: they
+   exist so a pinned text column has runway to scroll past while the figures
+   drift. Inside the rail the collage is stacked UNDER the copy, so that 44vh
+   is just 440px of dead cream between a paragraph and its own diagram. The
+   .old variant was already scoped above; .stack never was, which left the
+   same hole on all five rollout pages. */
+.csr-content .cs-collage.stack{margin:34px 0 0;}
+/* .cs-fd's figures drift up to ~34px UPWARD as the section crosses the
+   viewport. On COROS the media canvas starts far below the copy so it never
+   collides; on a page where prose runs straight into the finale (solace does
+   now) the top figure rides over the last paragraph. 56px of clearance covers
+   the drift with room to spare. --fd-head-offset does NOT help here: .flow
+   resets .tiltwrap's transform, so that variable is inert in flow layout. */
+.csr-content .cs-fd{margin-top:88px;}
+/* .flow is a two-column drifting grid. .is-single stacks the figures in ONE
+   column instead, for a study whose media pairs 1:1 with the numbered blocks
+   beside it (solace: ritual / canvas / live demo against 01 / 02 / 03). */
+.csr-content .cs-fd-media.flow.is-single{grid-template-columns:1fr;gap:34px;}
+.csr-content .cs-fd-media.flow.is-single .pcol:nth-child(2){padding-top:0;}
+.csr-content .cs-fd-media.flow.is-single video{width:100%;height:auto;display:block;border-radius:6px;}
+/* the canvas is the only portrait artefact in the stack. At full column width
+   it renders 762px tall against the ritual's 319 and the demo's 372, so it
+   reads as the main event when it is really the middle step. Capped on the
+   WRAPPER, not the img, so the zoom hairline tracks the smaller box. */
+.csr-content .cs-fd-media.flow.is-single .tiltwrap.is-portrait{max-width:360px;margin:0 auto;}
 .csr-content .cs-pin{position:static;height:auto;min-height:0;display:block;}
 .csr-content .cs-pin-inner{display:block;width:100%;}
 .csr-content .cs-step{
@@ -339,25 +364,6 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
 .csr-content .cs-step:last-child{margin-bottom:0;}
 .csr-content .cs-alt{grid-template-columns:1fr;gap:30px;}
 .csr-content .cs-image-wide{width:100% !important;margin-left:0 !important;}
-
-/* ---------- First Pass: artefact beside its reasoning ----------
-   The old 1240px canvas ran .cs-alt as media-left / copy-right, and that
-   pairing is the point of the section: you read "why it lost" next to the
-   thing that lost. The rule above flattens it because 780px cannot carry two
-   columns. So take the bleed back, and only claim the second column once the
-   copy track is still a reading measure (~480px+) — hence the 1200px gate
-   rather than applying this at every width. */
-@media (min-width:1200px){
-  .csr-content .cs-alt{
-    grid-template-columns:minmax(0,0.8fr) minmax(0,1fr);
-    gap:72px 52px;
-    width:calc(100% + var(--csr-bleed));
-  }
-  /* the other five pages put the section eyebrow INSIDE .cs-alt as a first
-     child. Harmless in one column; in two it eats the first cell and knocks
-     every media/copy pair out of alignment. */
-  .csr-content .cs-alt > .csr-eyebrow{grid-column:1 / -1;margin-bottom:-40px;}
-}
 
 /* ---------- photo-only hero band ----------
    For case studies with no screens to stand on the photo (capstone has no
@@ -371,3 +377,123 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
   background-position:center 62% !important;
 }
 @media (max-width:760px){ .csr-hero--photo{height:200px;} }
+
+/* ---------- hero variant: a system, not a product ----------
+   Solace's deliverables are a ritual, a framework and a tool, and every piece
+   of art that exists for any of them is a dark screenshot. Three of those on
+   the mosaic band made the page open like a product case study, which is the
+   one thing this project is not. So: the three layers named in type on the
+   left, one machine carrying the artefact on the right.
+
+   The type sits on a solid cream CARD rather than straight on the photo. The
+   sublabels are 0.83rem and photographic texture under type that small is
+   exactly what made the first pass unreadable; a graded scrim was the other
+   candidate and lost. The card also rhymes with the panels in the problem
+   diagnosis diagram further down the page.
+
+   Everything is scoped to .csr-hero--system so the other five heroes, which
+   are still a plain flex row of images, are untouched. */
+.csr-hero--system{
+  display:block;padding:0;position:relative;
+  /* the mosaic stays, biased down off 'center top' so the band under the card
+     is rock rather than sky */
+  background-position:center 40%;
+}
+/* a light wash over the whole band: enough to sit the card down into the photo
+   without flattening it. The card does the real legibility work. */
+.csr-hero--system::before{
+  content:'';position:absolute;inset:0;background:rgba(250,248,245,.30);
+}
+.csr-hero-in{
+  position:relative;z-index:1;
+  max-width:1500px;margin:0 auto;
+  padding:74px clamp(28px,5vw,72px);
+  display:grid;
+  /* .74fr / 1.26fr, with a floor on the type column so the serif never wraps
+     mid-word between 900 and 1100px */
+  grid-template-columns:minmax(250px,.74fr) 1.26fr;
+  gap:clamp(30px,5vw,72px);
+  align-items:center;
+}
+/* the base .csr-hero img rule caps every hero image at 250px. This one is the
+   whole right half, so it has to win: two classes beats one. */
+.csr-hero--system img{
+  width:100%;height:auto;display:block;margin:0;
+  filter:drop-shadow(0 30px 70px rgba(65,0,22,.20));
+}
+.csr-hero-card{
+  background:rgba(250,248,245,.96);
+  border:1px solid rgba(20,19,17,.07);
+  border-radius:8px;
+  padding:34px 32px 36px;
+  box-shadow:0 20px 50px rgba(65,0,22,.10);
+}
+.csr-hero-eyebrow{
+  font-family:var(--font-mono);font-size:.6rem;letter-spacing:.18em;
+  text-transform:uppercase;color:#6B5F53;margin-bottom:26px;
+}
+.csr-layers{display:flex;flex-direction:column;gap:26px;}
+.csr-layer .n{
+  font-family:var(--font-mono);font-size:.6rem;letter-spacing:.2em;
+  font-weight:500;color:var(--orange);display:block;margin-bottom:7px;
+}
+.csr-layer .t{
+  font-family:var(--font-serif);font-size:clamp(1.4rem,2.2vw,1.85rem);
+  line-height:1.12;display:block;color:var(--text-dark);
+}
+/* sentence-case Inter, NOT uppercase mono. Uppercase mono at this size is
+   decoration; it was the actual reason the first version could not be read. */
+.csr-layer .d{
+  font-family:var(--font-primary);font-size:.83rem;font-weight:300;
+  line-height:1.6;color:#4E463D;display:block;margin-top:7px;
+}
+@media (max-width:900px){
+  .csr-hero-in{grid-template-columns:1fr;gap:30px;padding:48px 24px 44px;}
+  .csr-hero-card{padding:28px 24px 30px;}
+  .csr-layers{gap:22px;}
+}
+
+
+/* a zoomable figure: the cursor and the hairline are the only affordance,
+   because these sit in a 567px column where the detail is deliberately not
+   readable in place. See bindZoom() in case-study.js. */
+.csr-content [data-zoom]{cursor:zoom-in;position:relative;}
+.csr-content [data-zoom]::after{
+  content:'';position:absolute;inset:0;border-radius:6px;
+  box-shadow:inset 0 0 0 1px rgba(20,19,17,0);transition:box-shadow .18s ease;
+  pointer-events:none;
+}
+.csr-content [data-zoom]:hover::after,
+.csr-content [data-zoom]:focus-visible::after{box-shadow:inset 0 0 0 1px rgba(225,83,4,.55);}
+.csr-content [data-zoom]:focus-visible{outline:none;}
+
+/* the affordance line for a [data-zoom] figure. Same mono voice as .csr-cap,
+   with the orange dot so it reads as an instruction rather than a caption. */
+.csr-content .csr-zoomhint{
+  font-family:var(--font-mono);font-size:0.55rem;line-height:1.6;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text-muted);margin:14px 0 0;
+  display:flex;align-items:center;gap:8px;
+}
+.csr-content .csr-zoomhint::before{
+  content:'';width:5px;height:5px;border-radius:50%;background:var(--orange);
+  flex:0 0 auto;
+}
+
+/* .csr-cols was written for h4 + a paragraph (COROS's three research findings).
+   Measuring Success needs short parallel items instead, so give the columns a
+   list: no bullets, an orange rule per item, same 0.85rem as .csr-cols p. */
+.csr-content .csr-cols ul{list-style:none;margin:0;padding:0;}
+.csr-content .csr-cols li{
+  font-family:var(--f-body);font-size:0.85rem;line-height:1.75;font-weight:300;
+  color:var(--text-light);position:relative;padding-left:16px;margin-bottom:11px;
+}
+.csr-content .csr-cols li:last-child{margin-bottom:0;}
+.csr-content .csr-cols li::before{
+  content:'';position:absolute;left:0;top:.78em;width:6px;height:1px;
+  background:var(--orange);opacity:.75;
+}
+
+/* .csr-cols is three up by default (COROS's three research findings).
+   .two is for a paired before/after, like the two testing rounds. */
+.csr-content .csr-cols.two{grid-template-columns:repeat(2,minmax(0,1fr));gap:44px;}
+@media (max-width:820px){.csr-content .csr-cols.two{grid-template-columns:1fr;gap:28px;}}

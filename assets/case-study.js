@@ -112,6 +112,7 @@
       '<button class="cs-lightbox-btn is-close" aria-label="Close">&times;</button>' +
       '<button class="cs-lightbox-btn is-prev" aria-label="Previous">&#8249;</button>' +
       '<img alt="">' +
+      '<video controls playsinline loop></video>' +
       '<button class="cs-lightbox-btn is-next" aria-label="Next">&#8250;</button>' +
       '<div class="cs-lightbox-cap"></div>';
     document.body.appendChild(lb);
@@ -249,6 +250,101 @@
     });
   }
 
+  /* ---------------------------------------------------------------
+     8b · Click any [data-zoom] figure to see it full size
+     The filmstrip lightbox above only knows about .cs-filmstrip frames
+     and only handles images. Solace's artefacts are wide diagrams and a
+     screen recording sitting in a 567px media column, deliberately too
+     small to read in place, so they need a way out. Any element carrying
+     data-zoom becomes clickable; siblings inside the same data-zoom-group
+     become the prev/next set. Opt-in, so no existing page changes.
+     --------------------------------------------------------------- */
+  function bindZoom() {
+    var items = [].slice.call(document.querySelectorAll('[data-zoom]'));
+    if (!items.length) return;
+
+    var lb = buildLightbox();
+    var lbImg = lb.querySelector('img');
+    var lbVid = lb.querySelector('video');
+    var lbCap = lb.querySelector('.cs-lightbox-cap');
+    var group = [], idx = 0, lastFocus = null;
+
+    function media(el) { return el.matches('img,video') ? el : el.querySelector('img,video'); }
+
+    function show(i) {
+      if (!group.length) return;
+      idx = (i + group.length) % group.length;
+      var m = media(group[idx]);
+      var isVid = m.tagName === 'VIDEO';
+      lbVid.pause();
+      /* '' would fall back to the stylesheet, which hides the video by
+         default. Set an explicit value on both. */
+      lbImg.style.display = isVid ? 'none' : 'block';
+      lbVid.style.display = isVid ? 'block' : 'none';
+      if (isVid) {
+        /* carry the source's dimensions over so the lightbox reserves the right
+           box before metadata lands; an empty <video> otherwise defaults to
+           300x150 and the frame jumps when it loads */
+        if (m.getAttribute('width')) lbVid.width = m.getAttribute('width');
+        if (m.getAttribute('height')) lbVid.height = m.getAttribute('height');
+        lbVid.src = m.currentSrc || m.src;
+        lbVid.play().catch(function(){});
+      }
+      else { lbImg.src = m.currentSrc || m.src; lbImg.alt = m.alt || ''; }
+      var cap = group[idx].getAttribute('data-caption') || m.getAttribute('alt') ||
+                m.getAttribute('aria-label') || '';
+      lbCap.textContent = group.length > 1 ? cap + '   ' + (idx + 1) + ' / ' + group.length : cap;
+      lb.querySelector('.is-prev').style.display = group.length > 1 ? '' : 'none';
+      lb.querySelector('.is-next').style.display = group.length > 1 ? '' : 'none';
+    }
+    function open(frames, i) {
+      group = frames; lastFocus = document.activeElement;
+      show(i);
+      lb.classList.add('is-open');
+      document.body.classList.add('cs-lightbox-open');
+      lb.querySelector('.is-close').focus();
+    }
+    function close() {
+      lb.classList.remove('is-open');
+      document.body.classList.remove('cs-lightbox-open');
+      lbVid.pause(); lbVid.removeAttribute('src'); lbImg.removeAttribute('src');
+      lbImg.style.display = 'block'; lbVid.style.display = 'none';
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    if (!lb.dataset.zoomBound) {
+      lb.dataset.zoomBound = '1';
+      lb.querySelector('.is-close').addEventListener('click', close);
+      lb.querySelector('.is-prev').addEventListener('click', function (e) { e.stopPropagation(); show(idx - 1); });
+      lb.querySelector('.is-next').addEventListener('click', function (e) { e.stopPropagation(); show(idx + 1); });
+      /* clicking the backdrop closes; clicking the video itself must not, or
+         you cannot touch its controls */
+      lb.addEventListener('click', function (e) { if (e.target === lb || e.target === lbImg) close(); });
+      document.addEventListener('keydown', function (e) {
+        if (!lb.classList.contains('is-open')) return;
+        if (e.key === 'Escape') { e.preventDefault(); close(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); show(idx - 1); }
+        else if (e.key === 'ArrowRight') { e.preventDefault(); show(idx + 1); }
+      });
+    }
+
+    items.forEach(function (el) {
+      if (el.dataset.zoomBound) return;
+      el.dataset.zoomBound = '1';
+      var g = el.getAttribute('data-zoom-group');
+      var frames = g
+        ? [].slice.call(document.querySelectorAll('[data-zoom-group="' + g + '"]'))
+        : [el];
+      el.setAttribute('tabindex', '0');
+      el.setAttribute('role', 'button');
+      if (!el.getAttribute('aria-label')) el.setAttribute('aria-label', 'Enlarge');
+      el.addEventListener('click', function () { open(frames, frames.indexOf(el)); });
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(frames, frames.indexOf(el)); }
+      });
+    });
+  }
+
   function bindTilt() {
     if (reduce.matches) return;
     [].slice.call(document.querySelectorAll('.tiltwrap')).forEach(function (wrap) {
@@ -347,11 +443,12 @@
 
   document.addEventListener('scroll', onScroll, true);
   window.addEventListener('resize', onScroll);
-  window.addEventListener('load', function () { bindTilt(); bindCompare(); bindFilmstrips(); frame(); });
+  window.addEventListener('load', function () { bindTilt(); bindCompare(); bindFilmstrips(); bindZoom(); frame(); });
 
   bindTilt();
   bindCompare();
   bindFilmstrips();
+  bindZoom();
   frame();
 })();
 
