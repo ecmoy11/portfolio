@@ -525,11 +525,20 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
    ONE wide uncropped frame on it. Uncropped matters: the composition runs the
    full height, news panel left and the reroute card top to bottom on the
    right, so a band crop would cut the argument out of the picture. */
+.csr-hero--cover{
+  padding:44px 40px 40px;
+  /* the band is short enough that the default 'center top' is all sky and
+     the red rock never shows. 45% catches the mesa line and lands the frame
+     on the warm band; 62% (the --photo value) is too rock-heavy here and
+     fights the red cancellation card. */
+  background-position:center 45%;
+}
 .csr-hero--cover img{
-  width:min(880px,72vw);max-width:none;height:auto;display:block;
+  width:min(660px,60vw);max-width:none;height:auto;display:block;
   border-radius:10px;
-  filter:drop-shadow(0 30px 70px rgba(65,0,22,.28));
+  filter:drop-shadow(0 24px 56px rgba(65,0,22,.28));
 }
 @media (max-width:760px){
+  .csr-hero--cover{padding:32px 20px 30px;}
   .csr-hero--cover img{width:100%;border-radius:6px;}
 }
