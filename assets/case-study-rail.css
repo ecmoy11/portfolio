@@ -520,12 +520,16 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
 /* ---------- hero variant: one full-bleed cover render ----------
    Airline 2036 opens on a wide scene, not a row of phone screens. The base
    hero caps every img at 250px and stands it on the mosaic band, which is
-   exactly wrong for a single cinematic frame. The composition also runs the
-   full height of the frame (news panel left, reroute card top to bottom on
-   the right), so any band crop cuts the argument out of the picture. Let it
-   be tall; cap and centre it so it doesn't balloon on a wide display. */
-.csr-hero--cover{display:block;padding:0;background:#171512;}
+   exactly wrong for a single cinematic frame. Keep the red rock band (see
+   [[hero-photo-band]] — Emma has asked for it back once already) and stand
+   ONE wide uncropped frame on it. Uncropped matters: the composition runs the
+   full height, news panel left and the reroute card top to bottom on the
+   right, so a band crop would cut the argument out of the picture. */
 .csr-hero--cover img{
-  width:100%;max-width:1600px;height:auto;display:block;
-  margin:0 auto;filter:none;
+  width:min(880px,72vw);max-width:none;height:auto;display:block;
+  border-radius:10px;
+  filter:drop-shadow(0 30px 70px rgba(65,0,22,.28));
+}
+@media (max-width:760px){
+  .csr-hero--cover img{width:100%;border-radius:6px;}
 }
