@@ -536,7 +536,7 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
   background-position:center 45%;
 }
 .csr-hero--cover img{
-  width:min(810px,64vw);max-width:none;height:auto;display:block;
+  width:min(730px,58vw);max-width:none;height:auto;display:block;
   border-radius:10px;
   filter:drop-shadow(0 24px 56px rgba(65,0,22,.28));
 }
