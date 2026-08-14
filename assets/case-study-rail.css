@@ -489,10 +489,12 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
 /* the affordance line for a [data-zoom] figure. Same mono voice as .csr-cap,
    with the orange dot so it reads as an instruction rather than a caption. */
 .csr-content .csr-zoomhint{
-  font-family:var(--font-mono);font-size:0.55rem;line-height:1.6;letter-spacing:.14em;
+  font-family:var(--font-mono);font-size:0.58rem;line-height:1.6;letter-spacing:.1em;
   text-transform:uppercase;color:var(--text-muted);margin:14px 0 0;
   display:flex;align-items:center;gap:8px;
 }
+/* Caption first, hint second: the hint tucks under its caption. */
+.csr-sec p.csr-cap + .csr-zoomhint{margin-top:6px;}
 .csr-content .csr-zoomhint::before{
   content:'';width:5px;height:5px;border-radius:50%;background:var(--orange);
   flex:0 0 auto;

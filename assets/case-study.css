@@ -2127,8 +2127,10 @@ body.fd-edit .cs-fd-media .tiltwrap::after{content:attr(data-readout);position:a
 .cs-strip-btn.is-prev{left:-10px;}
 .cs-strip-btn.is-next{right:-10px;}
 
-.cs-strip-hint{margin-top:2px;font-family:var(--font-mono);font-size:0.55rem;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);}
+/* Legacy alias. New markup uses .csr-cap for the description and .csr-zoomhint
+   for the click line; this stays on the same spec so old markup doesn't drift. */
+.cs-strip-hint{margin-top:10px;font-family:var(--font-mono);font-size:0.58rem;
+  line-height:1.6;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);}
 
 /* ============ lightbox ============ */
 .cs-lightbox{position:fixed;inset:0;z-index:9999;display:none;
