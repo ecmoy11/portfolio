@@ -11,29 +11,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&family=Instrument+Serif:ital@0;1&family=Fraunces:opsz,wght@9..144,300..700&family=Playfair+Display:wght@400;500&family=Newsreader:opsz,wght@6..72,300..700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/case-study.css">
 <link rel="stylesheet" href="assets/case-study-rail.css">
+<style>
+  /* the v1 wireframes are 2.67 and everything else is ~2.16, so pin the frame
+     height and letterbox on white. Scoped to this section on purpose: the
+     shared sheet sizes .cs-frame img for COROS' dark screenshots. */
+  #firstpass .cs-frame img{height:368px;object-fit:contain;object-position:top center;background:#fff;}
+
+  /* the paper artefacts. Below 1024 the shared sheet turns .cs-collage.stack
+     .pcol into a ROW of thumbnails, which laid the two figures and their
+     captions side by side and pushed 67px off the right edge. Scoped here so
+     the row behaviour still applies to every other page. */
+  #problem .cs-collage.stack .pcol{flex-direction:column;gap:38px;}
+  #problem .paper-fig{margin:0;}
+  #problem .paper-fig img{display:block;width:100% !important;height:auto;border-radius:6px;}
+</style>
 </head>
 <body>
 <nav class="nav" id="nav">
-  <a href="index.html" class="nav-logo">Emma Moystner</a>
+  <span class="nav-logo">Emma Moystner</span>
   <div class="nav-right">
     <a href="index.html">Work</a>
     <a href="playground.html">Play</a>
     <a href="about.html">About</a>
     <a href="resume.moystner.pdf" target="_blank">Resume</a>
-    <div class="nav-connect-wrap">
-      <a href="#" class="nav-cta" id="connect-toggle" onclick="toggleConnectDropdown(event)">Connect</a>
-      <div class="connect-dropdown" id="connect-dropdown">
-        <a href="mailto:emmamoystner.design@gmail.com">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
-          Email me
-        </a>
-        <div class="connect-dropdown-divider"></div>
-        <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-          LinkedIn
-        </a>
-      </div>
-    </div>
   </div>
   <button class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -44,17 +44,15 @@
   <a href="playground.html">Play</a>
   <a href="about.html">About</a>
   <a href="resume.moystner.pdf" target="_blank">Resume</a>
-  <div class="mobile-connect-links">
-    <a href="mailto:emmamoystner.design@gmail.com">Email</a>
-    <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
-  </div>
 </div>
 
 <div class="case-study-page" id="cs-gauge">
 
   <!-- ===== hero ===== -->
-  <div class="csr-hero is-wide">
-    <img src="images/gauge/bargeapptrans.png" alt="Gauge app screens: QR vehicle scan, mileage logging and inspection">
+  <div class="csr-hero">
+    <img src="images/gauge/update/web/v3-qr-scan.webp" alt="Scanning the vehicle QR code to start a report">
+    <img src="images/gauge/update/web/v3-journey-log.webp" alt="The journey log with trip mileage as the hero number, badged as billed to project">
+    <img src="images/gauge/update/web/v3-inspection.webp" alt="The vehicle inspection collapsed onto a single screen with flagging">
   </div>
 
   <div class="csr-shell">
@@ -67,7 +65,7 @@
         <a href="#tldr">TLDR;</a>
         <a href="#problem">Problem</a>
         <a href="#research">Research</a>
-        <a href="#firstpass">First Pass</a>
+        <a href="#firstpass">Passes</a>
         <a href="#solution">Solution</a>
         <a href="#testing">Testing</a>
         <a href="#learnings">Learnings</a>
@@ -86,7 +84,7 @@
         <dl class="csr-meta">
           <div><dt>Role</dt><dd>Product Designer</dd></div>
           <div><dt>Type</dt><dd>Self-Initiated / Internal Tool</dd></div>
-          <div><dt>Duration</dt><dd><span class="csr-todo">To fill this in</span></dd></div>
+          <div><dt>Duration</dt><dd>2023&ndash;2026, on and off around a full-time role</dd></div>
           <div><dt>Tools</dt><dd>Figma</dd></div>
           <div class="half"><dt>Methods</dt><dd>Employee Interviews, Workflow Shadowing, Usability Testing</dd></div>
           <div class="half"><dt>Deliverables</dt><dd>Three design iterations, QR inspection flow, mileage logging prototype, admin reporting view</dd></div>
@@ -130,12 +128,20 @@
                 <div class="csr-eyebrow">The process it replaced</div>
                 <h3 class="csr-display" style="font-size:clamp(1.3rem,2.4vw,1.8rem)">Three failures, one root cause: the number that mattered was captured last.</h3>
                 <p>Every breakdown in the list traces back to trip mileage being written down after the fact, by someone who was no longer in the vehicle. Everything downstream (the reimbursement, the project billing, the audit trail) inherits that one delay.</p>
+                <p>In practice that meant the mileage often wasn&rsquo;t written down at all. People reconstructed a week of driving from memory, so the number being billed to a project was a guess. When it did get written down it was handwritten, and reading someone else&rsquo;s handwriting is its own guess. As the admin I either picked the digit that looked most likely or walked back to the driver and asked, which put a second person&rsquo;s time into a number that should have taken two seconds to capture.</p>
               </div>
             </div></div>
           </div>
           <div class="cs-sticky-media"><div class="cs-collage stack wide" data-drift="170">
             <div class="pcol" data-rate="0.35">
-              <div class="cs-alt-media empty">A shot of the paper form<br>or the old email chain goes here</div>
+              <figure class="paper-fig">
+                <img src="images/gauge/update/web/paper-vehicle-report.webp" alt="The Barge Design Solutions paper vehicle report, filled in by hand" loading="lazy">
+                <p class="csr-cap">The form Gauge replaced. One sheet per vehicle per week, filled in at the end of it.</p>
+              </figure>
+              <figure class="paper-fig">
+                <img src="images/gauge/update/web/paper-odometer-detail.webp" alt="Close crop of the handwritten odometer rows: starting, ending and total mileage" loading="lazy">
+                <p class="csr-cap">Starting 21438. Ending 21669, or 21668. Total 225, or 228. That last number is the one billed to a project.</p>
+              </figure>
             </div>
           </div></div>
         </div>
@@ -151,14 +157,86 @@
 
       <!-- ---------- FIRST PASS ---------- -->
       <section class="csr-sec" id="firstpass" data-csr-section>
-        <div class="csr-eyebrow">First Pass</div>
-        <h2 class="csr-display">The version that satisfied compliance and made the product worse</h2>
+        <div class="csr-eyebrow">First &amp; Second Pass</div>
+        <h2 class="csr-display">Two versions I had to build before the third one could be simple</h2>
+        <p>Version 1 in 2023, version 2 in early 2025, version 3 this year. Both of the earlier ones are here on purpose. The third version only makes sense as an answer to what the first two got wrong, and I would rather show that argument than assert it.</p>
 
         <div class="cs-alt">
-          <div class="cs-alt-media empty">Version 2 screens need exporting<br>from the original file</div>
+          <div class="cs-alt-media is-strip">
+            <div class="cs-filmstrip-wrap" style="--frame-w:170px">
+              <button class="cs-strip-btn is-prev" aria-label="Scroll left">&#8249;</button>
+              <div class="cs-filmstrip">
+            <figure class="cs-frame" data-caption="01 &middot; Wireframe, home" data-full="images/gauge/update/web/v1-wf-home.webp">
+              <img src="images/gauge/update/web/v1-wf-home.webp" alt="Version 1 wireframe, home screen" loading="lazy">
+              <figcaption><b>01</b> Wireframe, home</figcaption>
+            </figure>
+            <figure class="cs-frame" data-caption="02 &middot; Wireframe, new report" data-full="images/gauge/update/web/v1-wf-new-report.webp">
+              <img src="images/gauge/update/web/v1-wf-new-report.webp" alt="Version 1 wireframe, the new report form" loading="lazy">
+              <figcaption><b>02</b> Wireframe, new report</figcaption>
+            </figure>
+            <figure class="cs-frame" data-caption="03 &middot; Wireframe, reports" data-full="images/gauge/update/web/v1-wf-reports.webp">
+              <img src="images/gauge/update/web/v1-wf-reports.webp" alt="Version 1 wireframe, past reports" loading="lazy">
+              <figcaption><b>03</b> Wireframe, reports</figcaption>
+            </figure>
+            <figure class="cs-frame" data-caption="04 &middot; Home" data-full="images/gauge/update/web/v1-home.webp">
+              <img src="images/gauge/update/web/v1-home.webp" alt="Version 1 home screen in Barge branding" loading="lazy">
+              <figcaption><b>04</b> Home</figcaption>
+            </figure>
+            <figure class="cs-frame" data-caption="05 &middot; New report" data-full="images/gauge/update/web/v1-new-report.webp">
+              <img src="images/gauge/update/web/v1-new-report.webp" alt="Version 1 new report form, one field per line" loading="lazy">
+              <figcaption><b>05</b> New report</figcaption>
+            </figure>
+            <figure class="cs-frame" data-caption="06 &middot; Vehicle number" data-full="images/gauge/update/web/v1-vehicle-number.webp">
+              <img src="images/gauge/update/web/v1-vehicle-number.webp" alt="Version 1 vehicle number entry" loading="lazy">
+              <figcaption><b>06</b> Vehicle number</figcaption>
+            </figure>
+            <figure class="cs-frame" data-caption="07 &middot; Summary" data-full="images/gauge/update/web/v1-summary.webp">
+              <img src="images/gauge/update/web/v1-summary.webp" alt="Version 1 report summary" loading="lazy">
+              <figcaption><b>07</b> Summary</figcaption>
+            </figure>
+              </div>
+              <button class="cs-strip-btn is-next" aria-label="Scroll right">&#8250;</button>
+            </div>
+            <p class="cs-strip-hint">Wireframes, then the first build. Click any to see it closer</p>
+          </div>
           <div class="cs-alt-copy">
-            <span class="cs-alt-entry-label">01 &middot; Version 2</span>
-            <div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>A new safety compliance requirement meant adding vehicle inspections to the flow, and I accommodated it the obvious way: more screens, more steps, a full inspection sequence sitting between the employee and the thing they actually came to do.</p></div>
+            <span class="cs-alt-entry-label">01 &middot; First pass, 2023</span>
+            <div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>I started where the paper started. Version 1 is the vehicle report translated to a screen, field for field: office, vehicle number, first name, last name, date, project number, phase, task, starting odometer, ending odometer. I wireframed it, then built it in the company&rsquo;s grey and yellow so it would read as an internal tool people already trusted.</p></div>
+            <div class="cs-alt-row"><span class="cs-alt-label">Why it lost</span><p>It moved the paper onto a phone without changing when the number got captured. Someone still had to hold ten values in their head and type them in at the end of a week, which is the exact failure I set out to fix. A form that is faithful to a broken process inherits the process.</p></div>
+            <div class="cs-alt-row"><span class="cs-alt-label">What replaced it</span><p>The reframe that trip mileage was the only field the business actually needed, and that everything else on the form existed to identify it. One idea from version 1 survived intact: Scan QR Code was already sitting on that first home screen. It turned out to be the answer rather than a shortcut.</p></div>
+          </div>
+          <div class="cs-alt-media is-strip">
+            <div class="cs-filmstrip-wrap" style="--frame-w:170px">
+              <button class="cs-strip-btn is-prev" aria-label="Scroll left">&#8249;</button>
+              <div class="cs-filmstrip">
+            <figure class="cs-frame" data-caption="01 &middot; Home" data-full="images/gauge/update/web/v2-home.webp">
+              <img src="images/gauge/update/web/v2-home.webp" alt="Version 2 home screen, reports in progress" loading="lazy">
+              <figcaption><b>01</b> Home</figcaption>
+            </figure>
+            <figure class="cs-frame" data-caption="02 &middot; Vehicle inspection" data-full="images/gauge/update/web/v2-inspection.webp">
+              <img src="images/gauge/update/web/v2-inspection.webp" alt="Version 2 inspection, one yes or no question per screen" loading="lazy">
+              <figcaption><b>02</b> Vehicle inspection</figcaption>
+            </figure>
+            <figure class="cs-frame" data-caption="03 &middot; Journey log" data-full="images/gauge/update/web/v2-journey-log.webp">
+              <img src="images/gauge/update/web/v2-journey-log.webp" alt="Version 2 journey log" loading="lazy">
+              <figcaption><b>03</b> Journey log</figcaption>
+            </figure>
+            <figure class="cs-frame" data-caption="04 &middot; Personal info" data-full="images/gauge/update/web/v2-personal-info.webp">
+              <img src="images/gauge/update/web/v2-personal-info.webp" alt="Version 2 personal information step" loading="lazy">
+              <figcaption><b>04</b> Personal info</figcaption>
+            </figure>
+            <figure class="cs-frame" data-caption="05 &middot; Summary" data-full="images/gauge/update/web/v2-summary.webp">
+              <img src="images/gauge/update/web/v2-summary.webp" alt="Version 2 report summary" loading="lazy">
+              <figcaption><b>05</b> Summary</figcaption>
+            </figure>
+              </div>
+              <button class="cs-strip-btn is-next" aria-label="Scroll right">&#8250;</button>
+            </div>
+            <p class="cs-strip-hint">The second build, with inspections added. Click any to see it closer</p>
+          </div>
+          <div class="cs-alt-copy">
+            <span class="cs-alt-entry-label">02 &middot; Second pass, 2025</span>
+            <div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>A new safety compliance requirement meant adding vehicle inspections to the flow, and I accommodated it the obvious way: more screens, more steps, a full inspection sequence sitting between the employee and the thing they actually came to do. Each check got its own screen with a single yes or no on it, behind a four-step progress bar.</p></div>
             <div class="cs-alt-row"><span class="cs-alt-label">Why it lost</span><p>It worked and people hated it. Users could complete the process, but testing surfaced real frustration: the app now felt heavier than the paper version it was replacing. Compliance had been satisfied and the product had been made worse, which is the trade I should have caught before building it.</p></div>
             <div class="cs-alt-row"><span class="cs-alt-label">What replaced it</span><p>Version 3 stripped it back. QR scanning auto-fills the vehicle so manual entry disappears, the inspection checklist collapses into a single tappable screen with flagging, and trip mileage moves to the front as the hero number. Fewer screens, and micro-interactions that make the flow feel fast rather than bureaucratic.</p></div>
           </div>
@@ -172,12 +250,16 @@
         <p>Version 3 is built around that one rule. Nothing in the flow exists to document the process for its own sake; each step either shortens the path to the mileage figure or protects the company&rsquo;s record of the vehicle.</p>
 
         <div class="cs-section cs-fd">
-          <div class="cs-fd-media flow wide" data-drift="150">
+          <div class="cs-fd-media flow" data-drift="150">
             <div class="pcol" data-rate="0.30">
-              <div class="tiltwrap"><img class="tilt" src="images/gauge/bargeapp.png" alt="Gauge screens, version 3" loading="lazy"></div>
+              <div class="tiltwrap" style="--rot:-4deg"><img class="tilt" src="images/gauge/update/web/v3-qr-scan.webp" alt="Scan the vehicle QR code, step 1 of 4" loading="lazy"></div>
+              <div class="tiltwrap" style="--rot:3deg"><img class="tilt" src="images/gauge/update/web/v3-journey-log.webp" alt="Journey log with trip mileage as the hero number and a billed to project badge" loading="lazy"></div>
+              <div class="tiltwrap"><img class="tilt" src="images/gauge/update/web/v3-report.webp" alt="Reports list, in progress and past reports" loading="lazy"></div>
             </div>
             <div class="pcol" data-rate="-0.30">
-              <div class="cs-alt-media empty">More version 3 screens<br>to export</div>
+              <div class="tiltwrap" style="--rot:4deg"><img class="tilt" src="images/gauge/update/web/v3-home.webp" alt="Home screen, new report and recent activity" loading="lazy"></div>
+              <div class="tiltwrap" style="--rot:-3deg"><img class="tilt" src="images/gauge/update/web/v3-inspection.webp" alt="Vehicle inspection collapsed onto one screen with flagging and photo evidence" loading="lazy"></div>
+              <div class="tiltwrap"><img class="tilt" src="images/gauge/update/web/v3-success.webp" alt="Report submitted, with the billed mileage confirmed" loading="lazy"></div>
             </div>
           </div>
 
@@ -211,6 +293,7 @@
       <section class="csr-sec" id="learnings" data-csr-section>
         <div class="csr-eyebrow">Learnings</div>
         <h2 class="csr-display">What this one changed about how I work</h2>
+        <p>Gauge was one of the first things I ever designed, and I kept coming back to it for three years. Both earlier versions are on this page on purpose. The distance between the first screen and the last one is the part of this project I am proudest of.</p>
 
         <div class="csr-learn">
           <div>
@@ -227,13 +310,13 @@
           </div>
           <div>
             <h4>What I&rsquo;d measure</h4>
-            <p><span class="csr-todo">To fill this in</span> If it had gone live, the number you&rsquo;d have watched to know whether it stuck.</p>
+            <p>Gauge stayed a prototype, so I never got live numbers. The one I would have watched is the gap between a trip ending and its mileage being recorded, because that gap is the whole problem: <span class="highlight">days on paper, minutes if the design works.</span> Not time in the app. On an internal tool, people spending longer in it means I have failed.</p>
           </div>
         </div>
 
         <a class="csr-next" href="capstone.html">
           <span>Next project</span>
-          <b>Active Autonomy Companion &rarr;</b>
+          <b>Nav Health &rarr;</b>
         </a>
       </section>
 
