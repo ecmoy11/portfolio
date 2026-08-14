@@ -8,9 +8,17 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&family=Instrument+Serif:ital@0;1&family=Fraunces:opsz,wght@9..144,300..700&family=Playfair+Display:wght@400;500&family=Newsreader:opsz,wght@6..72,300..700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/case-study.css">
 <link rel="stylesheet" href="assets/case-study-rail.css">
+<style>
+  /* First Pass strip only: the 2025 exports come in three aspect ratios, so cap the
+     frame height and letterbox instead of letting the row go ragged. */
+  /* Wireframes strip: the 2025 exports come in three aspect ratios, so cap the
+     frame height and letterbox instead of letting the row go ragged. */
+  #wireframes .cs-frame img{height:368px;object-fit:contain;object-position:top center;background:#fff;}
+  .cs-strip-block{margin:34px 0 0;}
+</style>
 </head>
 <body>
 <nav class="nav" id="nav">
@@ -49,177 +57,234 @@
     <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
   </div>
 </div>
-<div class="csr-hero">
-    <img src="images/airbnb/hifi-wishlist-onboarding.png" alt="Group wishlist onboarding">
-    <img src="images/airbnb/hifi-approvals.png" alt="Group approvals before booking">
-    <img src="images/airbnb/hifi-messages.png" alt="Trip messages overview">
+
+<div class="case-study-page" id="cs-airbnb">
+
+  <!-- ===== hero ===== -->
+  <div class="csr-hero">
+    <img src="images/airbnb/updates/web/wishlist-welcome.webp" alt="The group trip wishlist welcome screen">
+    <img src="images/airbnb/updates/web/group-budgets.webp" alt="Trip details showing every member&rsquo;s budget and the group total">
+    <img src="images/airbnb/updates/web/split-paymanage.webp" alt="The PayManage splitting method with custom percentages">
   </div>
 
-  <div class="csr-shell" id="cs-airbnb-rail">
+  <div class="csr-shell">
 
+    <!-- ===== sticky rail ===== -->
     <aside class="csr-rail">
       <a href="index.html" class="csr-back">&larr;&nbsp; All work</a>
-      <div class="csr-eyebrow" style="margin-bottom:10px">04 · Case Study</div>
       <div class="csr-railtitle">Airbnb<br>Group Booking</div>
       <nav class="csr-jump" id="csr-jump">
         <a href="#tldr">TLDR;</a>
-        <a href="#where-group-trips-break">Where Group Trips Break</a>
-        <a href="#what-the-survey-killed">What the Survey Killed</a>
-        <a href="#three-ways-to-be-fair">Three Ways to Be Fair</a>
-        <a href="#the-first-pass">The First Pass</a>
-        <a href="#final-designs">Final Designs</a>
-        <a href="#what-testing-changed">What Testing Changed</a>
-        <a href="#reflection">Reflection</a>
+        <a href="#problem">Problem</a>
+        <a href="#research">Research</a>
+        <a href="#decision">Decision</a>
+        <a href="#wireframes">Wireframes</a>
+        <a href="#solution">Solution</a>
+        <a href="#testing">Testing</a>
+        <a href="#learnings">Learnings</a>
       </nav>
     </aside>
 
+    <!-- ===== content ===== -->
     <main class="csr-content cs-body" style="margin:0;padding:0;">
 
       <!-- ---------- TLDR ---------- -->
       <section class="csr-sec" id="tldr" data-csr-section>
         <div class="csr-eyebrow">TLDR;</div>
         <h2 class="csr-display">Overview</h2>
-        <p class="csr-lede">Group trips shouldn’t fall apart before they start. We redesigned how Airbnb handles the hardest part: the money.</p>
-
-          <div class="cs-tldr"><div class="cs-tldr-row"><div class="cs-tldr-label">Problem</div><div class="cs-tldr-text">Group trips put the entire financial and logistical burden on <strong>one person</strong>, the one holding the credit card, which makes planning harder for everyone else too.</div></div>
-<div class="cs-tldr-row"><div class="cs-tldr-label">Insight</div><div class="cs-tldr-text">82% wanted to split “fairly,” but <strong>fair meant different things to different groups</strong>. Any single split model would alienate two-thirds of users, so the real decision was to let each group declare its own definition of fair up front.</div></div>
-<div class="cs-tldr-row"><div class="cs-tldr-label">Outcome</div><div class="cs-tldr-text">A group hub with three splitting modes, group sign-off before booking, and in-app messaging, moving power <strong>off the cardholder and onto the group</strong>. Testing validated the onboarding and flagged a need for clearer privacy affordances.</div></div></div>
+        <p>Group trips shouldn&rsquo;t fall apart before they start. Airbnb treats a group trip as a single transaction with a single customer, so every part of the coordination that makes it hard happens somewhere else. We redesigned the experience from research through high-fidelity prototype, starting with the hardest part: the money.</p>
 
         <dl class="csr-meta">
-            <div><dt>Role</dt><dd>Product Designer</dd></div>
-            <div><dt>Type</dt><dd>Concept Redesign</dd></div>
-            <div><dt>Duration</dt><dd>4 weeks</dd></div>
-            <div><dt>Tools</dt><dd>Fill in</dd></div>
-            <div class="half"><dt>Methods</dt><dd>Survey Research, Usability Testing, Hi-Fi Prototyping</dd></div>
-            <div class="half"><dt>Deliverables</dt><dd>Survey study, group trip hub flows, three splitting models, hi-fi prototype</dd></div>
-          </dl>
+          <div><dt>Role</dt><dd>Product Designer</dd></div>
+          <div><dt>Type</dt><dd>Concept Redesign</dd></div>
+          <div><dt>Duration</dt><dd>4 Weeks</dd></div>
+          <div><dt>Tools</dt><dd>Figma</dd></div>
+          <div class="half"><dt>Methods</dt><dd>Survey Research, Usability Testing, Hi-Fi Prototyping</dd></div>
+          <div class="half"><dt>Deliverables</dt><dd>Survey study, group trip hub flows, three splitting models, hi-fi prototype</dd></div>
+        </dl>
       </section>
 
-      <!-- ---------- WHERE GROUP TRIPS BREAK ---------- -->
-      <section class="csr-sec cs-sticky left-text" id="where-group-trips-break" data-csr-section>
-        <div class="csr-eyebrow">Where Group Trips Break</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <div class="cs-sticky-text">
-<div class="cs-pin"><div class="cs-pin-inner">
-<div class="cs-step solo">
+      <!-- ---------- PROBLEM ---------- -->
+      <section class="csr-sec" id="problem" data-csr-section>
+        <div class="csr-problem">
+          <div class="csr-eyebrow">The Problem</div>
+          <h2 class="csr-stmt">One person finds the place, one person pays for it, and one person spends the next three weeks chasing everyone else for money.</h2>
+          <p class="csr-q">How do you move a group trip off the cardholder without making it impossible for the group to commit to anything?</p>
+        </div>
 
-<p>Airbnb has no real group booking. One person finds the place, one person pays for it, and one person spends the next three weeks chasing everyone else for money. The platform treats a group trip as a single transaction with a single customer, so every part of the coordination that makes a group trip hard happens somewhere else: a text thread, a spreadsheet, a payment app.</p>
-<p>That structure doesn’t just inconvenience the organizer. It quietly removes agency from everyone else. If you didn’t book it you can’t see the reservation, can’t weigh in on the choice, and can’t tell whether your share has been counted.</p>
-<p>We redesigned the experience from research through high-fidelity prototype, introducing shared planning, flexible cost-splitting and a centralized hub that gives every traveler visibility, not just the person holding the card.</p>
-</div>
-</div></div>
-</div>
-<div class="cs-sticky-media"><div class="cs-collage stack" data-drift="170">
-<div class="pcol" data-rate="0.35">
-<div class="tiltwrap"><img alt="Creating a shared wishlist for a group trip" class="tilt" loading="lazy" src="images/airbnb/Create%20Wishlist%20Screen%201.png"/></div>
-<div class="tiltwrap"><img alt="Assigning beds among group members" class="tilt" loading="lazy" src="images/airbnb/Beds%20Assign.png"/></div>
-<div class="tiltwrap"><img alt="Early splitting method selection" class="tilt" loading="lazy" src="images/airbnb/Splitting%20Methods.png"/></div>
-</div>
-<div class="pcol" data-rate="-0.35">
-<div class="tiltwrap"><img alt="Property listing seen from a group member’s view" class="tilt" loading="lazy" src="images/airbnb/Property%20Listing%20-%20Group%20details%20group%20member.png"/></div>
-<div class="tiltwrap"><img alt="Early wishlist admin view" class="tilt" loading="lazy" src="images/airbnb/Wishlist%20Admin%20View.png"/></div>
-<div class="tiltwrap"><img alt="Early PayManage screen" class="tilt" loading="lazy" src="images/airbnb/PayMange%20Screen.png"/></div>
-</div>
-</div></div>
+        <p>Airbnb has no real group booking. The platform treats a group trip as a single transaction with a single customer, so every part of the coordination that makes a group trip hard happens somewhere else: a text thread, a spreadsheet, a payment app.</p>
+        <p>That structure doesn&rsquo;t just inconvenience the organizer. It quietly removes agency from everyone else. If you didn&rsquo;t book it you can&rsquo;t see the reservation, can&rsquo;t weigh in on the choice, and can&rsquo;t tell whether your share has been counted.</p>
+
       </section>
 
-      <!-- ---------- WHAT THE SURVEY KILLED ---------- -->
-      <section class="csr-sec" id="what-the-survey-killed" data-csr-section>
-        <div class="csr-eyebrow">What the Survey Killed</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
+      <!-- ---------- RESEARCH ---------- -->
+      <section class="csr-sec" id="research" data-csr-section>
+        <div class="csr-eyebrow">Research</div>
+        <h2 class="csr-display">82% wanted to split fairly, and that finding killed the obvious solution</h2>
         <p>We designed and distributed a structured survey to understand how people navigate group bookings now, not just the functional pain points but the social friction underneath them.</p>
-<p><strong>82% of respondents wanted to split costs fairly</strong>, and that finding killed the obvious solution immediately. Some meant even splits. Others meant proportional by room size or arrival date. A third group meant custom amounts they’d negotiated themselves. Any single split model would have alienated two-thirds of users no matter which one we picked.</p>
-<p><strong>63% wanted payment reminders</strong>, not because they’re forgetful, but because asking friends for money is uncomfortable. People wanted the platform to handle the follow-up so they didn’t have to.</p>
-<p><strong>71% wanted to share the planning workload.</strong> The organizer role is exhausting, and respondents wanted tools that distributed it rather than tools that made one person faster at it.</p>
+
+        <div class="csr-cols">
+          <div>
+            <span class="csr-num">01</span>
+            <h4>82% wanted to split costs fairly.</h4>
+            <p>Some meant even splits. Others meant proportional by room size or arrival date. A third group meant custom amounts they&rsquo;d negotiated themselves. Any single split model would have alienated two-thirds of users no matter which one we picked.</p>
+          </div>
+          <div>
+            <span class="csr-num">02</span>
+            <h4>63% wanted payment reminders.</h4>
+            <p>Not because they&rsquo;re forgetful, but because asking friends for money is uncomfortable. People wanted the platform to handle the follow-up so they didn&rsquo;t have to.</p>
+          </div>
+          <div>
+            <span class="csr-num">03</span>
+            <h4>71% wanted to share the planning workload.</h4>
+            <p>The organizer role is exhausting, and respondents wanted tools that distributed it rather than tools that made one person faster at it.</p>
+          </div>
+        </div>
       </section>
 
-      <!-- ---------- THREE WAYS TO BE FAIR ---------- -->
-      <section class="csr-sec" id="three-ways-to-be-fair" data-csr-section>
-        <div class="csr-eyebrow">Three Ways to Be Fair</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <p>So the real decision wasn’t which split model is correct. It was that the split model is not ours to choose. Each group declares its own definition of fair at the start, and the product commits to it: EvenSplit for friends going halves, FairValue for proportional splits, PayManage for custom amounts.</p>
-<p>The same logic drove the second decision. If the core problem is that one person carries the whole trip, then one person also shouldn’t be able to commit the group to it. Requiring group sign-off before booking is deliberate friction: slower to commit, but it moves the power off the cardholder and onto the group. That tradeoff is the argument the whole redesign rests on.</p>
+      <!-- ---------- THE DECISION ---------- -->
+      <section class="csr-sec" id="decision" data-csr-section>
+        <div class="csr-eyebrow">The Decision</div>
+        <h2 class="csr-display">The split model is not ours to choose.</h2>
+        <p>So the real decision wasn&rsquo;t which split model is correct. Each group declares its own definition of fair at the start, and the product commits to it: EvenSplit for friends going halves, FairValue for proportional splits, PayManage for custom amounts.</p>
+        <p>The same logic drove the second decision. If the core problem is that one person carries the whole trip, then one person also shouldn&rsquo;t be able to commit the group to it. Requiring group sign-off before booking is deliberate friction: slower to commit, but it moves the power off the cardholder and onto the group. That tradeoff is the argument the whole redesign rests on.</p>
       </section>
 
-      <!-- ---------- THE FIRST PASS ---------- -->
-      <section class="csr-sec cs-alt" id="the-first-pass" data-csr-section>
-        <div class="csr-eyebrow">The First Pass</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <div class="cs-alt-media contain">
-<img alt="An earlier version of the wishlist admin view" loading="lazy" src="images/airbnb/Wishlist%20Admin%20View-1.png"/>
-<span class="cs-alt-tag">Cut</span>
-</div>
-<div class="cs-alt-copy" data-placeholder="Placeholder · replace">
-<div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. The first version went wide before it went deep, and I built the whole thing out before testing whether the premise held.</p></div>
-<div class="cs-alt-row"><span class="cs-alt-label">Why it lost</span><p>Sed do eiusmod tempor incididunt ut labore. It tested as more work than the thing it replaced, which is the one result a redesign cannot survive.</p></div>
-<div class="cs-alt-row"><span class="cs-alt-label">What replaced it</span><p>Ut enim ad minim veniam, quis nostrud exercitation. The version I kept held on to the intent and threw out the scaffolding around it.</p></div>
-</div>
+      <!-- ---------- WIREFRAMES ---------- -->
+      <section class="csr-sec" id="wireframes" data-csr-section>
+        <div class="csr-eyebrow">Wireframes</div>
+        <h2 class="csr-display">Where the group hub took shape, before any of it had to look like Airbnb.</h2>
+        <p>Shared planning, flexible cost-splitting, and a hub that gives every traveler visibility, not just the person holding the card. These are the screens where all of that got argued out: a shared wishlist, bed assignment, and the first attempt at giving splitting a home inside the product rather than beside it.</p>
+
+        <div class="cs-strip-block">
+          <div class="cs-filmstrip-wrap" style="--frame-w:170px">
+            <button class="cs-strip-btn is-prev" aria-label="Scroll left">&#8249;</button>
+            <div class="cs-filmstrip">
+              <figure class="cs-frame" data-caption="01 &middot; Create Wishlist" data-full="images/airbnb/Create%20Wishlist%20Screen%201.png">
+                <img src="images/airbnb/Create%20Wishlist%20Screen%201.png" alt="Creating a shared wishlist for a group trip" loading="lazy">
+                <figcaption><b>01</b> Create Wishlist</figcaption>
+              </figure>
+              <figure class="cs-frame" data-caption="02 &middot; Group Details" data-full="images/airbnb/Property%20Listing%20-%20Group%20details%20group%20member.png">
+                <img src="images/airbnb/Property%20Listing%20-%20Group%20details%20group%20member.png" alt="Property listing seen from a group member&rsquo;s view" loading="lazy">
+                <figcaption><b>02</b> Group Details</figcaption>
+              </figure>
+              <figure class="cs-frame" data-caption="03 &middot; Beds Assign" data-full="images/airbnb/Beds%20Assign.png">
+                <img src="images/airbnb/Beds%20Assign.png" alt="Assigning beds among group members" loading="lazy">
+                <figcaption><b>03</b> Beds Assign</figcaption>
+              </figure>
+              <figure class="cs-frame" data-caption="04 &middot; Admin View" data-full="images/airbnb/Wishlist%20Admin%20View-1.png">
+                <img src="images/airbnb/Wishlist%20Admin%20View-1.png" alt="The earliest version of the wishlist admin view" loading="lazy">
+                <figcaption><b>04</b> Admin View</figcaption>
+              </figure>
+              <figure class="cs-frame" data-caption="05 &middot; Admin, Revised" data-full="images/airbnb/Wishlist%20Admin%20View.png">
+                <img src="images/airbnb/Wishlist%20Admin%20View.png" alt="The revised wishlist admin view" loading="lazy">
+                <figcaption><b>05</b> Admin, Revised</figcaption>
+              </figure>
+              <figure class="cs-frame" data-caption="06 &middot; Admin, Budget" data-full="images/airbnb/Wishlist%20Admin%20View%20-%20Budget.png">
+                <img src="images/airbnb/Wishlist%20Admin%20View%20-%20Budget.png" alt="The admin view with the group budget attached" loading="lazy">
+                <figcaption><b>06</b> Admin, Budget</figcaption>
+              </figure>
+              <figure class="cs-frame" data-caption="07 &middot; Splitting" data-full="images/airbnb/Splitting%20Methods.png">
+                <img src="images/airbnb/Splitting%20Methods.png" alt="The first attempt at choosing a splitting method" loading="lazy">
+                <figcaption><b>07</b> Splitting</figcaption>
+              </figure>
+              <figure class="cs-frame" data-caption="08 &middot; PayManage" data-full="images/airbnb/PayMange%20Screen.png">
+                <img src="images/airbnb/PayMange%20Screen.png" alt="The early PayManage screen for custom amounts" loading="lazy">
+                <figcaption><b>08</b> PayManage</figcaption>
+              </figure>
+            </div>
+            <button class="cs-strip-btn is-next" aria-label="Scroll right">&#8250;</button>
+          </div>
+          <p class="cs-strip-hint">Eight screens from the first build. Click any to see it closer</p>
+        </div>
+
       </section>
 
-      <!-- ---------- FINAL DESIGNS ---------- -->
-      <section class="csr-sec cs-fd" id="final-designs" data-csr-section>
-        <div class="csr-eyebrow">Final Designs</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <div class="cs-fd-media flow" data-drift="150">
-<div class="pcol" data-rate="0.30">
-<div class="tiltwrap"><img alt="Group wishlist onboarding" class="tilt" loading="lazy" src="images/airbnb/hifi-wishlist-onboarding.png"/></div>
-<div class="tiltwrap"><img alt="Group approvals before booking" class="tilt" loading="lazy" src="images/airbnb/hifi-approvals.png"/></div>
-<div class="tiltwrap"><img alt="Trip messages overview" class="tilt" loading="lazy" src="images/airbnb/hifi-messages.png"/></div>
-</div>
-<div class="pcol" data-rate="-0.30">
-<div class="tiltwrap"><img alt="Joining a trip and paying a share" class="tilt" loading="lazy" src="images/airbnb/hifi-payment-join.png"/></div>
-<div class="tiltwrap"><img alt="Trip details with per-member budget" class="tilt" loading="lazy" src="images/airbnb/hifi-trip-details.png"/></div>
-<div class="tiltwrap"><img alt="A trip message thread" class="tilt" loading="lazy" src="images/airbnb/hifi-messages-thread.png"/></div>
-</div>
-</div>
-<div class="cs-fd-text">
-<div class="cs-fd-block">
+      <!-- ---------- SOLUTION ---------- -->
+      <section class="csr-sec" id="solution" data-csr-section>
+        <div class="csr-eyebrow">The Solution</div>
+        <h2 class="csr-display">Three moves, each one taking something the organizer was doing alone and handing it to the group.</h2>
+        <p>The group hub is where a trip now lives: the choice, the money and the conversation in one place, visible to everyone on it rather than to whoever happened to book.</p>
 
-<p>Three moves carry the redesign, and each one takes something the organizer was doing alone and hands it to the group.</p>
-</div>
-<div class="cs-fd-block" data-fd-step="1">
-<div aria-controls="fd-body-1" aria-expanded="false" class="cs-section-label tight" role="button" tabindex="0">01 · Three Splitting Modes</div>
-<div class="cs-fd-body" id="fd-body-1"><div><p>The group picks its definition of fair before anyone pays. EvenSplit for straight halves, FairValue for proportional splits by room or by nights, PayManage for custom amounts. Choosing the model up front turns the most uncomfortable conversation of the trip into a setup step.</p></div></div>
-</div>
-<div class="cs-fd-block" data-fd-step="2">
-<div aria-controls="fd-body-2" aria-expanded="false" class="cs-section-label tight" role="button" tabindex="0">02 · The Group Signs Off</div>
-<div class="cs-fd-body" id="fd-body-2"><div><p>A shared wishlist, voting, and end-to-end visibility, with group sign-off required before anything books. Every member can see the reservation, the budget and where their share stands, which is the part the old flow never gave them.</p></div></div>
-</div>
-<div class="cs-fd-block" data-fd-step="3">
-<div aria-controls="fd-body-3" aria-expanded="false" class="cs-section-label tight" role="button" tabindex="0">03 · Coordination Where the Trip Lives</div>
-<div class="cs-fd-body" id="fd-body-3"><div><p>Group trips normally get planned in a WhatsApp thread while the booking happens somewhere else, so context splits in two. Messaging moved into the trip flow itself, with notifications scoped to the trip, so the conversation and the decision finally sit in the same place.</p></div></div>
-</div>
-</div>
+        <div class="cs-section cs-fd">
+          <div class="cs-fd-media flow" data-drift="150" data-drift-anchor="sticky">
+            <div class="pcol" data-rate="0.30">
+              <div class="tiltwrap"><img class="tilt" src="images/airbnb/updates/web/split-paymanage.webp" alt="PayManage: the admin assigns each member a percentage and the app shows the resulting contribution against their budget" loading="lazy"></div>
+              <div class="tiltwrap"><img class="tilt" src="images/airbnb/updates/web/approvals.webp" alt="The approvals queue: each listing shows how many of the group have signed off" loading="lazy"></div>
+              <div class="tiltwrap"><img class="tilt" src="images/airbnb/updates/web/trip-messages.webp" alt="The group message thread, with an approval request for Casa M&uacute; pinned to the top" loading="lazy"></div>
+            </div>
+            <div class="pcol" data-rate="-0.30">
+              <div class="tiltwrap"><img class="tilt" src="images/airbnb/updates/web/split-fairvalue.webp" alt="FairValue: contributions adjust to the room each member is assigned" loading="lazy"></div>
+              <div class="tiltwrap"><img class="tilt" src="images/airbnb/updates/web/group-budgets.webp" alt="Trip details: every member, their role, their budget and the group total" loading="lazy"></div>
+              <div class="tiltwrap"><img class="tilt" src="images/airbnb/updates/web/wishlist-welcome.webp" alt="The shared wishlist welcome screen where the group adds homes, writes notes and votes" loading="lazy"></div>
+            </div>
+          </div>
+
+          <div class="cs-fd-text">
+            <div class="cs-fd-block" data-fd-step="1">
+              <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-1">01 &middot; Three Splitting Modes</div>
+              <div class="cs-fd-body" id="fd-body-1"><div><p>The group picks its definition of fair before anyone pays. EvenSplit for straight halves, FairValue for proportional splits by room or by nights, PayManage for custom amounts. Choosing the model up front turns the most uncomfortable conversation of the trip into a setup step.</p></div></div>
+            </div>
+            <div class="cs-fd-block" data-fd-step="2">
+              <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-2">02 &middot; The Group Signs Off</div>
+              <div class="cs-fd-body" id="fd-body-2"><div><p>A shared wishlist, voting, and end-to-end visibility, with group sign-off required before anything books. Every member can see the reservation, the budget and where their share stands, which is the part the old flow never gave them.</p></div></div>
+            </div>
+            <div class="cs-fd-block" data-fd-step="3">
+              <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-3">03 &middot; Coordination Where the Trip Lives</div>
+              <div class="cs-fd-body" id="fd-body-3"><div><p>Group trips normally get planned in a WhatsApp thread while the booking happens somewhere else, so context splits in two. Messaging moved into the trip flow itself, with notifications scoped to the trip, so the conversation and the decision finally sit in the same place.</p></div></div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <!-- ---------- WHAT TESTING CHANGED ---------- -->
-      <section class="csr-sec" id="what-testing-changed" data-csr-section>
-        <div class="csr-eyebrow">What Testing Changed</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
+      <!-- ---------- TESTING ---------- -->
+      <section class="csr-sec" id="testing" data-csr-section>
+        <div class="csr-eyebrow">Testing</div>
+        <h2 class="csr-display">Nobody had to be taught the group flow. What they hesitated on was who can see what.</h2>
         <p><strong>Seamless group onboarding.</strong> Building the group feature into the wishlist flow meant users never had to learn a separate concept. They started group trips without being told how.</p>
-<p><strong>Clarity drives confidence.</strong> EvenSplit and FairValue were well received for their simplicity. PayManage caused hesitation: users weren’t sure who could see what, which pointed to a need for clearer affordances around privacy and transparency.</p>
-<p><strong>Feedback and visibility matter.</strong> Users missed the comments section and expected notifications for group actions. When someone joins, approves or pays, the group should know.</p>
+        <p><strong>Clarity drives confidence.</strong> EvenSplit and FairValue were well received for their simplicity. PayManage caused hesitation: users weren&rsquo;t sure who could see what, which pointed to a need for clearer affordances around privacy and transparency.</p>
+        <p><strong>Feedback and visibility matter.</strong> Users missed the comments section and expected notifications for group actions. When someone joins, approves or pays, the group should know.</p>
       </section>
 
-      <!-- ---------- REFLECTION ---------- -->
-      <section class="csr-sec" id="reflection" data-csr-section>
-        <div class="csr-eyebrow">Reflection</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <p>The most useful thing this project taught me is that the obvious solution is worth killing early. We went in assuming the job was to build a good cost-splitting feature, and the survey turned that into a much better question: whose definition of fair does the product encode? Once we stopped trying to answer it for people, most of the rest of the design followed.</p>
-<p>The part I’d push harder on is the privacy hesitation PayManage surfaced. We identified it and didn’t get to resolve it. If I picked this back up, that’s where I’d start: <span class="highlight">a group can only share money honestly if everyone knows exactly who can see what</span>.</p>
+      <!-- ---------- LEARNINGS ---------- -->
+      <section class="csr-sec" id="learnings" data-csr-section>
+        <div class="csr-eyebrow">Learnings</div>
+        <h2 class="csr-display">What this one changed about how I work</h2>
+
+        <div class="csr-learn">
+          <div>
+            <h4>Looking back, I&rsquo;d solve it with less</h4>
+            <p>I answered a coordination problem by adding surface: a hub, three splitting models, a sign-off step, a message thread. Each one earned its place on its own, and stacked together they ask a group to learn a lot before anyone books a house. <span class="highlight">If I picked this up now I&rsquo;d start from the least a group has to understand to get to a booking</span>, and only add what that can&rsquo;t carry.</p>
+          </div>
+          <div>
+            <h4>Whose definition of fair does the product encode?</h4>
+            <p>That question is the whole project. Once we stopped trying to answer it for people, most of the rest of the design followed on its own.</p>
+          </div>
+          <div>
+            <h4>Deliberate friction is a real design move</h4>
+            <p>Group sign-off makes booking slower, and it was still the right call. Learning to argue for a slower flow on the grounds of who holds the power was the harder skill.</p>
+          </div>
+          <div>
+            <h4>The thing I&rsquo;d push harder on</h4>
+            <p>The privacy hesitation PayManage surfaced. We identified it and didn&rsquo;t get to resolve it. If I picked this back up, that&rsquo;s where I&rsquo;d start: <span class="highlight">a group can only share money honestly if everyone knows exactly who can see what</span>.</p>
+          </div>
+        </div>
+
         <a class="csr-next" href="gauge.html">
           <span>Next project</span>
           <b>Gauge &rarr;</b>
         </a>
-
       </section>
 
     </main>
   </div>
+</div>
+
 <footer class="footer">
   <a href="mailto:emmamoystner.design@gmail.com">Contact</a>
   <span>&copy; 2026 Emma Moystner</span>
 </footer>
+
 <script src="assets/case-study.js"></script>
 <script src="assets/case-study-rail.js"></script>
 </body>
