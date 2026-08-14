@@ -2079,8 +2079,9 @@ body.fd-edit .cs-fd-media .tiltwrap::after{content:attr(data-readout);position:a
 .cs-compare-tag.is-left{left:10px;}
 .cs-compare-tag.is-right{right:10px;}
 
-.cs-compare-hint{margin-top:10px;font-family:var(--font-mono);font-size:0.55rem;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);}
+/* Legacy alias, same as .cs-strip-hint. New markup uses .csr-hint. */
+.cs-compare-hint{margin-top:10px;font-family:var(--font-mono);font-size:0.58rem;
+  line-height:1.6;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);}
 
 @media (max-width:1024px){
   .cs-compare-grip{width:40px;height:40px;margin:-20px 0 0 -20px;}
