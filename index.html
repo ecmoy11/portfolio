@@ -1683,7 +1683,7 @@ a { color: inherit; text-decoration: none; }
   <a href="index.html" class="nav-logo">Emma Moystner</a>
   <div class="nav-right">
     <a href="index.html">Work</a>
-    <a href="playground.html">Play</a>
+    <a href="playground.html">Side Quests</a>
     <a href="about.html">About</a>
     <a href="resume.moystner.pdf" target="_blank">Resume</a>
     <div class="nav-connect-wrap">
@@ -1708,7 +1708,7 @@ a { color: inherit; text-decoration: none; }
 
 <div class="mobile-nav-overlay" id="mobile-nav-overlay">
   <a href="index.html">Work</a>
-  <a href="playground.html">Play</a>
+  <a href="playground.html">Side Quests</a>
   <a href="about.html">About</a>
   <a href="resume.moystner.pdf" target="_blank">Resume</a>
   <div class="mobile-connect-links">
@@ -2568,6 +2568,33 @@ if (window.csScrollies.length) {
   window.addEventListener('resize', window.csSyncSteps);
   window.csSyncSteps();
 }
+</script>
+<script>
+/* ---------------------------------------------------------------------
+   Safety net for the entrance animation.
+
+   The nav wordmark, the nav links and every .reveal-up start at opacity 0
+   and are brought in by GSAP — inside the SAME script block (1898-2536)
+   that boots Lenis on its first line. So if either CDN is slow, blocked or
+   down, that block throws before the reveal ever runs and the homepage
+   renders as a blank page with no nav. One third-party hiccup, whole page.
+
+   This lives in its own block, so it cannot be taken down with them. It
+   only fires when GSAP genuinely didn't arrive; on a healthy load it does
+   nothing and the scroll reveals behave normally.
+   --------------------------------------------------------------------- */
+(function () {
+  function rescue() {
+    if (window.gsap) return;                 // healthy: leave the animation alone
+    var els = document.querySelectorAll('.nav-logo, .nav-right, .reveal-up');
+    for (var i = 0; i < els.length; i++) {
+      els[i].style.opacity = '1';
+      els[i].style.transform = 'none';
+    }
+  }
+  setTimeout(rescue, 1200);
+  addEventListener('load', function () { setTimeout(rescue, 400); });
+})();
 </script>
 </body>
 </html>
