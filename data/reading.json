@@ -1,0 +1,6 @@
+{
+  "_howto": "Edit this by hand whenever you start a new book. Nothing automated touches this file. For the cover, drop in the book's ISBN-13 and use https://covers.openlibrary.org/b/isbn/<ISBN>-L.jpg — or set cover to \"\" and the card will just show the title.",
+  "title": "Thinking in Systems",
+  "author": "Donella Meadows",
+  "cover": "https://covers.openlibrary.org/b/isbn/9781603580557-L.jpg"
+}

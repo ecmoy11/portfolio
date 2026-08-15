@@ -1,0 +1,43 @@
+name: Refresh Side Quests data
+
+on:
+  schedule:
+    # every 4 hours. GitHub's scheduler drifts under load; that is fine here.
+    - cron: "17 */4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: now-json
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch feeds
+        env:
+          # Falls back to the literal username so the workflow runs with no repo
+          # configuration at all. A public Duolingo username is not a secret; it
+          # is already in the profile URL the card links to.
+          DUOLINGO_USERNAME: ${{ vars.DUOLINGO_USERNAME || 'ecmoy1' }}
+          DUOLINGO_JWT: ${{ secrets.DUOLINGO_JWT }}
+          # Strava and Last.fm env removed 2026-08-15 along with their entries
+          # in FEEDS (scripts/fetch_now.py). Restore both together.
+        run: python3 scripts/fetch_now.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- data/now.json; then
+            echo "no change"
+          else
+            git add data/now.json
+            git commit -m "chore: refresh side quests data [skip ci]"
+            git push
+          fi
