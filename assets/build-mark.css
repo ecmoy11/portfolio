@@ -7,7 +7,9 @@
       hero photo band. Static. Emma's call Aug 15 2026: it belongs to the
       picture, not to the viewport.
       The rail just gets a plain "How This Was Built" jump link alongside
-      Try It and Learnings. Two placements, not three. No JS.
+      Try It and Learnings. Two placements, not three. The only JS is
+      build-mark.js, which flips the hero mark between white and black
+      depending on what the photo is doing behind it.
 
    2. .build-sec   — the disclosure section itself: the five-step
       human/machine ladder with this project's step lit, plus a plain
@@ -48,6 +50,17 @@
          drop-shadow(0 10px 26px rgba(40,8,0,.4));
 }
 .csr-hero-mark:hover{transform:translateY(-3px);}
+
+/* Adaptive ink. The hero photo is painted `cover`, so the bottom-right
+   corner lands on pale sky at some widths and dark red rock at others.
+   build-mark.js samples the source pixels that actually fall under the
+   mark and adds .on-light when the backdrop is light. White stays the
+   default, so with JS off or the image unavailable nothing regresses. */
+.csr-hero-mark.on-light img{
+  filter:none;
+  filter:drop-shadow(0 1px 6px rgba(255,255,255,.9))
+         drop-shadow(0 8px 22px rgba(0,0,0,.18));
+}
 
 /* Every hero variant in the repo — plain, --photo, --cover, --system —
    bottoms out on the mosaic desert band, which is dark red rock in the
