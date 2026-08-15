@@ -547,3 +547,15 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
   .csr-hero--cover{padding:26px 20px 24px;}
   .csr-hero--cover img{width:100%;border-radius:6px;}
 }
+
+/* ---------- air above a sticky block inside the rail ----------
+   Aug 15 2026, Emma on gauge: "the spacing between the problem and the
+   process it replaced ... needs more padding."
+
+   Measured: on gauge the `.cs-sticky` block sat 8px below the `.csr-cols`
+   grid, while every other gap in that section is 34-36px. Cause: the rail
+   collapses `.cs-sticky` to one column and it carries no top margin of its
+   own, so it inherits only the previous block's 8px. A sticky block is a
+   change of register - copy plus media - and needs a bigger step than the
+   paragraph rhythm around it. */
+.csr-content .cs-sticky:not(:first-child){margin-top:64px;}
