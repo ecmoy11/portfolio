@@ -74,7 +74,11 @@ a { color: inherit; text-decoration: none; }
 
 .nav-logo {
   font-family: var(--font-mono);
-  font-size: 11px;
+  /* 13 / 12 / 12 is the site-wide nav scale (index.html, assets/case-study.css,
+     about.html). This page was carried over from the old playground template,
+     which was still on the pre-2026-08-15 11/10/10, so the nav visibly shrank
+     when you left any other page. Keep these three in step with the others. */
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.3em;
   text-transform: uppercase;
@@ -89,7 +93,7 @@ a { color: inherit; text-decoration: none; }
 
 .nav-right a {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -107,7 +111,7 @@ a { color: inherit; text-decoration: none; }
   padding: 10px 24px;
   border-radius: 50px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -1034,7 +1038,7 @@ a { color: inherit; text-decoration: none; }
     <a href="about.html">About</a>
     <a href="resume.moystner.pdf" target="_blank">Resume</a>
     <div class="nav-connect-wrap">
-      <a href="#" class="nav-cta" onclick="toggleConnectDropdown(event)">Connect</a>
+      <a href="#" class="nav-cta" id="connect-toggle" onclick="toggleConnectDropdown(event)">Connect</a>
       <div class="connect-dropdown" id="connect-dropdown">
         <a href="mailto:emmamoystner.design@gmail.com">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
