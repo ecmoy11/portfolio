@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/case-study.css">
 <link rel="stylesheet" href="assets/case-study-rail.css">
+<link rel="stylesheet" href="assets/build-mark.css">
 </head>
 <body>
 <nav class="nav" id="nav">
@@ -49,7 +50,8 @@
     <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
   </div>
 </div>
-<div class="csr-hero csr-hero--photo" role="presentation"></div>
+<div class="csr-hero csr-hero--photo">
+      <a class="csr-hero-mark" href="#build" aria-label="How this was built: Human > Machine"><img src="assets/build-icons/hmc-human-led.svg" alt=""></a></div>
 
 <!-- ============================================================
      PREVIEW PAGE, ON PURPOSE.
@@ -72,6 +74,10 @@
         <a href="#idea">The Idea</a>
         <a href="#soon">Coming Soon</a>
       </nav>
+      <a class="csr-buildmark" href="#build">
+        <span class="csr-buildmark-label">How this was built</span>
+        <span class="csr-buildmark-row"><img src="assets/build-icons/hmc-human-led.svg" alt=""><b>Human &gt; Machine</b></span>
+      </a>
     </aside>
 
     <main class="csr-content cs-body" style="margin:0;padding:0;">
@@ -121,6 +127,31 @@
         </div>
       </section>
 
+
+      <!-- ---------- HOW THIS WAS BUILT ---------- -->
+      <section class="csr-sec" id="build" data-csr-section>
+        <div class="csr-eyebrow">How this was built</div>
+        <h2 class="csr-display">Human-led, with the machine at the ideation stage.</h2>
+        <p>Live work, so this one moves, and this note moves with it. Human-led throughout: the research, the framing and every screen are mine. Where a machine has helped it has been early, widening the option set before anything was&nbsp;settled.</p>
+
+        <div class="build-grid">
+          <div class="build-scale">
+            <div class="build-step"><img src="assets/build-icons/hmc-human.svg" alt="" aria-hidden="true"><span>Human</span></div>
+            <div class="build-step is-here"><img src="assets/build-icons/hmc-human-led.svg" alt="" aria-hidden="true"><span>Human&nbsp;&gt;&nbsp;Machine</span></div>
+            <div class="build-step"><img src="assets/build-icons/hmc-balanced.svg" alt="" aria-hidden="true"><span>Human&nbsp;+&nbsp;Machine</span></div>
+            <div class="build-step"><img src="assets/build-icons/hmc-machine-led.svg" alt="" aria-hidden="true"><span>Machine&nbsp;&gt;&nbsp;Human</span></div>
+            <div class="build-step"><img src="assets/build-icons/hmc-machine.svg" alt="" aria-hidden="true"><span>Machine</span></div>
+          </div>
+          <div>
+            <dl class="build-split">
+              <div><dt>What the machine did</dt><dd>Ideation and early variations only. Nothing generated has carried through into a design decision&nbsp;as-is.</dd></div>
+              <div><dt>What I did</dt><dd>The research, the framing, the system, every screen, and the final craft pass.</dd></div>
+            </dl>
+            <p class="build-credit">Scale &middot; Human&ndash;Machine Collaboration, Dubai Future Foundation</p>
+          </div>
+        </div>
+      </section>
+
       <!-- ---------- COMING SOON ---------- -->
       <section class="csr-sec" id="soon" data-csr-section>
         <div class="csr-eyebrow">Coming Soon</div>
@@ -136,6 +167,7 @@
 
     </main>
   </div>
+
 
 <footer class="footer">
   <a href="mailto:emmamoystner.design@gmail.com">Contact</a>

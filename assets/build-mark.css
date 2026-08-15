@@ -1,0 +1,185 @@
+/* =====================================================================
+   BUILD MARK + AI DISCLOSURE
+   ---------------------------------------------------------------------
+   Two pieces that share one vocabulary:
+
+   1. .csr-hero-mark — the mark itself, planted in the bottom-right of the
+      hero photo band. Static. Emma's call Aug 15 2026: it belongs to the
+      picture, not to the viewport.
+   1b. .csr-buildmark — a small repeat of it in the sticky rail, under the
+      jump nav, in the rail's own mono type. This is the one that rides
+      down the page. No JS involved in either.
+
+   2. .build-sec   — the disclosure section itself: the five-step
+      human/machine ladder with this project's step lit, plus a plain
+      statement of what the machine did and what it didn't.
+
+   Deliberately a NEW file rather than an addition to case-study-rail.css.
+   The dev folder and the repo copy of that sheet have diverged in both
+   directions; a new file merges cleanly either way.
+
+   Icon set: the Human-Machine Collaboration scale (Dubai Future
+   Foundation). Five steps, from all-human to all-machine.
+   ===================================================================== */
+
+/* ---------- 1 · the mark, in the hero band ----------
+   Sits in the bottom-right corner of the hero photo and stays there. No
+   fixed positioning, no fade: it is part of the picture, not an overlay
+   that follows you. .csr-hero owns its own background in
+   case-study-rail.css; position:relative is added here so the sheet stays
+   additive and merges cleanly into either copy of that file. */
+.csr-hero{position:relative;}
+
+.csr-hero-mark{
+  position:absolute;
+  right:clamp(18px,3vw,42px);
+  bottom:clamp(16px,2.6vw,34px);
+  z-index:3;
+  display:block;line-height:0;
+  transition:transform .4s cubic-bezier(.22,.61,.36,1);
+}
+.csr-hero-mark img{
+  width:clamp(50px,5.4vw,76px);height:auto;display:block;
+  /* NOTE: these load as <img src>, so the page's `color` does NOT cascade
+     into the SVG and fill:currentColor resolves to the SVG's own black.
+     invert(1) on pure-black art is the one-line way to get white. Do not
+     "fix" this back to color:#fff — it silently does nothing. */
+  filter:invert(1)
+         drop-shadow(0 2px 8px rgba(40,8,0,.65))
+         drop-shadow(0 10px 26px rgba(40,8,0,.4));
+}
+.csr-hero-mark:hover{transform:translateY(-3px);}
+
+/* Every hero variant in the repo — plain, --photo, --cover, --system —
+   bottoms out on the mosaic desert band, which is dark red rock in the
+   bottom-right corner. So white is the default and there is currently no
+   variant that needs ink. If a pale hero ever lands, this is the hook:
+   .csr-hero--pale .csr-hero-mark img{color:var(--text-dark);filter:...} */
+
+@media (max-width:760px){
+  .csr-hero-mark{right:14px;bottom:12px;}
+  .csr-hero-mark img{width:44px;}
+}
+
+/* ---------- 1b · the marker in the sticky rail ----------
+   Same little mono voice as .csr-back and .csr-jump, so it reads as one
+   more rail label rather than a badge bolted on. */
+.csr-buildmark{
+  display:block;text-decoration:none;
+  margin-top:34px;padding-top:20px;
+  border-top:1px solid var(--divider,#e4e0da);
+}
+.csr-buildmark-label{
+  display:block;
+  font-family:var(--font-mono,ui-monospace,monospace);
+  font-size:0.55rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-muted,#8b857d);
+  margin-bottom:12px;
+}
+.csr-buildmark-row{display:flex;align-items:center;gap:10px;}
+.csr-buildmark-row img{
+  width:30px;height:30px;display:block;flex:0 0 auto;
+  color:var(--text-light,#555);
+  transition:color .25s ease;
+}
+.csr-buildmark-row b{
+  font-family:var(--font-mono,ui-monospace,monospace);
+  font-size:0.6rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-light,#555);line-height:1.4;
+  transition:color .25s ease;
+}
+.csr-buildmark:hover .csr-buildmark-row img,
+.csr-buildmark:hover .csr-buildmark-row b{color:var(--text-dark,#1a1a1a);}
+
+/* the rail collapses to a horizontal strip on mobile; the marker would
+   just be noise there, and the #build section is two scrolls away */
+@media (max-width:900px){.csr-buildmark{display:none;}}
+
+@media (prefers-reduced-motion:reduce){
+  .csr-hero-mark,.csr-buildmark-row img,.csr-buildmark-row b{transition-duration:.01ms;}
+}
+
+/* ---------- 2 · the disclosure section ---------- */
+.build-grid{
+  display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr);
+  gap:56px;align-items:start;margin-top:36px;
+}
+@media (max-width:820px){
+  .build-grid{grid-template-columns:1fr;gap:36px;}
+}
+
+/* the five-step ladder */
+.build-scale{
+  display:flex;flex-direction:column;gap:2px;
+  border-left:1px solid var(--divider,#e4e0da);
+  padding-left:0;
+}
+.build-step{
+  display:flex;align-items:center;gap:12px;
+  padding:9px 0 9px 16px;
+  border-left:2px solid transparent;
+  margin-left:-1px;
+  opacity:.34;
+  transition:opacity .3s ease;
+}
+.build-step img{
+  width:22px;height:22px;display:block;
+  color:var(--text-light,#555);
+  opacity:.75;
+}
+.build-step span{
+  font-family:var(--font-mono,ui-monospace,monospace);
+  font-size:0.52rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--text-light,#555);line-height:1.4;
+}
+.build-step.is-here{
+  opacity:1;
+  border-left-color:var(--orange,#c1502e);
+}
+.build-step.is-here img{width:42px;height:42px;color:var(--text-dark,#1a1a1a);opacity:1;}
+.build-step.is-here span{color:var(--text-dark,#1a1a1a);}
+
+@media (max-width:820px){
+  .build-scale{flex-direction:row;flex-wrap:wrap;border-left:0;border-top:1px solid var(--divider,#e4e0da);padding-top:14px;}
+  .build-step{border-left:0;border-top:2px solid transparent;margin-left:0;padding:12px 14px 0 0;}
+  .build-step.is-here{border-left-color:transparent;border-top-color:var(--orange,#c1502e);}
+  .build-step span{display:none;}
+  .build-step.is-here span{display:block;}
+}
+
+/* the what/what-not pair */
+.build-split{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:30px 40px;margin-top:34px;
+  padding-top:28px;border-top:1px solid var(--divider,#e4e0da);
+}
+@media (max-width:640px){.build-split{grid-template-columns:1fr;gap:24px;}}
+.build-split dt{
+  font-family:var(--font-mono,ui-monospace,monospace);
+  font-size:0.55rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-muted,#8b857d);margin-bottom:9px;
+}
+.build-split dd{
+  margin:0;font-size:0.88rem;font-weight:300;line-height:1.7;
+  color:var(--text-light,#555);
+}
+
+/* the scale's own footnote.
+   Qualified with .csr-sec p so it outranks `.csr-sec p` (0,1,1) — the same
+   specificity trap that makes .csr-cap need `p.csr-cap`. */
+.csr-sec p.build-credit,
+.build-credit{
+  font-family:var(--font-mono,ui-monospace,monospace);
+  font-size:0.52rem;font-weight:400;line-height:1.6;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-muted,#8b857d);
+  margin:26px 0 0;
+}
+
+/* ---------- 3 · wrap discipline ----------
+   No orphans. balance evens the head, pretty stops the body and the
+   two dd columns from ending on a single word. */
+#build .csr-display{text-wrap:balance;}
+#build p,
+.build-split dd,
+.build-step span{text-wrap:pretty;}

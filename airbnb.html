@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&family=Instrument+Serif:ital@0;1&family=Fraunces:opsz,wght@9..144,300..700&family=Playfair+Display:wght@400;500&family=Newsreader:opsz,wght@6..72,300..700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/case-study.css">
 <link rel="stylesheet" href="assets/case-study-rail.css">
+<link rel="stylesheet" href="assets/build-mark.css">
 <style>
   /* First Pass strip only: the 2025 exports come in three aspect ratios, so cap the
      frame height and letterbox instead of letting the row go ragged. */
@@ -65,6 +66,7 @@
     <img src="images/airbnb/updates/web/wishlist-welcome.webp" alt="The group trip wishlist welcome screen">
     <img src="images/airbnb/updates/web/group-budgets.webp" alt="Trip details showing every member&rsquo;s budget and the group total">
     <img src="images/airbnb/updates/web/split-paymanage.webp" alt="The PayManage splitting method with custom percentages">
+      <a class="csr-hero-mark" href="#build" aria-label="How this was built: Human"><img src="assets/build-icons/hmc-human.svg" alt=""></a>
   </div>
 
   <div class="csr-shell">
@@ -83,6 +85,10 @@
         <a href="#testing">Testing</a>
         <a href="#learnings">Learnings</a>
       </nav>
+      <a class="csr-buildmark" href="#build">
+        <span class="csr-buildmark-label">How this was built</span>
+        <span class="csr-buildmark-row"><img src="assets/build-icons/hmc-human.svg" alt=""><b>Human</b></span>
+      </a>
     </aside>
 
     <!-- ===== content ===== -->
@@ -247,6 +253,31 @@
         <p><strong>Feedback and visibility matter.</strong> Users missed the comments section and expected notifications for group actions. When someone joins, approves or pays, the group should know.</p>
       </section>
 
+
+      <!-- ---------- HOW THIS WAS BUILT ---------- -->
+      <section class="csr-sec" id="build" data-csr-section>
+        <div class="csr-eyebrow">How this was built</div>
+        <h2 class="csr-display">Human, start to finish.</h2>
+        <p>No generative tools in this one. Research, Figma, and iteration.</p>
+
+        <div class="build-grid">
+          <div class="build-scale">
+            <div class="build-step is-here"><img src="assets/build-icons/hmc-human.svg" alt="" aria-hidden="true"><span>Human</span></div>
+            <div class="build-step"><img src="assets/build-icons/hmc-human-led.svg" alt="" aria-hidden="true"><span>Human&nbsp;&gt;&nbsp;Machine</span></div>
+            <div class="build-step"><img src="assets/build-icons/hmc-balanced.svg" alt="" aria-hidden="true"><span>Human&nbsp;+&nbsp;Machine</span></div>
+            <div class="build-step"><img src="assets/build-icons/hmc-machine-led.svg" alt="" aria-hidden="true"><span>Machine&nbsp;&gt;&nbsp;Human</span></div>
+            <div class="build-step"><img src="assets/build-icons/hmc-machine.svg" alt="" aria-hidden="true"><span>Machine</span></div>
+          </div>
+          <div>
+            <dl class="build-split">
+              <div><dt>What the machine did</dt><dd>Nothing.</dd></div>
+              <div><dt>What I did</dt><dd>All of it. The research, the flows, the wireframes, the screens, the testing, the&nbsp;write-up.</dd></div>
+            </dl>
+            <p class="build-credit">Scale &middot; Human&ndash;Machine Collaboration, Dubai Future Foundation</p>
+          </div>
+        </div>
+      </section>
+
       <!-- ---------- LEARNINGS ---------- -->
       <section class="csr-sec" id="learnings" data-csr-section>
         <div class="csr-eyebrow">Learnings</div>
@@ -280,6 +311,7 @@
     </main>
   </div>
 </div>
+
 
 <footer class="footer">
   <a href="mailto:emmamoystner.design@gmail.com">Contact</a>

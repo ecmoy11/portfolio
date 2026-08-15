@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/case-study.css">
 <link rel="stylesheet" href="assets/case-study-rail.css">
+<link rel="stylesheet" href="assets/build-mark.css">
 </head>
 <body>
 <nav class="nav" id="nav">
@@ -51,6 +52,7 @@
 </div>
 <div class="csr-hero csr-hero--cover">
     <img src="images/airline%202036/airline-cover.jpg" alt="The 2036 terminal: a cancellation notice and three reroute options, each with its tradeoffs stated">
+      <a class="csr-hero-mark" href="#build" aria-label="How this was built: Machine > Human"><img src="assets/build-icons/hmc-machine-led.svg" alt=""></a>
   </div>
 
   <div class="csr-shell" id="cs-airline-futures-rail">
@@ -67,6 +69,10 @@
         <a href="#the-film">The Final Design</a>
         <a href="#reflection">Reflection</a>
       </nav>
+      <a class="csr-buildmark" href="#build">
+        <span class="csr-buildmark-label">How this was built</span>
+        <span class="csr-buildmark-row"><img src="assets/build-icons/hmc-machine-led.svg" alt=""><b>Machine &gt; Human</b></span>
+      </a>
     </aside>
 
     <main class="csr-content cs-body" style="margin:0;padding:0;">
@@ -82,7 +88,7 @@
             <div><dt>Role</dt><dd>Sole Designer &amp; Researcher</dd></div>
             <div><dt>Type</dt><dd>Solo Project</dd></div>
             <div><dt>Duration</dt><dd>14 weeks</dd></div>
-            <div><dt>Tools</dt><dd>Runway (AI video), Figma, ChatGPT</dd></div>
+            <div><dt>Tools</dt><dd>Figma, Artlist Studio, CapCut, Claude, ChatGPT</dd></div>
             <div class="half"><dt>Methods</dt><dd>Futures, Service Design, Sci-Fi Prototyping</dd></div>
             <div class="half"><dt>Deliverables</dt><dd>STEEPX analysis, Causal Layered Analysis, future persona, service blueprint, Actor-Network map, five speculative briefs, narrated film</dd></div>
           </dl>
@@ -162,6 +168,31 @@ Your browser does not support embedded video. <a href="images/airline%202036/air
         </div>
       </section>
 
+
+      <!-- ---------- HOW THIS WAS BUILT ---------- -->
+      <section class="csr-sec" id="build" data-csr-section>
+        <div class="csr-eyebrow">How this was built</div>
+        <h2 class="csr-display">Made by machine, directed by me.</h2>
+        <p>This one runs the other way. The film was generated &mdash; the shots, the environments, the motion. I chose to work that way on purpose: futures casting needs an artefact from inside the future, and generation is how a solo designer gets one. What the tools never had was the argument.</p>
+
+        <div class="build-grid">
+          <div class="build-scale">
+            <div class="build-step"><img src="assets/build-icons/hmc-human.svg" alt="" aria-hidden="true"><span>Human</span></div>
+            <div class="build-step"><img src="assets/build-icons/hmc-human-led.svg" alt="" aria-hidden="true"><span>Human&nbsp;&gt;&nbsp;Machine</span></div>
+            <div class="build-step"><img src="assets/build-icons/hmc-balanced.svg" alt="" aria-hidden="true"><span>Human&nbsp;+&nbsp;Machine</span></div>
+            <div class="build-step is-here"><img src="assets/build-icons/hmc-machine-led.svg" alt="" aria-hidden="true"><span>Machine&nbsp;&gt;&nbsp;Human</span></div>
+            <div class="build-step"><img src="assets/build-icons/hmc-machine.svg" alt="" aria-hidden="true"><span>Machine</span></div>
+          </div>
+          <div>
+            <dl class="build-split">
+              <div><dt>What the machine did</dt><dd>Artlist Studio, running Nano Banana 2, generated the hero stills and the image-to-video. ChatGPT and Claude were thinking partners during the STEEPX scan. The rendering, in other words &mdash; the surface of the thing.</dd></div>
+              <div><dt>What I did</dt><dd>The brief, the research, the position the film exists to make, the script, the shot list, the edit in CapCut, the sequencing, and every frame of the design language in Figma. Machine-led on the pixels. Human-led on the&nbsp;point.</dd></div>
+            </dl>
+            <p class="build-credit">Scale &middot; Human&ndash;Machine Collaboration, Dubai Future Foundation</p>
+          </div>
+        </div>
+      </section>
+
       <!-- ---------- REFLECTION ---------- -->
       <section class="csr-sec" id="reflection" data-csr-section>
         <div class="csr-eyebrow">Reflection</div>
@@ -172,6 +203,7 @@ Your browser does not support embedded video. <a href="images/airline%202036/air
 
     </main>
   </div>
+
 <footer class="footer">
   <a href="mailto:emmamoystner.design@gmail.com">Contact</a>
   <span>&copy; 2026 Emma Moystner</span>
