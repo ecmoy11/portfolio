@@ -786,17 +786,19 @@ a { color: inherit; text-decoration: none; }
   padding: 30px 26px 0;
   height: 420px;
 
-  /* Genuinely last on the page. Being last in the DOM is not enough: the grid
-     is CSS multi-column, which balances heights, so the card would only reach
-     the bottom of whichever column it landed in while a longer column ran past
-     it. column-span:all breaks it out of the column flow entirely and drops it
-     below all of them. Width is pinned to one column so it doesn't stretch,
-     and it stays right-aligned where it used to sit. Remove these four
-     properties to put it back in the column flow. */
-  column-span: all;
-  width: calc((100% - 16px) / 3);
-  margin-left: auto;
-  margin-right: 0;
+  /* Back in the column flow as of 2026-08-15. It used to carry
+     column-span:all + a pinned one-column width + margin-left:auto, which put
+     it below every column — but a spanning card can only start under the
+     LONGEST column, so the shorter columns showed a ragged hole above it
+     (measured 120px at 1440px once Strava and In Rotation were hidden).
+     Emma wants every gap between cards identical. As an ordinary column item
+     it inherits the shared 8px margin-bottom, so every gap on the page is 8px
+     at every breakpoint. Trade-off she accepted: the card is no longer
+     guaranteed to be the lowest thing on the page. Card heights come from
+     fixed aspect ratios and cannot be partitioned into three equal columns
+     (best achievable spread is ~89px), so "uniform gaps" and "sits below
+     everything" cannot both hold. Do not re-add column-span without
+     re-reading this. */
 }
 #card-duolingo.duo-widget:hover { border-color: rgba(255, 255, 255, 0.24); }
 #card-duolingo .duo-streak {
@@ -839,11 +841,10 @@ a { color: inherit; text-decoration: none; }
   border-radius: 14px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.24);
 }
-@media (max-width: 900px) {
-  #card-duolingo.duo-widget { width: calc((100% - 8px) / 2); }
-}
 @media (max-width: 600px) {
-  #card-duolingo.duo-widget { width: 100%; height: 460px; }
+  /* width now comes from the column itself; only the taller mobile card and
+     its larger character stay. */
+  #card-duolingo.duo-widget { height: 460px; }
   #card-duolingo .duo-avatar { width: 360px; }
 }
 .live-card {
