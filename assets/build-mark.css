@@ -6,9 +6,8 @@
    1. .csr-hero-mark — the mark itself, planted in the bottom-right of the
       hero photo band. Static. Emma's call Aug 15 2026: it belongs to the
       picture, not to the viewport.
-   1b. .csr-buildmark — a small repeat of it in the sticky rail, under the
-      jump nav, in the rail's own mono type. This is the one that rides
-      down the page. No JS involved in either.
+      The rail just gets a plain "How This Was Built" jump link alongside
+      Try It and Learnings. Two placements, not three. No JS.
 
    2. .build-sec   — the disclosure section itself: the five-step
       human/machine ladder with this project's step lit, plus a plain
@@ -61,42 +60,12 @@
   .csr-hero-mark img{width:44px;}
 }
 
-/* ---------- 1b · the marker in the sticky rail ----------
-   Same little mono voice as .csr-back and .csr-jump, so it reads as one
-   more rail label rather than a badge bolted on. */
-.csr-buildmark{
-  display:block;text-decoration:none;
-  margin-top:34px;padding-top:20px;
-  border-top:1px solid var(--divider,#e4e0da);
-}
-.csr-buildmark-label{
-  display:block;
-  font-family:var(--font-mono,ui-monospace,monospace);
-  font-size:0.55rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--text-muted,#8b857d);
-  margin-bottom:12px;
-}
-.csr-buildmark-row{display:flex;align-items:center;gap:10px;}
-.csr-buildmark-row img{
-  width:30px;height:30px;display:block;flex:0 0 auto;
-  color:var(--text-light,#555);
-  transition:color .25s ease;
-}
-.csr-buildmark-row b{
-  font-family:var(--font-mono,ui-monospace,monospace);
-  font-size:0.6rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--text-light,#555);line-height:1.4;
-  transition:color .25s ease;
-}
-.csr-buildmark:hover .csr-buildmark-row img,
-.csr-buildmark:hover .csr-buildmark-row b{color:var(--text-dark,#1a1a1a);}
-
-/* the rail collapses to a horizontal strip on mobile; the marker would
-   just be noise there, and the #build section is two scrolls away */
-@media (max-width:900px){.csr-buildmark{display:none;}}
+/* The rail gets an ordinary "How This Was Built" jump link, not a badge —
+   her call: two placements, the hero mark and the section, and the rail
+   entry reads like Try It and Learnings. Nothing to style here. */
 
 @media (prefers-reduced-motion:reduce){
-  .csr-hero-mark,.csr-buildmark-row img,.csr-buildmark-row b{transition-duration:.01ms;}
+  .csr-hero-mark{transition-duration:.01ms;}
 }
 
 /* ---------- 2 · the disclosure section ---------- */
