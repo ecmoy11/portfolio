@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Active Autonomy Companion &middot; Emma Moystner</title>
-<meta name="description" content="Active Autonomy Companion. A capstone by Emma Moystner.">
+<title>Nav Health &middot; Emma Moystner</title>
+<meta name="description" content="Nav Health, a digital nurse navigator for the emergency room. Capstone and thesis by Emma Moystner, full case study coming soon.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,140 +51,97 @@
 </div>
 <div class="csr-hero csr-hero--photo" role="presentation"></div>
 
+<!-- ============================================================
+     PREVIEW PAGE, ON PURPOSE.
+     Emma is still in the program, so this page is a teaser: what the
+     project is, one image, and a coming-soon line. The full case study
+     (problem, the decision, first pass, the four moves, restraint,
+     where it stands) is written and parked at
+     _drafts/capstone-full-draft.html in the Portfolio 2025 folder.
+     Drop it back in when the work is ready to be seen.
+     ============================================================ -->
+
 <div class="csr-shell" id="cs-capstone-rail">
 
     <aside class="csr-rail">
       <a href="index.html" class="csr-back">&larr;&nbsp; All work</a>
-      <div class="csr-eyebrow" style="margin-bottom:10px">Capstone &amp; Thesis · In Progress</div>
-      <div class="csr-railtitle">Active Autonomy<br>Companion</div>
+      <div class="csr-eyebrow" style="margin-bottom:10px">Capstone &amp; Thesis &middot; In Progress</div>
+      <div class="csr-railtitle">Nav<br>Health</div>
       <nav class="csr-jump" id="csr-jump">
-        <a href="#tldr">TLDR;</a>
-        <a href="#the-problem">The Problem</a>
-        <a href="#three-threads-i-m-working-on-now">Three Threads I’m Working On Now</a>
-        <a href="#the-first-pass">The First Pass</a>
-        <a href="#final-designs">Final Designs</a>
-        <a href="#where-it-s-headed">Where It’s Headed</a>
+        <a href="#tldr">Overview</a>
+        <a href="#idea">The Idea</a>
+        <a href="#soon">Coming Soon</a>
       </nav>
     </aside>
 
     <main class="csr-content cs-body" style="margin:0;padding:0;">
 
-      <!-- ---------- TLDR ---------- -->
+      <!-- ---------- OVERVIEW ---------- -->
       <section class="csr-sec" id="tldr" data-csr-section>
-        <div class="csr-eyebrow">TLDR;</div>
+        <div class="csr-eyebrow">Capstone &amp; Thesis</div>
         <h2 class="csr-display">Overview</h2>
-        <p class="csr-lede">A digital nurse navigator that helps emergency room patients understand where they are, why they’re waiting, and what happens next, in plain language.</p>
-
-          <div class="cs-tldr"><div class="cs-tldr-row"><div class="cs-tldr-label">Problem</div><div class="cs-tldr-text">The emergency department is disorienting. You’re anxious, often in pain, and rarely sure what’s happening or how long it will take.</div></div>
-<div class="cs-tldr-row"><div class="cs-tldr-label">Insight</div><div class="cs-tldr-text">An anticipatory, AI-driven system should make people feel <strong>more in control, not less</strong>. It never hides what it’s doing: it shows its work and sets honest expectations about the wait.</div></div>
-<div class="cs-tldr-row"><div class="cs-tldr-label">Outcome</div><div class="cs-tldr-text"><em>In progress.</em> A digital nurse navigator that keeps patients oriented from check-in to discharge, built on a <strong>HIPAA-safe spec that treats the model as untrusted</strong>. Full study to come.</div></div></div>
+        <p><span class="highlight">Nav Health</span> is a digital nurse navigator for the emergency room. It tells a patient where she stands, what her triage level actually means, what happens next, and roughly when, in plain language.</p>
+        <p>This is my capstone and thesis, and it is still in the program with me. The full case study goes up once it is finished. Until then, here is what it is about.</p>
 
         <dl class="csr-meta">
-            <div><dt>Role</dt><dd>Sole Designer &amp; Researcher</dd></div>
-            <div><dt>Type</dt><dd>Capstone &amp; Thesis</dd></div>
-            <div><dt>Duration</dt><dd>Ongoing · 2026</dd></div>
-            <div><dt>Tools</dt><dd>Fill in</dd></div>
-            <div class="half"><dt>Methods</dt><dd>Service Design, Prototyping, A/B Testing</dd></div>
-            <div class="half"><dt>Deliverables</dt><dd>In progress. Patient-facing flows, HIPAA handling spec, A/B tested layout variants</dd></div>
-          </dl>
+          <div><dt>Role</dt><dd>Sole Designer &amp; Researcher</dd></div>
+          <div><dt>Type</dt><dd>Capstone &amp; Thesis</dd></div>
+          <div><dt>Duration</dt><dd>Ongoing &middot; 2026</dd></div>
+          <div><dt>Tools</dt><dd>Figma</dd></div>
+          <div class="half"><dt>Methods</dt><dd>Service Design, Prototyping, A/B Testing</dd></div>
+          <div class="half"><dt>Deliverables</dt><dd>In progress. Patient-facing flows, service blueprint, HIPAA handling spec, A/B tested layout variants</dd></div>
+        </dl>
       </section>
 
-      <!-- ---------- THE PROBLEM ---------- -->
-      <section class="csr-sec cs-sticky left-text" id="the-problem" data-csr-section>
-        <div class="csr-eyebrow">The Problem</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <div class="cs-sticky-text">
-<div class="cs-pin"><div class="cs-pin-inner">
-<div class="cs-step solo">
+      <!-- ---------- THE IDEA ---------- -->
+      <section class="csr-sec" id="idea" data-csr-section>
+        <div class="csr-eyebrow">The Idea</div>
+        <h2 class="csr-display">The problem with the emergency room wait is not how long it is. It is that you cannot see it.</h2>
+        <p>A department cannot promise a time, which is the reason most of them tell patients nothing at all. But she was never asking for a promise. She was asking for a position, and the department already knows where she stands. It just never says it out loud. Nav Health is built around one claim: an anticipatory system should leave someone feeling <strong>more in control, not less</strong>.</p>
 
-<p>The emergency department is disorienting. You’re anxious, often in pain, and rarely sure what’s happening or how long it will take. The information that would settle you exists, it just never reaches you: your triage level, your position in the queue, who is actually responsible for your care, what the next step is and roughly when it happens.</p>
-<p><span class="highlight">Active Autonomy Companion</span> is a digital nurse navigator that meets patients there. It explains where they are, why they’re waiting, what their triage level means, who’s on their care team and what comes next, all in plain language.</p>
-<p>The thesis: an anticipatory, AI-driven system should make people feel more in control, not less. It never hides what it’s doing. It shows its work, sets honest expectations about wait times, and keeps patients oriented from check-in to discharge.</p>
-</div>
-</div></div>
-</div>
-<div class="cs-sticky-media"><div class="cs-collage stack wide" data-drift="170">
-<div class="pcol" data-rate="0.35">
-<div class="tiltwrap"><video autoplay="" class="tilt" loop="" muted="" playsinline="" preload="metadata" style="width:100%;display:block;border-radius:6px;"><source src="images/capstone/capstoneteaser.mp4" type="video/mp4"/></video></div>
-</div>
-</div></div>
+        <div class="cs-image-wide"><img src="images/capstone/updates/web/nav-title-header.webp" alt="Nav Health: the waiting view with an estimated wait range, triage level and journey timeline, beside the assistant screen" loading="lazy"></div>
+        <p class="csr-cap">An honest range, a triage level that arrives already translated, and the visit laid out end to end</p>
+
+        <div class="csr-cols">
+          <div>
+            <span class="csr-num">01</span>
+            <h4>Say the wait honestly</h4>
+            <p>A range that is timestamped and maintained, not a countdown. A countdown reads as a promise, and an emergency department reorders by acuity, not by arrival.</p>
+          </div>
+          <div>
+            <span class="csr-num">02</span>
+            <h4>Translate the number</h4>
+            <p>A triage level on its own is a ranking, which is the last thing anyone wants handed to them in a waiting room. The card carries what it means, what it does not mean, and that it gets looked at again.</p>
+          </div>
+          <div>
+            <span class="csr-num">03</span>
+            <h4>Calm by default, alarm reserved</h4>
+            <p>One quiet surface, and colour spent in exactly one place. If everything can shout, nothing can.</p>
+          </div>
+        </div>
       </section>
 
-      <!-- ---------- THREE THREADS I’M WORKING ON NOW ---------- -->
-      <section class="csr-sec" id="three-threads-i-m-working-on-now" data-csr-section>
-        <div class="csr-eyebrow">Three Threads I’m Working On Now</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <p><strong>The patient experience under high cognitive load.</strong> The ER is a high-stress moment. People are anxious, in pain, and in no state to absorb complexity. I’m designing the screens that carry patients through a visit (the waiting view, journey timeline, care team and discharge summary) to keep them calm and oriented, and A/B testing layout and navigation variations to find the clearest version.</p>
-<p><strong>Safe handling of patient data.</strong> Every screen touches protected health information, so I’m also writing the spec for handling it safely under HIPAA. The principle: treat the model as untrusted, and enforce anything that matters legally or clinically in code rather than in a prompt.</p>
-<p><strong>AI that belongs in high-stakes spaces.</strong> The bigger question underneath it all: how do we design AI for environments like the ER so it’s genuinely safe and helpful, rather than one more thing to manage?</p>
-      </section>
+      <!-- ---------- COMING SOON ---------- -->
+      <section class="csr-sec" id="soon" data-csr-section>
+        <div class="csr-eyebrow">Coming Soon</div>
+        <h2 class="csr-display">The full study lands when the work does</h2>
+        <p>Still ahead: the service blueprint, the direction I cut, the four decisions the final screens rest on, what I chose not to build, and what sixteen test sessions settled. It goes up here as soon as the program is behind me.</p>
+        <div class="quote-block">Want the walkthrough before then? <a href="mailto:emmamoystner.design@gmail.com">Email me</a> and I will take you through it.</div>
 
-      <!-- ---------- THE FIRST PASS ---------- -->
-      <section class="csr-sec cs-alt" id="the-first-pass" data-csr-section>
-        <div class="csr-eyebrow">The First Pass</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <div class="cs-alt-media">
-<div class="cs-alt-media empty">Artefact from the cut direction<br/>goes here</div>
-<span class="cs-alt-tag">Cut</span>
-</div>
-<div class="cs-alt-copy" data-placeholder="Placeholder · replace">
-<div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. The first version went wide before it went deep, and I built the whole thing out before testing whether the premise held.</p></div>
-<div class="cs-alt-row"><span class="cs-alt-label">Why it lost</span><p>Sed do eiusmod tempor incididunt ut labore. It tested as more work than the thing it replaced, which is the one result a redesign cannot survive.</p></div>
-<div class="cs-alt-row"><span class="cs-alt-label">What replaced it</span><p>Ut enim ad minim veniam, quis nostrud exercitation. The version I kept held on to the intent and threw out the scaffolding around it.</p></div>
-</div>
-      </section>
-
-      <!-- ---------- FINAL DESIGNS ---------- -->
-      <section class="csr-sec cs-fd" id="final-designs" data-csr-section>
-        <div class="csr-eyebrow">Final Designs</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <div class="cs-fd-media flow wide" data-drift="150">
-<div class="pcol" data-rate="0.30">
-<div class="cs-alt-media empty">Final screens land here</div>
-</div>
-<div class="pcol" data-rate="-0.30">
-<div class="cs-alt-media empty">Final screens land here</div>
-</div>
-</div>
-<div class="cs-fd-text">
-<div class="cs-fd-block">
-
-<p>In progress. The three threads above are what the final screens have to resolve, and this is where they will land as they come together.</p>
-</div>
-<div class="cs-fd-block" data-fd-step="1">
-<div aria-controls="fd-body-1" aria-expanded="false" class="cs-section-label tight" role="button" tabindex="0">01 · The Waiting View</div>
-<div class="cs-fd-body" id="fd-body-1"><div><p>The screen a patient looks at most, and the one that has to carry honest expectations about the wait without pretending to a precision the department doesn’t have.</p></div></div>
-</div>
-<div class="cs-fd-block" data-fd-step="2">
-<div aria-controls="fd-body-2" aria-expanded="false" class="cs-section-label tight" role="button" tabindex="0">02 · The Journey Timeline</div>
-<div class="cs-fd-body" id="fd-body-2"><div><p>Where you are, what already happened, and what comes next. Orientation is the whole product, and this is the surface that delivers it.</p></div></div>
-</div>
-<div class="cs-fd-block" data-fd-step="3">
-<div aria-controls="fd-body-3" aria-expanded="false" class="cs-section-label tight" role="button" tabindex="0">03 · Discharge in Plain Language</div>
-<div class="cs-fd-body" id="fd-body-3"><div><p>The handoff back to the patient’s own life, which is the moment the most instructions get given and the least gets retained.</p></div></div>
-</div>
-</div>
-      </section>
-
-      <!-- ---------- WHERE IT’S HEADED ---------- -->
-      <section class="csr-sec" id="where-it-s-headed" data-csr-section>
-        <div class="csr-eyebrow">Where It’s Headed</div>
-        <!-- TODO: a one-line <h2 class="csr-display"> goes here -->
-        <p>The full case study, prototype and final deliverables will land here as it comes together.</p>
-<div class="quote-block">More to come. This is my capstone, and it’s actively in progress.</div>
         <a class="csr-next" href="airline-2036.html">
           <span>Next project</span>
           <b>Airline 2036 &rarr;</b>
         </a>
-
       </section>
 
     </main>
   </div>
+
 <footer class="footer">
   <a href="mailto:emmamoystner.design@gmail.com">Contact</a>
   <span>&copy; 2026 Emma Moystner</span>
 </footer>
+
 <script src="assets/case-study.js"></script>
 <script src="assets/case-study-rail.js"></script>
 </body>
