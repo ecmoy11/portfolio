@@ -1648,7 +1648,11 @@ a { color: inherit; text-decoration: none; }
 
 @media (max-width: 768px) {
   .nav { padding: 16px 24px; }
-  .nav.scrolled { padding: 12px 24px; }
+  /* Opaque on mobile. The frosted .92 + blur reads as a designed effect on a wide
+     desktop nav; on a phone it sits directly on top of the sticky rail and body
+     copy ghosts through it, which reads as a bug. Desktop keeps the frost. */
+  .nav.scrolled { padding: 12px 24px; background: #FAF8F5;
+                  backdrop-filter: none; -webkit-backdrop-filter: none; }
   .nav-right { display: none; }
   .mobile-menu-toggle { display: flex; }
   .cs-meta-bar { flex-wrap: wrap; gap: 24px; }

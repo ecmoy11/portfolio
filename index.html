@@ -1702,7 +1702,7 @@ a { color: inherit; text-decoration: none; }
   <a href="index.html" class="nav-logo">Emma Moystner</a>
   <div class="nav-right">
     <a href="index.html">Work</a>
-    <a href="playground.html">Side Quests</a>
+    <a href="side-quests.html">Side Quests</a>
     <a href="about.html">About</a>
     <a href="resume.moystner.pdf" target="_blank">Resume</a>
     <div class="nav-connect-wrap">
@@ -1727,7 +1727,7 @@ a { color: inherit; text-decoration: none; }
 
 <div class="mobile-nav-overlay" id="mobile-nav-overlay">
   <a href="index.html">Work</a>
-  <a href="playground.html">Side Quests</a>
+  <a href="side-quests.html">Side Quests</a>
   <a href="about.html">About</a>
   <a href="resume.moystner.pdf" target="_blank">Resume</a>
   <div class="mobile-connect-links">
@@ -2066,7 +2066,7 @@ function closeCaseStudy() {
 // ======================================
 let playgroundInitialized = false;
 
-function openPlayground() { window.location.href = 'playground.html'; }
+function openSideQuests() { window.location.href = 'side-quests.html'; }
 
 function closePlayground() { window.location.href = 'index.html'; }
 
@@ -2549,7 +2549,7 @@ function closeInfo() { closeCaseStudy(); }
 
 // Open playground if arriving via #playground hash
 if (window.location.hash === '#playground') {
-  openPlayground();
+  openSideQuests();
 }
 
 </script>

@@ -303,9 +303,14 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
   .csr-shell{grid-template-columns:minmax(0,1fr);gap:0;padding:40px 28px 90px;}
   .csr-rail,.csr-content{min-width:0;}
   .csr-rail{
-    position:sticky;top:64px;z-index:60;margin:0 -28px 40px;
-    padding:14px 28px;background:rgba(250,248,245,.94);
-    backdrop-filter:blur(10px);border-bottom:1px solid var(--divider);
+    /* The nav is 69px tall at rest and 61px once .scrolled shrinks its padding.
+       top:64px matched neither: it tucked 5px under the nav at rest, then left a
+       3px hole once the nav shrank, and body text scrolled through it. The rail
+       only ever sticks after the nav has shrunk, so 60px is the number, and the
+       1px overlap kills the sub-pixel seam. Opaque, because .94 ghosted too. */
+    position:sticky;top:60px;z-index:60;margin:0 -28px 40px;
+    padding:14px 28px;background:#FAF8F5;
+    border-bottom:1px solid var(--divider);
   }
   .csr-railtitle{display:none;}
   .csr-back{margin-bottom:12px;}
