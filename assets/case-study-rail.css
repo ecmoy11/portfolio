@@ -264,6 +264,38 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
 }
 .csr-next:hover b{color:var(--orange);}
 
+/* ---------- live prototype link (.csr-proto) ----------
+   A prototype that is hosted off-site. Built as a card, not an inline link,
+   because it is usually the only clickable thing in the section it sits in and
+   an inline link disappears into body copy. Three lines: mono label so it reads
+   as a component, headline-scale link text, then the bare host so the reader
+   can see where the click is sending them before they take it. Uses the same
+   head vars as .csr-next so it tracks any font swap on <html data-head>. */
+.csr-proto{
+  display:block;margin:28px 0 8px;padding:22px 26px;
+  border:1px solid var(--divider);border-radius:14px;
+  background:var(--bg-warm);text-decoration:none;
+  transition:border-color .3s ease, background .3s ease;
+}
+.csr-proto:hover{border-color:var(--orange);background:#fff;}
+.csr-proto span{
+  display:block;font-family:var(--font-mono);font-size:0.55rem;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);
+}
+.csr-proto b{
+  display:block;margin-top:10px;
+  font-family:var(--f-head);font-weight:var(--head-weight,400);
+  font-size:calc(1.25rem * var(--head-scale));letter-spacing:var(--head-track);
+  color:var(--text-dark);transition:color .3s ease;
+  text-wrap:balance;
+}
+.csr-proto:hover b{color:var(--orange);}
+.csr-proto em{
+  display:block;margin-top:8px;font-style:normal;
+  font-family:var(--font-mono);font-size:0.58rem;letter-spacing:.06em;
+  color:var(--text-muted);
+}
+
 /* ---------- bleed: right only, never under the rail ----------
    The shared stylesheet bleeds symmetrically off a centred column.
    Here the column sits right of a 200px rail, so a symmetric bleed
