@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+**/.DS_Store
+._*
+Thumbs.db
+
+# scratch / retired work — emptied by hand, never deployed
+_to_delete/
+
+# git lock debris left by the sandbox bridge (rm is blocked on that mount)
+*.lock
+
+# raw camera originals (18-23MB each). The site serves images/play/photography/
+# thumbs/ in the grid and large/ in the lightbox — both stay tracked.
+/images/play/photography/*.JPG
+/images/play/photography/*.jpg
