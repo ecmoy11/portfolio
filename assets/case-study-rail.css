@@ -575,14 +575,19 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
      fights the red cancellation card. */
   background-position:center 45%;
 }
-.csr-hero--cover img{
+/* the cover artefact is a still on most pages and a silent loop on airline
+   2036. The generic `.csr-hero video` rule sizes video like a phone screen
+   (140-250px), so the video has to be named here or the hero collapses. */
+.csr-hero--cover img,
+.csr-hero--cover video{
   width:min(730px,58vw);max-width:none;height:auto;display:block;
   border-radius:10px;
   filter:drop-shadow(0 24px 56px rgba(65,0,22,.28));
 }
 @media (max-width:760px){
   .csr-hero--cover{padding:26px 20px 24px;}
-  .csr-hero--cover img{width:100%;border-radius:6px;}
+  .csr-hero--cover img,
+  .csr-hero--cover video{width:100%;border-radius:6px;}
 }
 
 /* ---------- air above a sticky block inside the rail ----------
