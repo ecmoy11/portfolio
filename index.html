@@ -1760,7 +1760,11 @@ a { color: inherit; text-decoration: none; }
     <!-- 01 · Airline Interaction Design 2036 -->
     <a class="work-tile reveal-up" href="airline-2036.html">
       <div class="tile-media" style="aspect-ratio:3/2;">
-        <img src="images/airline%202036/airline%20coverphoto.png" alt="Airline Interaction Design 2036 cover" loading="lazy">
+        <video src="images/airline%202036/airline-loop-tile.mp4"
+               poster="images/airline%202036/airline-loop-poster.jpg"
+               width="1280" height="704"
+               autoplay muted loop playsinline preload="metadata"
+               aria-label="Airline Interaction Design 2036: a cancelled flight, three reroute options, and a rebooking, playing out in the 2036 terminal"></video>
         <div class="tile-overlay">
           <span class="tile-pill tile-pill-name">Airline Interaction Design 2036</span>
           <span class="tile-pill tile-pill-tag">Aviation &middot; Futures / Service Design</span>
@@ -2613,6 +2617,18 @@ if (window.csScrollies.length) {
   }
   setTimeout(rescue, 1200);
   addEventListener('load', function () { setTimeout(rescue, 400); });
+})();
+</script>
+<!-- An autoplaying loop is motion nobody asked for. If the OS says reduce,
+     hold the poster frame instead. Runs before first paint of the video. -->
+<script>
+(function(){
+  try{
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('video[autoplay]').forEach(function(v){
+      v.autoplay=false; v.removeAttribute('autoplay'); v.removeAttribute('loop'); v.pause();
+    });
+  }catch(e){}
 })();
 </script>
 </body>

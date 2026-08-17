@@ -69,7 +69,11 @@
   </div>
 </div>
 <div class="csr-hero csr-hero--cover">
-    <img src="images/airline%202036/airline-cover.jpg" alt="The 2036 terminal: a cancellation notice and three reroute options, each with its tradeoffs stated">
+    <video src="images/airline%202036/airline-loop.mp4"
+           poster="images/airline%202036/airline-loop-poster.jpg"
+           width="1920" height="1056"
+           autoplay muted loop playsinline preload="metadata"
+           aria-label="The 2036 terminal: a cancellation notice arrives, three reroute options are laid out with their tradeoffs stated, and one is confirmed"></video>
     <a class="csr-hero-mark" href="#build" aria-label="How this was built: Machine-led"><img src="assets/build-icons/hmc-machine-led.svg" alt=""></a>
   </div>
 
@@ -230,5 +234,17 @@ Your browser does not support embedded video. <a href="images/airline%202036/air
 <script src="assets/case-study.js"></script>
 <script src="assets/case-study-rail.js"></script>
 <script src="assets/build-mark.js"></script>
+<!-- An autoplaying loop is motion nobody asked for. If the OS says reduce,
+     hold the poster frame instead. Runs before first paint of the video. -->
+<script>
+(function(){
+  try{
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('video[autoplay]').forEach(function(v){
+      v.autoplay=false; v.removeAttribute('autoplay'); v.removeAttribute('loop'); v.pause();
+    });
+  }catch(e){}
+})();
+</script>
 </body>
 </html>
