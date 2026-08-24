@@ -32,6 +32,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
 
+<!-- Load screen. Same-origin, no library. It builds its own overlay, so if
+     this file fails to arrive there is simply no load screen. -->
+<script src="assets/loadscreen.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
@@ -2630,6 +2634,23 @@ if (window.csScrollies.length) {
       v.autoplay=false; v.removeAttribute('autoplay'); v.removeAttribute('loop'); v.pause();
     });
   }catch(e){}
+})();
+</script>
+<!-- The load screen covers the site until JS takes it away, which is the
+     same shape of risk as the GSAP rescue above. This block is separate on
+     purpose: it cannot be taken down with the file it protects. On a healthy
+     load the overlay is already gone and this does nothing. -->
+<script>
+(function () {
+  function clear() {
+    if (window.__emLoadRemove) { window.__emLoadRemove(); return; }
+    var o = document.getElementById('em-loadscreen');
+    if (o && o.parentNode) o.parentNode.removeChild(o);
+  }
+  // The normal exit tops out around 3.0s (2.2s cap + a beat + the fade),
+  // so these sit well clear of it. They are a last resort, not a race.
+  setTimeout(clear, 5000);
+  addEventListener('load', function () { setTimeout(clear, 4000); });
 })();
 </script>
 </body>
