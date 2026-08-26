@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nav Health &middot; Emma Moystner</title>
-<meta name="description" content="Nav Health is a digital nurse navigator for the emergency room: where you stand, what your triage level means, and what happens next. Capstone, in progress.">
+<meta name="description" content="Nav Health is a digital companion for the emergency room. The department already knows where each patient stands. This is the case for saying it out loud, in language they can use.">
 <link rel="canonical" href="https://emmamoystner.design/capstone.html">
 <meta name="author" content="Emma Moystner">
 
@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Emma Moystner">
 <meta property="og:url" content="https://emmamoystner.design/capstone.html">
 <meta property="og:title" content="Nav Health &middot; Emma Moystner">
-<meta property="og:description" content="Nav Health is a digital nurse navigator for the emergency room: where you stand, what your triage level means, and what happens next. Capstone, in progress.">
+<meta property="og:description" content="Nav Health is a digital companion for the emergency room. The department already knows where each patient stands. This is the case for saying it out loud, in language they can use.">
 <meta property="og:image" content="https://emmamoystner.design/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -20,7 +20,7 @@
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Nav Health &middot; Emma Moystner">
-<meta name="twitter:description" content="Nav Health is a digital nurse navigator for the emergency room: where you stand, what your triage level means, and what happens next. Capstone, in progress.">
+<meta name="twitter:description" content="Nav Health is a digital companion for the emergency room. The department already knows where each patient stands. This is the case for saying it out loud, in language they can use.">
 <meta name="twitter:image" content="https://emmamoystner.design/og-image.png">
 
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -30,6 +30,171 @@
 <link rel="stylesheet" href="assets/case-study.css">
 <link rel="stylesheet" href="assets/case-study-rail.css">
 <link rel="stylesheet" href="assets/build-mark.css">
+<style>
+/* ---------- persona strip (capstone only) ----------
+   Five user-story cards laid out with the shared .cs-filmstrip mechanics
+   (snap scrolling + the prev/next buttons in case-study.js). Deliberately
+   NOT .cs-frame: that class binds the image lightbox, and these are type,
+   not screens, so they have to be legible in place instead of on zoom. */
+/* ---------- typography defaults ----------
+   Her standing rule: single-word last lines are a defect. The shared
+   case-study sheets never set these, so body copy on this page had no
+   orphan protection at all and broke at 360, 1000, 1024, 1100 and 1150.
+   balance evens short headings, pretty stops paragraphs ending on one word.
+   &nbsp; glue stays where measurement still finds one. */
+.csr-content p, .csr-content dd, .csr-content li,
+.csr-cap, .csr-hint, .nav-j-story, .nav-j-tests{text-wrap:pretty;}
+.csr-content h2, .csr-content h3, .csr-content h4,
+.csr-stmt, .csr-q, .csr-sub{text-wrap:balance;}
+
+/* ---------- pre-existing bleed bug, scoped fix ----------
+   case-study-rail.css:310 gives the bleed sections a rightward-only bleed:
+     --csr-bleed: min(230px, calc(96px + max(0px,(100vw - 1280px)/2)))
+     width: calc(100% + var(--csr-bleed)); margin-left: 0;
+   The 96px floor is the bug. Below about 1196px there is not 96px of room to
+   the right of the text column (the shell only has 80px of padding there), so
+   .cs-fd runs past the viewport and the whole page scrolls sideways. Measured
+   16px of horizontal scroll at 1024, 1100 and 1200. It is invisible on a wide
+   monitor, which is why it survived.
+   Third clamp = the room that actually exists: half the slack outside the
+   1240px shell, plus the shell's own right padding, less a scrollbar gutter.
+   Declared on .csr-content so .cs-alt inherits it too: its 2-column rule at
+   min-width:1200px uses the same variable and overshot in the 1200-1230px
+   band. coros, solace, airbnb and airline share all of this, so the real fix
+   is this one line in case-study-rail.css:310. */
+.csr-content{
+  --csr-bleed:max(0px, min(230px, calc(96px + max(0px,(100vw - 1280px) / 2)), calc((100vw - 1240px) / 2 + 68px)));
+}
+
+/* ---------- Try It: the prototype needs room ----------
+   The prototype renders a 393x852 device sitting under a ~390px stack of
+   control bar, intro and journey stepper. The shared .cs-proto-frame caps
+   width at 480px and height at a 520px min, which clipped the phone on both
+   axes. Here it gets the full bleed and a height that clears the device. */
+.cs-proto-wide .cs-prototype-embed{margin:0;display:block;}
+.cs-proto-wide .cs-proto-frame{max-width:none;width:100%;}
+/* The prototype needs ~1240px to show its control bar and the whole 393x852
+   device. Rendering that at 1:1 made the block taller than any other section
+   on the page, so above 760px it is scaled down to fit the column instead:
+   nothing is cut, the block is about a quarter shorter, and the phone still
+   reads larger than the 480px-capped version it replaced. Below 760px the
+   prototype's own responsive layout does a better job than scaling, so it
+   goes back to a plain full-width frame. The cutover is on the STAGE width,
+   not the viewport: at a 1100px viewport the rail leaves the column only 676px.
+   Scale is set in script. */
+.cs-proto-stage{
+  position:relative;overflow:hidden;
+  border:1px solid var(--divider);border-radius:6px;background:var(--bg-warm);
+  height:775px;}
+.cs-proto-wide .cs-proto-frame iframe{
+  max-width:none;min-height:0;border:0;display:block;
+  position:absolute;top:0;left:0;transform-origin:top left;
+  width:100%;height:100%;}
+.cs-image-wide video{width:100%;height:auto;display:block;border-radius:6px;background:var(--ink);}
+/* the A/B two-up is a composed pair of phones on its own ground, so it needs
+   no card chrome, and it opens full size on click (data-zoom). */
+.cs-alt-media.is-ab{border:none;background:none;border-radius:0;overflow:visible;}
+.cs-ab-shot{cursor:zoom-in;border-radius:4px;overflow:hidden;}
+.cs-alt-media.is-ab img{filter:none;opacity:1;display:block;width:100%;height:auto;}
+
+/* the three screen recordings in the solution canvas: silent loops, so they
+   autoplay and carry no controls. Sized like the images they replaced. */
+/* These are recordings, not a photo collage, so they hold a rigid column:
+   one line, same width, same left edge, even spacing, and no drift. Capped
+   at 360 the way case-study-rail.css caps solace's portrait canvas. */
+.nav-vid{max-width:360px;margin:0 0 40px;}
+.nav-vid:last-child{margin-bottom:0;}
+.nav-vid video{
+  /* width/height attributes are on the elements so the column reserves the
+     right space before the file loads; CSS keeps them fluid. */
+  width:100%;height:auto;display:block;border-radius:6px;
+  border:1px solid var(--divider);background:var(--bg-warm);}
+
+/* Two-column canvas: 1.7fr for the media left ~200px of dead air between the
+   recordings and the copy, because the recordings were capped at 360 inside a
+   560px column. Even the columns and let the recordings fill theirs, so the
+   width is spread rather than pooled in a gap. Only above the 1100px stack. */
+@media (min-width:1101px){
+  #solution .cs-fd{grid-template-columns:1fr 1fr;column-gap:64px;}
+  #solution .nav-vid{max-width:none;}
+}
+
+/* .csr-cols is a fixed 3-up. The findings block is down to two, so it would
+   sit in columns 1 and 2 with a hole on the right. Even them out instead. */
+.csr-cols.is-two{grid-template-columns:repeat(2,minmax(0,1fr));}
+@media (max-width:760px){ .csr-cols.is-two{grid-template-columns:1fr;} }
+
+/* ---------- information hierarchy ----------
+   Measured on First Pass before the split: .csr-sub rendered 17.92px and the
+   h4 inside .csr-learn rendered 17.28px, same family and weight, so a
+   sub-section and an item inside it read as the same rank. Below that,
+   ENTRY 9.92 / LABEL 9.6 / cap 9.28 / hint 9.28 put four different roles
+   inside 0.64px of each other. Two fixes: lift the sub clear of the item
+   headings, and push the hint below the caption line so instructions stop
+   competing with content. */
+.csr-sec p.csr-sub{font-size:1.38rem;margin-top:68px;}
+/* a hint used to be the last thing in a block; now one sits mid-section with
+   body copy under it, and the default margin leaves them touching. */
+#firstpass .csr-hint + p{margin-top:34px;}
+.csr-content .csr-hint, .csr-content .csr-zoomhint{
+  font-size:0.5rem;letter-spacing:.12em;opacity:.7;margin-top:10px;}
+.csr-content .csr-hint::before, .csr-content .csr-zoomhint::before{width:4px;height:4px;}
+/* and lift the round titles clear of their own row labels: ENTRY was 9.92px
+   against LABEL's 9.6px, which is the same collapse one tier down. */
+.csr-content .cs-alt-entry-label{font-size:0.72rem;letter-spacing:.16em;}
+
+/* ---------- her own designs show in colour ----------
+   .cs-frame img and .cs-alt-media img both ship grayscale-until-hover. That
+   treatment exists for work that is NOT hers: on coros.html it marks COROS's
+   own shipped screens so they read as reference rather than as her design.
+   Every screen on this page is hers, so it stays in colour and the hover does
+   nothing. Click-to-enlarge is untouched. */
+#firstpass .cs-frame img,
+#firstpass .cs-alt-media img{filter:none;opacity:1;}
+#firstpass .cs-frame:hover img,
+#firstpass .cs-frame:focus-visible img,
+#firstpass .cs-alt-media:hover img{filter:none;opacity:1;transform:none;}
+
+/* ---------- user journeys: a horizontal run of five ----------
+   Reuses the shared .cs-filmstrip mechanics (snap scrolling + the prev/next
+   buttons in case-study.js). Deliberately NOT .cs-frame: that class binds the
+   image lightbox, which expects a single screenshot per frame, and these are
+   a photo plus copy. Landscape 3:2 stills drop into .nav-j-shot from
+   images/capstone/journeys/. */
+.nav-journeys{--jcard:100%;margin:26px 0 10px;}
+.nav-journeys .cs-filmstrip{gap:24px;align-items:start;}
+.nav-j-card{
+  flex:0 0 var(--jcard);width:var(--jcard);scroll-snap-align:start;
+  display:flex;flex-direction:column;}
+.nav-j-shot{
+  aspect-ratio:3/2;border-radius:6px;overflow:hidden;margin-bottom:16px;
+  background:var(--bg-warm);border:1px solid var(--divider);
+  display:flex;align-items:center;justify-content:center;}
+/* these are line-art storyboards, already monochrome, so the site's usual
+   grayscale-until-hover treatment only dimmed them. Shown flat instead. */
+.nav-j-shot img{width:100%;height:100%;object-fit:cover;display:block;}
+.nav-j-empty{
+  font-family:var(--font-mono);font-size:0.58rem;letter-spacing:.16em;
+  text-transform:uppercase;color:#B4ADA3;text-align:center;line-height:2;padding:24px;}
+.nav-j-head{display:flex;align-items:baseline;gap:11px;}
+.nav-j-num{font-family:var(--font-mono);font-size:0.6rem;font-weight:500;letter-spacing:.16em;color:var(--orange);}
+.nav-j-name{font-family:var(--font-serif);font-size:1.5rem;line-height:1.15;color:var(--ink);}
+.nav-j-who{
+  font-family:var(--font-mono);font-size:0.55rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-muted);margin:5px 0 10px;}
+.nav-j-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,0.78fr);
+  gap:4px 44px;align-items:start;}
+.nav-j-story{margin:0;font-size:0.9rem;line-height:1.65;color:var(--text-dark);}
+.nav-j-tests{margin:0;font-size:0.82rem;line-height:1.58;color:var(--text-light);}
+.nav-j-tests b{
+  display:block;margin-bottom:4px;font-weight:400;
+  font-family:var(--font-mono);font-size:0.55rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text-muted);}
+@media (max-width:700px){
+  .nav-j-body{grid-template-columns:1fr;gap:14px;}
+}
+}
+</style>
 </head>
 <body>
 <nav class="nav" id="nav">
@@ -68,30 +233,38 @@
     <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
   </div>
 </div>
-<div class="csr-hero csr-hero--photo">  <a class="csr-hero-mark" href="#build" aria-label="How this was built: Human-led"><img src="assets/build-icons/hmc-human-led.svg" alt=""></a>
-  </div>
+
+<div class="case-study-page" id="cs-capstone-rail">
 
 <!-- ============================================================
-     PREVIEW PAGE, ON PURPOSE.
-     Emma is still in the program, so this page is a teaser: what the
-     project is, one image, and a coming-soon line. The full case study
-     (problem, the decision, first pass, the four moves, restraint,
-     where it stands) is written and parked at
-     _drafts/capstone-full-draft.html in the Portfolio 2025 folder.
-     Drop it back in when the work is ready to be seen.
+     HERO. One wide uncropped loop on the mosaic band, using the --cover
+     variant airline-2036 already uses. That variant is the ONE hero rule
+     in case-study-rail.css that names `video` as well as `img`, so it
+     sizes correctly without a page-local width rule.
      ============================================================ -->
+<div class="csr-hero csr-hero--cover">
+  <video autoplay muted loop playsinline preload="metadata" width="1600" height="900"
+         poster="images/capstone/video/web/hero-poster.jpg"
+         aria-label="Nav Health from the waiting room to behind the curtain, to when the test goes out, to when you are discharged"><source src="images/capstone/video/web/hero.mp4" type="video/mp4"></video>
+  <a class="csr-hero-mark" href="#build" aria-label="How this was built: Human-led"><img src="assets/build-icons/hmc-human-led.svg" alt=""></a>
+</div>
 
-<div class="csr-shell" id="cs-capstone-rail">
+<div class="csr-shell">
 
     <aside class="csr-rail">
       <a href="index.html" class="csr-back">&larr;&nbsp; All work</a>
-      <div class="csr-eyebrow" style="margin-bottom:10px">Capstone &amp; Thesis &middot; In Progress</div>
+      <div class="csr-eyebrow" style="margin-bottom:10px">Capstone</div>
       <div class="csr-railtitle">Nav<br>Health</div>
       <nav class="csr-jump" id="csr-jump">
         <a href="#tldr">Overview</a>
-        <a href="#idea">The Idea</a>
+        <a href="#problem">The Problem</a>
+        <a href="#research">Research</a>
+        <a href="#firstpass">First Pass</a>
+        <a href="#testing">Testing</a>
+        <a href="#solution">The Solution</a>
+        <a href="#tryit">Try It</a>
         <a href="#build">How This Was Built</a>
-        <a href="#soon">Coming Soon</a>
+        <a href="#learnings">Learnings</a>
       </nav>
     </aside>
 
@@ -99,55 +272,305 @@
 
       <!-- ---------- OVERVIEW ---------- -->
       <section class="csr-sec" id="tldr" data-csr-section>
-        <div class="csr-eyebrow">Capstone &amp; Thesis</div>
+        <div class="csr-eyebrow">Capstone</div>
         <h2 class="csr-display">Overview</h2>
-        <p><span class="highlight">Nav Health</span> is a digital nurse navigator for the emergency room. It tells a patient where she stands, what her triage level actually means, what happens next, and roughly when, in plain language.</p>
-        <p>This is my capstone and thesis, and it is still in the program with me. The full case study goes up once it is finished. Until then, here is what it is about.</p>
+        <p><span class="highlight">Nav Health</span> is a digital companion for the emergency room. It tells the patient where they stand, what their triage level actually means, what happens next, and roughly when, in plain language. Not a promise about the clock. A position inside a system they otherwise cannot&nbsp;see.</p>
+        <p>Concept work, never run in a live department. Underneath it: sixteen survey responses, two A/B studies of seven and five, four rounds of usability testing, and one emergency nurse who read every screen. Mostly not the people this is for, and every number below says&nbsp;so.</p>
 
         <dl class="csr-meta">
           <div><dt>Role</dt><dd>Sole Designer &amp; Researcher</dd></div>
-          <div><dt>Type</dt><dd>Capstone &amp; Thesis</dd></div>
-          <div><dt>Duration</dt><dd>Ongoing &middot; 2026</dd></div>
-          <div><dt>Tools</dt><dd>Figma</dd></div>
-          <div class="half"><dt>Methods</dt><dd>Service Design, Prototyping, A/B Testing</dd></div>
-          <div class="half"><dt>Deliverables</dt><dd>In progress. Patient-facing flows, service blueprint, HIPAA handling spec, A/B tested layout variants</dd></div>
+          <div><dt>Type</dt><dd>Capstone</dd></div>
+          <div><dt>Duration</dt><dd>May to August 2026</dd></div>
+          <div><dt>Tools</dt><dd>Figma, HTML/CSS/JS prototype, After Effects</dd></div>
+          <div class="half"><dt>Methods</dt><dd>Service design, survey, usability testing, A/B testing, clinical SME review</dd></div>
+          <div class="half"><dt>Deliverables</dt><dd>Current-state and future-state service blueprints, 11-screen interactive prototype, two A/B studies, HIPAA handling spec, AI security spec</dd></div>
         </dl>
       </section>
 
-      <!-- ---------- THE IDEA ---------- -->
-      <section class="csr-sec" id="idea" data-csr-section>
-        <div class="csr-eyebrow">The Idea</div>
-        <h2 class="csr-display">The problem with the emergency room wait is not how long it is. It is that you cannot see it.</h2>
-        <p>A department cannot promise a time, which is the reason most of them tell patients nothing at all. But she was never asking for a promise. She was asking for a position, and the department already knows where she stands. It just never says it out loud. Nav Health is built around one claim: an anticipatory system should leave someone feeling <strong>more in control, not less</strong>.</p>
+      <!-- ---------- THE PROBLEM ---------- -->
+      <section class="csr-sec" id="problem" data-csr-section>
+        <div class="csr-problem">
+          <div class="csr-eyebrow">The Problem</div>
+          <h2 class="csr-stmt">The problem with the emergency room wait is not how long it is. It is that you cannot see&nbsp;it.</h2>
+          <p class="csr-q">How do you tell someone where they stand, when the honest answer is a number that would mean nothing to&nbsp;them?</p>
+        </div>
 
-        <div class="cs-image-wide"><img src="images/capstone/updates/web/nav-title-header.webp" alt="Nav Health: the waiting view with an estimated wait range, triage level and journey timeline, beside the assistant screen" loading="lazy"></div>
-        <p class="csr-cap">An honest range, a triage level that arrives already translated, and the visit laid out end to end</p>
+        <p>The median wait to see a provider is sixteen minutes. The mean is thirty-eight. Most visits move fast, the tail is enormous, and one posted number hides which one you&nbsp;are.</p>
 
-        <div class="csr-cols">
+        <p>Not knowing costs. Patients who left without being seen roughly doubled between 2017 and 2021, reaching about 10% at the worst-hit departments. The driver is boarding: admitted patients held downstairs because there is no bed upstairs. The engine of the wait sits at the back of the building, and the emergency department does not control&nbsp;it.</p>
+
+        <p>So the silence is rational. Reordering by acuity is correct, and refusing to name a time is a department declining to promise what it cannot&nbsp;keep.</p>
+
+        <p>But a promise was never the ask. The ask was a position, and the department already knows where each patient stands. <span class="highlight">It just never says it out&nbsp;loud.</span></p>
+
+      </section>
+
+      <!-- ---------- RESEARCH ---------- -->
+      <section class="csr-sec" id="research" data-csr-section>
+        <div class="csr-eyebrow">Research</div>
+        <h2 class="csr-display">Two answers came back unanimous. Nothing else&nbsp;did.</h2>
+
+        <p class="csr-sub">It started with a survey</p>
+        <p>Thirty questions, self-administered, sent through personal and design networks between June 10 and 23. Eighteen responses, sixteen qualified. Ten had been the patient, three a caregiver for another adult, two a parent of a minor patient. Fourteen of the sixteen had sat through a visit of three hours or more, six of them twelve hours or&nbsp;more.</p>
+        <p>Sixteen out of sixteen on a convenience sample is not a population estimate. It is a signal that the item is not contested among the people who&nbsp;answered.</p>
+        <p>That set the brief. Everything after it was built to test a specific claim rather than to go looking&nbsp;again.</p>
+
+        <p class="csr-sub">Two findings</p>
+        <div class="csr-cols is-two">
           <div>
             <span class="csr-num">01</span>
-            <h4>Say the wait honestly</h4>
-            <p>A range that is timestamped and maintained, not a countdown. A countdown reads as a promise, and an emergency department reorders by acuity, not by arrival.</p>
+            <h4>They wanted to know what to&nbsp;expect.</h4>
+            <p>The unanimous pair was never just &ldquo;tell me the wait.&rdquo; It was the wait <em>and why</em>. Not because fourteen minutes reads differently from sixteen, but because a number on its own still leaves you sitting in the dark. Next most wanted: a real-time explanation of where I am, fourteen of sixteen, and plain-language meaning of tests and results,&nbsp;thirteen.</p>
           </div>
           <div>
             <span class="csr-num">02</span>
-            <h4>Translate the number</h4>
-            <p>A triage level on its own is a ranking, which is the last thing anyone wants handed to them in a waiting room. The card tells you what it means, what it does not mean, and that you can be reassessed.</p>
-          </div>
-          <div>
-            <span class="csr-num">03</span>
-            <h4>Calm by default, alarm reserved</h4>
-            <p>One quiet surface, and colour spent in exactly one place. If everything can shout, nothing can.</p>
+            <h4>Nobody wanted the app instead of a&nbsp;person.</h4>
+            <p>Eight would have welcomed it. Six would try it but still wanted a human to confirm. One said it depends how it is done, one would rather hear everything from staff. Five of the ten who answered the free-text worry question raised privacy or HIPAA unprompted. I took both as constraints, not&nbsp;results.</p>
           </div>
         </div>
+
+        <p class="csr-sub">User journeys</p>
+        <p>Five of them, and each one exists to stress a different part of the design. The key journey is the walk-in triaged at level three or four, plus whoever is waiting on the other end of a dead phone&nbsp;thread.</p>
+
+        <div class="nav-journeys">
+          <div class="cs-filmstrip-wrap">
+            <button class="cs-strip-btn is-prev" aria-label="Scroll left">&#8249;</button>
+            <div class="cs-filmstrip">
+              <article class="nav-j-card">
+                <div class="nav-j-shot"><img src="images/capstone/journeys/margaret.webp" alt="Margaret, 74, in the emergency department waiting room" loading="lazy"></div>
+                <div class="nav-j-body">
+                  <div><div class="nav-j-head"><span class="nav-j-num">01</span><span class="nav-j-name">Margaret</span></div>
+                <div class="nav-j-who">74 &middot; walk-in, with an advocate</div>
+                <p class="nav-j-story">Arrives after a fall, with a daughter across town driving without being in the know.</p>
+                  </div><p class="nav-j-tests"><b>What it stress-tests</b>The need to be able to share updates with loved ones.</p>
+                </div>
+              </article>
+              <article class="nav-j-card">
+                <div class="nav-j-shot"><img src="images/capstone/journeys/elena.webp" alt="Elena, 38, waiting with a racing heart" loading="lazy"></div>
+                <div class="nav-j-body">
+                  <div><div class="nav-j-head"><span class="nav-j-num">02</span><span class="nav-j-name">Elena</span></div>
+                <div class="nav-j-who">38 &middot; the anxiety loop</div>
+                <p class="nav-j-story">A racing heart at eleven on a Thursday night. Fear amplifying the symptom, the symptom amplifying the fear.</p>
+                  </div><p class="nav-j-tests"><b>What it stress-tests</b>Whether an honest range and a visible position are enough to interrupt the loop.</p>
+                </div>
+              </article>
+              <article class="nav-j-card">
+                <div class="nav-j-shot"><img src="images/capstone/journeys/marcus.webp" alt="Marcus, 25, on his first emergency room visit" loading="lazy"></div>
+                <div class="nav-j-body">
+                  <div><div class="nav-j-head"><span class="nav-j-num">03</span><span class="nav-j-name">Marcus</span></div>
+                <div class="nav-j-who">25 &middot; first visit</div>
+                <p class="nav-j-story">First time in an emergency room. Reads a queue that reorders by acuity as having been forgotten.</p>
+                  </div><p class="nav-j-tests"><b>What it stress-tests</b>The triage translation. This is the reason the number never arrives alone.</p>
+                </div>
+              </article>
+              <article class="nav-j-card">
+                <div class="nav-j-shot"><img src="images/capstone/journeys/dianaandlily.webp" alt="Diana with her infant daughter Lily in the waiting room" loading="lazy"></div>
+                <div class="nav-j-body">
+                  <div><div class="nav-j-head"><span class="nav-j-num">04</span><span class="nav-j-name">Diana &amp; Lily</span></div>
+                <div class="nav-j-who">infant patient, tracked at home</div>
+                <p class="nav-j-story">A parent, an infant, a possible food sensitivity, and a phone full of tracker data nobody thinks to ask for.</p>
+                  </div><p class="nav-j-tests"><b>What it stress-tests</b>Structured intake, so the history is not retold from memory to every new clinician.</p>
+                </div>
+              </article>
+              <article class="nav-j-card">
+                <div class="nav-j-shot"><img src="images/capstone/journeys/yuki.webp" alt="Yuki, 43, waiting in the emergency department" loading="lazy"></div>
+                <div class="nav-j-body">
+                  <div><div class="nav-j-head"><span class="nav-j-num">05</span><span class="nav-j-name">Yuki</span></div>
+                <div class="nav-j-who">43 &middot; language bridge</div>
+                <p class="nav-j-story">A Japanese speaker who needs the process in their own language, at the speed the waiting room moves.</p>
+                  </div><p class="nav-j-tests"><b>What it stress-tests</b>Where the bridge stops. Wayfinding and process, never the clinical&nbsp;conversation.</p>
+                </div>
+              </article>
+            </div>
+            <button class="cs-strip-btn is-next" aria-label="Scroll right">&#8250;</button>
+          </div>
+        </div>
+        <p class="csr-hint">Scroll or use the arrows</p>
       </section>
 
+      <!-- ---------- FIRST PASS ---------- -->
+      <section class="csr-sec" id="firstpass" data-csr-section>
+        <div class="csr-eyebrow">First Pass</div>
+        <h2 class="csr-display">A first version, then the research named what had to be in&nbsp;it.</h2>
+
+        <p>Before designing anything, since I was not designing inside somebody else&rsquo;s design system, I realized I needed to build the base of one of my&nbsp;own.</p>
+        <div class="cs-image-wide" data-zoom data-caption="The Nav Health design system &middot; type, the five acuity levels, the surface tokens, and the mark">
+          <img src="images/capstone/web/design-system.webp" alt="The design system board: Hanken Grotesk and its type scale; five acuity colours from L1 to L5, used in exactly one place, the acuity card, with level one the only red in the app; five surface tokens from background to ink; and the mark, a compass, described as not a cross and not a heartbeat." loading="lazy">
+        </div>
+        <p class="csr-hint">Click to see it closer</p>
+
+        <p><strong>Calm by default. Alarm reserved.</strong> In a heightened space calm is not an aesthetic preference. It is the only way an interface still gets read by someone who is frightened. So colour is spent in exactly one place, and red belongs to a level the patient never&nbsp;reads.</p>
+
+        <p class="csr-sub">Then version one</p>
+        <p>Built to see the whole thing standing up: a screen for each part of the visit, and a companion sitting across all of&nbsp;them.</p>
+
+        <div class="cs-filmstrip-wrap" style="--frame-w:186px">
+          <button class="cs-strip-btn is-prev" aria-label="Scroll left">&#8249;</button>
+          <div class="cs-filmstrip">
+              <figure class="cs-frame" data-caption="01 &middot; Home" data-full="images/capstone/pass1web/1-home.webp">
+                <img src="images/capstone/pass1web/1-home.webp" alt="&ldquo;Welcome Claire, you&rsquo;re checked in&rdquo;: a nurse has reviewed your arrival, an estimated wait of 30 to 60 minutes with seeing a clinician up next, the reason for visit, and a journey stepper from checked in to treatment and next steps." loading="lazy">
+                <figcaption><b>01</b> Home</figcaption>
+              </figure>
+              <figure class="cs-frame" data-caption="02 &middot; Care" data-full="images/capstone/pass1web/2-care.webp">
+                <img src="images/capstone/pass1web/2-care.webp" alt="&ldquo;Small things you can do while you wait&rdquo;: report a symptom change, take a guided meditation, say you are stepping outside, and an &ldquo;I&rsquo;m feeling worse&rdquo; row that alerts a nurse to re-check you." loading="lazy">
+                <figcaption><b>02</b> Care</figcaption>
+              </figure>
+              <figure class="cs-frame" data-caption="03 &middot; Journal" data-full="images/capstone/pass1web/3-journal.webp">
+                <img src="images/capstone/pass1web/3-journal.webp" alt="&ldquo;Your journal: questions, pain and notes all in one place&rdquo;: a zero-to-ten pain check-in, a log of earlier readings with the time and who took them, and a running list of questions for the doctor with the answers saved underneath." loading="lazy">
+                <figcaption><b>03</b> Journal</figcaption>
+              </figure>
+              <figure class="cs-frame" data-caption="04 &middot; Learn" data-full="images/capstone/pass1web/4-learn.webp">
+                <img src="images/capstone/pass1web/4-learn.webp" alt="&ldquo;Why waits happen&rdquo;: three numbered explanations, seen by need not arrival time, your place can change, and the team is working even when it is quiet, above a line saying the aim is to make the system readable rather than to overwhelm you." loading="lazy">
+                <figcaption><b>04</b> Learn</figcaption>
+              </figure>
+              <figure class="cs-frame" data-caption="05 &middot; Nav" data-full="images/capstone/pass1web/5-nav.webp">
+                <img src="images/capstone/pass1web/5-nav.webp" alt="The companion: &ldquo;Hi Claire, how can I help?&rdquo; with a note that it is an AI guide and not a substitute for medical advice, a row to chat with a human on the care team, three suggested questions, and an ask-anything field." loading="lazy">
+                <figcaption><b>05</b> Nav</figcaption>
+              </figure>
+          </div>
+          <button class="cs-strip-btn is-next" aria-label="Scroll right">&#8250;</button>
+        </div>
+        <p class="csr-cap">Version one, running end to end</p>
+        <p class="csr-hint">Click any to see it closer</p>
+
+        <p class="csr-sub">Four things the research made non-negotiable</p>
+        <div class="csr-learn">
+          <div>
+            <h4>A gauge of the wait</h4>
+            <p>Some sense of how long, even a rough one: not a promise, a&nbsp;size.</p>
+          </div>
+          <div>
+            <h4>A connection point</h4>
+            <p>A way to bring somebody else in, because the visit is rarely one person&rsquo;s&nbsp;alone.</p>
+          </div>
+          <div>
+            <h4>Orientation</h4>
+            <p>Not only how long, but which part of the visit they are standing in and what comes&nbsp;next.</p>
+          </div>
+          <div>
+            <h4>Symptoms change</h4>
+            <p>If something gets worse, a way to say so that reaches a nurse rather than sitting in the&nbsp;app.</p>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ---------- TESTING ---------- -->
+      <section class="csr-sec" id="testing" data-csr-section>
+        <div class="csr-eyebrow">Testing</div>
+        <h2 class="csr-display">I ran the tests to find out what people actually&nbsp;thought.</h2>
+
+        <div class="cs-alt">
+          <div class="cs-alt-media is-ab">
+            <div class="cs-ab-shot" data-zoom data-caption="A/B Study 1 &middot; left, the journey lower down in the check-in card &middot; right, the journey inside the estimated-wait card">
+              <img src="images/capstone/ab-test/ab-twoup.webp" alt="The two tested layouts side by side. Left: the estimated wait card with up next, and the journey further down inside the check-in card. Right: the same wait card with the journey timeline inside it." loading="lazy">
+            </div>
+            <p class="csr-cap">Left, the layout I had. Right, the alternative I tested it&nbsp;against.</p>
+            <p class="csr-hint">Click to see it closer</p>
+          </div>
+          <div class="cs-alt-copy">
+            <span class="cs-alt-entry-label">01 &middot; A/B Study 1 &middot; Wait-card hierarchy</span>
+            <div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>The wait estimate in one card and the journey stepper in a card below it. Two jobs, two containers. I ran the test expecting it to be&nbsp;confirmed.</p></div>
+            <div class="cs-alt-row"><span class="cs-alt-label">The result</span><p>Seven completions. Four preferred the journey inside the wait card, three saw no difference, nobody chose the version below. Comprehension was identical in both arms, so the finding is not that one is clearer. <strong>It is that one costs less to read</strong>, and in a waiting room that is the thing that matters. Order was four current-first, and three of the four who chose inwait saw it second, so recency cannot be ruled out at&nbsp;seven.</p></div>
+          </div>
+
+          <div class="cs-alt-media is-ab">
+            <div class="cs-ab-shot" data-zoom data-caption="A/B Study 1A &middot; left, the triage numeral shown &middot; right, the same panel with translation only">
+              <img src="images/capstone/ab-test/esi-twoup.webp" alt="The same waiting screen twice. Left: the triage card leads with a numeral 3 and the line "Triage level 3: stable, multiple steps expected". Right: the same card with no number, reading "What to expect: a stable, multi-step visit"." loading="lazy">
+            </div>
+            <p class="csr-cap">The only difference is the number.</p>
+          </div>
+          <div class="cs-alt-copy">
+            <span class="cs-alt-entry-label">02 &middot; A/B Study 1A &middot; The Triage Number</span>
+            <div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>The same panel with the numeral and without it. Nothing else on the screen changed, so whatever moved would be the number and not the&nbsp;copy.</p></div>
+            <div class="cs-alt-row"><span class="cs-alt-label">The result</span><p>Five completions, one test row excluded. Comprehension, trust and whether the app felt straight came back the same either way. <strong>The numeral is inert</strong>, and that is the argument for keeping it: it is the word staff use out loud, so nobody has to translate back. What was doing the work is the three lines around&nbsp;it.</p></div>
+          </div>
+
+          <div class="cs-alt-media is-ab">
+            <div class="cs-ab-shot" data-zoom data-caption="Both directions of sync &middot; left, the exact summary the triage nurse will read, shown before it sends &middot; right, the journal saying plainly that it reaches nobody">
+              <img src="images/capstone/sync/web/sync-twoup.webp" alt="Left: a card headed what your nurse will see, listing what changed, how bad it is now against the triage number, when it started and where, above a send to the triage nurse button. Right: the journal, with a note that only you can see it and the care team does not have access to what you write." loading="lazy">
+            </div>
+            <p class="csr-cap">What the nurse will see, and what nobody will</p>
+          </div>
+          <div class="cs-alt-copy">
+            <span class="cs-alt-entry-label">03 &middot; Usability &middot; Four Rounds</span>
+            <div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>Think-aloud walkthroughs of the prototype, behaviour kept separate from opinion, every finding severity-rated. Three patient testers, then a practising emergency nurse as clinical subject matter&nbsp;expert.</p></div>
+            <div class="cs-alt-row"><span class="cs-alt-label">The result</span><p>Three findings held across sessions: where am I and when will I be seen is the deepest need, sync clarity has to run in both directions, and cognitive load is what kills a screen in a waiting room. Plus one misread I had not designed for, the wait estimate read as total time in the department. The nurse&rsquo;s round turned up something else entirely, and it is in the&nbsp;learnings.</p></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ---------- THE SOLUTION ---------- -->
+      <section class="csr-sec" id="solution" data-csr-section>
+        <div class="csr-eyebrow">The Solution</div>
+        <h2 class="csr-display">Turn what the department already knows into something a patient can&nbsp;hold.</h2>
+        <p>Three moves. The first two decide what the information says. The third decides how much of it arrives at once. They are separate problems, and the design fails if either one gets solved&nbsp;alone.</p>
+
+        <div class="cs-image-wide">
+          <video controls playsinline preload="none" poster="images/capstone/nav-sizzle-poster.jpg" aria-label="Nav Health reel: the ER wait, made legible">
+            <source src="images/capstone/nav-sizzle.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="csr-hint">Sound on</p>
+
+        <div class="cs-section cs-fd">
+          <div class="cs-fd-media flow is-single" data-drift="0" data-drift-anchor="sticky">
+            <div class="pcol">
+              <div class="nav-vid"><video autoplay muted loop playsinline preload="metadata" width="760" height="1446" poster="images/capstone/video/web/waittime-poster.jpg" aria-label="The wait card over half an hour: the estimate moves from 20 to 35 minutes down to under 20, then back up to under 25, each change stamped with when it was set and announced by a notice that a nurse has reviewed the waiting room"><source src="images/capstone/video/web/waittime.mp4" type="video/mp4"></video></div>
+              <div class="nav-vid"><video autoplay muted loop playsinline preload="metadata" width="760" height="1588" poster="images/capstone/video/web/triage-poster.jpg" aria-label="The triage card expanding to show what the level means, what it does not mean, and that it can change if you are reassessed"><source src="images/capstone/video/web/triage.mp4" type="video/mp4"></video></div>
+              <div class="nav-vid"><video autoplay muted loop playsinline preload="metadata" width="760" height="1354" poster="images/capstone/video/web/island-poster.jpg" aria-label="The wait on the lock screen and in the Dynamic Island, reading under 25 minutes and seen by the care team, before opening into the app"><source src="images/capstone/video/web/island.mp4" type="video/mp4"></video></div>
+            </div>
+          </div>
+
+          <div class="cs-fd-text">
+            <div class="cs-fd-block" data-fd-step="1">
+              <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-1">01 &middot; Say the wait honestly</div>
+              <div class="cs-fd-body" id="fd-body-1"><div><p>A range that is timestamped and maintained, not a countdown. A countdown reads as a promise, and an emergency department reorders by acuity, not by arrival. The range is conservative by construction and stamped with when it was set, so it reads as something being kept up rather than something printed&nbsp;once.</p>
+</div></div>
+            </div>
+            <div class="cs-fd-block" data-fd-step="2">
+              <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-2">02 &middot; Translate the number</div>
+              <div class="cs-fd-body" id="fd-body-2"><div><p>A triage level on its own is a ranking, which is the last thing anyone wants handed to them in a waiting room. So the level never arrives alone. The panel says what it means, what it does not mean, and that you can be reassessed, in that order, at every level. The same three things every time, so the pattern gets learned once and read&nbsp;forever.</p>
+              <p>The framing came from how the scale actually works. Levels one and two are assigned on acuity. Levels three to five are assigned on how many resources the visit is expected to need. So a three is not a middling score, it is a description of how many steps are coming. <span class="highlight">Steps, not score.</span> That is the translation in three&nbsp;words.</p></div></div>
+            </div>
+            <div class="cs-fd-block" data-fd-step="3">
+              <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-3">03 &middot; Design for people who want different amounts</div>
+              <div class="cs-fd-body" id="fd-body-3"><div><p>I was not designing for the wait. I was designing for the person sitting in it, and that is not one person. Some want every detail, and the detail is what calms them. Others want to know as little as possible until it is over, and being handed more is its own kind of&nbsp;pressure.</p>
+              <p>So the surface layer has to be complete on its own. What is on the screen at a glance is enough to stand on, and reading further is a choice rather than a requirement. The same idea carries out of the app: the wait follows you to the lock screen, so you can put the phone down without losing your place. <span class="highlight">The best version of this is the one nobody has to keep&nbsp;checking.</span></p></div></div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ---------- TRY IT ---------- -->
+      <section class="csr-sec" id="tryit" data-csr-section>
+        <div class="csr-eyebrow">Try It Out</div>
+        <h2 class="csr-display">The whole argument takes about fifteen&nbsp;seconds.</h2>
+        <p>Eleven screens, six personas, five triage levels, and a switcher for what the department is doing that&nbsp;night.</p>
+        <p>Land on Status, open the triage panel, then change the level and watch the same three lines hold at every one. That is the spine. Everything else is there to poke&nbsp;at.</p>
+
+        <div class="cs-image-wide cs-proto-wide">
+          <div class="cs-prototype-embed">
+            <div class="cs-proto-frame">
+              <div class="cs-proto-stage">
+                <iframe src="https://ecmoy11.github.io/nav-prototype/" title="Nav Health prototype" loading="lazy" allowfullscreen></iframe>
+              </div>
+              <a class="cs-proto-fallback" href="https://ecmoy11.github.io/nav-prototype/" target="_blank" rel="noopener">Prototype not loading? Open it in a new tab &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+      </section>
 
       <!-- ---------- HOW THIS WAS BUILT ---------- -->
       <section class="csr-sec" id="build" data-csr-section>
         <div class="csr-eyebrow">How this was built</div>
-        <h2 class="csr-display">Human-led, with the machine at the ideation stage.</h2>
-        <p>Live work, so this one moves, and this note moves with it. Human-led throughout: the research, the framing and every screen are mine. Where a machine has helped it has been early, widening the option set before anything was&nbsp;settled.</p>
+        <h2 class="csr-display">Human-led, with the machine at the ideation&nbsp;stage.</h2>
+        <p>A visit has states, and a still frame only has one. Six personas, five triage levels, phase transitions, a care-stage toggle: what I was designing was a state machine, and a static mock would have let me call it done while it only worked in one of its states. So the prototype got built in code, and the states got tested instead of the&nbsp;screens.</p>
+        <p>Where Figma still won was the nitty gritty. Type, spacing, the second click. The machine was there early, before anything was settled, widening the option set. Nothing generated has carried through into a design decision&nbsp;as-is.</p>
 
         <div class="build-grid">
           <div class="build-scale">
@@ -159,27 +582,47 @@
           </div>
           <div>
             <dl class="build-split">
-              <div><dt>What the machine did</dt><dd>Ideation and early variations only. Nothing generated has carried through into a design decision&nbsp;as-is.</dd></div>
-              <div><dt>What I did</dt><dd>The research, the framing, the system, every screen, and the final craft pass.</dd></div>
+              <div><dt>What the machine did</dt><dd>Ideation and early variation, and scaffolding for the coded prototype so I could test states rather than screens. Nothing generated survives as a design&nbsp;decision.</dd></div>
+              <div><dt>What I did</dt><dd>The research, the framing, the system, every screen, both A/B instruments, and the last craft pass: type, copy, spacing, the second&nbsp;click.</dd></div>
             </dl>
             <p class="build-credit">Scale &middot; Human&ndash;Machine Collaboration, Dubai Future Foundation</p>
           </div>
         </div>
       </section>
 
-      <!-- ---------- COMING SOON ---------- -->
-      <section class="csr-sec" id="soon" data-csr-section>
-        <div class="csr-eyebrow">Coming Soon</div>
-        <h2 class="csr-display">The full study lands when the work does</h2>
-        <p>Still ahead: the service blueprint, the direction I cut, the four decisions the final screens rest on, what I chose not to build, and what sixteen test sessions settled. It goes up here as soon as the program is behind me.</p>
-        <p>In the meantime, here&rsquo;s the live prototype if you want to poke at&nbsp;it.</p>
+      <!-- ---------- LEARNINGS ---------- -->
+      <section class="csr-sec" id="learnings" data-csr-section>
+        <div class="csr-eyebrow">Learnings</div>
+        <h2 class="csr-display">What this one actually&nbsp;settled</h2>
 
-        <a class="csr-proto" href="https://ecmoy11.github.io/nav-prototype/" target="_blank" rel="noopener">
-          <span>Live prototype</span>
-          <b>Nav Health &rarr;</b>
-          <em>ecmoy11.github.io/nav-prototype</em>
-        </a>
-        <div class="quote-block">Want the walkthrough before then? <a href="mailto:emmamoystner.design@gmail.com">Email me</a> and I will take you through it.</div>
+        <div class="csr-learn">
+          <div>
+            <h4>Transparency was the easy half</h4>
+            <p>I thought the honest move was showing people the data. Then I tested the number and it came back inert; what moved people was the sentence beside it. Showing was never the hard part. Saying it in language a hospital could stand behind&nbsp;was.</p>
+          </div>
+          <div>
+            <h4>An honesty rule has to survive your own copy</h4>
+            <p>Two lines got cut from the wait card. &ldquo;Most people are seen sooner,&rdquo; because it raises a hope nobody has agreed to. And &ldquo;we widened the range rather than promise a time we cannot keep,&rdquo; because that is itself a promise. I caught the second one late, which is the&nbsp;point.</p>
+          </div>
+          <div>
+            <h4>The clinician caught what no patient could</h4>
+            <p>An emergency nurse read the same screens three patients had and said: never show a nurse or tech&rsquo;s last name. There is one family with that surname in the county. Invisible to every patient tester, and it changed two screens. Users tell you whether a design works. The people who live inside it tell you whether it should exist in that&nbsp;shape.</p>
+          </div>
+          <div>
+            <h4>I built an app. I think the answer is two screens.</h4>
+            <p>Settled: a triage level has to arrive already translated, and a range reads as an update where a countdown reads as a promise. What I would change is the container. Nobody downloads an app in a waiting room, so the right form is probably an emergency mode inside the system the hospital already runs, opened from a text they already&nbsp;send.</p>
+          </div>
+          <div>
+            <h4>What we would test for success</h4>
+            <p><strong>Left without being seen.</strong> Already tracked, so nobody has to be talked into measuring it, and it is the harm opacity actually causes. Patient satisfaction sits beside&nbsp;it.</p>
+            <p><strong>Comprehension in the chair.</strong> Ask someone at hour two what their level means and what happens next: the claim itself, measured&nbsp;directly.</p>
+            <p><strong>Front-desk interruptions.</strong> Counted on the staff side. If the desk can work uninterrupted, the department got something out of this&nbsp;too.</p>
+          </div>
+          <div>
+            <h4>The session I never got</h4>
+            <p>No genuinely distressed patient ever tested this. Every session I ran was calm, seated and unhurried, which is the one condition this design will never meet. The nurse is clinical truth, not a substitute for a frightened seventy-year-old at hour two. Same gap structurally: I walked the level-three journey end to end and sampled the others. One more session goes&nbsp;there.</p>
+          </div>
+        </div>
 
         <a class="csr-next" href="airline-2036.html">
           <span>Next project</span>
@@ -189,7 +632,7 @@
 
     </main>
   </div>
-
+</div>
 
 <footer class="footer">
   <a href="mailto:emmamoystner.design@gmail.com">Contact</a>
@@ -198,6 +641,49 @@
 
 <script src="assets/case-study.js"></script>
 <script src="assets/case-study-rail.js"></script>
+<script>
+/* Fit the prototype to the column: scale the 1000x1250 frame down so the whole
+   thing is visible without the block dominating the page. Under 760px the
+   prototype reflows better on its own, so the transform comes off. */
+(function(){
+  var stage = document.querySelector('.cs-proto-stage');
+  if (!stage) return;
+  var fr = stage.querySelector('iframe');
+  /* Scale is FIXED and the frame's width is derived from it, rather than the
+     other way round. A wider frame does not make the prototype any taller
+     (device bottom sits at 1240px from 1000px wide upward, and the control bar
+     collapses from three rows to one past ~1250), so pinning the scale is what
+     lets the block be a constant 775px tall at every column width. */
+  var BASE_H = 1250, SCALE = 0.62, MIN = 600;   /* stage width, not viewport */
+  function fit(){
+    var w = stage.clientWidth;
+    if (w < MIN){
+      fr.style.transform = 'none';
+      fr.style.width = '100%'; fr.style.height = '1020px';
+      stage.style.height = '1020px';
+      return;
+    }
+    fr.style.width = Math.round(w / SCALE) + 'px';
+    fr.style.height = BASE_H + 'px';
+    fr.style.transform = 'scale(' + SCALE + ')';
+    stage.style.height = Math.round(BASE_H * SCALE) + 'px';
+  }
+  fit();
+  window.addEventListener('resize', fit);
+})();
+</script>
 <script src="assets/build-mark.js"></script>
+<!-- Autoplaying loops are motion nobody asked for: under reduced-motion
+     they hold their poster frame instead. Runs before the video's first paint. -->
+<script>
+(function(){
+  try{
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('video[autoplay]').forEach(function(v){
+      v.autoplay=false; v.removeAttribute('autoplay'); v.removeAttribute('loop'); v.pause();
+    });
+  }catch(e){}
+})();
+</script>
 </body>
 </html>
