@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aster House Productions &middot; Emma Moystner</title>
+<meta name="description" content="A wedding videography brand and site, named the night before and built in one day. The site was never the hard part.">
+<link rel="canonical" href="https://emmamoystner.design/aster-house.html">
+<meta name="author" content="Emma Moystner">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Emma Moystner">
+<meta property="og:url" content="https://emmamoystner.design/aster-house.html">
+<meta property="og:title" content="Aster House Productions &middot; Emma Moystner">
+<meta property="og:description" content="A wedding videography brand and site, named the night before and built in one day. The site was never the hard part.">
+<meta property="og:image" content="https://emmamoystner.design/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Emma Moystner, interaction designer. A designer who loves real people, messy problems, and a good challenge.">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aster House Productions &middot; Emma Moystner">
+<meta name="twitter:description" content="A wedding videography brand and site, named the night before and built in one day. The site was never the hard part.">
+<meta name="twitter:image" content="https://emmamoystner.design/og-image.png">
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/case-study.css">
+<link rel="stylesheet" href="assets/case-study-rail.css">
+<link rel="stylesheet" href="assets/build-mark.css">
+<style>
+/* ---------- typography defaults ----------
+   Standing rule: single-word last lines are a defect. The shared case-study
+   sheets never set text-wrap at all, so every page has to declare it locally
+   until the fix moves into case-study-rail.css. Same block as capstone.html. */
+.csr-content p, .csr-content dd, .csr-content li,
+.csr-cap, .csr-hint{text-wrap:pretty;}
+.csr-content h2, .csr-content h3, .csr-content h4,
+.csr-stmt, .csr-q, .csr-sub{text-wrap:balance;}
+
+/* ---------- bleed floor override ----------
+   case-study-rail.css:310 sets a 96px floor on --csr-bleed that overflows the
+   viewport by 16px between about 1024 and 1200px. Same scoped fix capstone
+   carries. Delete from both pages once the shared sheet is corrected. */
+.csr-content{
+  --csr-bleed:max(0px, min(230px, calc(96px + max(0px,(100vw - 1280px) / 2)), calc((100vw - 1240px) / 2 + 68px)));
+}
+
+/* ---------- ART PLACEHOLDERS, TEMPORARY ----------
+   Every .ah-slot is a hole waiting for a real asset. Search "ah-slot" to find
+   them all. Delete this rule once the last one is filled. */
+.ah-slot{
+  display:grid; place-items:center; min-height:280px; padding:32px;
+  border:1px dashed rgba(26,26,26,.24); border-radius:4px;
+  background:rgba(26,26,26,.025); text-align:center;
+}
+.ah-slot.tall{min-height:420px;}
+.ah-slot.short{min-height:190px;}
+.ah-slot span{
+  font-family:'JetBrains Mono',ui-monospace,monospace; font-size:0.68rem;
+  letter-spacing:.14em; text-transform:uppercase; line-height:2;
+  color:rgba(26,26,26,.46); max-width:34ch;
+}
+.ah-slot b{display:block; font-weight:500; color:rgba(26,26,26,.62);}
+/* The .cs-alt-media.empty slots take their type from case-study.css, so the
+   label inside them needs its own line break rule. */
+.cs-alt-media.empty b{display:block; font-weight:500; margin-bottom:6px;}
+.cs-alt-media.empty span{display:block; max-width:34ch; line-height:2; padding:0 18px;}
+
+/* The three-term definition row from the site's own name band, rebuilt here
+   at portfolio scale. Not a shared component; if it earns its keep it should
+   move into case-study.css rather than get copied to a second page. */
+.ah-terms{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:28px;
+  margin-top:44px; padding-top:30px; border-top:1px solid rgba(26,26,26,.14);
+}
+.ah-terms dt{font-family:'DM Serif Display',Georgia,serif; font-size:1.35rem; line-height:1.2;}
+.ah-terms dd{
+  margin:8px 0 0; font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-size:0.66rem; letter-spacing:.16em; text-transform:uppercase;
+  color:rgba(26,26,26,.5);
+}
+@media (max-width:640px){.ah-terms{grid-template-columns:1fr; gap:20px;}}
+
+/* ---------- HERO: two clips, desktop behind, phone overlapping right ----------
+   .csr-hero--cover sizes a bare img/video at min(730px,58vw). Here the sized
+   element is the stack instead, and both clips are positioned inside it, so the
+   band's own rule has nothing to grab. The shadow values match the ones the
+   shared sheet puts on a --cover artefact. */
+/* The stack carries the drop-shadow, the video carries the mask. Order matters:
+   a filter on the masked element itself would shadow the full rectangle, but a
+   filter on the PARENT sees the already-masked result, so the shadow follows
+   the device silhouette. */
+.csr-hero--cover .ah-hero-stack{
+  position:relative; width:min(860px,66vw); line-height:0;
+  filter:drop-shadow(0 26px 54px rgba(65,0,22,.30));
+}
+/* The mockup ships on a flat mauve field. Rather than key it out into an alpha
+   video (VP8/VP9 alpha is the one codec path that still fails quietly in some
+   browsers) the background is removed with a CSS mask: one 9KB PNG whose alpha
+   is the device silhouette. The devices never move in the clip, so a single
+   static mask is exact for every frame, and the video stays plain H.264.
+   .csr-hero--cover carries the selector because the shared sheet's
+   `.csr-hero--cover img, .csr-hero--cover video` rule is two classes deep. */
+/* The mask sits on this WRAPPER, never on the <video> itself. Safari promotes a
+   video to its own compositing layer and a CSS mask applied directly to it can
+   drop out entirely, which reads as an empty hero.
+
+   The mask is INLINE as a data URI rather than a file reference, and that is
+   the fix for the hero rendering empty. Opened over file:// every local file is
+   its own opaque origin, so a mask that points at another file is treated as
+   cross-origin and refused. A refused mask does not fail open, it masks
+   everything away, so the hero goes blank while the unmasked videos elsewhere
+   on the page keep playing. A data URI belongs to the document, so there is no
+   origin to fail. images/aster-house/hero-devices-mask.png is still on disk as
+   the readable source for this string. */
+.csr-hero--cover .ah-hero-devices{
+  display:block; width:100%; line-height:0;
+  -webkit-mask-image:url('data:image/png;base64,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udY8DAJwkV4yqx1uZS5XAV7qpV539y8AC308m7XRWd/OIQAX7m+f29fMTZt5uQCwC45nPqhFAAIAsAjGRgAAIAABABCAAAAIQAAABCAAAAIQAAABCACAAAQAQAACACAAAQAQgAAACEAAAAQgAAACEABAAAIAIAABABCAAAAIQAAABCAAAAIQAAABCACAAAQAQAACACAAAQAQgAAACEAAAAQgAAACEABAAAIAIAABABCAAAAIQAAABCAAAAIQAAABCACAAAQAQAACACAAAQAQgAAACEAAAAQgAIAABABAAAIAIAABABCAAAAIQAAABCAAAAIQAAABCACAAAQAQAACACAAAQAQgAAACEAAAAQgAIAABABAAAIAIAABABCAAAAIQAAABCAAAAIQAAABCACAAAQAQAACACAAAQAQgAAACEAAAAEIAIAABABAAAIAIAABABCAAAAIQAAABCAAAAIQAAABCACAAAQAQAACACAAAQAQgAAACEAAAAEIAIAABABAAAIAsNiWjAAAYEBGjQUgAMBwjFvtkAAEABiGUZP2d7z/IQABAIZg3GpHO9bjPSYAAQB2uy/v/h7vWEdbFYAAALvdSh/okR7vePubNBKAAAC723JH+pm+qYfbd+UjAP8daVNJXzIxduYAAAAASUVORK5CYII=');
+          mask-image:url('data:image/png;base64,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udY8DAJwkV4yqx1uZS5XAV7qpV539y8AC308m7XRWd/OIQAX7m+f29fMTZt5uQCwC45nPqhFAAIAsAjGRgAAIAABABCAAAAIQAAABCAAAAIQAAABCACAAAQAQAACACAAAQAQgAAACEAAAAQgAAACEABAAAIAIAABABCAAAAIQAAABCAAAAIQAAABCACAAAQAQAACACAAAQAQgAAACEAAAAQgAAACEABAAAIAIAABABCAAAAIQAAABCAAAAIQAAABCACAAAQAQAACACAAAQAQgAAACEAAAAQgAIAABABAAAIAIAABABCAAAAIQAAABCAAAAIQAAABCACAAAQAQAACACAAAQAQgAAACEAAAAQgAIAABABAAAIAIAABABCAAAAIQAAABCAAAAIQAAABCACAAAQAQAACACAAAQAQgAAACEAAAAEIAIAABABAAAIAIAABABCAAAAIQAAABCAAAAIQAAABCACAAAQAQAACACAAAQAQgAAACEAAAAEIAIAABABAAAIAsNiWjAAAYEBGjQUgAMBwjFvtkAAEABiGUZP2d7z/IQABAIZg3GpHO9bjPSYAAQB2uy/v/h7vWEdbFYAAALvdSh/okR7vePubNBKAAAC723JH+pm+qYfbd+UjAP8daVNJXzIxduYAAAAASUVORK5CYII=');
+  -webkit-mask-size:100% 100%;  mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+  -webkit-mask-position:center;  mask-position:center;
+}
+.csr-hero--cover .ah-hero-devices video{
+  width:100%; max-width:none; height:auto; display:block; border-radius:0;
+}
+@media (max-width:760px){ .csr-hero--cover .ah-hero-stack{width:100%;} }
+
+/* ---------- The First Pass: sheets left, copy pinned right ----------
+   NOT .cs-sticky. case-study-rail.css forces .cs-sticky to one column inside
+   the rail on purpose, so reusing it here would stack the sheets under the
+   copy. This is its own grid, and it takes the same rightward bleed the wide
+   figures take so neither column ends up cramped. */
+.ah-paper{
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(28px,4vw,64px); align-items:start;
+  width:calc(100% + var(--csr-bleed)); margin-left:0;
+}
+.ah-paper-sheets{display:grid; gap:clamp(30px,4vw,58px);}
+.ah-paper-sheets figure{margin:0;}
+.ah-paper-sheets img{
+  width:100%; height:auto; display:block;
+  border:1px solid rgba(26,26,26,.10); border-radius:3px;
+}
+.ah-paper-sheets figcaption{margin-top:12px;}
+/* 110px clears the nav at both of its heights, 69 at rest and 61 scrolled. */
+.ah-paper-copy{position:sticky; top:110px;}
+.ah-paper-copy > :first-child{margin-top:0;}
+@media (max-width:900px){
+  .ah-paper{grid-template-columns:1fr; width:100%;}
+  .ah-paper-copy{position:static; top:auto; order:-1;}
+}
+
+/* The palette as shipped, in scroll order. Swatches are the real hexes, so
+   this block is accurate art rather than a placeholder. */
+.ah-palette{display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin-top:36px;}
+.ah-palette div{display:flex; flex-direction:column; gap:8px;}
+.ah-palette i{display:block; height:78px; border-radius:3px; border:1px solid rgba(26,26,26,.1);}
+.ah-palette span{
+  font-family:'JetBrains Mono',ui-monospace,monospace; font-size:0.58rem;
+  letter-spacing:.1em; color:rgba(26,26,26,.5); line-height:1.7;
+}
+.ah-palette b{display:block; font-weight:500; color:rgba(26,26,26,.72); text-transform:uppercase; letter-spacing:.12em;}
+@media (max-width:760px){.ah-palette{grid-template-columns:repeat(4,1fr);}}
+@media (max-width:460px){.ah-palette{grid-template-columns:repeat(2,1fr);}}
+
+/* caption on the left, click hint on the right, one line under the board */
+.ah-caprow{display:flex; align-items:baseline; justify-content:space-between; gap:20px; flex-wrap:wrap;}
+.ah-caprow .csr-cap, .ah-caprow .csr-hint{margin-top:10px; margin-bottom:0;}
+
+/* A hint that refers to one artefact has to live in that artefact's grid cell.
+   Placed after the .cs-alt grid instead, it lands below the tallest item in the
+   last row, which is the copy column, and ends up 119px clear of the video it
+   is talking about. This wrapper takes the media column's place in the grid and
+   holds the artefact and its hint together. */
+.ah-media-cell{display:grid; gap:12px; min-width:0;}
+.ah-media-cell .csr-hint{margin-top:0;}
+
+/* .cs-alt-media is written for <img>, so a <video> in that slot has to be told
+   to fill the column the same way. */
+.cs-alt-media video{width:100%;height:auto;display:block;border-radius:2px;}
+
+/* The shared sheet desaturates a rejected artefact and returns it to colour on
+   hover, but only via `.cs-alt-media img`. Scoped to #cut so the videos in
+   What Stayed, which are not rejected, keep their colour. */
+#cut .cs-alt-media video{filter:grayscale(1) contrast(1.05); opacity:.82;
+  transition:filter .5s ease, opacity .5s ease;}
+#cut .cs-alt-media:hover video{filter:none; opacity:1;}
+
+/* A hint sitting mid-section needs the same breathing room capstone gives it. */
+.csr-content .csr-hint + p{margin-top:34px;}
+/* .cs-image-wide carries only 6px of bottom margin from the rail sheet, which
+   is right when a caption follows it and far too tight when body copy does. */
+.csr-content .cs-image-wide + p{margin-top:clamp(30px,3.2vw,46px);}
+
+/* .csr-learn is a bare grid with no bottom margin, so the closing paragraphs
+   were sitting straight against the last row of cards. */
+.csr-content .csr-learn + p{margin-top:clamp(48px,5.5vw,76px);}
+
+/* the hint lives inside the second <figure>, not as a grid child: as a child of
+   .ah-paper-sheets the grid gap pushed it 68px off the sheet it refers to. */
+.ah-paper-sheets figure .csr-hint{margin-top:10px;}
+</style>
+</head>
+<body>
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav-logo">Emma Moystner</a>
+  <div class="nav-right">
+    <a href="index.html">Work</a>
+    <a href="side-quests.html">Side Quests</a>
+    <a href="about.html">About</a>
+    <a href="resume.moystner.pdf" target="_blank">Resume</a>
+    <div class="nav-connect-wrap">
+      <a href="#" class="nav-cta" id="connect-toggle" onclick="toggleConnectDropdown(event)">Connect</a>
+      <div class="connect-dropdown" id="connect-dropdown">
+        <a href="mailto:emmamoystner.design@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
+          Email me
+        </a>
+        <div class="connect-dropdown-divider"></div>
+        <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+  <button class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-nav-overlay" id="mobile-nav-overlay">
+  <a href="index.html">Work</a>
+  <a href="side-quests.html">Side Quests</a>
+  <a href="about.html">About</a>
+  <a href="resume.moystner.pdf" target="_blank">Resume</a>
+  <div class="mobile-connect-links">
+    <a href="mailto:emmamoystner.design@gmail.com">Email</a>
+    <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
+  </div>
+</div>
+
+<div class="case-study-page" id="cs-aster-house-rail">
+
+<!-- ============================================================
+     HERO. The live navy home screen, rendered at 2x from the real
+     public/index.html with the actual Cormorant and Jost files, so no
+     cursor, no half-faded load screen, no scrollbar. --cover is the
+     variant that sizes an uncropped landscape asset correctly.
+     ============================================================ -->
+<div class="csr-hero csr-hero--cover">
+  <div class="ah-hero-stack">
+    <div class="ah-hero-devices">
+      <video autoplay muted loop playsinline preload="metadata" width="1280" height="826"
+             poster="images/aster-house/hero-devices-poster.jpg"
+             aria-label="The Aster House site running on a laptop with a phone beside it, both showing the navy hero."><source src="images/aster-house/hero-devices.mp4" type="video/mp4"></video>
+    </div>
+  </div>
+  <a class="csr-hero-mark" href="#build" aria-label="How this was built: Machine-assisted"><img src="assets/build-icons/hmc-balanced.svg" alt=""></a>
+</div>
+
+<div class="csr-shell">
+
+    <aside class="csr-rail">
+      <a href="index.html" class="csr-back">&larr;&nbsp; All work</a>
+      <div class="csr-eyebrow" style="margin-bottom:10px">Brand &amp; Site</div>
+      <div class="csr-railtitle">Aster<br>House</div>
+      <nav class="csr-jump" id="csr-jump">
+        <a href="#overview">Overview</a>
+        <a href="#oneday">One Day</a>
+        <a href="#name">The Name</a>
+        <a href="#paper">The First Pass</a>
+        <a href="#details">What Stayed</a>
+        <a href="#cut">What Got Cut</a>
+        <a href="#backend">How It Actually Works</a>
+        <a href="#build">How This Was Built</a>
+        <a href="#live">See It Live</a>
+        <a href="#settled">What I Settled</a>
+      </nav>
+    </aside>
+
+    <main class="csr-content cs-body" style="margin:0;padding:0;">
+
+      <!-- ---------- OVERVIEW ---------- -->
+      <section class="csr-sec" id="overview" data-csr-section>
+        <div class="csr-eyebrow">Brand &amp; Site</div>
+        <h2 class="csr-display">Overview</h2>
+        <p><span class="highlight">Aster House Productions</span> is a solo wedding videography company, just starting out and needing somewhere to send people. She came to me with a name and nothing else. No identity, no&nbsp;site.</p>
+        <p>The rest of the brief was rough. She could not say what her style was. She had exactly one film to show. She did not want a price published anywhere. She had been sitting on the project for months, and she wanted all of it live by the&nbsp;end&nbsp;of&nbsp;the&nbsp;day.</p>
+        <p>So that is what we did. Identity, site, domain and a working inquiry form. It is live at <a href="https://asterhouseproductions.com" target="_blank" rel="noopener">asterhouseproductions.com</a>, and the form on it sends real mail to a real&nbsp;inbox.</p>
+
+        <dl class="csr-meta">
+          <div><dt>Role</dt><dd>Brand, copy, design, and build</dd></div>
+          <div><dt>Type</dt><dd>Brand identity &amp; site</dd></div>
+          <div><dt>Duration</dt><dd>One day, September 2026</dd></div>
+          <div><dt>Tools</dt><dd>Claude, Cloudflare Workers, Resend, Premiere Pro</dd></div>
+          <div class="half"><dt>Methods</dt><dd>Naming, identity system, interaction design, front-end build, email infrastructure</dd></div>
+          <div class="half"><dt>Deliverables</dt><dd>Logo system, brand pack, live one-page site, working inquiry pipeline</dd></div>
+        </dl>
+      </section>
+
+      <!-- ---------- ONE DAY ---------- -->
+      <section class="csr-sec" id="oneday" data-csr-section>
+        <div class="csr-problem">
+          <div class="csr-eyebrow">One Day</div>
+          <h2 class="csr-stmt">Being new was not the obstacle. Being new with nowhere to point people&nbsp;was.</h2>
+        </div>
+
+        <p>She had been dabbling in photography and video for a while, and the inquiries had already started arriving on their own. People asked about wedding coverage and there was nowhere to send them. No page, nothing&nbsp;to&nbsp;answer&nbsp;with.</p>
+        <p>So she wanted a landing page that could take that weight. Somewhere to bring people in, and something that made the whole thing read as a real operation rather than a favor. Instagram is the long game and she wants to grow it the slow organic way, but that takes time she did not have while the inquiries kept&nbsp;coming.</p>
+        <p>She had also been fiddling with this for months. So we gave it a deadline instead of a scope: one day, and see how far we could&nbsp;get.</p>
+        <p>The name was already settled. Everything else, the identity, the type, the palette, the site, the domain, the form and the email routing, happened between morning and&nbsp;night.</p>
+
+        <p>The deadline did the useful thing deadlines do. It stopped this being a design project that could keep being improved and made it a thing that had to&nbsp;exist.</p>
+
+        <p class="csr-sub">The objection, and the answer</p>
+        <p>There is an obvious objection to a site like this, which is that it has one film on it and no signature style. I decided the opposite of what you would expect. <strong>A signature style would be a lie right now.</strong> She is early, she is still playing, and with one film on the wall nobody is going to hire her for a look. So the site does not promise one. It stays universal on purpose, and it spends its effort proving the thing she can actually&nbsp;prove.</p>
+      </section>
+
+      <!-- ---------- THE NAME ---------- -->
+      <section class="csr-sec" id="name" data-csr-section>
+        <div class="csr-eyebrow">The Name</div>
+        <h2 class="csr-display">Aster House started in high&nbsp;school.</h2>
+
+        <p>The name arrived before I did. My job was not to name the thing, it was to find out whether the name already held a system. It&nbsp;did.</p>
+        <p>In high school she had a photography brand called Emma Claire Photography, and she wanted to nod at that without using her own name again. She wanted something that could grow with her, and maybe one day grow past her. So she went at it through what the names mean. Emma is whole. Claire is clear and bright. Both of them keep landing on light, which is what photography and film are actually&nbsp;about.</p>
+        <p>Aster is Greek for star. A star is a small point of light inside something much&nbsp;larger.</p>
+        <p>The bird was the one thing she asked for outright. She has been obsessed with birds for years and wanted one in the mark. Wanting a bird is not a reason to have a bird, so it had to earn the space, and it did. Birds are observers. They belong to perspective, to movement, to seeing a familiar place from somewhere&nbsp;above&nbsp;it.</p>
+        <p>House is the part people skip past, and it is carrying the most weight. She is a multifaceted creative, design and photography and film, and Aster House is built to sit over all of it. A household name rather than a wedding film company, so the work can widen as she does without needing&nbsp;a&nbsp;rebrand.</p>
+        <p>It is also a promise about the day itself. When she shoots a wedding she wants to host, to make people comfortable enough to forget there is a camera in the room. Aster House sounded cozy and warm before anybody could explain why, and then it turned out there&nbsp;was&nbsp;a&nbsp;why.</p>
+
+        <p class="csr-sub">Two rounds, which is what the day allowed</p>
+        <p>Round one went engraved. A drawn swallow with all its feathering, a compass star beside it, Libre Caslon Display over letterspaced Montserrat, and three lockups. She liked it. It felt high end, and high end was the thing she least wanted to&nbsp;lose.</p>
+
+        <div class="cs-image-wide">
+          <div data-zoom data-caption="Brand ideation, round one. Libre Caslon Display and letterspaced Montserrat, a drawn swallow and a compass star as separate elements, and three lockups: primary, crest and wordmark.">
+            <img src="images/aster-house/brand-ideation-1.webp" width="1536" height="735" loading="lazy" alt="Round one of the identity. A type and color board above three lockups: a detailed engraved swallow with a compass star above it over the words ASTER HOUSE, a circular crest version, and a wordmark with the star centred above it.">
+          </div>
+          <div class="ah-caprow">
+            <p class="csr-cap">Round&nbsp;one.</p>
+            <p class="csr-hint">Click to see it closer</p>
+          </div>
+        </div>
+
+        <p>What she did not like was how much of it there was. The bird and the star were both carrying detail, and she wanted the mark to feel more like her. More grounded, simpler, without&nbsp;giving&nbsp;up&nbsp;that&nbsp;feel.</p>
+        <p>My read was narrower than that. She wanted both elements and I agreed she should have both, but in round one they were competing. Two illustrations sharing a frame, each asking to be looked at first. Round two stopped treating them as two&nbsp;things.</p>
+
+        <div class="cs-image-wide">
+          <div data-zoom data-caption="Brand ideation, round two. The swallow reduced to a solid silhouette with the wings cut from negative space, and the star shrunk into the notch above the upper wing.">
+            <img src="images/aster-house/brand-ideation-2.webp" width="1254" height="893" loading="lazy" alt="Round two of the identity. A navy swallow drawn as a solid silhouette with its wings cut out of the negative space, a small star tucked into the notch above the upper wing, over ASTER HOUSE and PRODUCTIONS, with horizontal, crest and icon-only lockups below.">
+          </div>
+          <div class="ah-caprow">
+            <p class="csr-cap">Round&nbsp;two.</p>
+            <p class="csr-hint">Click to see it closer</p>
+          </div>
+        </div>
+
+        <p>The bird lost its feathering and became one silhouette, wings cut out of the negative space. The star shrank and moved into the notch above the upper wing, so it reads as part of the bird instead of a second object standing next to it. <strong>One mark, not two.</strong> That is the version on every surface now, from the favicon to the send&nbsp;button.</p>
+
+        <p>Light, perspective, keeping. The star, the bird, the house. Filmmaking sits exactly between the first two, and the third is a promise about what it feels like to work with&nbsp;her.</p>
+
+        <dl class="ah-terms">
+          <div><dt>Light</dt><dd>The star</dd></div>
+          <div><dt>Perspective</dt><dd>The bird</dd></div>
+          <div><dt>Keeping</dt><dd>The house</dd></div>
+        </dl>
+      </section>
+
+      <!-- ---------- THE FIRST PASS (on paper) ---------- -->
+      <section class="csr-sec" id="paper" data-csr-section>
+        <div class="csr-eyebrow">The First Pass</div>
+        <h2 class="csr-display">The shapes were settled before anything got&nbsp;typed.</h2>
+
+        <div class="ah-paper">
+          <div class="ah-paper-sheets">
+            <figure data-zoom data-caption="Wireframe sheet one. The hero, the film band, the about row with its photo, and the navy band under it, with the ground color for each written in the margin: navy, white, cream, navy.">
+              <img src="images/aster-house/wireframe-1.webp" width="1025" height="1650" loading="lazy" alt="A hand-drawn wireframe on dot paper. A tall page divided into four stacked bands, with the words navy, white, cream and navy written down the left margin beside them.">
+            </figure>
+            <figure data-zoom data-caption="Wireframe sheet two. Collections as three cards, the contact form, and the footer, marked cream, light blue and navy.">
+              <img src="images/aster-house/wireframe-2.webp" width="1025" height="1650" loading="lazy" alt="A second hand-drawn wireframe on dot paper. Three cards in a row above a form block and a footer, with the words cream, light blue and navy written down the left margin.">
+              <p class="csr-hint">Click either sheet to see it closer</p>
+            </figure>
+          </div>
+
+          <div class="ah-paper-copy">
+            <p>I still wireframe by hand. Dot paper, a pen, and the whole scroll drawn out before anything gets&nbsp;typed.</p>
+            <p>That drawing is what I handed Claude first. Not a mood board and not a reference site. The page in order, band by band, with the ground color written in the margin beside each one. Navy, white, cream, navy. Then cream, light blue, navy. <strong>The rhythm of the site was decided on paper</strong>, and the build was a translation of&nbsp;it.</p>
+            <p>Then I gave it the intent of each section, what that band was for and what it had to get across, and let it write the first pass of the copy. That is the part I would defend hardest. A blank page is expensive, and on a one day deadline I would rather spend my attention editing than&nbsp;staring.</p>
+            <p>What came back was a draft, not the site. From there it was refining: tightening lines, cutting what did not sound right, keeping what&nbsp;did.</p>
+            <p><span class="highlight">The paper is why one day was possible.</span> By the time anything got typed, the only open questions left were&nbsp;sentences.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- THE DETAILS THAT STAYED ---------- -->
+      <section class="csr-sec" id="details" data-csr-section>
+        <div class="csr-eyebrow">What Stayed</div>
+        <h2 class="csr-display">Three colors, two typefaces, and three things that&nbsp;move.</h2>
+
+        <p>Midnight navy, warm ivory and heirloom gold carry the brand. Underneath those I had a quieter family I liked just as much, spring water, sand, wood, and rather than pick between them I gave them different jobs. Navy and ivory are the spine, the part you remember. The neutrals are grounds, one per section, so the page moves through light without ever getting loud. Olive and blush did not make it. Cormorant Garamond sets the display type, Jost sets everything&nbsp;small.</p>
+
+        <div class="ah-palette" aria-hidden="true">
+          <div><i style="background:#0C1D36"></i><span><b>Navy</b>0C1D36</span></div>
+          <div><i style="background:#EEE8E1"></i><span><b>Ivory</b>EEE8E1</span></div>
+          <div><i style="background:#C49A5A"></i><span><b>Gold</b>C49A5A</span></div>
+          <div><i style="background:#E8E2DA"></i><span><b>Sand</b>E8E2DA</span></div>
+          <div><i style="background:#D3DADC"></i><span><b>Spring</b>D3DADC</span></div>
+          <div><i style="background:#D6C9B4"></i><span><b>Wood</b>D6C9B4</span></div>
+          <div><i style="background:#455763"></i><span><b>Slate</b>455763</span></div>
+        </div>
+        <p class="csr-cap">The palette as shipped, in the order you meet it scrolling the&nbsp;site.</p>
+
+        <p>Gold never had to carry any reading. It is hairlines, list bullets and the scroll progress line, and nothing else. The page checks clean at AA&nbsp;everywhere.</p>
+
+        <p class="csr-sub">I think a website is a full experience</p>
+        <p>Three things move. Each one is the brand doing work rather than decoration, and that is the only reason any of them&nbsp;stayed.</p>
+
+        <div class="cs-alt">
+          <div class="cs-alt-media" data-zoom data-zoom-group="stayed" data-caption="The illumination. Light falling from above onto the wordmark, which is the name story made literal.">
+            <video autoplay muted loop playsinline preload="metadata" width="1280" height="810"
+                   poster="images/aster-house/illumination-poster.jpg"
+                   aria-label="The Aster House hero, pushing in on the wordmark so the light falling from above reads across the navy, then pulling back out."><source src="images/aster-house/illumination.mp4" type="video/mp4"></video>
+          </div>
+          <div class="cs-alt-copy">
+            <span class="cs-alt-entry-label">01 &middot; The Illumination</span>
+            <div class="cs-alt-row"><span class="cs-alt-label">What it does</span><p>The hero is navy with light falling on it from above, so the first thing anyone sees is the name story rather&nbsp;than&nbsp;a&nbsp;logo.</p></div>
+            <div class="cs-alt-row"><span class="cs-alt-label">Why it earned it</span><p>It is the sentence from the name story made literal: a small point of light inside something much larger. It is also the only ornament in the hero, which is what lets it read as atmosphere instead&nbsp;of&nbsp;an&nbsp;effect.</p></div>
+          </div>
+
+          <div class="cs-alt-media" data-zoom data-zoom-group="stayed" data-caption="The load screen. Star, then the bird arriving to meet it, then the wordmark's letterspacing settling in.">
+            <video autoplay muted loop playsinline preload="metadata" width="1280" height="806"
+                   poster="images/aster-house/loadscreen-poster.jpg"
+                   aria-label="The load screen in sequence: the star alone on navy, then the bird arriving to meet it, then the wordmark appearing wide and its letterspacing settling in, then the hero."><source src="images/aster-house/loadscreen.mp4" type="video/mp4"></video>
+          </div>
+          <div class="cs-alt-copy">
+            <span class="cs-alt-entry-label">02 &middot; The Load Screen</span>
+            <div class="cs-alt-row"><span class="cs-alt-label">What it does</span><p>Star, then the bird arriving to meet it, then the wordmark&rsquo;s tracking settling. It waits on the font rather than&nbsp;on&nbsp;a&nbsp;timer.</p></div>
+            <div class="cs-alt-row"><span class="cs-alt-label">Why it earned it</span><p>The wordmark is the brand and the wordmark is a serif, so if the page paints before the font arrives the hero visibly reflows and the first thing anyone sees is the logo changing shape. A two second floor so it is not a flash, a four and a half second ceiling so a slow connection cannot trap anyone, and all of it off under reduced&nbsp;motion.</p></div>
+          </div>
+
+          <div class="ah-media-cell">
+            <div class="cs-alt-media" data-zoom data-zoom-group="stayed" data-caption="The bird that leaves. It lifts out of the send button and climbs away, and the confirmation waits 700 milliseconds so it gets airborne first.">
+              <video autoplay muted loop playsinline preload="metadata" width="1280" height="812"
+                     poster="images/aster-house/bird-poster.jpg"
+                     aria-label="The inquiry form being sent. The button disables, the bird lifts out of it and climbs off the top of the frame, and the confirmation line appears underneath."><source src="images/aster-house/bird.mp4" type="video/mp4"></video>
+            </div>
+            <p class="csr-hint">Click any of the three to see it bigger</p>
+          </div>
+          <div class="cs-alt-copy">
+            <span class="cs-alt-entry-label">03 &middot; The Bird That Leaves</span>
+            <div class="cs-alt-row"><span class="cs-alt-label">What it does</span><p>On the whole site the mark moves exactly once, when someone sends an inquiry. The bird inside the send button lifts out of it and climbs away, and the confirmation holds back 700 milliseconds so it gets airborne&nbsp;first.</p></div>
+            <div class="cs-alt-row"><span class="cs-alt-label">Why it earned it</span><p>It climbs at about 45 degrees, because any shallower and it reads as flying sideways while nose up. I spent the motion at the one moment the site has a job. Everything before it is&nbsp;information.</p></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ---------- WHAT GOT CUT ---------- -->
+      <section class="csr-sec" id="cut" data-csr-section>
+        <div class="csr-eyebrow">What Got Cut</div>
+        <h2 class="csr-display">I am not against detail. I am against detail that is not&nbsp;smooth.</h2>
+
+        <div class="cs-alt">
+          <div class="ah-media-cell">
+            <div class="cs-alt-media" data-zoom data-caption="The version that did not ship. The wings alternate between the two frames as the bird climbs, so the wingbeat reads as a stutter in the flight path.">
+              <video autoplay muted loop playsinline preload="metadata" width="1000" height="858"
+                     poster="images/aster-house/bird-flap-flight-poster.jpg"
+                     aria-label="The rejected version. The bird leaves the send button with its wings alternating between the two frames as it climbs, so the wingbeat reads as a stutter rather than as flight."><source src="images/aster-house/bird-flap-flight.mp4" type="video/mp4"></video>
+            </div>
+            <p class="csr-hint">Click the flap to see it bigger</p>
+          </div>
+          <div class="cs-alt-copy">
+            <span class="cs-alt-entry-label">The Flapping Bird</span>
+            <div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>I wanted the bird to actually flap. I had the whole thing in my head, a beautiful drifting motion as it left the button. I built the kit for it, two frames, one with the wing and one without, alternating every few hundred&nbsp;milliseconds.</p></div>
+            <div class="cs-alt-row"><span class="cs-alt-label">Why it lost</span><p>I could not get it where it did not look gimmicky. I tried a couple of techniques and nothing felt smooth enough for me to push&nbsp;it.</p></div>
+            <div class="cs-alt-row"><span class="cs-alt-label">What replaced it</span><p>The glide. It just looked&nbsp;better.</p></div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ---------- HOW IT ACTUALLY WORKS ---------- -->
+      <section class="csr-sec" id="backend" data-csr-section>
+        <div class="csr-eyebrow">How It Actually Works</div>
+        <h2 class="csr-display">Every other project here is a concept. This one&nbsp;runs.</h2>
+
+        <p>The part that makes it run is the part nobody sees. The film is on YouTube because that is what she already uses, and it loads only when someone clicks it, behind her own title card, so nothing third party touches the page until it is asked&nbsp;for.</p>
+        <p>The form posts to a Cloudflare Worker. The Worker checks the fields and hands the note to Resend, which mails it to her. Reply-to is set to the person who wrote it, so answering in Gmail writes back to the couple rather than into a&nbsp;void.</p>
+
+        <div class="cs-image-wide">
+          <div data-zoom data-caption="Three tracks. Deploy: GitHub to Cloudflare to the live domain. The film: the self-hosted title card, the click, then the YouTube embed built on demand. The form: five fields to the Worker at /api/inquire, to Resend, to the inbox at hello@.">
+            <img src="images/aster-house/how-it-works.webp" width="2400" height="781" loading="lazy" alt="A three-row diagram. Deploy runs GitHub to Cloudflare to asterhouseproductions.com. The film runs from the self-hosted poster image through a click to a youtube-nocookie embed. The form runs from five fields through a Cloudflare Worker at slash api slash inquire to Resend and into the hello@ inbox.">
+          </div>
+          <p class="csr-hint">Click to see it closer</p>
+        </div>
+
+        <p>The interesting part is why her mail comes from a subdomain. Verifying a domain with Resend puts an MX record on it, and the MX record on the root domain already belongs to Cloudflare Email Routing, which is the thing forwarding hello@ into her inbox. <strong>Verify the root and I would have broken the inbox I was trying to fill.</strong> So sending happens from a send subdomain and receiving stays on the root. Three extra DNS records, and mail moves in both&nbsp;directions.</p>
+
+
+        <p class="csr-sub">What it costs to load</p>
+        <p>13KB of gzipped HTML. No framework, no build step, no dependencies. First paint at 192 milliseconds, fully loaded at 230 on a warm cache, nine requests, two of which are her own&nbsp;photographs.</p>
+      </section>
+
+      <!-- ---------- HOW THIS WAS BUILT ---------- -->
+      <section class="csr-sec" id="build" data-csr-section>
+        <div class="csr-eyebrow">How this was built</div>
+        <h2 class="csr-display">A human and machine build, and the rush is&nbsp;why.</h2>
+        <p>Claude wrote the code. I led the art direction and the design, and the branding came out of that: the story, the bird, the palette, the type direction, and every call about what stayed and what went. The load screen and the bird leaving the button were both my ideas. The film is hers, shot on a cinema camera and camcorders and cut in&nbsp;Premiere.</p>
+
+        <div class="build-grid">
+          <div class="build-scale">
+            <div class="build-step"><img src="assets/build-icons/hmc-human.svg" alt="" aria-hidden="true"><span>All human</span></div>
+            <div class="build-step"><img src="assets/build-icons/hmc-human-led.svg" alt="" aria-hidden="true"><span>Human-led</span></div>
+            <div class="build-step is-here"><img src="assets/build-icons/hmc-balanced.svg" alt="" aria-hidden="true"><span>Machine-assisted</span></div>
+            <div class="build-step"><img src="assets/build-icons/hmc-machine-led.svg" alt="" aria-hidden="true"><span>Machine-led</span></div>
+            <div class="build-step"><img src="assets/build-icons/hmc-machine.svg" alt="" aria-hidden="true"><span>All machine</span></div>
+          </div>
+          <div>
+            <dl class="build-split">
+              <div><dt>What the machine did</dt><dd>Every line of the site&rsquo;s code, the Worker and the mail pipeline, the vector production of the marks I specified, and the first pass of the&nbsp;copy.</dd></div>
+              <div><dt>What I did</dt><dd>The structure on paper, the identity, the palette and type, both motion ideas, the edit on every line, and every call about what stayed and what&nbsp;went.</dd></div>
+            </dl>
+            <p class="build-credit">Scale &middot; Human&ndash;Machine Collaboration, Dubai Future Foundation</p>
+          </div>
+        </div>
+
+        <p>Where my own hours went was the prework, and then the pass at the end. The identity, two rounds of the mark until the bird and the star stopped competing. The structure drawn out on paper, band by band, with a ground color written against each one. The palette and the type. Both motion ideas. Then the edit on every line that came back, and the decisions about what did not&nbsp;survive.</p>
+      </section>
+
+      <!-- ---------- SEE IT LIVE ---------- -->
+      <section class="csr-sec" id="live" data-csr-section>
+        <div class="csr-eyebrow">See It Live</div>
+        <h2 class="csr-display">The best version of this page is the site&nbsp;itself.</h2>
+        <p>Everything above is running right now. Worth opening in a fresh tab rather than one you already have, because the load screen only plays on a cold&nbsp;load.</p>
+
+        <a class="csr-proto" href="https://asterhouseproductions.com" target="_blank" rel="noopener">
+          <span>Live site</span>
+          <b>Aster House Productions &rarr;</b>
+          <em>asterhouseproductions.com</em>
+        </a>
+      </section>
+
+      <!-- ---------- WHAT I SETTLED ---------- -->
+      <section class="csr-sec" id="settled" data-csr-section>
+        <div class="csr-eyebrow">What I Settled</div>
+        <h2 class="csr-display">It did not need to be a hard&nbsp;thing.</h2>
+
+        <div class="csr-learn">
+          <div>
+            <h4>Simple was the spec, not the compromise</h4>
+            <p>It is fun to think about everything a site could do, and I could have kept adding to this one for a week. A landing page with one film on it is not built to carry that weight. Light and informational is what it was supposed to be, and staying there was the actual&nbsp;work.</p>
+          </div>
+          <div>
+            <h4>The bottleneck was upstream of the work</h4>
+            <p>She was not blocked on being able to shoot a wedding. She was blocked on having somewhere to send someone who asked. One is a craft problem and takes years. The other took a day, and it sat for months because it looked bigger from the outside than it&nbsp;was.</p>
+          </div>
+          <div>
+            <h4>Not having a style is a position, not a gap</h4>
+            <p>With one film up, promising a signature look would be a claim she cannot back. So the site stays universal on purpose and spends its credibility on care instead. That is a real answer to the obvious objection rather than a&nbsp;way&nbsp;around&nbsp;it.</p>
+          </div>
+          <div>
+            <h4>Detail earns its place by being smooth</h4>
+            <p>I like a site that feels like a full experience, and I kept two motion ideas that do. The one I cut was the one I wanted most, and it went because I could not get it past gimmicky. The standard is craft, not&nbsp;restraint.</p>
+          </div>
+          <div>
+            <h4>What I would watch</h4>
+            <p>Whether inquiries start arriving through the form. That is the one number that separates the site working from the people around her doing the work for it, and it is too early to have it. Which is the honest&nbsp;answer.</p>
+          </div>
+          <div>
+            <h4>Where it goes next</h4>
+            <p>There is one film on it today. As more come in, the films get their own page, the about section gets its own page, and the homepage keeps a short highlight instead of a single frame. The load screen is where a background video eventually&nbsp;goes.</p>
+          </div>
+        </div>
+
+        <p>None of that is why the site exists. It exists so somebody can ask her a question, and so that when they get here they can tell this matters. <span class="highlight">Clearly somebody cares. She put time into a&nbsp;site.</span></p>
+
+        <p>The client, for the record, was me. I would work with her again&nbsp;;)</p>
+
+        <p>Aster House is my side hustle, and it is a place where my creative cup gets filled back&nbsp;up.</p>
+
+        <!-- TODO: the loop order follows the homepage tiles. Once Aster House has
+             a tile, this link and the .csr-next on whichever page precedes it
+             both need rewriting. Pointing at the capstone for now. -->
+        <a class="csr-next" href="capstone.html">
+          <span>Next project</span>
+          <b>Nav Health &rarr;</b>
+        </a>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<footer class="footer">
+  <a href="mailto:emmamoystner.design@gmail.com">Contact</a>
+  <span>&copy; 2026 Emma Moystner</span>
+</footer>
+
+<script src="assets/case-study.js"></script>
+<script src="assets/case-study-rail.js"></script>
+<script src="assets/build-mark.js"></script>
+<!-- Autoplaying loops are motion nobody asked for: under reduced-motion they
+     hold their poster frame instead. Runs before the first paint of the video. -->
+<script>
+(function(){
+  try{
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('video[autoplay]').forEach(function(v){
+      v.autoplay=false; v.removeAttribute('autoplay'); v.removeAttribute('loop'); v.pause();
+    });
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
