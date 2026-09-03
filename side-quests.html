@@ -637,6 +637,169 @@ a { color: inherit; text-decoration: none; }
   .pgal-lb-nav.next { right: 12px; }
 }
 
+/* ============ CONTINUING ED (Life Learner) ============ */
+.ce-page {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--bg-cream);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  z-index: 260;
+}
+.ce-page.active { opacity: 1; pointer-events: auto; }
+
+.ce-body {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 110px 16px 120px;
+}
+.ce-head {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--text-dark);
+  margin: 0;
+}
+.ce-deck {
+  font-family: var(--font-primary);
+  font-weight: 300;
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.62;
+  color: var(--text-light);
+  max-width: 46ch;
+  margin: 20px 0 0;
+  text-wrap: pretty;
+}
+
+.ce-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0 40px;
+  margin-top: 64px;
+  border-top: 1px solid var(--divider);
+}
+.ce-col {
+  padding: 28px 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ce-col + .ce-col { border-left: 1px solid var(--divider); padding-left: 40px; }
+.ce-num {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--orange);
+}
+.ce-src {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.ce-course {
+  font-family: var(--font-primary);
+  font-size: 1.12rem;
+  font-weight: 500;
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+  color: var(--text-dark);
+  text-decoration: none;
+  text-wrap: balance;
+  transition: color 0.25s ease;
+}
+.ce-course .ce-label {
+  background-image: linear-gradient(rgba(44, 43, 40, 0.28), rgba(44, 43, 40, 0.28));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 1px;
+  padding-bottom: 2px;
+  transition: background-image 0.25s ease;
+}
+.ce-course .ce-arrow {
+  display: inline-block;
+  padding-left: 5px;
+  font-size: 0.78em;
+  color: var(--text-muted);
+  transform: translateY(-1px);
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+.ce-course:hover { color: var(--orange); }
+.ce-course:hover .ce-label {
+  background-image: linear-gradient(var(--orange), var(--orange));
+}
+.ce-course:hover .ce-arrow {
+  color: var(--orange);
+  transform: translate(2px, -3px);
+}
+.ce-course:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+.ce-note {
+  font-family: var(--font-primary);
+  font-weight: 300;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-light);
+  text-wrap: pretty;
+}
+.ce-status {
+  margin-top: auto;
+  padding-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.ce-status::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--orange);
+}
+.ce-closer {
+  margin-top: 72px;
+  padding-top: 34px;
+  border-top: 1px solid var(--divider);
+}
+.ce-close-line {
+  font-family: var(--font-primary);
+  font-weight: 300;
+  font-size: clamp(1.15rem, 2.1vw, 1.5rem);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: var(--text-dark);
+  max-width: 34ch;
+  text-wrap: pretty;
+}
+
+@media (max-width: 860px) {
+  .ce-cols { grid-template-columns: 1fr; gap: 0; }
+  .ce-col { padding: 26px 0; border-bottom: 1px solid var(--divider); }
+  .ce-col + .ce-col { border-left: 0; padding-left: 0; }
+  .ce-col:last-child { border-bottom: 0; }
+  .ce-status { margin-top: 4px; padding-top: 8px; }
+  .ce-course, .ce-note { max-width: 54ch; }
+  .ce-body { padding: 96px 12px 90px; }
+}
+
 /* ============ FOOTER ============ */
 .footer {
   background: var(--text-dark);
@@ -1239,13 +1402,26 @@ a { color: inherit; text-decoration: none; }
 -->
 
 
-    <div class="playground-card">
+    <div class="playground-card" onclick="window.open('https://asterhouseproductions.com/','_blank','noopener')">
       <div class="playground-card-image" style="aspect-ratio:1082/612; background:#0a0a0a;">
         <img src="images/play/videography/videography-cover.png" alt="Videography — The Wedding of Ian & Sam title card" loading="lazy">
       </div>
       <div class="playground-card-info">
         <span class="playground-card-title">Videography</span>
         <span class="playground-card-tag">Motion</span>
+      </div>
+    </div>
+
+    <div class="playground-card" onclick="openLifeLearner()">
+      <div class="playground-card-image" style="aspect-ratio:16/9; background:#0a0a0a;">
+        <video src="images/play/learning-loop.mp4" poster="images/play/learning-poster.jpg"
+               width="1280" height="720"
+               autoplay muted loop playsinline preload="metadata"
+               aria-label="Emma sitting cross-legged with a laptop on a green velvet sofa in the middle of a wildflower field, the camera drifting slowly in and back out"></video>
+      </div>
+      <div class="playground-card-info">
+        <span class="playground-card-title">Life Learner</span>
+        <span class="playground-card-tag">Coursework</span>
       </div>
     </div>
 
@@ -1289,6 +1465,47 @@ a { color: inherit; text-decoration: none; }
     <img class="pgal-lb-img" id="pgal-lb-img" src="" alt="Photography">
     <button class="pgal-lb-nav next" onclick="lightboxStep(1)" aria-label="Next">&rarr;</button>
     <div class="pgal-lb-count" id="pgal-lb-count"></div>
+  </div>
+</div>
+
+<!-- ============ CONTINUING ED PAGE ============ -->
+<div class="ce-page" id="ce-page">
+  <div class="pgal-topnav">
+    <span class="pgal-back" onclick="closeLifeLearner()">&larr; Back</span>
+    <span class="pgal-title">Life Learner</span>
+    <span class="pgal-tag">Coursework</span>
+  </div>
+  <div class="ce-body">
+    <h2 class="ce-head">Continuing&nbsp;Ed</h2>
+    <p class="ce-deck">Three courses are open on my desk right now, all of them outside of design. None of them are finished, which is sort of the point.</p>
+
+    <div class="ce-cols">
+      <div class="ce-col">
+        <span class="ce-num">01</span>
+        <span class="ce-src">edX &middot; HarvardX</span>
+        <a class="ce-course" href="https://www.edx.org/learn/r-programming/harvard-university-data-science-r-basics" target="_blank" rel="noopener noreferrer"><span class="ce-label">Data Science: R Basics</span><span class="ce-arrow" aria-hidden="true">&#8599;</span></a>
+        <p class="ce-note">R, and enough fluency to interrogate a dataset myself instead of taking someone else's summary of it on faith.</p>
+        <span class="ce-status">In progress</span>
+      </div>
+      <div class="ce-col">
+        <span class="ce-num">02</span>
+        <span class="ce-src">edX &middot; HarvardX</span>
+        <a class="ce-course" href="https://www.edx.org/learn/computer-science/harvard-university-cs50-s-introduction-to-computer-science" target="_blank" rel="noopener noreferrer"><span class="ce-label">CS50: Introduction to Computer Science</span><span class="ce-arrow" aria-hidden="true">&#8599;</span></a>
+        <p class="ce-note">The fundamentals underneath everything I prototype. I've been building on top of these ideas for years without ever being taught them.</p>
+        <span class="ce-status">In progress</span>
+      </div>
+      <div class="ce-col">
+        <span class="ce-num">03</span>
+        <span class="ce-src">freeCodeCamp</span>
+        <a class="ce-course" href="https://www.freecodecamp.org/learn/full-stack-developer/" target="_blank" rel="noopener noreferrer"><span class="ce-label">Certified Full Stack Developer</span><span class="ce-arrow" aria-hidden="true">&#8599;</span></a>
+        <p class="ce-note">The long one. Front end through back end, so that what I design is also something I can build.</p>
+        <span class="ce-status">In progress</span>
+      </div>
+    </div>
+
+    <div class="ce-closer">
+      <p class="ce-close-line">I'm always looking for a challenge. The day I stop learning something new is the day&nbsp;I&nbsp;stop getting better at this.</p>
+    </div>
   </div>
 </div>
 
@@ -2047,6 +2264,26 @@ const PGAL_PHOTOS = [
 ];
 let pgalLightboxIndex = -1;
 
+function openLifeLearner() {
+  const page = document.getElementById('ce-page');
+  if (!page) return;
+  page.classList.add('active');
+  page.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLifeLearner() {
+  const page = document.getElementById('ce-page');
+  if (!page) return;
+  page.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  if (document.getElementById('ce-page')?.classList.contains('active')) closeLifeLearner();
+});
+
 function openPhotoGallery() {
   const page = document.getElementById('photo-gallery');
   if (!page) return;
@@ -2338,6 +2575,17 @@ document.addEventListener('keydown', (e) => {
       // renderStrava(now.strava);
       // renderRotation(now.listening, reading);
     });
+})();
+</script>
+
+<!-- Autoplaying loops are motion nobody asked for. Strip autoplay when the
+     visitor has asked their OS for reduced motion. -->
+<script>
+(function(){
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('video[autoplay]').forEach(function(v){
+    v.autoplay=false; v.removeAttribute('autoplay'); v.removeAttribute('loop'); v.pause();
+  });
 })();
 </script>
 
