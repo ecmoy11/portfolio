@@ -28,7 +28,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/case-study.css">
 <link rel="stylesheet" href="assets/case-study-rail.css">
 <link rel="stylesheet" href="assets/build-mark.css">
@@ -38,35 +38,10 @@
    (snap scrolling + the prev/next buttons in case-study.js). Deliberately
    NOT .cs-frame: that class binds the image lightbox, and these are type,
    not screens, so they have to be legible in place instead of on zoom. */
-/* ---------- typography defaults ----------
-   Her standing rule: single-word last lines are a defect. The shared
-   case-study sheets never set these, so body copy on this page had no
-   orphan protection at all and broke at 360, 1000, 1024, 1100 and 1150.
-   balance evens short headings, pretty stops paragraphs ending on one word.
-   &nbsp; glue stays where measurement still finds one. */
-.csr-content p, .csr-content dd, .csr-content li,
-.csr-cap, .csr-hint, .nav-j-story, .nav-j-tests{text-wrap:pretty;}
-.csr-content h2, .csr-content h3, .csr-content h4,
-.csr-stmt, .csr-q, .csr-sub{text-wrap:balance;}
+/* typography defaults + bleed fix now live in case-study-rail.css */
+.nav-j-story, .nav-j-tests{text-wrap:pretty;}
 
-/* ---------- pre-existing bleed bug, scoped fix ----------
-   case-study-rail.css:310 gives the bleed sections a rightward-only bleed:
-     --csr-bleed: min(230px, calc(96px + max(0px,(100vw - 1280px)/2)))
-     width: calc(100% + var(--csr-bleed)); margin-left: 0;
-   The 96px floor is the bug. Below about 1196px there is not 96px of room to
-   the right of the text column (the shell only has 80px of padding there), so
-   .cs-fd runs past the viewport and the whole page scrolls sideways. Measured
-   16px of horizontal scroll at 1024, 1100 and 1200. It is invisible on a wide
-   monitor, which is why it survived.
-   Third clamp = the room that actually exists: half the slack outside the
-   1240px shell, plus the shell's own right padding, less a scrollbar gutter.
-   Declared on .csr-content so .cs-alt inherits it too: its 2-column rule at
-   min-width:1200px uses the same variable and overshot in the 1200-1230px
-   band. coros, solace, airbnb and airline share all of this, so the real fix
-   is this one line in case-study-rail.css:310. */
-.csr-content{
-  --csr-bleed:max(0px, min(230px, calc(96px + max(0px,(100vw - 1280px) / 2)), calc((100vw - 1240px) / 2 + 68px)));
-}
+
 
 /* ---------- Try It: the prototype needs room ----------
    The prototype renders a 393x852 device sitting under a ~390px stack of
@@ -134,13 +109,9 @@
    inside 0.64px of each other. Two fixes: lift the sub clear of the item
    headings, and push the hint below the caption line so instructions stop
    competing with content. */
-.csr-sec p.csr-sub{font-size:1.38rem;margin-top:68px;}
 /* a hint used to be the last thing in a block; now one sits mid-section with
    body copy under it, and the default margin leaves them touching. */
 #firstpass .csr-hint + p{margin-top:34px;}
-.csr-content .csr-hint, .csr-content .csr-zoomhint{
-  font-size:0.5rem;letter-spacing:.12em;opacity:.7;margin-top:10px;}
-.csr-content .csr-hint::before, .csr-content .csr-zoomhint::before{width:4px;height:4px;}
 /* and lift the round titles clear of their own row labels: ENTRY was 9.92px
    against LABEL's 9.6px, which is the same collapse one tier down. */
 .csr-content .cs-alt-entry-label{font-size:0.72rem;letter-spacing:.16em;}
@@ -180,7 +151,7 @@
   text-transform:uppercase;color:#B4ADA3;text-align:center;line-height:2;padding:24px;}
 .nav-j-head{display:flex;align-items:baseline;gap:11px;}
 .nav-j-num{font-family:var(--font-mono);font-size:0.6rem;font-weight:500;letter-spacing:.16em;color:var(--orange);}
-.nav-j-name{font-family:var(--font-serif);font-size:1.5rem;line-height:1.15;color:var(--ink);}
+.nav-j-name{font-family:var(--f-head);font-size:1.5rem;line-height:1.15;color:var(--ink);}
 .nav-j-who{
   font-family:var(--font-mono);font-size:0.55rem;letter-spacing:.12em;
   text-transform:uppercase;color:var(--text-muted);margin:5px 0 10px;}

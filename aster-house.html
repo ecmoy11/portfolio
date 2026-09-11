@@ -29,27 +29,12 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/case-study.css">
 <link rel="stylesheet" href="assets/case-study-rail.css">
 <link rel="stylesheet" href="assets/build-mark.css">
 <style>
-/* ---------- typography defaults ----------
-   Standing rule: single-word last lines are a defect. The shared case-study
-   sheets never set text-wrap at all, so every page has to declare it locally
-   until the fix moves into case-study-rail.css. Same block as capstone.html. */
-.csr-content p, .csr-content dd, .csr-content li,
-.csr-cap, .csr-hint{text-wrap:pretty;}
-.csr-content h2, .csr-content h3, .csr-content h4,
-.csr-stmt, .csr-q, .csr-sub{text-wrap:balance;}
-
-/* ---------- bleed floor override ----------
-   case-study-rail.css:310 sets a 96px floor on --csr-bleed that overflows the
-   viewport by 16px between about 1024 and 1200px. Same scoped fix capstone
-   carries. Delete from both pages once the shared sheet is corrected. */
-.csr-content{
-  --csr-bleed:max(0px, min(230px, calc(96px + max(0px,(100vw - 1280px) / 2)), calc((100vw - 1240px) / 2 + 68px)));
-}
+/* typography defaults + bleed fix now live in case-study-rail.css */
 
 /* ---------- ART PLACEHOLDERS, TEMPORARY ----------
    Every .ah-slot is a hole waiting for a real asset. Search "ah-slot" to find
@@ -79,7 +64,7 @@
   display:grid; grid-template-columns:repeat(3,1fr); gap:28px;
   margin-top:44px; padding-top:30px; border-top:1px solid rgba(26,26,26,.14);
 }
-.ah-terms dt{font-family:'DM Serif Display',Georgia,serif; font-size:1.35rem; line-height:1.2;}
+.ah-terms dt{font-family:var(--f-head); font-size:1.35rem; line-height:1.2;}
 .ah-terms dd{
   margin:8px 0 0; font-family:'JetBrains Mono',ui-monospace,monospace;
   font-size:0.66rem; letter-spacing:.16em; text-transform:uppercase;
