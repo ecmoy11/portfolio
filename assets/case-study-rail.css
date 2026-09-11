@@ -143,8 +143,8 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
 .csr-sec p strong{color:var(--text-dark);font-weight:500;}
 /* qualified with p so they outrank `.csr-sec p` above, which is (0,1,1) */
 .csr-sec p.csr-sub{
-  font-family:var(--f-sub);font-size:1.12rem;font-weight:500;line-height:1.45;color:var(--text-dark);
-  margin:60px 0 10px;letter-spacing:-0.01em;
+  font-family:var(--f-sub);font-size:1.38rem;font-weight:500;line-height:1.45;color:var(--text-dark);
+  margin:68px 0 10px;letter-spacing:-0.01em;
 }
 
 /* ---------- meta row, Amy's inline treatment ---------- */
@@ -308,6 +308,10 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
      100vw counts the scrollbar, so the extra room past the shell is measured
      off 1280 rather than 1240 to stay clear of it. */
   --csr-bleed:min(230px, calc(96px + max(0px,(100vw - 1280px) / 2)));
+  /* The 96px floor above overflowed the viewport by ~16px between 1024 and
+     1230px. Third clamp = the room that actually exists. Was a page-local
+     patch on capstone + aster only; promoted Sept 11 2026 so all 7 get it. */
+  --csr-bleed:max(0px, min(230px, calc(96px + max(0px,(100vw - 1280px) / 2)), calc((100vw - 1240px) / 2 + 68px)));
 }
 .csr-content .cs-fd,
 .csr-content .cs-sticky,
@@ -494,7 +498,7 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
   font-weight:500;color:var(--orange);display:block;margin-bottom:7px;
 }
 .csr-layer .t{
-  font-family:var(--font-serif);font-size:clamp(1.4rem,2.2vw,1.85rem);
+  font-family:var(--f-head);font-size:clamp(1.4rem,2.2vw,1.85rem);
   line-height:1.12;display:block;color:var(--text-dark);
 }
 /* sentence-case Inter, NOT uppercase mono. Uppercase mono at this size is
@@ -601,3 +605,16 @@ html[data-head="dmserif"] .csr-display{font-variation-settings:normal;}
    change of register - copy plus media - and needs a bigger step than the
    paragraph rhythm around it. */
 .csr-content .cs-sticky:not(:first-child){margin-top:64px;}
+
+
+/* ---------- typography defaults, all case studies ----------
+   Standing rule: single-word last lines are a defect. Was declared locally on
+   capstone + aster only; promoted Sept 11 2026. csr-sub was 1.12rem, which sat
+   0.6px above the h4s inside it, so a sub-section and its items read as the
+   same rank; 1.38rem is the size capstone had already proved out. */
+.csr-content p, .csr-content dd, .csr-content li,
+.csr-cap, .csr-hint{text-wrap:pretty;}
+.csr-content h2, .csr-content h3, .csr-content h4,
+.csr-stmt, .csr-q, .csr-sub{text-wrap:balance;}
+/* one serif family per page: pull quotes were DM Serif with a faked italic */
+.csr-content .quote-block{font-family:var(--f-head);font-size:1.2rem;}
