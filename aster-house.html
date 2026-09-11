@@ -186,13 +186,6 @@
    to fill the column the same way. */
 .cs-alt-media video{width:100%;height:auto;display:block;border-radius:2px;}
 
-/* The shared sheet desaturates a rejected artefact and returns it to colour on
-   hover, but only via `.cs-alt-media img`. Scoped to #cut so the videos in
-   What Stayed, which are not rejected, keep their colour. */
-#cut .cs-alt-media video{filter:grayscale(1) contrast(1.05); opacity:.82;
-  transition:filter .5s ease, opacity .5s ease;}
-#cut .cs-alt-media:hover video{filter:none; opacity:1;}
-
 /* A hint sitting mid-section needs the same breathing room capstone gives it. */
 .csr-content .csr-hint + p{margin-top:34px;}
 /* .cs-image-wide carries only 6px of bottom margin from the rail sheet, which
@@ -207,27 +200,41 @@
    .ah-paper-sheets the grid gap pushed it 68px off the sheet it refers to. */
 .ah-paper-sheets figure .csr-hint{margin-top:10px;}
 </style>
+<style id="a11y-utils">
+/* Accessibility utilities. Added 2026-09-09 in the audit pass.
+   .skip-link is invisible until it takes focus, then it is the first tab stop.
+   .visually-hidden is read by screen readers and never painted. */
+.skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:1000;}
+.skip-link:focus{left:16px;top:16px;width:auto;height:auto;overflow:visible;
+  padding:12px 22px;background:var(--text-dark,#2C2B28);color:#fff;border-radius:6px;
+  font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:12px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;text-decoration:none;
+  outline:3px solid var(--orange,#E15304);outline-offset:2px;}
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;}
+</style>
 </head>
 <body>
-<nav class="nav" id="nav">
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="nav" id="nav" aria-label="Main">
   <a href="index.html" class="nav-logo">Emma Moystner</a>
   <div class="nav-right">
     <a href="index.html">Work</a>
     <a href="side-quests.html">Side Quests</a>
     <a href="about.html">About</a>
-    <a href="resume.moystner.pdf" target="_blank">Resume</a>
+    <a href="resume.moystner.pdf" target="_blank">Resume<span class="visually-hidden"> (PDF, opens in a new tab)</span></a>
     <div class="nav-connect-wrap">
       <a href="#" class="nav-cta" id="connect-toggle" onclick="toggleConnectDropdown(event)">Connect</a>
       <div class="connect-dropdown" id="connect-dropdown">
         <a href="mailto:emmamoystner.design@gmail.com">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
           Email me
         </a>
         <div class="connect-dropdown-divider"></div>
         <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
           LinkedIn
-        </a>
+        <span class="visually-hidden"> (opens in a new tab)</span></a>
       </div>
     </div>
   </div>
@@ -239,10 +246,10 @@
   <a href="index.html">Work</a>
   <a href="side-quests.html">Side Quests</a>
   <a href="about.html">About</a>
-  <a href="resume.moystner.pdf" target="_blank">Resume</a>
+  <a href="resume.moystner.pdf" target="_blank">Resume<span class="visually-hidden"> (PDF, opens in a new tab)</span></a>
   <div class="mobile-connect-links">
     <a href="mailto:emmamoystner.design@gmail.com">Email</a>
-    <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
+    <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a>
   </div>
 </div>
 
@@ -254,7 +261,7 @@
      cursor, no half-faded load screen, no scrollbar. --cover is the
      variant that sizes an uncropped landscape asset correctly.
      ============================================================ -->
-<div class="csr-hero csr-hero--cover">
+<header class="csr-hero csr-hero--cover">
   <div class="ah-hero-stack">
     <div class="ah-hero-devices">
       <video autoplay muted loop playsinline preload="metadata" width="1280" height="826"
@@ -263,21 +270,20 @@
     </div>
   </div>
   <a class="csr-hero-mark" href="#build" aria-label="How this was built: Machine-assisted"><img src="assets/build-icons/hmc-balanced.svg" alt=""></a>
-</div>
+</header>
 
 <div class="csr-shell">
 
     <aside class="csr-rail">
       <a href="index.html" class="csr-back">&larr;&nbsp; All work</a>
       <div class="csr-eyebrow" style="margin-bottom:10px">Brand &amp; Site</div>
-      <div class="csr-railtitle">Aster<br>House</div>
-      <nav class="csr-jump" id="csr-jump">
+      <h1 class="csr-railtitle">Aster<br>House</h1>
+      <nav class="csr-jump" id="csr-jump" aria-label="Sections on this page">
         <a href="#overview">Overview</a>
         <a href="#oneday">One Day</a>
         <a href="#name">The Name</a>
         <a href="#paper">The First Pass</a>
         <a href="#details">What Stayed</a>
-        <a href="#cut">What Got Cut</a>
         <a href="#backend">How It Actually Works</a>
         <a href="#build">How This Was Built</a>
         <a href="#live">See It Live</a>
@@ -285,15 +291,15 @@
       </nav>
     </aside>
 
-    <main class="csr-content cs-body" style="margin:0;padding:0;">
+    <main id="main" class="csr-content cs-body" style="margin:0;padding:0;">
 
       <!-- ---------- OVERVIEW ---------- -->
       <section class="csr-sec" id="overview" data-csr-section>
         <div class="csr-eyebrow">Brand &amp; Site</div>
         <h2 class="csr-display">Overview</h2>
         <p><span class="highlight">Aster House Productions</span> is a solo wedding videography company, just starting out and needing somewhere to send people. She came to me with a name and nothing else. No identity, no&nbsp;site.</p>
-        <p>The rest of the brief was rough. She could not say what her style was. She had exactly one film to show. She did not want a price published anywhere. She had been sitting on the project for months, and she wanted all of it live by the&nbsp;end&nbsp;of&nbsp;the&nbsp;day.</p>
-        <p>So that is what we did. Identity, site, domain and a working inquiry form. It is live at <a href="https://asterhouseproductions.com" target="_blank" rel="noopener">asterhouseproductions.com</a>, and the form on it sends real mail to a real&nbsp;inbox.</p>
+        <p>The rest of the brief was rough. She could not say what her style was. She had exactly one film to show. She did not want a price published anywhere. She wanted all of it live by the&nbsp;end&nbsp;of&nbsp;the&nbsp;day.</p>
+        <p>So that is what we did. Identity, site, domain and a working inquiry form. It is live at <a href="https://asterhouseproductions.com" target="_blank" rel="noopener">asterhouseproductions.com<span class="visually-hidden"> (opens in a new tab)</span></a>, and the form on it sends real mail to a real&nbsp;inbox.</p>
 
         <dl class="csr-meta">
           <div><dt>Role</dt><dd>Brand, copy, design, and build</dd></div>
@@ -314,13 +320,13 @@
 
         <p>She had been dabbling in photography and video for a while, and the inquiries had already started arriving on their own. People asked about wedding coverage and there was nowhere to send them. No page, nothing&nbsp;to&nbsp;answer&nbsp;with.</p>
         <p>So she wanted a landing page that could take that weight. Somewhere to bring people in, and something that made the whole thing read as a real operation rather than a favor. Instagram is the long game and she wants to grow it the slow organic way, but that takes time she did not have while the inquiries kept&nbsp;coming.</p>
-        <p>She had also been fiddling with this for months. So we gave it a deadline instead of a scope: one day, and see how far we could&nbsp;get.</p>
+        <p>So we gave it a deadline instead of a scope: one day, and see how far we could&nbsp;get.</p>
         <p>The name was already settled. Everything else, the identity, the type, the palette, the site, the domain, the form and the email routing, happened between morning and&nbsp;night.</p>
 
         <p>The deadline did the useful thing deadlines do. It stopped this being a design project that could keep being improved and made it a thing that had to&nbsp;exist.</p>
 
         <p class="csr-sub">The objection, and the answer</p>
-        <p>There is an obvious objection to a site like this, which is that it has one film on it and no signature style. I decided the opposite of what you would expect. <strong>A signature style would be a lie right now.</strong> She is early, she is still playing, and with one film on the wall nobody is going to hire her for a look. So the site does not promise one. It stays universal on purpose, and it spends its effort proving the thing she can actually&nbsp;prove.</p>
+        <p>The obvious objection to a site like this is that it has one film on it and no signature style. <strong>A signature style would be a lie right now.</strong> With one film on the wall nobody is going to hire her for a look, so the site does not promise one. It stays universal on purpose, and spends its effort proving the thing she can actually&nbsp;prove.</p>
       </section>
 
       <!-- ---------- THE NAME ---------- -->
@@ -329,14 +335,14 @@
         <h2 class="csr-display">Aster House started in high&nbsp;school.</h2>
 
         <p>The name arrived before I did. My job was not to name the thing, it was to find out whether the name already held a system. It&nbsp;did.</p>
-        <p>In high school she had a photography brand called Emma Claire Photography, and she wanted to nod at that without using her own name again. She wanted something that could grow with her, and maybe one day grow past her. So she went at it through what the names mean. Emma is whole. Claire is clear and bright. Both of them keep landing on light, which is what photography and film are actually&nbsp;about.</p>
+        <p>In high school she had a photography brand under her own name. She wanted to nod at that without using it again, with something that could one day grow&nbsp;past&nbsp;her.</p>
         <p>Aster is Greek for star. A star is a small point of light inside something much&nbsp;larger.</p>
-        <p>The bird was the one thing she asked for outright. She has been obsessed with birds for years and wanted one in the mark. Wanting a bird is not a reason to have a bird, so it had to earn the space, and it did. Birds are observers. They belong to perspective, to movement, to seeing a familiar place from somewhere&nbsp;above&nbsp;it.</p>
-        <p>House is the part people skip past, and it is carrying the most weight. She is a multifaceted creative, design and photography and film, and Aster House is built to sit over all of it. A household name rather than a wedding film company, so the work can widen as she does without needing&nbsp;a&nbsp;rebrand.</p>
-        <p>It is also a promise about the day itself. When she shoots a wedding she wants to host, to make people comfortable enough to forget there is a camera in the room. Aster House sounded cozy and warm before anybody could explain why, and then it turned out there&nbsp;was&nbsp;a&nbsp;why.</p>
+        <p>The bird was the one thing she asked for outright. Wanting a bird is not a reason to have a bird, so it had to earn the space, and it did. Birds are observers. They belong to perspective, to seeing a familiar place from somewhere&nbsp;above&nbsp;it.</p>
+        <p>House is the part people skip past, and it is carrying the most weight. A household name rather than a wedding film company, so the work can widen as she does without needing&nbsp;a&nbsp;rebrand.</p>
+        <p>It is also a promise about the day itself. When she shoots a wedding she wants to host, to make people comfortable enough to forget there is a camera in&nbsp;the&nbsp;room.</p>
 
         <p class="csr-sub">Two rounds, which is what the day allowed</p>
-        <p>Round one went engraved. A drawn swallow with all its feathering, a compass star beside it, Libre Caslon Display over letterspaced Montserrat, and three lockups. She liked it. It felt high end, and high end was the thing she least wanted to&nbsp;lose.</p>
+        <p>Round one went engraved, and she liked it. It felt high end, and high end was the thing she least wanted to&nbsp;lose.</p>
 
         <div class="cs-image-wide">
           <div data-zoom data-caption="Brand ideation, round one. Libre Caslon Display and letterspaced Montserrat, a drawn swallow and a compass star as separate elements, and three lockups: primary, crest and wordmark.">
@@ -348,8 +354,8 @@
           </div>
         </div>
 
-        <p>What she did not like was how much of it there was. The bird and the star were both carrying detail, and she wanted the mark to feel more like her. More grounded, simpler, without&nbsp;giving&nbsp;up&nbsp;that&nbsp;feel.</p>
-        <p>My read was narrower than that. She wanted both elements and I agreed she should have both, but in round one they were competing. Two illustrations sharing a frame, each asking to be looked at first. Round two stopped treating them as two&nbsp;things.</p>
+        <p>What she did not like was how much of it there was. She wanted the mark to feel more grounded and simpler, without giving up that&nbsp;feel.</p>
+        <p>My read was narrower. She wanted both elements and I agreed she should have both, but in round one they were competing: two illustrations sharing a frame, each asking to be looked at first. Round two stopped treating them as two&nbsp;things.</p>
 
         <div class="cs-image-wide">
           <div data-zoom data-caption="Brand ideation, round two. The swallow reduced to a solid silhouette with the wings cut from negative space, and the star shrunk into the notch above the upper wing.">
@@ -361,9 +367,7 @@
           </div>
         </div>
 
-        <p>The bird lost its feathering and became one silhouette, wings cut out of the negative space. The star shrank and moved into the notch above the upper wing, so it reads as part of the bird instead of a second object standing next to it. <strong>One mark, not two.</strong> That is the version on every surface now, from the favicon to the send&nbsp;button.</p>
-
-        <p>Light, perspective, keeping. The star, the bird, the house. Filmmaking sits exactly between the first two, and the third is a promise about what it feels like to work with&nbsp;her.</p>
+        <p>The star shrank into the notch above the upper wing, so it reads as part of the bird instead of a second object standing next to it. <strong>One mark, not two.</strong> That is the version on every surface now, from the favicon to the send&nbsp;button.</p>
 
         <dl class="ah-terms">
           <div><dt>Light</dt><dd>The star</dd></div>
@@ -455,33 +459,8 @@
           <div class="cs-alt-copy">
             <span class="cs-alt-entry-label">03 &middot; The Bird That Leaves</span>
             <div class="cs-alt-row"><span class="cs-alt-label">What it does</span><p>On the whole site the mark moves exactly once, when someone sends an inquiry. The bird inside the send button lifts out of it and climbs away, and the confirmation holds back 700 milliseconds so it gets airborne&nbsp;first.</p></div>
-            <div class="cs-alt-row"><span class="cs-alt-label">Why it earned it</span><p>It climbs at about 45 degrees, because any shallower and it reads as flying sideways while nose up. I spent the motion at the one moment the site has a job. Everything before it is&nbsp;information.</p></div>
+            <div class="cs-alt-row"><span class="cs-alt-label">Why it earned it</span><p>It climbs at about 45 degrees, because any shallower and it reads as flying sideways while nose up. I tried making it flap first and cut that, because I could not get it past gimmicky. I spent the motion at the one moment the site has a job. Everything before it is&nbsp;information.</p></div>
           </div>
-        </div>
-
-      </section>
-
-      <!-- ---------- WHAT GOT CUT ---------- -->
-      <section class="csr-sec" id="cut" data-csr-section>
-        <div class="csr-eyebrow">What Got Cut</div>
-        <h2 class="csr-display">I am not against detail. I am against detail that is not&nbsp;smooth.</h2>
-
-        <div class="cs-alt">
-          <div class="ah-media-cell">
-            <div class="cs-alt-media" data-zoom data-caption="The version that did not ship. The wings alternate between the two frames as the bird climbs, so the wingbeat reads as a stutter in the flight path.">
-              <video autoplay muted loop playsinline preload="metadata" width="1000" height="858"
-                     poster="images/aster-house/bird-flap-flight-poster.jpg"
-                     aria-label="The rejected version. The bird leaves the send button with its wings alternating between the two frames as it climbs, so the wingbeat reads as a stutter rather than as flight."><source src="images/aster-house/bird-flap-flight.mp4" type="video/mp4"></video>
-            </div>
-            <p class="csr-hint">Click the flap to see it bigger</p>
-          </div>
-          <div class="cs-alt-copy">
-            <span class="cs-alt-entry-label">The Flapping Bird</span>
-            <div class="cs-alt-row"><span class="cs-alt-label">What I tried</span><p>I wanted the bird to actually flap. I had the whole thing in my head, a beautiful drifting motion as it left the button. I built the kit for it, two frames, one with the wing and one without, alternating every few hundred&nbsp;milliseconds.</p></div>
-            <div class="cs-alt-row"><span class="cs-alt-label">Why it lost</span><p>I could not get it where it did not look gimmicky. I tried a couple of techniques and nothing felt smooth enough for me to push&nbsp;it.</p></div>
-            <div class="cs-alt-row"><span class="cs-alt-label">What replaced it</span><p>The glide. It just looked&nbsp;better.</p></div>
-          </div>
-
         </div>
 
       </section>
@@ -501,7 +480,7 @@
           <p class="csr-hint">Click to see it closer</p>
         </div>
 
-        <p>The interesting part is why her mail comes from a subdomain. Verifying a domain with Resend puts an MX record on it, and the MX record on the root domain already belongs to Cloudflare Email Routing, which is the thing forwarding hello@ into her inbox. <strong>Verify the root and I would have broken the inbox I was trying to fill.</strong> So sending happens from a send subdomain and receiving stays on the root. Three extra DNS records, and mail moves in both&nbsp;directions.</p>
+        <p>Her mail sends from a subdomain rather than the root, because verifying the root with Resend would have overwritten the MX record already forwarding hello@ into her inbox. <strong>I would have broken the inbox I was trying to fill.</strong> Three extra DNS records, and mail moves in both&nbsp;directions.</p>
 
 
         <p class="csr-sub">What it costs to load</p>
@@ -531,7 +510,6 @@
           </div>
         </div>
 
-        <p>Where my own hours went was the prework, and then the pass at the end. The identity, two rounds of the mark until the bird and the star stopped competing. The structure drawn out on paper, band by band, with a ground color written against each one. The palette and the type. Both motion ideas. Then the edit on every line that came back, and the decisions about what did not&nbsp;survive.</p>
       </section>
 
       <!-- ---------- SEE IT LIVE ---------- -->
@@ -544,7 +522,7 @@
           <span>Live site</span>
           <b>Aster House Productions &rarr;</b>
           <em>asterhouseproductions.com</em>
-        </a>
+        <span class="visually-hidden"> (opens in a new tab)</span></a>
       </section>
 
       <!-- ---------- WHAT I SETTLED ---------- -->
@@ -560,14 +538,6 @@
           <div>
             <h4>The bottleneck was upstream of the work</h4>
             <p>She was not blocked on being able to shoot a wedding. She was blocked on having somewhere to send someone who asked. One is a craft problem and takes years. The other took a day, and it sat for months because it looked bigger from the outside than it&nbsp;was.</p>
-          </div>
-          <div>
-            <h4>Not having a style is a position, not a gap</h4>
-            <p>With one film up, promising a signature look would be a claim she cannot back. So the site stays universal on purpose and spends its credibility on care instead. That is a real answer to the obvious objection rather than a&nbsp;way&nbsp;around&nbsp;it.</p>
-          </div>
-          <div>
-            <h4>Detail earns its place by being smooth</h4>
-            <p>I like a site that feels like a full experience, and I kept two motion ideas that do. The one I cut was the one I wanted most, and it went because I could not get it past gimmicky. The standard is craft, not&nbsp;restraint.</p>
           </div>
           <div>
             <h4>What I would watch</h4>

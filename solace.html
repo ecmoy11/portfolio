@@ -32,27 +32,41 @@
 <link rel="stylesheet" href="assets/case-study.css?v=20260812">
 <link rel="stylesheet" href="assets/case-study-rail.css?v=20260812">
 <link rel="stylesheet" href="assets/build-mark.css">
+<style id="a11y-utils">
+/* Accessibility utilities. Added 2026-09-09 in the audit pass.
+   .skip-link is invisible until it takes focus, then it is the first tab stop.
+   .visually-hidden is read by screen readers and never painted. */
+.skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:1000;}
+.skip-link:focus{left:16px;top:16px;width:auto;height:auto;overflow:visible;
+  padding:12px 22px;background:var(--text-dark,#2C2B28);color:#fff;border-radius:6px;
+  font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:12px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;text-decoration:none;
+  outline:3px solid var(--orange,#E15304);outline-offset:2px;}
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;}
+</style>
 </head>
 <body>
-<nav class="nav" id="nav">
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="nav" id="nav" aria-label="Main">
   <a href="index.html" class="nav-logo">Emma Moystner</a>
   <div class="nav-right">
     <a href="index.html">Work</a>
     <a href="side-quests.html">Side Quests</a>
     <a href="about.html">About</a>
-    <a href="resume.moystner.pdf" target="_blank">Resume</a>
+    <a href="resume.moystner.pdf" target="_blank">Resume<span class="visually-hidden"> (PDF, opens in a new tab)</span></a>
     <div class="nav-connect-wrap">
       <a href="#" class="nav-cta" id="connect-toggle" onclick="toggleConnectDropdown(event)">Connect</a>
       <div class="connect-dropdown" id="connect-dropdown">
         <a href="mailto:emmamoystner.design@gmail.com">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
           Email me
         </a>
         <div class="connect-dropdown-divider"></div>
         <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
           LinkedIn
-        </a>
+        <span class="visually-hidden"> (opens in a new tab)</span></a>
       </div>
     </div>
   </div>
@@ -64,13 +78,13 @@
   <a href="index.html">Work</a>
   <a href="side-quests.html">Side Quests</a>
   <a href="about.html">About</a>
-  <a href="resume.moystner.pdf" target="_blank">Resume</a>
+  <a href="resume.moystner.pdf" target="_blank">Resume<span class="visually-hidden"> (PDF, opens in a new tab)</span></a>
   <div class="mobile-connect-links">
     <a href="mailto:emmamoystner.design@gmail.com">Email</a>
-    <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
+    <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a>
   </div>
 </div>
-<div class="csr-hero csr-hero--system">
+<header class="csr-hero csr-hero--system">
     <div class="csr-hero-in">
       <div class="csr-hero-card">
         <div class="csr-hero-eyebrow">A three-part system</div>
@@ -83,15 +97,15 @@
       <img src="images/solace/solace-hero.png" alt="The Sprint Ticket Panel running alongside Slack: a blocked ticket, a City Pulse Check post, and the sprint&rsquo;s rituals listed down the right">
     </div>
     <a class="csr-hero-mark" href="#build" aria-label="How this was built: Machine-assisted"><img src="assets/build-icons/hmc-balanced.svg" alt=""></a>
-  </div>
+  </header>
 
   <div class="csr-shell" id="cs-solace-health-rail">
 
     <aside class="csr-rail">
       <a href="index.html" class="csr-back">&larr;&nbsp; All work</a>
       <div class="csr-eyebrow" style="margin-bottom:10px">02 · Case Study</div>
-      <div class="csr-railtitle">Solace<br>Health</div>
-      <nav class="csr-jump" id="csr-jump">
+      <h1 class="csr-railtitle">Solace<br>Health</h1>
+      <nav class="csr-jump" id="csr-jump" aria-label="Sections on this page">
         <a href="#tldr">TLDR;</a>
         <a href="#the-problem">The Problem</a>
         <a href="#user-research">User Research</a>
@@ -103,7 +117,7 @@
       </nav>
     </aside>
 
-    <main class="csr-content cs-body" style="margin:0;padding:0;">
+    <main id="main" class="csr-content cs-body" style="margin:0;padding:0;">
 
       <!-- ---------- TLDR ---------- -->
       <section class="csr-sec" id="tldr" data-csr-section>

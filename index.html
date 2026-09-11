@@ -1698,29 +1698,43 @@ a { color: inherit; text-decoration: none; }
   .footer span::before{left:-9px;}
 }
 </style>
+<style id="a11y-utils">
+/* Accessibility utilities. Added 2026-09-09 in the audit pass.
+   .skip-link is invisible until it takes focus, then it is the first tab stop.
+   .visually-hidden is read by screen readers and never painted. */
+.skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:1000;}
+.skip-link:focus{left:16px;top:16px;width:auto;height:auto;overflow:visible;
+  padding:12px 22px;background:var(--text-dark,#2C2B28);color:#fff;border-radius:6px;
+  font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:12px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;text-decoration:none;
+  outline:3px solid var(--orange,#E15304);outline-offset:2px;}
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;}
+</style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <!-- ======== NAV ======== -->
-<nav class="nav" id="nav">
+<nav class="nav" id="nav" aria-label="Main">
   <a href="index.html" class="nav-logo">Emma Moystner</a>
   <div class="nav-right">
     <a href="index.html">Work</a>
     <a href="side-quests.html">Side Quests</a>
     <a href="about.html">About</a>
-    <a href="resume.moystner.pdf" target="_blank">Resume</a>
+    <a href="resume.moystner.pdf" target="_blank">Resume<span class="visually-hidden"> (PDF, opens in a new tab)</span></a>
     <div class="nav-connect-wrap">
       <a href="#" class="nav-cta" id="connect-toggle" onclick="toggleConnectDropdown(event)">Connect</a>
       <div class="connect-dropdown" id="connect-dropdown">
         <a href="mailto:emmamoystner.design@gmail.com">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
           Email me
         </a>
         <div class="connect-dropdown-divider"></div>
         <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
           LinkedIn
-        </a>
+        <span class="visually-hidden"> (opens in a new tab)</span></a>
       </div>
     </div>
   </div>
@@ -1733,21 +1747,22 @@ a { color: inherit; text-decoration: none; }
   <a href="index.html">Work</a>
   <a href="side-quests.html">Side Quests</a>
   <a href="about.html">About</a>
-  <a href="resume.moystner.pdf" target="_blank">Resume</a>
+  <a href="resume.moystner.pdf" target="_blank">Resume<span class="visually-hidden"> (PDF, opens in a new tab)</span></a>
   <div class="mobile-connect-links">
     <a href="mailto:emmamoystner.design@gmail.com">Email</a>
-    <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>
+    <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a>
   </div>
 </div>
 
 <!-- ======== HERO INTRO ======== -->
+<main id="main">
 <section class="hero-intro reveal-up">
   <p class="hero-eyebrow">Interaction Designer &middot; ArtCenter M.Des</p>
   <h1 class="hero-statement">Hey, I'm Emma. A designer who loves real people, messy problems, and a good challenge.</h1>
 </section>
 
 <!-- ======== WORK GRID ======== -->
-<main id="work-grid">
+<section id="work-grid">
   <div class="grid-inner">
 
     <!-- Capstone: Nav Health -->
@@ -1791,7 +1806,7 @@ a { color: inherit; text-decoration: none; }
     <!-- 03 · COROS -->
     <a class="work-tile reveal-up" href="coros.html">
       <div class="tile-media" style="aspect-ratio:4/5;">
-        <img src="images/coros/headerphoto.COROS.png" alt="COROS cycle-aware training dashboard" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+        <img src="images/coros/web/iphone-watch.webp" alt="The COROS redesign on a phone and a watch: the phone shows Phase Insights reading Ovulatory Phase, day 14 of 28; the watch shows Cycle Day 27, Luteal Phase" width="1280" height="1600" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
         <div class="tile-overlay">
           <span class="tile-pill tile-pill-name">COROS</span>
           <span class="tile-pill tile-pill-tag">Wellness &middot; Service Design</span>
@@ -1838,9 +1853,11 @@ a { color: inherit; text-decoration: none; }
     </a>
 
   </div>
-</main>
+</section>
 
 <!-- ======== FOOTER ======== -->
+</main>
+
 <footer class="footer">
   <a href="mailto:emmamoystner.design@gmail.com">Contact</a>
   <span>&copy; 2026 Emma Moystner</span>
@@ -1848,7 +1865,7 @@ a { color: inherit; text-decoration: none; }
 
 <!-- ============ INFO OVERLAY ============ -->
 <!-- ============ CASE STUDY PAGES ============ -->
-<div class="case-study-page" id="cs-hand-tetris">
+<div class="case-study-page" id="cs-hand-tetris" aria-hidden="true" inert>
   <div class="cs-nav"><button onclick="closeCaseStudy()">&larr; Back</button></div>
   <div class="cs-header">
     <div class="cs-label">Play · Gesture Prototype</div>
@@ -1876,7 +1893,7 @@ a { color: inherit; text-decoration: none; }
         <a class="tetris-launch" href="https://editor.p5js.org/emoystner/full/aq_l2cmPV" target="_blank" rel="noopener">
           <img src="images/play/hand%20tetris/intro.png" alt="Hand Tetris intro screen with How to Play instructions">
           <span class="tetris-launch-label">&#9654;&nbsp; Play in a new tab &middot; uses your webcam</span>
-        </a>
+        <span class="visually-hidden"> (opens in a new tab)</span></a>
       </div>
       <div class="tetris-demo-note">Opens the live sketch in a new tab. Camera stays on your device.</div>
     </div>
@@ -2062,9 +2079,15 @@ document.addEventListener('click', (e) => {
 });
 
 function openCaseStudy(id) {
-  document.querySelectorAll('.case-study-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.case-study-page').forEach(p => {
+    p.classList.remove('active');
+    p.setAttribute('inert', ''); p.setAttribute('aria-hidden', 'true');
+  });
   const page = document.getElementById('cs-' + id);
-  if (page) { page.classList.add('active'); page.scrollTop = 0; }
+  if (page) {
+    page.classList.add('active'); page.scrollTop = 0;
+    page.removeAttribute('inert'); page.setAttribute('aria-hidden', 'false');
+  }
   if (window.csSyncSteps) requestAnimationFrame(window.csSyncSteps);
   if (lenis) { lenis.destroy(); lenis = null; }
   if (lenisRafId) { cancelAnimationFrame(lenisRafId); lenisRafId = null; }
@@ -2072,7 +2095,10 @@ function openCaseStudy(id) {
 }
 
 function closeCaseStudy() {
-  document.querySelectorAll('.case-study-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.case-study-page').forEach(p => {
+    p.classList.remove('active');
+    p.setAttribute('inert', ''); p.setAttribute('aria-hidden', 'true');
+  });
   document.body.style.overflow = '';
   history.replaceState(null, '', window.location.pathname);
   initLenis();
