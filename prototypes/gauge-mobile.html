@@ -1,0 +1,1072 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Gauge Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --stage:#2E2E2E; --stage-ink:#E9E9EC; --stage-mute:#8E8E96; --stage-line:#434347;
+  --ink:#1C1D1F; --yellow:#FEC524; --yellow-dark:#C89A0E; --yellow-pale:#FFF8E1;
+  --border:#E4E4E7; --muted:#A1A1AA; --ph:#D1D1D6; --card:#FAFAFA; --chip:#F4F4F5;
+  --green:#16A34A; --green-pale:#F0FDF4; --red:#DC2626; --red-pale:#FEF2F2; --slate:#52525B; --zinc:#71717A;
+  --frost-1:#DCDAF2; --frost-2:#B5B1DA; --frost-3:#8C88BE;
+}
+html,body{height:100%}
+body{background:var(--stage);color:var(--stage-ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;padding-inline:16px;overflow:hidden}
+.stage{height:100%;display:flex;align-items:center;justify-content:center;gap:56px}
+
+/* side panel */
+.panel{width:230px;display:flex;flex-direction:column;gap:22px}
+.panel h1{margin:0;font-size:22px;font-weight:600;letter-spacing:-.3px}
+.panel p{margin:6px 0 0;font-size:13px;line-height:1.5;color:var(--stage-mute)}
+.flows{display:flex;flex-direction:column;gap:16px}
+.flow-label{font-size:11px;font-weight:600;letter-spacing:1px;color:var(--stage-mute);margin-bottom:6px}
+.flow{display:flex;flex-direction:column;border-left:1px solid var(--stage-line)}
+.jump{all:unset;cursor:pointer;font-size:13px;padding:5px 0 5px 12px;margin-left:-1px;border-left:2px solid transparent;color:var(--stage-mute)}
+.jump:hover{color:var(--stage-ink)}
+.jump[aria-current="true"]{color:var(--stage-ink);border-left-color:var(--yellow)}
+.jump:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+.restart{all:unset;cursor:pointer;align-self:flex-start;font-size:12px;font-weight:500;padding:7px 12px;border:1px solid var(--stage-line);border-radius:14px;color:var(--stage-ink)}
+.restart:hover{border-color:var(--stage-mute)}
+@media (max-width:760px){.panel{display:none}}
+
+/* device: Pixel 11 (Frost), proportions from the Figma mockup frame */
+.fit{position:relative;flex:none}
+.device{position:absolute;left:0;top:0;width:403px;height:860px;transform-origin:0 0;filter:drop-shadow(34px 46px 38px rgba(0,0,0,.42))}
+.body{position:absolute;left:0;top:0;width:399px;height:859.5px;border-radius:62px;
+  background:linear-gradient(90deg,var(--frost-3) 0%,var(--frost-1) 1.4%,var(--frost-2) 3%,var(--frost-2) 97%,var(--frost-1) 98.6%,var(--frost-3) 100%);
+  box-shadow:inset 0 0 0 1px rgba(80,76,130,.55)}
+.body::before{content:"";position:absolute;inset:4px;border-radius:58px;background:linear-gradient(180deg,#CFCCEB,#B3AFD8 50%,#CFCCEB)}
+.bezel{position:absolute;left:8.5px;top:8.5px;width:382px;height:842.5px;border-radius:54px;background:#050506}
+.btn-side{position:absolute;left:397.5px;width:4px;border-radius:0 3px 3px 0;background:linear-gradient(90deg,#9D99C9,#C7C4E6)}
+.screen{position:absolute;left:12px;top:12px;width:375px;height:835.5px;border-radius:50.5px;overflow:hidden;background:#050506;isolation:isolate}
+/* hide the anti-aliased seam where the screen meets the bezel */
+.screen::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1.25px #050506;pointer-events:none;z-index:90}
+.punch{position:absolute;left:187.5px;top:21px;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 42% 40%,#2B2F3A 0 18%,#0B0C10 32%,#000 70%);z-index:50;pointer-events:none}
+
+/* app primitives: every coordinate below is from the Figma frames */
+.scr{position:absolute;inset:0;background:#fff;color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:normal;-webkit-font-smoothing:antialiased}
+.scr *{box-sizing:border-box}
+.a{position:absolute}
+.t{position:absolute;white-space:nowrap;margin:0}
+.cx{transform:translateX(-50%)}
+.ic{position:absolute}
+.ic svg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block}
+.lbl{font-size:11px;font-weight:600;letter-spacing:1px;color:var(--muted)}
+.lbl13{font-size:13px;font-weight:600;letter-spacing:1.2px;color:var(--muted)}
+:where(button.tap){all:unset}
+.tap{box-sizing:border-box;position:absolute;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden}
+.tap:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+.press{transition:transform .3s cubic-bezier(.25,1,.5,1),filter .2s ease,border-color .25s ease,background-color .25s ease}
+.press:active{transform:scale(.98);filter:brightness(.98);transition-duration:.1s}
+.ripple{position:absolute;border-radius:50%;background:currentColor;opacity:.07;pointer-events:none;scale:0;animation:ripple .6s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes ripple{to{scale:1;opacity:0}}
+.cta{left:24px;width:327px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600}
+.cta.dark{background:var(--ink);color:#fff}
+.cta.yel{background:var(--yellow);color:var(--ink)}
+.cta.ghost{border:1.5px solid var(--border);color:var(--zinc);font-weight:500}
+.cta[aria-disabled="true"]{opacity:.3;pointer-events:none}
+.field{position:absolute;left:24px;width:327px;height:46px;border:1.5px solid var(--border);border-radius:12px;background:#fff;font:400 15px/1 Inter,system-ui,sans-serif;color:var(--ink);padding:0 13px;outline:none}
+.field::placeholder{color:var(--ph)}
+.field:focus{border-color:var(--ink)}
+.odo{position:absolute;left:14.5px;top:30.5px;width:125px;border:0;padding:0;background:transparent;font:600 22px/27px Inter,system-ui,sans-serif;letter-spacing:1px;color:var(--ink);outline:none;font-variant-numeric:tabular-nums}
+.odo::placeholder{color:var(--ph)}
+.field.err{border-color:var(--red)}
+.field.err::placeholder{color:#F09A9A}
+.select{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:28px;font-size:14px;text-overflow:ellipsis;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%23A1A1AA' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.5l3 3 3-3'/%3E%3C/svg%3E") no-repeat right 12px center}
+.select.empty{color:var(--ph)}
+.select.err.empty{color:#F09A9A}
+.select option{color:var(--ink)}
+.sheet-wrap{position:absolute;inset:0;z-index:70}
+.sheet{position:absolute;left:0;bottom:0;width:375px;height:470px;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.12)}
+.fx-sheet{animation:sheetUp .38s var(--ease-out) both}
+@keyframes sheetUp{from{translate:0 100%}}
+.fx-fade{animation:fadeIn .3s ease both}
+@keyframes fadeIn{from{opacity:0}}
+.sheet-wrap.closing .sheet{animation:sheetDown .23s cubic-bezier(.4,0,1,1) both}
+.sheet-wrap.closing .sheet-back{animation:fadeOut .23s ease both}
+@keyframes sheetDown{to{translate:0 100%}}
+.fx-step{animation:stepIn .28s var(--ease-out) both}
+@keyframes stepIn{from{opacity:0;translate:12px 0}}
+.tap[disabled]{pointer-events:none}
+.notif{all:unset;box-sizing:border-box;position:absolute;left:20px;top:40px;width:359px;min-height:72px;padding:14px 14px 14px 64px;border-radius:20px;background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.04);z-index:80;cursor:pointer;font-family:Inter,system-ui,sans-serif;color:var(--ink);animation:notifIn .45s var(--ease-out) both}
+.notif[hidden]{display:none}
+.notif.out{animation:notifOut .3s ease-in both}
+@keyframes notifIn{from{translate:0 -130%;opacity:0}}
+@keyframes notifOut{to{translate:0 -130%;opacity:0}}
+.notif .n-ic{position:absolute;left:14px;top:14px;width:38px;height:38px;border-radius:11px;background:var(--yellow);display:grid;place-items:center}
+.notif .n-t{font-size:13px;font-weight:600;display:flex;justify-content:space-between}
+.notif .n-t span{font-weight:400;color:var(--muted);font-size:12px}
+.notif .n-b{font-size:12.5px;color:var(--slate);margin-top:3px;line-height:1.35}
+.switch{width:44px;height:26px;border-radius:13px;background:var(--border);transition:background-color .2s}
+.switch i{position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:translate .22s var(--ease-out)}
+.switch.on{background:var(--green)}
+.switch.on i{translate:18px 0}
+.vpill span{display:inline-block;font-size:12px;font-weight:600;padding:5px 10px;border-radius:12px}
+.dot.pulse::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--yellow);animation:pulse 1.8s ease-out infinite}
+@keyframes pulse{0%{scale:1;opacity:.6}70%,100%{scale:2.6;opacity:0}}
+.scroller{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;overscroll-behavior:contain}
+.scroller::-webkit-scrollbar{display:none}
+.cta-fade{position:absolute;left:0;bottom:0;width:375px;height:118px;background:linear-gradient(rgba(255,255,255,0),#fff 32%);pointer-events:none;z-index:5}
+.cta{z-index:6}
+.field.note{height:96px;padding:12px 13px;font:400 14px/1.45 Inter,system-ui,sans-serif;resize:none}
+.extlink{position:absolute;left:24px;top:20px;font:600 14px Inter,system-ui,sans-serif;color:var(--yellow-dark);text-decoration:none;display:flex;align-items:center;gap:6px}
+.extlink:hover{text-decoration:underline}
+.extlink .ic{position:relative !important;width:14px;height:14px}
+.status{position:absolute;left:0;top:0;width:375px;height:40px;z-index:40}
+.status .time{position:absolute;left:15px;top:14px;width:54px;text-align:center;font-size:17px;font-weight:600;letter-spacing:-.408px;line-height:22px}
+.status .ic{left:283.6px;top:17px;width:77.4px;height:13px}
+.dot{position:absolute;width:8px;height:8px;border-radius:50%}
+.overlay-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+
+/* ---------- screen transitions (individual translate/scale props so they never fight .cx transforms) ---------- */
+:root{--ease-out:cubic-bezier(.32,.72,0,1);--spring:cubic-bezier(.25,1.12,.5,1)}
+.scr::after{content:"";position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;z-index:60}
+.in-push{z-index:2;animation:pushIn .46s var(--ease-out) both;box-shadow:-8px 0 24px rgba(0,0,0,.08)}
+.out-push{z-index:1;animation:pushOut .46s var(--ease-out) both}
+.out-push::after{animation:dimIn .46s var(--ease-out) both}
+.in-pop{z-index:1;animation:popIn .42s var(--ease-out) both}
+.in-pop::after{animation:dimOut .42s var(--ease-out) both}
+.out-pop{z-index:2;animation:popOut .42s var(--ease-out) both;box-shadow:-8px 0 24px rgba(0,0,0,.08)}
+@keyframes pushIn{from{translate:100% 0}}
+@keyframes pushOut{to{translate:-20% 0}}
+@keyframes popIn{from{translate:-20% 0}}
+@keyframes popOut{to{translate:100% 0}}
+@keyframes dimIn{to{opacity:.1}}
+@keyframes dimOut{from{opacity:.1}to{opacity:0}}
+.in-tab{z-index:2;animation:tabIn .34s var(--ease-out) both}
+.out-tab{z-index:1;animation:fadeOut .18s ease both}
+@keyframes tabIn{from{opacity:0;translate:0 4px}}
+@keyframes fadeOut{to{opacity:0}}
+.in-rise{z-index:2;animation:riseIn .52s var(--ease-out) both;border-radius:40px 40px 0 0}
+.out-rise{z-index:1;animation:sink .52s var(--ease-out) both}
+.out-rise::after{animation:dimIn .52s var(--ease-out) both}
+@keyframes riseIn{from{translate:0 100%}}
+@keyframes sink{to{scale:.97;opacity:.85}}
+.in-dismiss{z-index:1;animation:unsink .5s var(--ease-out) both}
+.out-dismiss{z-index:2;animation:dropOut .44s cubic-bezier(.5,0,.75,0) both}
+@keyframes unsink{from{scale:.97;opacity:.7}}
+@keyframes dropOut{to{translate:0 110%}}
+
+/* entry choreography, only while a screen is arriving */
+.scr.entering .rise{animation:riseUp .38s var(--ease-out) both;animation-delay:calc(var(--d,0s) * .55)}
+@keyframes riseUp{from{opacity:0;translate:0 5px}}
+.scr.entering .grow{transform-origin:left center;animation:grow .6s var(--ease-out) both;animation-delay:var(--d,.2s)}
+@keyframes grow{from{scale:0 1}}
+.scr.entering .burst{animation:burst .45s var(--ease-out) both;animation-delay:var(--d,.12s)}
+@keyframes burst{from{scale:.7;opacity:0}}
+.scr.entering .ring{animation:ring .9s ease-out both;animation-delay:var(--d,.3s)}
+@keyframes ring{from{scale:1;opacity:.25}to{scale:1.4;opacity:0}}
+.scr.entering .draw path, .fx-draw path{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .38s ease-out forwards;animation-delay:var(--d,.05s)}
+@keyframes draw{to{stroke-dashoffset:0}}
+.scr.entering .tab-on .ic{animation:tabPop .3s var(--ease-out) .08s both}
+@keyframes tabPop{0%{scale:.88}}
+
+/* in-screen feedback */
+.fx-pop{animation:fxPop .28s var(--ease-out)}
+@keyframes fxPop{0%{scale:.85}100%{scale:1}}
+.fx-row{animation:fxRow .25s var(--ease-out)}
+@keyframes fxRow{0%{scale:.99}100%{scale:1}}
+.fx-wiggle{animation:wiggle .34s var(--ease-out)}
+@keyframes wiggle{0%{scale:.8;rotate:-8deg}60%{rotate:3deg}100%{scale:1;rotate:0deg}}
+.fx-shake{animation:shake .3s ease}
+@keyframes shake{33%{translate:-2px 0}66%{translate:1.5px 0}}
+.fx-lock{animation:lock .35s var(--ease-out)}
+@keyframes lock{0%{scale:1.05}100%{scale:1}}
+.fx-flash{animation:flash .6s ease-out both}
+@keyframes flash{from{opacity:.12}to{opacity:0}}
+.fx-spring{animation:spring .4s var(--ease-out) both}
+@keyframes spring{from{opacity:0;translate:0 6px}}
+.fx-unlock{animation:unlock .35s ease}
+@keyframes unlock{0%{opacity:.3}100%{opacity:1}}
+.cta{transition:opacity .3s ease,transform .42s var(--spring)}
+.scanline{animation:sweep 1.4s ease-in-out infinite alternate}
+@keyframes sweep{from{top:62px}to{top:196px}}
+.scanline.done{animation:none;top:130px;opacity:0;transition:opacity .3s}
+@media (prefers-reduced-motion:reduce){.scr *,.scr,.scr::after,.dot.pulse::after{animation:none!important;transition:none!important}.scanline{top:130px}}
+</style>
+
+<div class="stage">
+  <aside class="panel" aria-label="Prototype controls">
+    <div>
+      <h1>Gauge</h1>
+      <p>Tap through it on the phone. Everything highlighted in yellow or ink is live.</p>
+    </div>
+    <nav class="flows" id="jumps"></nav>
+    <button class="restart" id="approve">Simulate fleet manager approval</button>
+    <button class="restart" id="restart">Restart from Home</button>
+  </aside>
+  <div class="fit" id="fit">
+    <div class="device" id="device">
+      <div class="btn-side" style="top:249px;height:62px"></div>
+      <div class="btn-side" style="top:352px;height:117px"></div>
+      <div class="body"></div>
+      <div class="bezel"></div>
+      <div class="screen" id="screen"></div>
+      <button class="notif" id="notif" hidden aria-label="Booking confirmed. Open"></button>
+      <div class="punch"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- icons, exported as SVG from the Figma nodes ---------- */
+const I = {
+newreport:`<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M0.875 5V0.875H5M18.75 0.875H22.875V5M22.875 18.75V22.875H18.75M5 22.875H0.875V18.75M5 11.875H18.75M11.875 5V18.75" stroke="#1C1D1F" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+calendar:`<svg width="25" height="24" viewBox="0 0 25 24" fill="none" stroke="#1C1D1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.33334 2V5"/><path d="M16.6667 2V5"/><path d="M19.7917 3H5.20833C4.05774 3 3.125 3.89543 3.125 5V19C3.125 20.1046 4.05774 21 5.20833 21H19.7917C20.9423 21 21.875 20.1046 21.875 19V5C21.875 3.89543 20.9423 3 19.7917 3Z"/><path d="M3.125 9H21.875"/><path d="M8.33334 13H8.34334"/><path d="M12.5 13H12.51"/><path d="M16.6667 13H16.6767"/><path d="M8.33334 17H8.34334"/><path d="M12.5 17H12.51"/><path d="M16.6667 17H16.6767"/></svg>`,
+car38:`<svg width="38" height="38" viewBox="0 0 38 38" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M30.0833 26.9167H33.25C34.2 26.9167 34.8333 26.2833 34.8333 25.3333V20.5833C34.8333 19.1583 33.725 17.8917 32.4583 17.575C29.6083 16.7833 25.3333 15.8333 25.3333 15.8333C25.3333 15.8333 23.275 13.6167 21.85 12.1917C21.0583 11.5583 20.1083 11.0833 19 11.0833H7.91667C6.96667 11.0833 6.175 11.7167 5.7 12.5083L3.48334 17.1C3.27367 17.7115 3.16667 18.3535 3.16667 19V25.3333C3.16667 26.2833 3.80001 26.9167 4.75001 26.9167H7.91667"/><path d="M11.0833 30.0833C12.8322 30.0833 14.25 28.6656 14.25 26.9167C14.25 25.1678 12.8322 23.75 11.0833 23.75C9.33444 23.75 7.91667 25.1678 7.91667 26.9167C7.91667 28.6656 9.33444 30.0833 11.0833 30.0833Z"/><path d="M14.25 26.9167H23.75"/><path d="M26.9167 30.0833C28.6656 30.0833 30.0833 28.6656 30.0833 26.9167C30.0833 25.1678 28.6656 23.75 26.9167 23.75C25.1678 23.75 23.75 25.1678 23.75 26.9167C23.75 28.6656 25.1678 30.0833 26.9167 30.0833Z"/></svg>`,
+reportDoc:`<svg width="22" height="27" viewBox="0 0 22 27" fill="none"><path d="M20.875 8.375L13.375 0.875H3.375C2 0.875 0.875 2 0.875 3.375V23.375C0.875 24.75 2 25.875 3.375 25.875H18.375C19.75 25.875 20.875 24.75 20.875 23.375V8.375ZM13.375 0.875V8.375H20.875M15.875 14.625H5.875M15.875 19.625H5.875" stroke="#1C1D1F" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+tabHome:`<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M0.875 9.29605L10.875 0.875L20.875 9.29605V20.875H14.2083V13.5066H7.54167V20.875H0.875V9.29605Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+tabReports:`<svg width="20" height="22" viewBox="0 0 20 22" fill="none"><path d="M18.875 6.875L12.125 0.875H3.125C1.8875 0.875 0.875 1.775 0.875 2.875V18.875C0.875 19.975 1.8875 20.875 3.125 20.875H16.625C17.8625 20.875 18.875 19.975 18.875 18.875V6.875ZM12.125 0.875V6.875H18.875" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+tabScan:`<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M0.875 4.625V0.875H4.625M17.125 0.875H20.875V4.625M20.875 17.125V20.875H17.125M4.625 20.875H0.875V17.125M4.625 10.875H17.125" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+tabProfile:`<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M20.875 20.875V18.375C20.875 15.6125 16.4 13.375 10.875 13.375C5.35 13.375 0.875 15.6125 0.875 18.375V20.875M10.875 8.375C12.95 8.375 14.625 6.7 14.625 4.625C14.625 2.55 12.95 0.875 10.875 0.875C8.8 0.875 7.125 2.55 7.125 4.625C7.125 6.7 8.8 8.375 10.875 8.375Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+statusRight:`<svg width="78" height="13" viewBox="0 0 78 13" fill="none"><path opacity="0.35" d="M54 0.527344H71C72.9178 0.527344 74.4727 2.08222 74.4727 4V9C74.4727 10.9178 72.9178 12.4727 71 12.4727H54C52.0822 12.4727 50.5273 10.9178 50.5273 9V4C50.5273 2.08222 52.0822 0.527344 54 0.527344Z" stroke="currentColor" stroke-width="1.05509"/><path opacity="0.4" d="M76 5V9.22034C76.8491 8.86291 77.4012 8.0314 77.4012 7.11017C77.4012 6.18894 76.8491 5.35744 76 5Z" fill="currentColor"/><path d="M52 4C52 2.89543 52.8954 2 54 2H71C72.1046 2 73 2.89543 73 4V9C73 10.1046 72.1046 11 71 11H54C52.8954 11 52 10.1046 52 9V4Z" fill="currentColor"/><path d="M32.1152 9.91875C33.535 8.69319 35.6144 8.69332 37.0342 9.91875C37.1056 9.98468 37.1475 10.0783 37.1494 10.1766C37.1514 10.2748 37.1136 10.3694 37.0449 10.4383L34.8213 12.7283C34.7562 12.7956 34.6678 12.8337 34.5752 12.8338C34.4825 12.8338 34.3933 12.7956 34.3281 12.7283L32.1045 10.4383C32.0359 10.3694 31.998 10.2748 32 10.1766C32.002 10.0783 32.0438 9.98463 32.1152 9.91875ZM29.1094 7.17851C32.1685 4.27392 36.9058 4.27392 39.9648 7.17851C40.0339 7.24662 40.0732 7.34029 40.0742 7.43828C40.0751 7.53616 40.0373 7.63055 39.9697 7.7L38.6846 9.02519C38.5521 9.16047 38.338 9.16378 38.2022 9.03203C37.1977 8.10361 35.8912 7.58961 34.5361 7.58964C33.1818 7.59022 31.876 8.10412 30.8721 9.03203C30.7362 9.16378 30.5221 9.16054 30.3897 9.02519L29.1045 7.7C29.0367 7.63064 28.9992 7.53621 29 7.43828C29.0009 7.34031 29.0404 7.24661 29.1094 7.17851ZM26.1074 4.44218C30.7993 -0.147426 38.2007 -0.147363 42.8926 4.44218C42.9605 4.51037 42.9994 4.60373 43 4.70097C43.0005 4.79806 42.9625 4.89184 42.8955 4.96074L41.6094 6.28593C41.4769 6.42191 41.2616 6.42362 41.127 6.28984C39.3393 4.55507 36.9666 3.5878 34.5 3.58769C32.0334 3.58781 29.6608 4.55507 27.8731 6.28984C27.7385 6.42373 27.523 6.42208 27.3906 6.28593L26.1035 4.96074C26.0366 4.89181 25.9995 4.79803 26 4.70097C26.0006 4.60373 26.0395 4.51032 26.1074 4.44218Z" fill="currentColor"/><path d="M10 4C10 3.44772 10.4477 3 11 3H12C12.5523 3 13 3.44772 13 4V12C13 12.5523 12.5523 13 12 13H11C10.4477 13 10 12.5523 10 12V4Z" fill="currentColor"/><path d="M15 2C15 1.44772 15.4477 1 16 1H17C17.5523 1 18 1.44772 18 2V12C18 12.5523 17.5523 13 17 13H16C15.4477 13 15 12.5523 15 12V2Z" fill="currentColor"/><path d="M5 7.5C5 6.94772 5.44772 6.5 6 6.5H7C7.55228 6.5 8 6.94772 8 7.5V12C8 12.5523 7.55228 13 7 13H6C5.44772 13 5 12.5523 5 12V7.5Z" fill="currentColor"/><path d="M0 10C0 9.44772 0.447715 9 1 9H2C2.55228 9 3 9.44772 3 10V12C3 12.5523 2.55228 13 2 13H1C0.447715 13 0 12.5523 0 12V10Z" fill="currentColor"/></svg>`,
+check14:`<svg width="17" height="17" viewBox="0 0 17 17" fill="none"><path pathLength="1" d="M15.2501 1.25012L5.62512 15.2501L1.25012 8.88649" stroke="#1C1D1F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+back:`<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M17 9H1M9 1L1 9L9 17" stroke="#1C1D1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+checkSmall:`<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path pathLength="1" d="M11.2501 1.25012L4.37512 11.2501L1.25012 6.70467" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+camera:`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.997 4C14.3578 3.99999 14.7119 4.09759 15.0217 4.28244C15.3316 4.46729 15.5856 4.73251 15.757 5.05L16.243 5.95C16.4144 6.26749 16.6684 6.53271 16.9783 6.71756C17.2881 6.90241 17.6422 7.00001 18.003 7H20C20.5304 7 21.0391 7.21071 21.4142 7.58579C21.7893 7.96086 22 8.46957 22 9V18C22 18.5304 21.7893 19.0391 21.4142 19.4142C21.0391 19.7893 20.5304 20 20 20H4C3.46957 20 2.96086 19.7893 2.58579 19.4142C2.21071 19.0391 2 18.5304 2 18V9C2 8.46957 2.21071 7.96086 2.58579 7.58579C2.96086 7.21071 3.46957 7 4 7H5.997C6.35742 7.00002 6.71115 6.90264 7.02078 6.71817C7.33041 6.53369 7.58444 6.26897 7.756 5.952L8.245 5.048C8.41656 4.73103 8.67059 4.46631 8.98022 4.28183C9.28985 4.09736 9.64358 3.99998 10.004 4H13.997Z"/><path d="M12 16C13.6569 16 15 14.6569 15 13C15 11.3431 13.6569 10 12 10C10.3431 10 9 11.3431 9 13C9 14.6569 10.3431 16 12 16Z"/></svg>`,
+jlCal:`<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M13.875 0.875V4.475M5.875 0.875V4.475M0.875 8.075H18.875M0.875 4.475C0.875 3.485 1.775 2.675 2.875 2.675H16.875C17.975 2.675 18.875 3.485 18.875 4.475V17.075C18.875 18.065 17.975 18.875 16.875 18.875H2.875C1.775 18.875 0.875 18.065 0.875 17.075V4.475Z" stroke="#1C1D1F" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+succCheck:`<svg width="31" height="31" viewBox="0 0 31 31" fill="none"><path pathLength="1" d="M29.2501 1.25012L10.0001 29.2501L1.25012 16.5228" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+search:`<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#A1A1AA" stroke-width="1.6" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="5.7"/><line x1="11.3" y1="11.3" x2="14.06" y2="14.06"/></svg>`,
+car26:`<svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5834 18.4167H22.7501C23.4001 18.4167 23.8334 17.9833 23.8334 17.3333V14.0833C23.8334 13.1083 23.0751 12.2417 22.2084 12.025C20.2584 11.4833 17.3334 10.8333 17.3334 10.8333C17.3334 10.8333 15.9251 9.31668 14.9501 8.34168C14.4084 7.90834 13.7584 7.58334 13.0001 7.58334H5.41675C4.76675 7.58334 4.22508 8.01668 3.90008 8.55834L2.38341 11.7C2.23996 12.1184 2.16675 12.5577 2.16675 13V17.3333C2.16675 17.9833 2.60008 18.4167 3.25008 18.4167H5.41675" stroke-width="1.5"/><path d="M7.58341 20.5833C8.78003 20.5833 9.75008 19.6133 9.75008 18.4167C9.75008 17.22 8.78003 16.25 7.58341 16.25C6.3868 16.25 5.41675 17.22 5.41675 18.4167C5.41675 19.6133 6.3868 20.5833 7.58341 20.5833Z" stroke-width="1.5"/><path d="M10 18L16 18" stroke-width="2"/><path d="M18.4167 20.5833C19.6133 20.5833 20.5833 19.6133 20.5833 18.4167C20.5833 17.22 19.6133 16.25 18.4167 16.25C17.22 16.25 16.25 17.22 16.25 18.4167C16.25 19.6133 17.22 20.5833 18.4167 20.5833Z" stroke-width="1.5"/></svg>`,
+selCheck:`<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path pathLength="1" d="M2.5 6.19999L4.8 8.49999L9.5 3.79999" stroke="#1C1D1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+pencil:`<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#A1A1AA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.2 2.3a1.6 1.6 0 0 1 2.3 2.3L5.3 12.8 2.3 13.7l.9-3z"/><path d="M10 3.5l2.5 2.5"/></svg>`,
+chevL:`<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#1C1D1F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 3L4.5 7l4 4"/></svg>`,
+chevR:`<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#1C1D1F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 3l4 4-4 4"/></svg>`,
+tabCal:`<svg width="26.5" height="25.5" viewBox="0 0 25 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M8.33334 2V5"/><path d="M16.6667 2V5"/><path d="M19.7917 3H5.20833C4.05774 3 3.125 3.89543 3.125 5V19C3.125 20.1046 4.05774 21 5.20833 21H19.7917C20.9423 21 21.875 20.1046 21.875 19V5C21.875 3.89543 20.9423 3 19.7917 3Z"/><path d="M3.125 9H21.875"/><path d="M8.33334 13H8.34334"/><path d="M12.5 13H12.51"/><path d="M16.6667 13H16.6767"/><path d="M8.33334 17H8.34334"/><path d="M12.5 17H12.51"/><path d="M16.6667 17H16.6767"/></svg>`,
+pin:`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C89A0E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>`,
+chevRm:`<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#A1A1AA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 3l4 4-4 4"/></svg>`,
+fileAlert:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+key:`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1C1D1F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>`,
+ext:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C89A0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`,
+confIcon:`<svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#C89A0E" stroke-width="2.21667" stroke-linecap="round"><path d="M24.5 13.4167V9.33333C24.5 8.40507 24.1313 7.51483 23.4749 6.85845C22.8185 6.20208 21.9283 5.83333 21 5.83333H7C6.07174 5.83333 5.1815 6.20208 4.52513 6.85845C3.86875 7.51483 3.5 8.40507 3.5 9.33333V21C3.5 21.9283 3.86875 22.8185 4.52513 23.4749C5.1815 24.1312 6.07174 24.5 7 24.5H14"/><path d="M18.6666 2.91667V8.16667M9.33325 2.91667V8.16667M4.08325 12.8333H24.4999"/><path d="M17.5 21.2333L20.0667 23.8L25.6667 18.2" stroke-linejoin="round"/></svg>`
+};
+
+/* ---------- state ---------- */
+const OFFICES = [
+  {id:'nash', name:'Nashville'}, {id:'cha', name:'Chattanooga'}, {id:'knx', name:'Knoxville'}, {id:'mem', name:'Memphis'}
+];
+let homeOffice = 'nash';  // set on Profile
+const ENT_LOCS = [
+  {id:'bna', name:'Nashville Airport (BNA)', short:'BNA Airport'},
+  {id:'nashdt', name:'Downtown Nashville', short:'Downtown'},
+  {id:'westend', name:'Nashville, West End', short:'West End'},
+  {id:'cha', name:'Chattanooga Airport (CHA)', short:'CHA Airport'},
+  {id:'tys', name:'Knoxville Airport (TYS)', short:'TYS Airport'},
+  {id:'mem', name:'Memphis Airport (MEM)', short:'MEM Airport'}
+];
+let entPref = 'bna';      // Enterprise pickup preference, set on Profile
+const entLoc = id => ENT_LOCS.find(l=>l.id===id);
+const entLabel = (id, sep=' · ') => { const n=entLoc(id).short; return /^enterprise/i.test(n) ? n : 'Enterprise'+sep+n; };
+const isEnt = b => b.type==='ent';
+const vehShort = b => isEnt(b) ? 'Enterprise rental' : VEHICLES.find(x=>x.id===b.vehicle).short;
+const pickupPlace = b => isEnt(b) ? entLabel(b.entLoc, ', ') : `${officeName(b.office)} office`;
+const VEHICLES = [
+  {id:'f150', office:'nash', name:'Ford F-150 · TN-4829-XR', short:'Ford F-150 · TN-4829', meta:'2024 · White · Lot A · 34,281 mi'},
+  {id:'tacoma', office:'nash', name:'Toyota Tacoma · TN-1173-KB', short:'Toyota Tacoma · TN-1173', meta:'2023 · Silver · Lot A · 51,006 mi'},
+  {id:'transit', office:'nash', name:'Ford Transit · TN-9902-DL', short:'Ford Transit · TN-9902', meta:'2022 · White · Lot B · 78,412 mi'},
+  {id:'silverado', office:'cha', name:'Chevy Silverado · TN-5520-CR', short:'Chevy Silverado · TN-5520', meta:'2023 · Gray · 41,870 mi'},
+  {id:'escape', office:'cha', name:'Ford Escape · TN-3381-EM', short:'Ford Escape · TN-3381', meta:'2024 · Blue · 12,406 mi'},
+  {id:'rav4', office:'knx', name:'Toyota RAV4 · TN-7741-KX', short:'Toyota RAV4 · TN-7741', meta:'2022 · White · 58,932 mi'},
+  {id:'f150k', office:'knx', name:'Ford F-150 · TN-6604-KN', short:'Ford F-150 · TN-6604', meta:'2023 · Black · 29,115 mi'},
+  {id:'explorer', office:'mem', name:'Ford Explorer · TN-2290-MF', short:'Ford Explorer · TN-2290', meta:'2024 · Silver · 9,870 mi'}
+];
+const officeName = id => OFFICES.find(o=>o.id===id).name;
+const fmtPhase = p => /^\d/.test(p.trim()) ? `Phase ${p.trim()}` : p.trim();
+const CHECKS = [
+  ['Tires & wheels','Pressure, tread, damage'],
+  ['Lights & signals','Headlights, brake, indicators'],
+  ['Body condition','Dents, scratches, rust'],
+  ['Windshield & mirrors','Cracks, chips, visibility'],
+  ['Fluid levels','Oil, coolant, washer fluid']
+];
+const isoOf = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const todayISO = () => isoOf(new Date());
+const addDays = (iso,n) => { const d=new Date(iso+'T12:00:00'); d.setDate(d.getDate()+n); return isoOf(d); };
+const newBooking = () => { const t=addDays(todayISO(),1); return {pickup:{date:t,time:'8:00 AM'}, ret:{date:t,time:'5:00 PM'}, touched:false, dest:'Memphis, TN', project:'', phase:'', office:homeOffice, entLoc:entPref, note:'', type:'pool', vehicle:'f150', status:'pending', submitted:false, editing:false, tried:false, updated:false, confirmCancel:false}; };
+const initial = () => ({
+  screen:'home',
+  scanned:false,
+  checks:[true,true,false,false,false],
+  flags:[false,false,false,false,false],
+  photos:[false,false,false,false],
+  start:34281, end:null, startEdited:false, tried:false,
+  date:'2026-06-06',
+  origin:'Nashville, TN', dest:'', project:'', phase:'',
+  reportSeq:3,
+  lastReport:null,
+  recent:[
+    {dot:'y', title:'Ford F-150 — Inspection', meta:'Jun 4 · 60% complete'},
+    {dot:'g', title:'Toyota Tacoma — Weekly', meta:'Jun 1 · 47 mi submitted'},
+    {dot:'g', title:'Ford F-150 — Inspection', meta:'May 28 · 112 mi submitted'}
+  ],
+  past:[
+    {title:'Ford F-150 — Inspection', meta:'Jun 1 · 47 mi submitted'},
+    {title:'Toyota Tacoma — Weekly', meta:'May 28 · 112 mi submitted'},
+    {title:'Ford F-150 — Inspection', meta:'May 24 · 88 mi submitted'},
+    {title:'Chevy Silverado — Inspection', meta:'May 19 · 63 mi submitted'}
+  ],
+  query:'', notify:true, defaultProject:'BR-2291',
+  book:newBooking(),
+  sheet:null
+});
+let S = initial();
+
+const ORDER = ['home','scan','inspection','journey','success','reports','book','booked','confirmed','vehicle','profile'];
+const NAMES = {home:'Home',scan:'Scan vehicle',inspection:'Vehicle inspection',journey:'Journey log',success:'Report submitted',reports:'Reports',book:'Book a car',booked:'Booking requested',confirmed:'Booking confirmed',vehicle:'Vehicle info',profile:'Profile'};
+
+/* ---------- helpers ---------- */
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ic = (name,l,t,w,h,extra='',cls='') => `<span class="ic ${cls}" style="left:${l}px;top:${t}px;width:${w}px;height:${h}px;${extra}">${I[name]}</span>`;
+const D = d => `--d:${d}s;`;
+const fmtDate = (iso,long) => { const d=new Date(iso+'T12:00:00'); return d.toLocaleDateString('en-US', long?{month:'long',day:'numeric',year:'numeric'}:{month:'short',day:'numeric'}); };
+const miles = () => Math.max(0, S.end - S.start);
+let FX = null;               // one-shot feedback for the element that just changed
+const fx = (kind,i) => FX && FX.kind===kind && FX.i===i;
+const status = dark => `<div class="status" style="background:${dark?'var(--ink)':'#fff'};color:${dark?'#fff':'#000'}"><span class="time">9:41</span>${ic('statusRight',283.6,17,77.4,13)}</div>`;
+const stepHeader = (title, step, back) => {
+  const bars = [24,107,190,273].map((l,i)=>{
+    const fill = i < step-1 ? 'var(--yellow)' : i === step-1 ? 'var(--ink)' : null;
+    const animate = i >= step-2; // the bar just completed and the current one fill in
+    return `<div class="a" style="left:${l}px;top:104px;width:78px;height:3px;border-radius:2px;background:var(--border);overflow:hidden">${fill?`<div class="a ${animate?'grow':''}" style="inset:0;background:${fill};${D(i===step-1?.3:.12)}"></div>`:''}</div>`;
+  }).join('');
+  return `<button class="tap press" data-back="${back}" aria-label="Back" style="left:20px;top:58px;width:38px;height:38px;border-radius:12px;background:var(--chip)">${ic('back',11,11,16,16)}</button>
+  <p class="t rise" style="left:70px;top:66px;font-size:17px;font-weight:600;${D(.06)}">${title}</p>
+  ${step ? `<div class="a rise" style="left:287px;top:63px;width:68px;height:26px;border-radius:13px;background:var(--yellow-pale);${D(.1)}"><p class="t" style="left:12px;top:7px;font-size:11px;font-weight:600;color:var(--yellow-dark)">Step ${step}/4</p></div>${bars}` : ''}`;
+};
+const tabBar = active => {
+  const tabs = [
+    {k:'home',label:'Home',x:36.5,icon:ic('tabHome',26,9,20,20),go:'home'},
+    {k:'reports',label:'Reports',x:111.5,icon:ic('tabReports',101,9,18,20),go:'reports'},
+    {k:'scan',label:'Scan',x:186.5,icon:ic('tabScan',176,9,20,20),go:'scan'},
+    {k:'book',label:'Book',x:261.5,icon:ic('tabCal',250.5,8,22,22),go:'@book'},
+    {k:'profile',label:'Profile',x:336.5,icon:ic('tabProfile',326,9,20,20),go:'profile'}
+  ];
+  return `<div class="a" style="left:0;bottom:0;width:375px;height:82px;background:#fff;border:1px solid var(--border);overflow:hidden">
+  ${tabs.map(t=>{const on=t.k===active;return `<div class="${on?'tab-on':''}" style="color:${on?'var(--ink)':'var(--muted)'}">${t.icon}<p class="t cx" style="left:${t.x}px;top:37px;font-size:10px;font-weight:500">${t.label}</p></div>
+    <button class="tap" ${t.go==='@book'?'data-book-tab':`data-go="${t.go}" data-kind="${t.go==='scan'?'push':'tab'}"`} aria-label="${t.label}" ${on?'aria-current="page"':''} style="left:${t.x-37}px;top:0;width:74px;height:56px;border-radius:20px;color:var(--ink)"></button>`}).join('')}
+  <div class="a" style="left:120px;top:69px;width:134px;height:5px;border-radius:3px;background:var(--ink)"></div></div>`;
+};
+const listRows = (rows, top, dotFor, d0=.2) => rows.map((r,i)=>`
+  <div class="rise" style="${D(d0+i*.05)}">
+  ${dotFor(r)==='y'
+    ? `<div class="dot pulse" style="left:24px;top:${top+8+i*52}px;background:var(--yellow)"></div><p class="t" style="right:24px;top:${top+9+i*52}px;font-size:13px;font-weight:500;color:var(--yellow-dark)">Finish</p>`
+    : `<div class="dot" style="left:24px;top:${top+8+i*52}px;background:var(--green)"></div>`}
+  <p class="t" style="left:44px;top:${top+i*52}px;font-size:14px;font-weight:500">${esc(r.title)}</p>
+  <p class="t" style="left:44px;top:${top+20+i*52}px;font-size:12px;color:var(--muted)">${esc(r.meta)}</p></div>`).join('');
+
+/* ---------- screens ---------- */
+const R = {};
+const upcomingCard = () => { const b=S.book, v=VEHICLES.find(x=>x.id===b.vehicle);
+  return `<p class="t lbl13 rise" style="left:24px;top:478px;${D(.24)}">UPCOMING</p>
+  <div class="rise" style="${D(.26)}"><button class="tap press" ${b.status==='approved'?'data-go="confirmed"':'data-edit-booking'} style="left:20px;top:500px;width:335px;height:76px;border-radius:16px;background:var(--yellow-pale);border:1.5px solid rgba(254,197,36,.45);color:var(--yellow-dark)">
+    <div class="a" style="left:12.5px;top:12.5px;width:48px;height:48px;border-radius:12px;background:var(--yellow)"></div>
+    ${ic('calendar',24,24.5,25,24)}
+    <p class="t" style="left:74.5px;top:15.5px;font-size:15px;font-weight:600;color:var(--ink)">${spanText(b)}</p>
+    <p class="t" style="left:74.5px;top:37.5px;font-size:12px;color:var(--slate)">${b.pickup.time} pickup · ${pickupPlace(b)}</p>
+    <p class="t" style="right:12.5px;top:14px;font-size:11px;font-weight:600;padding:4px 8px;border-radius:10px;${b.status==='approved'?'background:var(--green);color:#fff':'background:#fff'}">${b.status==='approved'?'Approved':'Pending'}</p>
+    <p class="t" style="right:14px;top:47px;font-size:12px;font-weight:500">${b.status==='approved'?'View':'Edit'}</p>
+  </button></div>`; };
+const MY_CAR = 'f150';
+R.vehicle = () => {
+  const v = VEHICLES.find(x=>x.id===MY_CAR), b = S.book;
+  const reserved = b.submitted && !isEnt(b) && b.vehicle===MY_CAR;
+  const issues = S.lastReport ? CHECKS.filter((c,i)=>S.flags[i] && !S.checks[i]).map(c=>c[0]) : [];
+  const pill = reserved
+    ? `<span style="background:${b.status==='approved'?'var(--green)':'rgba(254,197,36,.16)'};color:${b.status==='approved'?'#fff':'var(--yellow)'}">${b.status==='approved'?'Reserved for you':'Requested by you'} · ${fmtDate(b.pickup.date)}</span>`
+    : `<span style="background:rgba(22,163,74,.18);color:#4ADE80">Available now</span>`;
+  return `
+  <div class="a" style="left:0;top:0;width:375px;height:236px;background:var(--ink);border-radius:0 0 28px 28px;color:#fff;overflow:hidden">
+    <button class="tap press" data-back="home" aria-label="Back" style="left:20px;top:58px;width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.1);color:#fff">${ic('back',11,11,16,16,'filter:invert(1)')}</button>
+    <p class="t rise" style="left:70px;top:66px;font-size:17px;font-weight:600;${D(.06)}">Vehicle</p>
+    <span class="rise" style="position:absolute;right:-18px;top:92px;opacity:.14;color:#fff;${D(.12)}">${I.car38.replace('width="38" height="38"','width="170" height="170"')}</span>
+    <p class="t rise" style="left:24px;top:116px;font-size:28px;font-weight:600;letter-spacing:-.5px;${D(.1)}">Ford F-150</p>
+    <p class="t rise" style="left:24px;top:153px;font-size:14px;color:var(--muted);${D(.14)}">TN-4829-XR · 2024 · White</p>
+    <div class="rise vpill" style="position:absolute;left:24px;top:186px;${D(.18)}">${pill}</div>
+  </div>
+
+  <p class="t lbl rise" style="left:24px;top:256px;${D(.2)}">WHERE IT'S PARKED</p>
+  <div class="a rise" style="left:24px;top:278px;width:327px;height:84px;border-radius:16px;background:var(--card);border:1px solid var(--border);${D(.22)}">
+    <div class="a" style="left:14px;top:14px;width:44px;height:44px;border-radius:12px;background:var(--yellow-pale)"></div>
+    ${ic('pin',25,25,22,22)}
+    <p class="t" style="left:72px;top:13px;font-size:15px;font-weight:600">${officeName(v.office)} office · Lot A</p>
+    <p class="t" style="left:72px;top:34px;font-size:13px;color:var(--slate)">Space 14, near the east entrance</p>
+    <p class="t" style="left:72px;top:55px;font-size:11px;color:var(--muted)">Parked after the last trip · Jun 6</p>
+  </div>
+
+  <div class="a rise" style="left:24px;top:382px;width:158px;height:76px;border-radius:14px;background:var(--card);border:1px solid var(--border);${D(.32)}">
+    <p class="t lbl" style="left:14px;top:12px">ODOMETER</p>
+    <p class="t" style="left:14px;top:30px;font-size:19px;font-weight:600;font-variant-numeric:tabular-nums">${S.start.toLocaleString('en-US')}</p>
+    <p class="t" style="left:14px;top:54px;font-size:11px;color:var(--muted)">miles</p>
+  </div>
+  <div class="a rise" style="left:192px;top:382px;width:158px;height:76px;border-radius:14px;background:var(--card);border:1px solid var(--border);${D(.34)}">
+    <p class="t lbl" style="left:14px;top:12px">NEXT SERVICE</p>
+    <p class="t" style="left:14px;top:30px;font-size:19px;font-weight:600">Oil change</p>
+    <p class="t" style="left:14px;top:54px;font-size:11px;color:var(--muted)">in ${(35500-S.start).toLocaleString('en-US')} mi</p>
+  </div>
+
+  <div class="a rise" style="left:24px;top:470px;width:327px;height:52px;border-radius:14px;background:${issues.length?'var(--red-pale)':'var(--green-pale)'};border:1px solid ${issues.length?'rgba(220,38,38,.25)':'rgba(22,163,74,.25)'};${D(.38)}">
+    <div class="a" style="left:14px;top:14px;width:24px;height:24px;border-radius:50%;background:${issues.length?'var(--red)':'var(--green)'};display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700;line-height:1">${issues.length?'!':''}</div>
+    ${issues.length?'':ic('checkSmall',21,21,10,10)}
+    <p class="t" style="left:48px;top:8px;font-size:14px;font-weight:500">${issues.length?`${issues.length} open issue${issues.length>1?'s':''}`:'No open issues'}</p>
+    <p class="t" style="left:48px;top:27px;font-size:12px;color:var(--muted)">${issues.length?esc(issues.join(', ')):'From the last inspection · Jun 6'}</p>
+  </div>
+
+  <button class="tap press cta dark" data-go="scan" style="bottom:32px">Start a report</button>
+  ${status(true)}`;
+};
+
+R.profile = () => {
+  const reports = S.past.length + 8;
+  const row = (i,label,value,attrs='',extra='') => `<button class="tap" ${attrs} style="left:0;top:${i*52}px;width:335px;height:52px;color:var(--ink);${attrs?'':'cursor:default;'}">
+      <p class="t" style="left:16px;top:16px;font-size:15px">${label}</p>${value}${extra}</button>
+      ${i<5?`<div class="a" style="left:16px;top:${i*52+51.5}px;width:303px;height:1px;background:var(--border)"></div>`:''}`;
+  return `
+  <div class="a" style="left:0;top:0;width:375px;height:236px;background:var(--ink);border-radius:0 0 28px 28px;color:#fff">
+    <div class="a rise" style="left:24px;top:60px;width:60px;height:60px;border-radius:30px;background:var(--yellow);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;${D(.06)}">JM</div>
+    <p class="t rise" style="left:98px;top:66px;font-size:22px;font-weight:600;letter-spacing:-.3px;${D(.08)}">Jeff Morgan</p>
+    <p class="t rise" style="left:98px;top:96px;font-size:13px;color:var(--muted);${D(.1)}">Project Engineer · ${officeName(homeOffice)} office</p>
+    ${[[reports,'reports filed'],['1,284','miles this year'],[S.book.submitted?1:0,(S.book.submitted?'booking':'bookings')]].map(([n,l],i)=>`
+      <div class="rise" style="${D(.14+i*.04)}"><p class="t" style="left:${24+i*112}px;top:150px;font-size:22px;font-weight:600;font-variant-numeric:tabular-nums">${n}</p>
+      <p class="t" style="left:${24+i*112}px;top:180px;font-size:12px;color:var(--muted)">${l}</p></div>`).join('')}
+    <div class="a" style="left:128px;top:152px;width:1px;height:44px;background:rgba(255,255,255,.12)"></div>
+    <div class="a" style="left:240px;top:152px;width:1px;height:44px;background:rgba(255,255,255,.12)"></div>
+  </div>
+  <p class="t lbl rise" style="left:24px;top:258px;${D(.22)}">ACCOUNT</p>
+  <div class="a rise" style="left:20px;top:280px;width:335px;height:312px;border-radius:18px;background:var(--card);border:1px solid var(--border);overflow:hidden;${D(.24)}">
+    ${row(0,'Home office',`<p class="t" style="right:36px;top:16px;font-size:15px;color:var(--slate)">${officeName(homeOffice)}</p>${ic('chevRm',307,19,14,14)}`,'data-open-home-office')}
+    ${row(1,'Enterprise pickup',`<p class="t" style="right:36px;top:17px;font-size:14px;color:var(--slate)">${entLoc(entPref).short}</p>${ic('chevRm',307,19,14,14)}`,'data-open-ent="profile"')}
+    ${row(2,"Driver's license",`<p class="t" style="right:16px;top:15px;font-size:12px;font-weight:600;color:var(--green);background:var(--green-pale);padding:4px 9px;border-radius:10px">Verified · exp 2028</p>`)}
+    ${row(3,'Booking notifications',`<span class="a switch ${S.notify?'on':''}" style="left:271px;top:13px"><i></i></span>`,'data-toggle-notify')}
+    ${row(4,'Default project',`<p class="t" style="right:36px;top:16px;font-size:15px;color:${S.defaultProject?'var(--slate)':'var(--ph)'}">${S.defaultProject||'None'}</p>${ic('chevRm',307,19,14,14)}`,'data-soon')}
+    ${row(5,'Help & support',ic('chevRm',307,19,14,14),'data-soon')}
+  </div>
+  <p class="t cx rise" style="left:187.5px;top:610px;font-size:12px;color:var(--muted);${D(.3)}">Gauge 1.0 · Barge fleet</p>
+  <button class="tap" data-soon style="left:120px;top:634px;width:135px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--red)">Sign out</button>
+  ${S.sheet ? (S.sheet.kind==='office' ? officeSheet() : entSheet()) : ''}
+  ${tabBar('profile')}
+  ${status(true)}`;
+};
+
+R.home = () => {
+  const inProg = S.recent.filter(r=>r.dot==='y').length + 1;
+  const up = S.book.submitted, rTop = up ? 626 : 508;
+  return `
+  <div class="a" style="left:0;top:0;width:375px;height:260px;background:var(--ink);border-radius:0 0 28px 28px;overflow:hidden;color:#fff">
+    <p class="t" style="left:24px;top:68px;font-size:20px;font-weight:700;letter-spacing:4px">BARGE</p>
+    <div class="a" style="left:315px;top:62px;width:36px;height:36px;border-radius:18px;background:rgba(255,255,255,.12)"></div>
+    <p class="t" style="left:324px;top:72px;font-size:12px;font-weight:600">JM</p>
+    <p class="t rise" style="left:24px;top:124px;font-size:26px;font-weight:300;letter-spacing:-.5px;${D(.04)}">Good morning,</p>
+    <p class="t rise" style="left:24px;top:160px;font-size:26px;font-weight:600;letter-spacing:-.5px;${D(.08)}">Jeff</p>
+    <p class="t rise" style="left:24px;top:198px;font-size:14px;color:var(--muted);${D(.12)}">${inProg} report${inProg===1?'':'s'} in progress</p>
+  </div>
+  <div class="rise" style="${D(.1)}"><button class="tap press" data-go="scan" style="left:20px;top:272px;width:335px;height:80px;border-radius:18px;background:var(--yellow);color:var(--ink)">
+    <div class="a" style="left:20px;top:16px;width:48px;height:48px;border-radius:14px;background:rgba(28,29,31,.08)"></div>
+    ${ic('newreport',33,29,22,22)}
+    <p class="t" style="left:84px;top:22px;font-size:16px;font-weight:600">New report</p>
+    <p class="t" style="left:84px;top:44px;font-size:13px;opacity:.5">Scan vehicle QR to start</p>
+  </button></div>
+  ${[['book','Book a car',ic('calendar',39,23,25,24)],['vehicle','Vehicle',`<span style="color:#000">${ic('car38',33.5,12,38,38)}</span>`],['reports','Reports',ic('reportDoc',43.5,20,20,25)]].map(([k,label,icon],i)=>`
+  <div class="rise" style="${D(.16+i*.04)}"><button class="tap press" ${k==='vehicle'?'data-go="vehicle"':k==='book'?(S.book.submitted?'data-go="booked"':'data-new-booking'):`data-go="${k}" data-kind="tab"`} style="left:${20+i*115}px;top:366px;width:105px;height:90px;border-radius:16px;background:var(--card);border:1px solid var(--border);color:var(--ink)">
+    ${icon}<p class="t cx" style="left:52px;top:60px;font-size:12px;font-weight:600">${label}</p></button></div>`).join('')}
+  ${up ? upcomingCard() : ''}
+  <p class="t lbl13 rise" style="left:24px;top:${rTop-30}px;${D(.26)}">RECENT</p>
+  <button class="tap" data-go="reports" data-kind="tab" style="left:302px;top:${rTop-38}px;width:57px;height:32px;border-radius:10px;color:var(--yellow-dark)"><p class="t" style="right:8px;top:10px;font-size:11px;font-weight:600;letter-spacing:.2px">See all</p></button>
+  ${listRows(S.recent.slice(0,up?2:3),rTop,r=>r.dot,.3)}
+  <button class="tap" data-go="inspection" aria-label="Resume Ford F-150 inspection" style="left:16px;top:${rTop-8}px;width:343px;height:48px;border-radius:10px;color:var(--ink);display:${S.recent[0].dot==='y'?'block':'none'}"></button>
+  ${tabBar('home')}
+  ${status(true)}`;
+};
+
+R.scan = () => {
+  const locked = fx('scan');
+  return `
+  ${stepHeader('Scan vehicle',1,'home')}
+  <div class="a" style="left:24px;top:124px;width:327px;height:260px;border-radius:20px;background:var(--ink);overflow:hidden">
+    <div class="a ${locked?'fx-lock':''}" style="inset:0">
+    ${[[83.5,50,24,3],[83.5,50,3,24],[219.5,50,24,3],[240.5,50,3,24],[83.5,207,24,3],[83.5,186,3,24],[219.5,207,24,3],[240.5,186,3,24]].map(([l,t,w,h])=>`<div class="a" style="left:${l}px;top:${t}px;width:${w}px;height:${h}px;border-radius:1px;background:var(--yellow)"></div>`).join('')}
+    </div>
+    <div class="a scanline ${S.scanned?'done':''}" style="left:93.5px;top:130px;width:140px;height:2px;border-radius:1px;background:var(--yellow);box-shadow:0 0 12px rgba(254,197,36,.6)"></div>
+    ${locked?`<div class="a fx-flash" style="inset:0;background:var(--yellow)"></div>`:''}
+  </div>
+  <p class="t cx" style="left:187.5px;top:402px;font-size:15px;font-weight:500">${S.scanned?'Vehicle found':'Point at the vehicle QR code'}</p>
+  <p class="t cx" style="left:187.5px;top:424px;font-size:13px;color:var(--muted)">Located on the driver-side dashboard.</p>
+  <p class="t cx" style="left:187.5px;top:442px;font-size:13px;color:var(--muted)">Car details will auto-fill.</p>
+  <div class="a ${locked?'fx-spring':''}" style="left:24px;top:476px;width:327px;height:68px;border-radius:16px;background:var(--yellow-pale);border:1.5px solid rgba(254,197,36,.3);display:${S.scanned?'block':'none'};${D(.1)}">
+    <div class="a ${locked?'fx-pop':''}" style="left:12.5px;top:12.5px;width:40px;height:40px;border-radius:12px;background:var(--yellow)"></div>
+    ${ic('check14',25.5,25.5,14,14,D(.3),locked?'fx-draw':'')}
+    <p class="t" style="left:64.5px;top:14.5px;font-size:14px;font-weight:600">Ford F-150 · TN-4829-XR</p>
+    <p class="t" style="left:64.5px;top:34.5px;font-size:12px;color:var(--slate)">2024 · White · 34,281 mi</p>
+  </div>
+  <button class="tap press cta dark ${locked?'fx-unlock':''}" data-go="inspection" aria-disabled="${!S.scanned}" style="bottom:62px">Continue</button>
+  <button class="tap press cta ghost" data-go="inspection" style="bottom:4px">Enter manually instead</button>
+  ${status(false)}`;
+};
+
+R.inspection = () => `
+  ${stepHeader('Vehicle inspection',2,'scan')}
+  <p class="t lbl rise" style="left:24px;top:124px;${D(.1)}">EXTERIOR CHECK</p>
+  ${CHECKS.map(([title,sub],i)=>{
+    const on=S.checks[i], fl=S.flags[i]&&!on;
+    const bg=on?'var(--green-pale)':fl?'var(--red-pale)':'#fff', bd=on?'var(--green)':fl?'var(--red)':'var(--border)';
+    const circle = on ? 'background:var(--green)' : fl ? 'background:var(--red)' : 'background:#fff;border:2px solid var(--ph)';
+    const rowFx = fx('check',i) ? 'fx-row' : fx('flag',i) && fl ? 'fx-shake' : fx('flag',i) ? 'fx-row' : '';
+    const circFx = fx('check',i) ? 'fx-pop' : fx('flag',i) ? (fl?'fx-wiggle':'fx-pop') : '';
+    return `<div class="rise" style="${D(.12+i*.04)}"><div class="a ${rowFx}" style="left:24px;top:${148+i*60}px;width:327px;height:52px;border-radius:14px;background:${bg};border:1.5px solid ${bd};transition:background-color .25s,border-color .25s">
+      <button class="tap" data-check="${i}" aria-pressed="${on}" aria-label="${esc(title)}" style="left:0;top:0;width:${on?324:262}px;height:49px;border-radius:13px;color:${on?'var(--green)':fl?'var(--red)':'var(--ink)'}">
+        <div class="a ${circFx}" style="left:12.5px;top:12.5px;width:24px;height:24px;border-radius:50%;${circle}">
+          ${fl?`<span class="a" style="inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700;line-height:1">!</span>`:''}
+        </div>
+        ${on?ic('checkSmall',19.5,19.5,10,10,D(.1),fx('check',i)?'fx-draw':''):''}
+        <p class="t" style="left:46.5px;top:8.5px;font-size:14px;font-weight:500;color:${on?'var(--slate)':'var(--ink)'}">${esc(title)}</p>
+        <p class="t" style="left:46.5px;top:26.5px;font-size:12px;color:${fl?'var(--red)':'var(--muted)'}">${esc(fl?'Flagged for fleet manager':sub)}</p>
+      </button>
+      ${on?'':`<button class="tap press ${fx('flag',i)?'fx-pop':''}" data-flag="${i}" aria-pressed="${fl}" style="right:9.5px;top:12.5px;height:24px;padding:0 6px;border-radius:8px;background:${fl?'var(--red)':'var(--red-pale)'};color:${fl?'#fff':'var(--red)'};font-size:11px;font-weight:600;display:flex;align-items:center">${fl?'Flagged':'Flag'}</button>`}
+    </div></div>`}).join('')}
+  <p class="t lbl rise" style="left:24px;top:460px;${D(.32)}">PHOTO EVIDENCE</p>
+  ${['Front','Rear','Left','Right'].map((label,i)=>{const on=S.photos[i];return `
+  <div class="rise" style="${D(.34+i*.04)}"><button class="tap press ${fx('photo',i)?'fx-pop':''}" data-photo="${i}" aria-pressed="${on}" aria-label="${label} photo" style="left:${i%2?192:24}px;top:${i<2?484:594}px;width:158px;height:100px;border-radius:14px;background:${on?'var(--green-pale)':'var(--card)'};border:1.5px ${on?'solid var(--green)':'dashed var(--ph)'};color:${on?'var(--green)':'var(--muted)'}">
+    ${ic('camera',65.5,28.5,24,24)}
+    <p class="t cx" style="left:77.5px;top:66.5px;font-size:11px;font-weight:500">${on?label+' added':label}</p></button></div>`}).join('')}
+  <button class="tap press cta dark" data-go="journey" style="bottom:32px">Continue</button>
+  ${status(false)}`;
+
+const endState = () => S.end==null ? 'empty' : S.end <= S.start ? 'low' : 'ok';
+const jlMilesText = () => endState()==='ok' ? String(miles()) : '—';
+const endHint = () => { const st=endState(); if(st==='low') return ['Must be above start','var(--red)']; if(st==='empty') return [S.tried?'Required':'Enter from dash', S.tried?'var(--red)':'var(--yellow-dark)']; return ['miles','var(--muted)']; };
+R.journey = () => {
+  const eh = endHint(), endBad = S.tried && endState()!=='ok' || endState()==='low';
+  const projBad = S.tried && !S.project.trim(), phaseBad = S.tried && !S.phase.trim();
+  const shake = n => FX && FX.kind==='invalid' && n ? 'fx-shake' : '';
+  return `
+  ${stepHeader('Journey log',3,'inspection')}
+  <div class="a rise" style="left:24px;top:124px;width:327px;height:180px;border-radius:20px;background:var(--ink);${D(.08)}">
+    <p class="t cx" style="left:164.25px;top:24px;font-size:11px;font-weight:600;letter-spacing:1.5px;color:var(--muted)">TRIP MILEAGE</p>
+    <p class="t cx" id="jlMiles" ${endState()==='ok'?`data-count="${miles()}"`:''} style="left:162.5px;top:48px;font-size:56px;font-weight:700;letter-spacing:-2px;color:var(--yellow);font-variant-numeric:tabular-nums">${jlMilesText()}</p>
+    <p class="t cx" style="left:163.5px;top:112px;font-size:13px;color:var(--muted)">miles</p>
+    <div class="a" style="left:103.5px;top:140px;width:120px;height:26px;border-radius:13px;background:rgba(254,197,36,.12)"></div>
+    <p class="t cx" style="left:163.5px;top:146px;font-size:11px;font-weight:600;color:var(--yellow)">Billed to project</p>
+  </div>
+  <label class="a rise" style="left:24px;top:320px;width:158px;height:80px;border-radius:14px;background:var(--card);border:1.5px solid var(--border);cursor:text;${D(.16)}">
+    <p class="t" style="left:14.5px;top:10.5px;font-size:11px;font-weight:600;letter-spacing:.8px;color:var(--muted)">START</p>
+    ${ic('pencil',125,9,16,16)}
+    <input id="startOdo" class="odo" inputmode="numeric" aria-label="Start odometer, from last trip" value="${S.start.toLocaleString('en-US')}">
+    <p class="t" id="startHint" style="left:14.5px;top:56.5px;font-size:12px;color:${S.startEdited?'var(--yellow-dark)':'var(--muted)'}">${S.startEdited?'Corrected':'From last trip'}</p>
+  </label>
+  <label class="a rise" style="left:192px;top:320px;width:158px;height:80px;${D(.2)}">
+    <div id="endCard" class="a ${shake(endBad)}" style="inset:0;border-radius:14px;background:${endBad?'var(--red-pale)':'var(--yellow-pale)'};border:1.5px solid ${endBad?'var(--red)':'rgba(254,197,36,.4)'};cursor:text">
+    <p class="t" style="left:14.5px;top:10.5px;font-size:11px;font-weight:600;letter-spacing:.8px;color:${endBad?'var(--red)':'var(--yellow-dark)'}">END</p>
+    <input id="endOdo" class="odo" inputmode="numeric" aria-label="End odometer" aria-required="true" placeholder="00,000" value="${S.end==null?'':S.end.toLocaleString('en-US')}">
+    <p class="t" id="endHint" style="left:14.5px;top:56.5px;font-size:12px;color:${eh[1]}">${eh[0]}</p></div>
+  </label>
+  <div class="a rise" style="left:24px;top:416px;width:327px;height:48px;border-radius:14px;background:var(--chip);overflow:hidden;${D(.24)}">
+    ${ic('jlCal',14,15,18,18)}
+    <p class="t" id="jlDate" style="left:44px;top:8px;font-size:14px;font-weight:500">${fmtDate(S.date,true)}</p>
+    <p class="t" style="left:44px;top:26px;font-size:12px;color:var(--muted)">Tap to change</p>
+    <input type="date" id="jlDateInput" class="overlay-input" aria-label="Trip date" value="${S.date}">
+  </div>
+  <p class="t lbl rise" style="left:24px;top:484px;${D(.28)}">ROUTE</p>
+  <div class="rise" style="${D(.3)}"><input class="field" id="jlOrigin" aria-label="Origin" placeholder="Origin" value="${esc(S.origin)}" style="top:506px"></div>
+  <div class="rise" style="${D(.34)}"><input class="field" id="jlDest" aria-label="Destination" placeholder="Destination" value="${esc(S.dest)}" style="top:560px"></div>
+  <p class="t lbl rise" style="left:24px;top:620px;${D(.36)}">PROJECT</p>
+  <p class="t rise" id="reqHint" style="right:24px;top:620px;font-size:11px;font-weight:500;color:${(projBad||phaseBad)?'var(--red)':'var(--muted)'};${D(.36)}">Both required</p>
+  <div class="rise" style="${D(.38)}"><input class="field ${projBad?'err':''} ${shake(projBad)}" id="jlProject" aria-label="Project code" aria-required="true" placeholder="${projBad?'Required':'Project code'}" value="${esc(S.project)}" style="top:642px;width:210px"></div>
+  <div class="rise" style="${D(.4)}"><input class="field ${phaseBad?'err':''} ${shake(phaseBad)}" id="jlPhase" aria-label="Phase" aria-required="true" autocomplete="off" placeholder="${phaseBad?'Required':'Phase'}" value="${esc(S.phase)}" style="top:642px;left:244px;width:107px"></div>
+  <button class="tap press cta yel" data-submit style="bottom:32px">Submit report</button>
+  ${status(false)}`;
+};
+// live updates while typing, so inputs keep focus
+function refreshJourney(){
+  const m=document.getElementById('jlMiles'); if(!m) return;
+  const txt=jlMilesText(); if(m.textContent!==txt){ m.textContent=txt; m.animate?.([{scale:1.03},{scale:1}],{duration:200,easing:'ease-out'}); }
+  const eh=endHint(), bad = (S.tried && endState()!=='ok') || endState()==='low';
+  const h=document.getElementById('endHint'); h.textContent=eh[0]; h.style.color=eh[1];
+  const c=document.getElementById('endCard'); c.style.background=bad?'var(--red-pale)':'var(--yellow-pale)'; c.style.borderColor=bad?'var(--red)':'rgba(254,197,36,.4)';
+  c.querySelector('p').style.color=bad?'var(--red)':'var(--yellow-dark)';
+  const sh=document.getElementById('startHint'); sh.textContent=S.startEdited?'Corrected':'From last trip'; sh.style.color=S.startEdited?'var(--yellow-dark)':'var(--muted)';
+  const pr=document.getElementById('jlProject'); if(S.project.trim()) pr.classList.remove('err');
+  const ph=document.getElementById('jlPhase'); if(S.phase.trim()){ ph.classList.remove('err'); ph.placeholder='Phase'; }
+  document.getElementById('reqHint').style.color = S.tried && (!S.project.trim()||!S.phase.trim()) ? 'var(--red)' : 'var(--muted)';
+}
+
+const celebrate = (bg, ringColor, icon, iconBox) => `
+  <div class="a ring" style="left:147.5px;top:160px;width:80px;height:80px;border-radius:50%;border:2px solid ${ringColor};${D(.42)}"></div>
+  <div class="a burst" style="left:147.5px;top:160px;width:80px;height:80px;border-radius:50%;background:${bg};${D(.14)}"></div>
+  ${icon}`;
+
+R.success = () => {
+  const r = S.lastReport || {miles:miles(), date:S.date, flags:0, id:'#BR-0606-003'};
+  const row = (y,k,v,i) => `<div class="rise" style="${D(.62+i*.05)}"><p class="t" style="left:16px;top:${y}px;font-size:13px;color:var(--muted)">${k}</p><p class="t" style="right:16px;top:${y}px;font-size:13px;font-weight:500">${esc(v)}</p></div>`;
+  return `
+  ${celebrate('var(--green-pale)','var(--green)', ic('succCheck',174,186,28,28,D(.36),'draw'))}
+  <p class="t cx rise" style="left:187.5px;top:264px;font-size:22px;font-weight:600;${D(.3)}">Report submitted</p>
+  <p class="t cx rise" style="left:187.5px;top:298px;font-size:14px;color:var(--zinc);${D(.36)}">Your vehicle inspection has been</p>
+  <p class="t cx rise" style="left:187.5px;top:318px;font-size:14px;color:var(--zinc);${D(.39)}">sent to your fleet manager.</p>
+  <div class="a rise" style="left:24px;top:360px;width:327px;height:240px;border-radius:16px;background:var(--card);${D(.46)}">
+    <p class="t cx lbl" style="left:164px;top:20px">TRIP MILEAGE BILLED</p>
+    <p class="t cx" data-count="${r.miles}" data-suffix=" mi" style="left:163.5px;top:42px;font-size:32px;font-weight:700;letter-spacing:-1px;font-variant-numeric:tabular-nums">${r.miles} mi</p>
+    <p class="t cx" style="left:163.5px;top:80px;font-size:12px;color:var(--muted)">${r.project?`Charged to ${esc(r.project)} · ${esc(r.phase)}`:'Charged to project'}</p>
+    <div class="a grow" style="left:16px;top:104px;width:295px;height:1px;background:var(--border);${D(.56)}"></div>
+    ${row(118,'Vehicle','Ford F-150 · TN-4829',0)}${row(146,'Date',fmtDate(r.date,true),1)}${row(174,'Issues flagged',String(r.flags),2)}${row(202,'Report ID',r.id,3)}
+  </div>
+  <div class="rise" style="${D(.8)}"><button class="tap press cta dark" data-go="home" data-kind="dismiss" style="top:630px">Done</button></div>
+  ${status(false)}`;
+};
+
+R.reports = () => {
+  const q = S.query.trim().toLowerCase();
+  const rows = S.past.filter(r => !q || (r.title+' '+r.meta).toLowerCase().includes(q));
+  return `
+  <div class="a" style="left:0;top:0;width:375px;height:190px;border-radius:0 0 28px 28px;background:var(--ink);color:#fff">
+    <p class="t rise" style="left:24px;top:58px;font-size:26px;font-weight:600;letter-spacing:-.5px;${D(.04)}">Reports</p>
+    <p class="t rise" style="left:24px;top:96px;font-size:14px;color:var(--muted);${D(.08)}">2 in progress · ${S.past.length + 8} completed</p>
+    <div class="a rise" style="left:20px;top:124px;width:335px;height:44px;border-radius:14px;background:rgba(255,255,255,.08);${D(.12)}">
+      ${ic('search',14,12.5,18,18)}
+      <input id="search" type="search" aria-label="Search reports" placeholder="Search reports" value="${esc(S.query)}" style="position:absolute;left:44px;top:0;width:280px;height:44px;border:0;background:transparent;font:400 14px Inter,system-ui,sans-serif;color:#fff;outline:none">
+    </div>
+  </div>
+  <p class="t lbl13 rise" style="left:24px;top:214px;${D(.14)}">IN PROGRESS</p>
+  ${[['Ford F-150 — Inspection','Started Jun 4 · 12 of 20 checks',143,'60%'],['Toyota Tacoma — Weekly','Started Jun 3 · 2 of 5 sections',95,'40%']].map(([t,m,w,p],i)=>`
+  <div class="a rise" style="left:20px;top:${238+i*112}px;width:335px;height:100px;border-radius:18px;background:var(--card);border:1px solid var(--border);${D(.18+i*.06)}">
+    <p class="t" style="left:17px;top:15px;font-size:15px;font-weight:600">${t}</p>
+    <p class="t" style="left:17px;top:37px;font-size:12px;color:var(--muted)">${m}</p>
+    <button class="tap press" data-go="inspection" style="left:238px;top:13px;width:78px;height:32px;border-radius:16px;background:var(--yellow);color:var(--ink);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center">Resume</button>
+    <div class="a" style="left:17px;top:67px;width:238px;height:6px;border-radius:3px;background:var(--border)"></div>
+    <div class="a grow" style="left:17px;top:67px;width:${w}px;height:6px;border-radius:3px;background:var(--yellow);${D(.36+i*.08)}"></div>
+    <p class="t" style="right:17px;top:61px;font-size:12px;font-weight:600">${p}</p>
+  </div>`).join('')}
+  <p class="t lbl13 rise" style="left:24px;top:478px;${D(.3)}">PAST REPORTS</p>
+  <div id="pastList">${pastList(rows)}</div>
+  ${tabBar('reports')}
+  ${status(true)}`;
+};
+const pastList = rows => rows.length ? listRows(rows.slice(0,4),508,()=>'g',.34) : `<p class="t" style="left:24px;top:508px;font-size:14px;color:var(--muted)">No reports match “${esc(S.query)}”.</p>`;
+
+const fmtDay = iso => new Date(iso+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+const spanText = b => b.pickup.date===b.ret.date ? fmtDay(b.pickup.date) : `${fmtDate(b.pickup.date)} – ${fmtDate(b.ret.date)}`;
+const TIMES = Array.from({length:27},(_,i)=>{ const m=360+i*30, h=Math.floor(m/60), mm=m%60; return `${(h+11)%12+1}:${mm?'30':'00'} ${h<12?'AM':'PM'}`; });
+const mins = t => { const [hm,ap]=t.split(' '); let [h,m]=hm.split(':').map(Number); if(ap==='PM'&&h!==12)h+=12; if(ap==='AM'&&h===12)h=0; return h*60+m; };
+const chev = dir => `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#1C1D1F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${dir<0?'M8.5 3L4.5 7l4 4':'M5.5 3l4 4-4 4'}"/></svg>`;
+
+R.book = () => {
+  const b = S.book, ed = b.editing, ent = isEnt(b);
+  const projBad = b.tried && !b.project.trim(), phaseBad = b.tried && !b.phase.trim();
+  const shake = n => FX && FX.kind==='invalid' && n ? 'fx-shake' : '';
+  const when = (l,label,slot,key,d) => `<div class="rise" style="${D(d)}"><button class="tap press" data-open="${key}" aria-label="${label}: ${fmtDay(slot.date)} ${slot.time}. Change" style="left:${l}px;top:138px;width:158px;height:78px;border-radius:14px;background:var(--card);border:1.5px solid ${S.sheet&&S.sheet.which===key?'var(--yellow)':'transparent'};color:var(--ink)">
+    <p class="t lbl" style="left:14.5px;top:10.5px">${label}</p>
+    <p class="t" style="left:14.5px;top:28.5px;font-size:17px;font-weight:600">${fmtDay(slot.date)}</p>
+    <p class="t" style="left:14.5px;top:52.5px;font-size:13px;color:var(--muted)">${slot.time}</p>
+    ${ic('pencil',129,9,16,16)}</button></div>`;
+  const fleet = VEHICLES.filter(v=>v.office===b.office);
+  const listTop = 536, afterList = ent ? listTop + 22 + 74 : listTop + 22 + fleet.length*76 - 8;
+  const noteTop = afterList + 22, contentH = noteTop + 22 + 96 + 50 + 110;
+  const seg = (k,label,i) => { const on = (k==='ent')===ent; return `<button class="tap" data-vtype="${k}" aria-pressed="${on}" style="left:${27+i*160.5}px;top:257px;width:160.5px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:${on?600:500};color:${on?'var(--ink)':'var(--zinc)'};z-index:1">${label}</button>`; };
+  const tag = t => `<span style="margin-left:8px;font-size:11px;font-weight:600;color:var(--yellow-dark);background:var(--yellow-pale);padding:3px 7px;border-radius:8px">${t}</span>`;
+  const segFx = fx('vtype') ? 'transition:translate .3s var(--ease-out)' : '';
+  return `
+  <div class="scroller" id="bkScroll"><div style="position:relative;height:${contentH}px">
+  ${stepHeader(ed?'Edit booking':'Book a car',0,ed?(b.status==='approved'?'confirmed':'booked'):'home')}
+  <p class="t lbl rise" style="left:24px;top:116px;${D(.08)}">WHEN</p>
+  ${b.touched?'':`<p class="t rise" style="right:24px;top:116px;font-size:11px;font-weight:500;color:var(--yellow-dark);${D(.08)}">Tomorrow · all day</p>`}
+  ${when(24,'PICKUP',b.pickup,'pickup',.1)}${when(192,'RETURN',b.ret,'ret',.14)}
+
+  <p class="t lbl rise" style="left:24px;top:232px;${D(.16)}">VEHICLE</p>
+  <div class="rise" style="${D(.17)}">
+    <div class="a" style="left:24px;top:254px;width:327px;height:44px;border-radius:13px;background:var(--chip)"></div>
+    <div class="a" id="segThumb" style="left:27px;top:257px;width:160.5px;height:38px;border-radius:10px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1);translate:${ent?'160.5px':'0'} 0;transition:translate .32s var(--ease-out)"></div>
+    ${seg('pool','Pool car',0)}${seg('ent','Enterprise rental',1)}
+  </div>
+
+  <p class="t lbl rise" style="left:24px;top:314px;${D(.18)}">PICK UP FROM</p>
+  <div class="rise" style="${D(.19)}"><button class="tap press field" ${ent?'data-open-ent="book"':'data-open-office'} aria-label="Pick up from: ${ent?entLoc(b.entLoc).name:officeName(b.office)+' office'}. Change" style="top:336px;display:flex;align-items:center;white-space:nowrap;${S.sheet&&(S.sheet.kind==='office'||S.sheet.kind==='ent')?'border-color:var(--yellow);':''}">
+    <span style="font-size:15px;overflow:hidden;text-overflow:ellipsis;max-width:${(ent?b.entLoc===entPref:b.office===homeOffice)?170:260}px">${ent?entLabel(b.entLoc):`${officeName(b.office)} office`}</span>
+    ${ent ? (b.entLoc===entPref?tag('Preferred'):'') : (b.office===homeOffice?tag('Your office'):'')}
+    ${ic('chevR',296,14,14,14,'rotate:90deg')}</button></div>
+
+  <p class="t lbl rise" style="left:24px;top:398px;${D(.2)}">TRIP</p>
+  <p class="t rise" id="bkReq" style="right:24px;top:398px;font-size:11px;font-weight:500;color:${(projBad||phaseBad)?'var(--red)':'var(--muted)'};${D(.2)}">Project code & phase required</p>
+  <div class="rise" style="${D(.22)}"><input class="field" id="bkDest" aria-label="Destination" placeholder="Destination" value="${esc(b.dest)}" style="top:420px"></div>
+  <div class="rise" style="${D(.24)}"><input class="field ${projBad?'err':''} ${shake(projBad)}" id="bkProject" aria-label="Project code" aria-required="true" placeholder="${projBad?'Required':'Project code'}" value="${esc(b.project)}" style="top:474px;width:210px"></div>
+  <div class="rise" style="${D(.26)}"><input class="field ${phaseBad?'err':''} ${shake(phaseBad)}" id="bkPhase" aria-label="Phase" aria-required="true" autocomplete="off" placeholder="${phaseBad?'Required':'Phase'}" value="${esc(b.phase)}" style="top:474px;left:244px;width:107px"></div>
+
+  ${ent ? `
+  <p class="t lbl rise" style="left:24px;top:${listTop}px;${D(.28)}">RENTAL</p>
+  <div class="a rise ${fx('vtype')?'fx-spring':''}" style="left:24px;top:${listTop+22}px;width:327px;height:74px;border-radius:14px;background:var(--card);border:1px solid var(--border);${D(.3)}">
+    <div class="a" style="left:12px;top:15px;width:44px;height:44px;border-radius:12px;background:#fff;border:1px solid var(--border)"></div>
+    ${ic('key',23,26,22,22)}
+    <p class="t" style="left:70px;top:14px;font-size:14px;font-weight:600">Enterprise picks the car</p>
+    <p class="t" style="left:70px;top:34px;font-size:12px;color:var(--slate)">Need a truck, van or hitch? Add a note.</p>
+    <p class="t" style="left:70px;top:51px;font-size:11px;color:var(--muted)">Billed to Barge's Enterprise account</p>
+  </div>` : `
+  <p class="t lbl rise" style="left:24px;top:${listTop}px;${D(.28)}">AVAILABLE AT ${officeName(b.office).toUpperCase()}</p>
+  ${fleet.map((v,i)=>{const on=b.vehicle===v.id, hit=fx('vehicle',v.id);return `
+  <div class="rise ${fx('vtype')?'fx-spring':''}" style="${D(.3+i*.05)}"><button class="tap press ${hit?'fx-row':''}" data-vehicle="${v.id}" aria-pressed="${on}" style="left:24px;top:${listTop+22+i*76}px;width:327px;height:68px;border-radius:14px;background:#fff;border:1.5px solid ${on?'var(--yellow)':'var(--border)'};color:var(--yellow-dark)">
+    <div class="a" style="left:10.5px;top:10.5px;width:44px;height:44px;border-radius:12px;background:var(--chip)"></div>
+    ${ic('car26',19.5,19,26,26)}
+    <p class="t" style="left:68.5px;top:14.5px;font-size:14px;font-weight:600;color:var(--ink)">${v.name}</p>
+    <p class="t" style="left:68.5px;top:34.5px;font-size:12px;color:var(--muted)">${v.meta}</p>
+    <div class="a ${hit?'fx-pop':''}" style="left:289.5px;top:21.5px;width:22px;height:22px;border-radius:50%;${on?'background:var(--yellow)':'border:1.5px solid var(--border)'}"></div>
+    ${on?ic('selCheck',294.5,26.5,12,12,D(.12),hit?'fx-draw':''):''}
+  </button></div>`}).join('')}`}
+
+  <p class="t lbl rise" style="left:24px;top:${noteTop}px;${D(.44)}">NOTE FOR FLEET MANAGER</p>
+  <p class="t rise" style="right:24px;top:${noteTop}px;font-size:11px;font-weight:500;color:var(--muted);${D(.44)}">Optional</p>
+  <div class="rise" style="${D(.46)}"><textarea class="field note" id="bkNote" aria-label="Note for fleet manager" placeholder="${ent?'Truck, van, hitch, airport pickup? Add it here.':'Need a specific car or anything else? Add it here.'}" style="top:${noteTop+22}px">${esc(b.note)}</textarea></div>
+  ${ed ? `<button class="tap" data-cancel-booking style="left:84px;top:${noteTop+130}px;width:207px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--red)">${b.confirmCancel?'Tap again to cancel request':'Cancel this request'}</button>`
+       : `<p class="t cx rise" style="left:187.5px;top:${noteTop+132}px;font-size:12px;color:var(--muted);${D(.46)}">Requests go to your fleet manager for approval.</p>`}
+  </div></div>
+  <div class="cta-fade"></div>
+  <button class="tap press cta yel" data-request style="bottom:32px">${ed?'Update request':'Request vehicle'}</button>
+  ${S.sheet ? (S.sheet.kind==='office' ? officeSheet() : S.sheet.kind==='ent' ? entSheet() : sheet()) : ''}
+  ${status(false)}`;
+};
+
+// bottom sheet: pick a date, then a time
+function sheet(){
+  const sh = S.sheet, b = S.book, label = sh.which==='pickup' ? 'Pickup' : 'Return';
+  const opening = fx('sheet-open'), stepping = fx('sheet-step');
+  const minDate = sh.which==='ret' ? b.pickup.date : todayISO();
+  let body = '';
+  if(sh.step==='date'){
+    const [y,m] = sh.month.split('-').map(Number);
+    const first = new Date(y,m-1,1), days = new Date(y,m,0).getDate(), off = first.getDay();
+    const colW = 327/7;
+    const cells = Array.from({length:days},(_,i)=>{
+      const d=i+1, iso=`${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const idx=off+i, col=idx%7, row=Math.floor(idx/7), dis = iso < minDate, sel = iso===sh.date, today = iso===todayISO();
+      return `<button class="tap" ${dis?'disabled aria-disabled="true"':`data-cal-day="${iso}"`} aria-label="${fmtDay(iso)}" style="left:${24+col*colW+colW/2-20}px;top:${124+row*44}px;width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:${sel||today?600:400};background:${sel?'var(--yellow)':'transparent'};color:${dis?'var(--ph)':'var(--ink)'};${dis?'cursor:default;':''}${today&&!sel?'box-shadow:inset 0 0 0 1.5px var(--border);':''}">${d}</button>`;
+    }).join('');
+    const monthName = first.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+    const canPrev = `${sh.month}-31` > minDate.slice(0,7)+'-00' && sh.month > minDate.slice(0,7);
+    body = `<p class="t" style="left:24px;top:66px;font-size:15px;font-weight:600">${monthName}</p>
+      <button class="tap press" data-cal-nav="-1" aria-label="Previous month" ${canPrev?'':'disabled'} style="left:283px;top:60px;width:32px;height:32px;border-radius:10px;background:var(--chip);opacity:${canPrev?1:.35};color:var(--ink)">${ic('chevL',9,9,14,14)}</button>
+      <button class="tap press" data-cal-nav="1" aria-label="Next month" style="left:319px;top:60px;width:32px;height:32px;border-radius:10px;background:var(--chip);color:var(--ink)">${ic('chevR',9,9,14,14)}</button>
+      ${['S','M','T','W','T','F','S'].map((w,i)=>`<p class="t cx" style="left:${24+i*colW+colW/2}px;top:102px;font-size:11px;font-weight:600;color:var(--muted)">${w}</p>`).join('')}
+      ${cells}
+      <p class="t cx" style="left:187.5px;top:410px;font-size:12px;color:var(--muted)">Pick a date, then a time</p>`;
+  } else {
+    const sameDayAsPickup = sh.which==='ret' && sh.date===b.pickup.date;
+    const cur = b[sh.which];
+    body = `<p class="t" style="left:24px;top:66px;font-size:15px;font-weight:600">${fmtDay(sh.date)}</p>
+      <button class="tap" data-sheet-back style="left:255px;top:58px;width:100px;height:34px;border-radius:10px;color:var(--yellow-dark)"><p class="t" style="right:4px;top:9px;font-size:13px;font-weight:500">Change date</p></button>
+      ${TIMES.map((t,i)=>{ const col=i%4, row=Math.floor(i/4), w=(327-3*8)/4;
+        const dis = sameDayAsPickup && mins(t) <= mins(b.pickup.time), sel = cur.date===sh.date && cur.time===t;
+        return `<button class="tap ${dis?'':'press'}" ${dis?'disabled':`data-time="${t}"`} style="left:${24+col*(w+8)}px;top:${104+row*44}px;width:${w}px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;background:${sel?'var(--ink)':'var(--card)'};border:1px solid ${sel?'var(--ink)':'var(--border)'};color:${sel?'#fff':dis?'var(--ph)':'var(--ink)'};${dis?'cursor:default':''}">${t}</button>`;}).join('')}`;
+  }
+  return `<div class="sheet-wrap" id="sheetWrap">
+    <button class="tap sheet-back ${opening?'fx-fade':''}" data-sheet-close aria-label="Close" style="left:0;top:0;width:375px;height:100%;background:rgba(10,10,12,.38);border-radius:0"></button>
+    <div class="sheet ${opening?'fx-sheet':''}" role="dialog" aria-label="${label} ${sh.step}">
+      <div class="a" style="left:169.5px;top:8px;width:36px;height:4px;border-radius:2px;background:var(--border)"></div>
+      <p class="t" style="left:24px;top:26px;font-size:17px;font-weight:600">${label} ${sh.step==='date'?'date':'time'}</p>
+      <div class="a" style="right:24px;top:31px;display:flex;gap:4px">${['date','time'].map(st=>`<span style="display:block;width:${sh.step===st?18:6}px;height:6px;border-radius:3px;background:${sh.step===st?'var(--yellow)':'var(--border)'};transition:width .25s"></span>`).join('')}</div>
+      <div class="a ${stepping?'fx-step':''}" style="inset:0;top:0">${body}</div>
+    </div></div>`;
+}
+function officeSheet(){
+  const b=S.book, sel = S.sheet.target==='home' ? homeOffice : b.office, opening=fx('sheet-open'), h=92+OFFICES.length*64+20;
+  return `<div class="sheet-wrap" id="sheetWrap">
+    <button class="tap sheet-back ${opening?'fx-fade':''}" data-sheet-close aria-label="Close" style="left:0;top:0;width:375px;height:100%;background:rgba(10,10,12,.38);border-radius:0"></button>
+    <div class="sheet ${opening?'fx-sheet':''}" role="dialog" aria-label="${S.sheet.target==='home'?'Home office':'Pickup office'}" style="height:${h}px">
+      <div class="a" style="left:169.5px;top:8px;width:36px;height:4px;border-radius:2px;background:var(--border)"></div>
+      <p class="t" style="left:24px;top:26px;font-size:17px;font-weight:600">${S.sheet.target==='home'?'Home office':'Pickup office'}</p>
+      <p class="t" style="left:24px;top:50px;font-size:12px;color:var(--muted)">${S.sheet.target==='home'?'Bookings start from this office':'Where you\'ll pick up and return the vehicle'}</p>
+      ${OFFICES.map((o,i)=>{ const on=o.id===sel, n=VEHICLES.filter(v=>v.office===o.id).length;
+        return `<button class="tap press" data-office="${o.id}" aria-pressed="${on}" style="left:16px;top:${80+i*64}px;width:343px;height:56px;border-radius:14px;background:${on?'var(--yellow-pale)':'#fff'};border:1.5px solid ${on?'var(--yellow)':'var(--border)'};color:var(--yellow-dark)">
+          <p class="t" style="left:14.5px;top:9.5px;font-size:15px;font-weight:600;color:var(--ink)">${o.name}</p>
+          <p class="t" style="left:14.5px;top:30.5px;font-size:12px;color:var(--muted)">${o.id===homeOffice?'Your office · ':''}${n} vehicle${n===1?'':'s'} available</p>
+          <div class="a" style="left:305.5px;top:15.5px;width:22px;height:22px;border-radius:50%;${on?'background:var(--yellow)':'border:1.5px solid var(--border)'}"></div>
+          ${on?ic('selCheck',310.5,20.5,12,12):''}
+        </button>`;}).join('')}
+    </div></div>`;
+}
+const ENT_MAP_URL = 'https://www.enterprise.com/en/car-rental-locations/us/tn.html';
+function entList(){
+  const forProfile = S.sheet.target==='profile', sel = forProfile ? entPref : S.book.entLoc;
+  const q = (S.sheet.q||'').trim(), ql = q.toLowerCase();
+  const hits = ENT_LOCS.filter(l => !ql || l.name.toLowerCase().includes(ql));
+  const exact = ENT_LOCS.some(l => l.name.toLowerCase()===ql);
+  const rows = [];
+  if(q && !exact) rows.push(`<button class="tap press" data-ent-custom style="left:0;top:0;width:343px;height:52px;border-radius:14px;background:#fff;border:1.5px dashed var(--ph);color:var(--yellow-dark)">
+      <p class="t" style="left:14.5px;top:8px;font-size:15px;font-weight:600;color:var(--ink);max-width:300px;overflow:hidden;text-overflow:ellipsis">Use “${esc(q)}”</p>
+      <p class="t" style="left:14.5px;top:28px;font-size:12px;color:var(--muted)">Your fleet manager will confirm the branch</p></button>`);
+  hits.forEach(l => { const on=l.id===sel;
+    rows.push(`<button class="tap press" data-ent="${l.id}" aria-pressed="${on}" style="left:0;top:0;width:343px;height:52px;border-radius:14px;background:${on?'var(--yellow-pale)':'#fff'};border:1.5px solid ${on?'var(--yellow)':'var(--border)'};color:var(--yellow-dark)">
+      <p class="t" style="left:14.5px;top:15px;font-size:15px;font-weight:${on?600:500};color:var(--ink);max-width:220px;overflow:hidden;text-overflow:ellipsis">${esc(l.name)}</p>
+      ${!forProfile&&l.id===entPref?'<p class="t" style="right:48px;top:17px;font-size:11px;font-weight:600">Preferred</p>':''}
+      <div class="a" style="left:305.5px;top:13.5px;width:22px;height:22px;border-radius:50%;${on?'background:var(--yellow)':'border:1.5px solid var(--border)'}"></div>
+      ${on?ic('selCheck',310.5,18.5,12,12):''}</button>`); });
+  if(!rows.length) rows.push(`<p style="margin:12px 4px;font-size:13px;color:var(--muted)">No saved locations match.</p>`);
+  return rows.map(r=>`<div style="position:relative;height:52px;margin-bottom:8px">${r}</div>`).join('');
+}
+function entSheet(){
+  const opening=fx('sheet-open'), forProfile = S.sheet.target==='profile', h=580;
+  return `<div class="sheet-wrap" id="sheetWrap">
+    <button class="tap sheet-back ${opening?'fx-fade':''}" data-sheet-close aria-label="Close" style="left:0;top:0;width:375px;height:100%;background:rgba(10,10,12,.38);border-radius:0"></button>
+    <div class="sheet ${opening?'fx-sheet':''}" role="dialog" aria-label="Enterprise pickup" style="height:${h}px">
+      <div class="a" style="left:169.5px;top:8px;width:36px;height:4px;border-radius:2px;background:var(--border)"></div>
+      <p class="t" style="left:24px;top:26px;font-size:17px;font-weight:600">${forProfile?'Enterprise pickup preference':'Enterprise pickup'}</p>
+      <p class="t" style="left:24px;top:50px;font-size:12px;color:var(--muted)">${forProfile?'Used by default when you book a rental':'Pick a branch or type one in'}</p>
+      <div class="a" style="left:16px;top:78px;width:343px;height:44px">
+        ${ic('search',12,13,18,18)}
+        <input id="entSearch" type="search" autocomplete="off" aria-label="Search or type an Enterprise location" placeholder="Search or type a branch or address" value="${esc(S.sheet.q||'')}" style="position:absolute;inset:0;width:100%;height:44px;border:1.5px solid var(--border);border-radius:12px;background:transparent;padding:0 12px 0 40px;font:400 15px Inter,system-ui,sans-serif;color:var(--ink);outline:none">
+      </div>
+      <div id="entList" class="a" style="left:16px;top:134px;width:343px;height:${h-134-64}px;overflow-y:auto;scrollbar-width:none">${entList()}</div>
+      <div class="a" style="left:0;bottom:0;width:375px;height:64px;border-top:1px solid var(--border);background:#fff;border-radius:0">
+        <a href="${ENT_MAP_URL}" target="_blank" rel="noopener" class="extlink">See Enterprise locations on a map ${ic('ext',0,0,14,14,'position:relative;display:inline-block;vertical-align:-2px')}</a>
+      </div>
+    </div></div>`;
+}
+function closeSheet(){
+  const w=document.getElementById('sheetWrap');
+  if(!w || REDUCED){ S.sheet=null; patch(); return; }
+  w.classList.add('closing'); setTimeout(()=>{ S.sheet=null; patch(); }, 230);
+}
+
+const summaryCard = (b, label, statusText, statusCol) => {
+  const rows = [['Vehicle', vehShort(b)], ['Pickup', isEnt(b) ? entLabel(b.entLoc, ', ') : `${officeName(b.office)} office${b.status==='approved'?' · '+((VEHICLES.find(x=>x.id===b.vehicle).meta.match(/Lot [A-Z]/)||['Main lot'])[0]):''}`],
+    ['Destination', b.dest||'Not set'], ['Project', `${b.project} · ${fmtPhase(b.phase)}`]];
+  if(b.note.trim()) rows.push(['Note', b.note.trim()]);
+  rows.push(['Status', statusText, statusCol]);
+  const span = spanText(b), h = 118 + rows.length*28 + 10;
+  const html = `<div class="a rise" style="left:24px;top:360px;width:327px;height:${h}px;border-radius:16px;background:var(--card);${D(.46)}">
+    <p class="t cx lbl" style="left:164px;top:20px">${label}</p>
+    <p class="t cx" style="left:163.5px;top:40px;font-size:${span.length>12?24:30}px;font-weight:700">${span}</p>
+    <p class="t cx" style="left:163.5px;top:82px;font-size:13px;color:var(--muted)">${b.pickup.time} – ${b.ret.time}</p>
+    <div class="a grow" style="left:16px;top:104px;width:295px;height:1px;background:var(--border);${D(.56)}"></div>
+    ${rows.map(([k,v,col],i)=>`<div class="rise" style="${D(.62+i*.05)}"><p class="t" style="left:16px;top:${118+i*28}px;font-size:13px;color:var(--muted)">${k}</p><p class="t" style="right:16px;top:${118+i*28}px;max-width:200px;overflow:hidden;text-overflow:ellipsis;font-size:13px;font-weight:${k==='Note'?400:600};${k==='Note'?'font-style:italic;':''}color:${col||'var(--ink)'}">${esc(v)}</p></div>`).join('')}
+  </div>`;
+  return {html, bottom: 360 + h};
+};
+
+R.confirmed = () => {
+  const b = S.book, c = summaryCard(b, 'PICK UP', 'Approved', 'var(--green)');
+  const keys = isEnt(b) ? `Show your badge at the Enterprise counter. Barge is billed directly.` : `Keys are at the ${officeName(b.office)} front desk. Bring your badge.`;
+  return `
+  ${celebrate('var(--green-pale)','var(--green)', ic('succCheck',174,186,28,28,D(.36),'draw'))}
+  <p class="t cx rise" style="left:187.5px;top:264px;font-size:22px;font-weight:600;${D(.3)}">Booking confirmed</p>
+  <p class="t cx rise" style="left:187.5px;top:300px;font-size:15px;color:var(--muted);${D(.36)}">Your fleet manager approved this request.</p>
+  <p class="t cx rise" style="left:187.5px;top:320px;font-size:15px;color:var(--muted);${D(.39)}">${isEnt(b)?'Your rental is reserved.':'The vehicle is held for you.'}</p>
+  ${c.html}
+  <p class="a rise" style="left:24px;width:327px;margin:0;text-align:center;top:${c.bottom+10}px;font-size:12px;line-height:1.4;color:var(--muted);${D(.86)}">${keys}</p>
+  <div class="rise" style="${D(.8)}"><button class="tap press cta dark" data-go="home" data-kind="dismiss" style="top:${c.bottom+52}px">Done</button></div>
+  <div class="rise" style="${D(.84)}"><button class="tap press cta ghost" data-edit-booking style="top:${c.bottom+110}px;color:var(--ink)">Edit booking</button></div>
+  ${status(false)}`;
+};
+
+R.booked = () => {
+  const b = S.book, c = summaryCard(b, 'BOOKED FOR', 'Pending approval', 'var(--yellow-dark)');
+  return `
+  ${celebrate('var(--yellow-pale)','var(--yellow)', ic('confIcon',173.5,186,28,28,'','burst'))}
+  <p class="t cx rise" style="left:187.5px;top:264px;font-size:22px;font-weight:600;${D(.3)}">${b.updated?'Request updated':'Booking requested'}</p>
+  <p class="t cx rise" style="left:187.5px;top:300px;font-size:15px;color:var(--muted);${D(.36)}">${b.updated?'Your fleet manager will see the changes.':'Your fleet manager will confirm shortly.'}</p>
+  <p class="t cx rise" style="left:187.5px;top:320px;font-size:15px;color:var(--muted);${D(.39)}">You'll get a notification once approved.</p>
+  ${c.html}
+  <div class="rise" style="${D(.8)}"><button class="tap press cta yel" data-go="home" data-kind="dismiss" style="top:${c.bottom+18}px">Done</button></div>
+  <div class="rise" style="${D(.84)}"><button class="tap press cta ghost" data-edit-booking style="top:${c.bottom+76}px;color:var(--ink)">Edit request</button></div>
+  <button class="tap" data-cancel-booking style="left:84px;top:${c.bottom+134}px;width:207px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:14px;color:${b.confirmCancel?'var(--red)':'var(--muted)'}">${b.confirmCancel?'Tap again to cancel':'Cancel request'}</button>
+  ${status(false)}`;
+};
+
+/* ---------- render + navigation ---------- */
+const screenEl = document.getElementById('screen');
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const DUR = {push:470, pop:430, tab:360, rise:540, dismiss:520};
+let scanTimer = null;
+const current = () => screenEl.querySelector('.scr.live');
+
+function countUp(root){
+  root.querySelectorAll('[data-count]').forEach(el=>{
+    const to=+el.dataset.count, suf=el.dataset.suffix||'';
+    if(REDUCED||!to) return;
+    const t0=performance.now()+180, dur=520;
+    const tick=now=>{ const k=Math.min(1,Math.max(0,(now-t0)/dur)); const e=1-Math.pow(1-k,3);
+      el.textContent=Math.round(to*e)+suf; if(k<1) requestAnimationFrame(tick); };
+    el.textContent='0'+suf; requestAnimationFrame(tick);
+  });
+}
+
+function mount(kind){
+  const el = document.createElement('div');
+  el.className = 'scr live entering'; el.dataset.screen = S.screen; el.innerHTML = R[S.screen]();
+  const old = current();
+  screenEl.querySelectorAll('.scr:not(.live)').forEach(n=>n.remove());
+  if(!old || !kind || REDUCED){ screenEl.replaceChildren(el); }
+  else {
+    old.classList.remove('live','entering'); old.style.pointerEvents='none';
+    if(kind==='pop' || kind==='dismiss') screenEl.insertBefore(el, old); else screenEl.appendChild(el);
+    old.classList.add('out-'+kind); el.classList.add('in-'+kind);
+    setTimeout(()=>{ old.remove(); el.classList.remove('in-'+kind); }, DUR[kind]);
+  }
+  countUp(el);
+  setTimeout(()=>el.classList.remove('entering'), 1500);
+  document.querySelectorAll('.jump').forEach(j=>j.setAttribute('aria-current', j.dataset.jump===S.screen));
+}
+// in-screen update: swap the content, keep the screen, play only the FX for what changed
+function patch(effect){
+  const el = current(); if(!el) return;
+  el.classList.remove('entering');
+  const sc = el.querySelector('.scroller'), top = sc ? sc.scrollTop : 0;
+  FX = effect || null; el.innerHTML = R[S.screen](); FX = null;
+  const sc2 = el.querySelector('.scroller'); if(sc2) sc2.scrollTop = top;
+}
+// navigation history, so Back returns to wherever you actually came from
+let HIST = [];
+function goBack(fallback){
+  const to = HIST.length ? HIST.pop() : fallback;
+  if(S.screen==='book' && S.book.submitted) S.book.editing = false;
+  go(to, 'pop', {back:true});
+}
+function go(to, kind='push', opts={}){
+  if(!R[to] || to===S.screen) return;
+  if(kind==='tab' || kind==='dismiss' || opts.reset) HIST = [];
+  else if(!opts.back && !opts.replace) HIST.push(S.screen);
+  clearTimeout(scanTimer); S.sheet=null;
+  if((to==='booked'||to==='confirmed') && !S.book.submitted){ Object.assign(S.book,{project:S.book.project||'BR-2291', phase:S.book.phase||'03', submitted:true}); }
+  if(to==='confirmed'){ S.book.status='approved'; }
+  if(to==='scan'){ S.scanned=false; scanTimer=setTimeout(()=>{ if(S.screen==='scan'){ S.scanned=true; patch({kind:'scan'}); } }, 1700); }
+  S.screen = to; mount(kind);
+}
+
+// Material-style ripple from the touch point (the device is scaled, so undo that)
+screenEl.addEventListener('pointerdown', e => {
+  const b = e.target.closest('button.tap'); if(!b || REDUCED) return;
+  const r = b.getBoundingClientRect(), k = r.width / b.offsetWidth || 1;
+  const size = Math.max(b.offsetWidth, b.offsetHeight) * 2.4;
+  const s = document.createElement('span'); s.className='ripple';
+  s.style.cssText = `width:${size}px;height:${size}px;left:${(e.clientX-r.left)/k-size/2}px;top:${(e.clientY-r.top)/k-size/2}px`;
+  b.appendChild(s); setTimeout(()=>s.remove(), 600);
+});
+
+screenEl.addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b) return;
+  if(b.dataset.back!==undefined){ goBack(b.dataset.back); return; }
+  if(b.dataset.go){
+    const to=b.dataset.go;
+    const kind = b.dataset.kind || (to==='success'||to==='booked' ? 'rise' : 'push');
+    go(to, kind); return;
+  }
+  if(b.dataset.check!==undefined){ const i=+b.dataset.check; S.checks[i]=!S.checks[i]; if(S.checks[i]) S.flags[i]=false; patch({kind:'check',i}); return; }
+  if(b.dataset.flag!==undefined){ const i=+b.dataset.flag; S.flags[i]=!S.flags[i]; patch({kind:'flag',i}); return; }
+  if(b.dataset.photo!==undefined){ const i=+b.dataset.photo; S.photos[i]=!S.photos[i]; patch({kind:'photo',i}); return; }
+  if(b.hasAttribute('data-new-booking')){ S.book = newBooking(); go('book'); return; }
+  if(b.hasAttribute('data-edit-booking')){ S.book.editing = true; S.book.tried=false; S.book.confirmCancel=false; go('book'); return; }
+  if(b.hasAttribute('data-cancel-booking')){
+    if(!S.book.confirmCancel){ S.book.confirmCancel=true; patch(); clearTimeout(window._cc); window._cc=setTimeout(()=>{ if(S.book.confirmCancel){ S.book.confirmCancel=false; patch(); } },3000); return; }
+    clearTimeout(window._cc); S.book = newBooking(); go('home','dismiss'); return;
+  }
+  if(b.dataset.open){ const slot=S.book[b.dataset.open]; S.sheet={which:b.dataset.open, step:'date', date:slot.date, month:slot.date.slice(0,7)}; patch({kind:'sheet-open'}); return; }
+  if(b.hasAttribute('data-sheet-close')){ closeSheet(); return; }
+  if(b.hasAttribute('data-open-office')){ S.sheet={kind:'office'}; patch({kind:'sheet-open'}); return; }
+  if(b.hasAttribute('data-open-home-office')){ S.sheet={kind:'office', target:'home'}; patch({kind:'sheet-open'}); return; }
+  if(b.hasAttribute('data-toggle-notify')){ S.notify=!S.notify; const sw=b.querySelector('.switch'); sw.classList.toggle('on', S.notify); return; }
+  if(b.hasAttribute('data-book-tab')){ if(!S.book.submitted){ S.book=newBooking(); go('book'); } else go(S.book.status==='approved'?'confirmed':'booked','push'); return; }
+  if(b.dataset.office && S.sheet && S.sheet.target==='home'){ homeOffice=b.dataset.office; if(!S.book.submitted){ S.book.office=homeOffice; const bk=S.book; if(!VEHICLES.some(v=>v.id===bk.vehicle && v.office===bk.office)) bk.vehicle=VEHICLES.find(v=>v.office===bk.office).id; } patch(); closeSheet(); return; }
+  if(b.dataset.vtype){ const want=b.dataset.vtype; if(S.book.type===want) return; S.book.type=want;
+    const th=document.getElementById('segThumb'); if(th) th.style.translate = want==='ent'?'160.5px 0':'0 0';
+    setTimeout(()=>patch({kind:'vtype'}), REDUCED?0:180); return; }
+  if(b.dataset.openEnt){ S.sheet={kind:'ent', target:b.dataset.openEnt, q:''}; patch({kind:'sheet-open'}); return; }
+  if(b.hasAttribute('data-ent-custom')){ const q=(S.sheet.q||'').trim(); if(!q) return; const id='c'+Date.now(); ENT_LOCS.push({id, name:q, short:q.length>18?q.slice(0,17)+'…':q});
+    if(S.sheet.target==='profile'){ entPref=id; if(!S.book.submitted) S.book.entLoc=id; } else S.book.entLoc=id; patch(); closeSheet(); return; }
+  if(b.dataset.ent){ if(S.sheet.target==='profile'){ entPref=b.dataset.ent; if(!S.book.submitted) S.book.entLoc=entPref; } else S.book.entLoc=b.dataset.ent; patch(); closeSheet(); return; }
+  if(b.dataset.office){ const bk=S.book; bk.office=b.dataset.office; if(!VEHICLES.some(v=>v.id===bk.vehicle && v.office===bk.office)) bk.vehicle=VEHICLES.find(v=>v.office===bk.office).id; patch(); closeSheet(); return; }
+  if(b.dataset.calNav){ const [y,m]=S.sheet.month.split('-').map(Number); const d=new Date(y,m-1+(+b.dataset.calNav),1); S.sheet.month=isoOf(d).slice(0,7); patch({kind:'sheet-step'}); return; }
+  if(b.dataset.calDay){ S.sheet.date=b.dataset.calDay; patch(); setTimeout(()=>{ if(S.sheet){ S.sheet.step='time'; patch({kind:'sheet-step'}); } },160); return; }
+  if(b.hasAttribute('data-sheet-back')){ S.sheet.step='date'; S.sheet.month=S.sheet.date.slice(0,7); patch({kind:'sheet-step'}); return; }
+  if(b.dataset.time){
+    const bk=S.book, which=S.sheet.which;
+    bk[which]={date:S.sheet.date, time:b.dataset.time}; bk.touched=true;
+    const retBefore = bk.ret.date < bk.pickup.date || (bk.ret.date===bk.pickup.date && mins(bk.ret.time) <= mins(bk.pickup.time));
+    if(which==='pickup' && retBefore){ const later = TIMES.find(t=>mins(t)>=Math.max(mins('5:00 PM'),mins(bk.pickup.time)+60)) || TIMES[TIMES.length-1]; bk.ret={date:bk.pickup.date, time:later}; }
+    patch(); closeSheet(); return;
+  }
+  if(b.hasAttribute('data-request')){
+    const bk=S.book;
+    if(!bk.project.trim() || !bk.phase.trim()){ bk.tried=true; patch({kind:'invalid'}); document.getElementById(!bk.project.trim()?'bkProject':'bkPhase')?.focus({preventScroll:true}); return; }
+    const wasEditing = bk.editing;
+    bk.updated = wasEditing; bk.status='pending'; bk.editing=false; bk.submitted=true; bk.tried=false; bk.confirmCancel=false;
+    go('booked', wasEditing?'pop':'rise', {replace:true}); return;
+  }
+  if(b.dataset.vehicle){ if(S.book.vehicle===b.dataset.vehicle) return; S.book.vehicle=b.dataset.vehicle; patch({kind:'vehicle',i:b.dataset.vehicle}); return; }
+  if(b.hasAttribute('data-submit')){
+    if(endState()!=='ok' || !S.project.trim() || !S.phase.trim()){
+      S.tried = true; patch({kind:'invalid'});
+      const first = endState()!=='ok' ? 'endOdo' : !S.project.trim() ? 'jlProject' : 'jlPhase';
+      document.getElementById(first)?.focus({preventScroll:true}); return;
+    }
+    const flags = S.flags.filter(Boolean).length;
+    const id = `#BR-${S.date.slice(5,7)}${S.date.slice(8,10)}-${String(S.reportSeq).padStart(3,'0')}`;
+    S.lastReport = {miles:miles(), date:S.date, flags, id, project:S.project.trim(), phase:fmtPhase(S.phase)};
+    S.reportSeq++;
+    const entry = {dot:'g', title:'Ford F-150 — Inspection', meta:`${fmtDate(S.date)} · ${miles()} mi submitted`};
+    S.recent = [entry, ...S.recent.filter(r=>r.dot!=='y')];
+    S.past = [entry, ...S.past];
+    // next report starts where this one ended
+    S.start = S.end; S.end = null; S.startEdited = false; S.tried = false; S.dest = ''; S.project = ''; S.phase = '';
+    go('success','rise', {replace:true}); return;
+  }
+  if(b.hasAttribute('data-soon')){ b.parentElement.animate?.([{translate:'0 0'},{translate:'-2px 0'},{translate:'1.5px 0'},{translate:'0 0'}],{duration:240}); }
+});
+screenEl.addEventListener('input', e => {
+  const t = e.target;
+  if(t.id==='endOdo'){ const n=parseInt(t.value.replace(/\D/g,''),10); S.end = isNaN(n)?null:n; refreshJourney(); }
+  else if(t.id==='startOdo'){ const n=parseInt(t.value.replace(/\D/g,''),10); if(!isNaN(n)){ S.start=n; S.startEdited=true; } refreshJourney(); }
+  else if(t.id==='jlOrigin') S.origin=t.value;
+  else if(t.id==='jlDest') S.dest=t.value;
+  else if(t.id==='jlProject'){ S.project=t.value; refreshJourney(); }
+  else if(t.id==='jlPhase'){ S.phase=t.value; refreshJourney(); }
+  else if(t.id==='bkPhase'){ S.book.phase=t.value; if(t.value.trim()){ t.classList.remove('err'); t.placeholder='Phase'; } updBkReq(); }
+  else if(t.id==='bkDest') S.book.dest=t.value;
+  else if(t.id==='bkNote') S.book.note=t.value;
+  else if(t.id==='entSearch'){ S.sheet.q=t.value; document.getElementById('entList').innerHTML=entList(); }
+  else if(t.id==='bkProject'){ S.book.project=t.value; if(t.value.trim()) t.classList.remove('err'); updBkReq(); }
+  else if(t.id==='search'){ S.query=t.value; const q=S.query.trim().toLowerCase(); document.getElementById('pastList').innerHTML = pastList(S.past.filter(r=>!q||(r.title+' '+r.meta).toLowerCase().includes(q))); }
+});
+screenEl.addEventListener('change', e => {
+  const t = e.target;
+  if(t.id==='jlDateInput' && t.value){ S.date=t.value; document.getElementById('jlDate').textContent=fmtDate(S.date,true); }
+  if(t.id==='endOdo'){ t.value = S.end==null ? '' : S.end.toLocaleString('en-US'); }
+  if(t.id==='startOdo'){ t.value = S.start.toLocaleString('en-US'); }
+});
+
+function updBkReq(){ const r=document.getElementById('bkReq'); if(r) r.style.color = S.book.tried && (!S.book.project.trim()||!S.book.phase.trim()) ? 'var(--red)' : 'var(--muted)'; }
+
+/* fleet manager approval, shown as a push notification */
+const notif = document.getElementById('notif');
+let notifTimer = null;
+function hideNotif(){ if(notif.hidden) return; notif.classList.add('out'); setTimeout(()=>{ notif.hidden=true; notif.classList.remove('out'); },300); }
+function approve(){
+  const bk=S.book;
+  if(!bk.submitted){ Object.assign(bk,{project:bk.project||'BR-2291', phase:bk.phase||'03', submitted:true}); }
+  bk.status='approved'; bk.editing=false;
+  const v=VEHICLES.find(x=>x.id===bk.vehicle)||{short:''};
+  notif.innerHTML = `<span class="n-ic">${I.calendar}</span><div class="n-t">Booking confirmed<span>now</span></div><div class="n-b">${esc(isEnt(bk)?'Enterprise rental':v.short.split(' · ')[0])} for ${spanText(bk)}, pick up at ${isEnt(bk)?'Enterprise, '+entLoc(bk.entLoc).name:'the '+officeName(bk.office)+' office'}.</div>`;
+  notif.hidden=false; notif.style.animation='none'; notif.offsetHeight; notif.style.animation='';
+  clearTimeout(notifTimer); notifTimer=setTimeout(hideNotif, 6000);
+  if(S.screen==='home' || S.screen==='booked') patch();
+}
+notif.addEventListener('click', ()=>{ clearTimeout(notifTimer); hideNotif(); go('confirmed', S.screen==='booked'?'tab':'rise'); });
+document.getElementById('approve').addEventListener('click', approve);
+
+/* side panel */
+const FLOWS = [['NEW REPORT',['home','scan','inspection','journey','success']],['REPORTS',['reports']],['BOOKING',['book','booked','confirmed']],['MORE',['vehicle','profile']]];
+document.getElementById('jumps').innerHTML = FLOWS.map(([label,keys])=>`<div><div class="flow-label">${label}</div><div class="flow">${keys.map(k=>`<button class="jump" data-jump="${k}">${NAMES[k]}</button>`).join('')}</div></div>`).join('');
+document.getElementById('jumps').addEventListener('click', e => { const j=e.target.closest('.jump'); if(j) go(j.dataset.jump, ORDER.indexOf(j.dataset.jump) < ORDER.indexOf(S.screen) ? 'pop':'push', {reset:true}); });
+document.getElementById('restart').addEventListener('click', () => { clearTimeout(scanTimer); hideNotif(); HIST = []; S = initial(); mount('tab'); });
+
+/* fit the phone to the window */
+const fit = document.getElementById('fit'), device = document.getElementById('device');
+function resize(){
+  const s = Math.min(1, (window.innerHeight - 40) / 860, (window.innerWidth - 32) / 407);
+  device.style.transform = `scale(${s})`;
+  fit.style.width = (403*s)+'px'; fit.style.height = (860*s)+'px';
+}
+window.addEventListener('resize', resize); resize();
+/* start screen from the URL hash (#scan, #inspection, ...). go() rather than
+   setting S.screen, so the scan timer and history behave as if tapped there */
+const START = decodeURIComponent(location.hash.slice(1));
+if(START && START!=='home' && ORDER.includes(START)) go(START,'tab'); else mount();
+
+</script>
+
+</body></html>

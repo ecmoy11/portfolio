@@ -1,0 +1,782 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0">
+<title>Gauge Fleet Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: SharePoint list anatomy (suite bar, site header, pivots, command bar, list, details pane), rebuilt in Gauge tokens */
+:root{
+  --bg:#F6F6F7; --surface:#FFFFFF; --ink:#1C1D1F; --muted:#6B6B73; --faint:#A1A1AA;
+  --border:#E4E4E7; --chip:#F4F4F5; --hover:#FAFAFA; --sel:#FFF8E1;
+  --yellow:#FEC524; --yellow-pale:#FFF8E1; --yellow-ink:#8F6B00;
+  --green:#16A34A; --green-pale:#F0FDF4; --red:#DC2626; --red-pale:#FEF2F2;
+  --suite:#1C1D1F; --suite-ink:#FFFFFF; --zebra:#F4F4F6; --bst:#0072EA; --bst-pale:#E6F1FD; --bst-ink:#005BBB; --sb:#D9D9DE; --sb-hover:#BDBDC4; color-scheme:light; --shadow:0 10px 40px rgba(28,29,31,.14);
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111214; --surface:#18191C; --ink:#EDEDEF; --muted:#9C9CA4; --faint:#6B6B73;
+  --border:#2A2B30; --chip:#24252A; --hover:#1E1F23; --sel:#2A2410;
+  --yellow-pale:#2E2610; --yellow-ink:#F5CF5A; --green:#4ADE80; --green-pale:#0F2619;
+  --red:#F87171; --red-pale:#2C1416; --zebra:#1F2024; --bst:#0072EA; --bst-pale:#0B2340; --bst-ink:#7DB6F5; --sb:#34353A; --sb-hover:#4A4B52; --suite:#0A0A0B; --shadow:0 10px 40px rgba(0,0,0,.5); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111214; --surface:#18191C; --ink:#EDEDEF; --muted:#9C9CA4; --faint:#6B6B73;
+  --border:#2A2B30; --chip:#24252A; --hover:#1E1F23; --sel:#2A2410;
+  --yellow-pale:#2E2610; --yellow-ink:#F5CF5A; --green:#4ADE80; --green-pale:#0F2619;
+  --red:#F87171; --red-pale:#2C1416; --zebra:#1F2024; --bst:#0072EA; --bst-pale:#0B2340; --bst-ink:#7DB6F5; --sb:#34353A; --sb-hover:#4A4B52; --suite:#0A0A0B; --shadow:0 10px 40px rgba(0,0,0,.5); color-scheme:dark}
+
+*{box-sizing:border-box}
+:root[data-theme="light"]{color-scheme:light}
+/* Soft scrollbars that follow the theme */
+*{scrollbar-width:thin;scrollbar-color:var(--sb) transparent}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--sb);border-radius:10px;border:3px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background-color:var(--sb-hover)}
+::-webkit-scrollbar-corner{background:transparent}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+.mono{font-family:var(--mono);font-size:12.5px;letter-spacing:-.01em}
+.num{font-variant-numeric:tabular-nums}
+
+/* Suite bar */
+.suite{background:var(--suite);color:var(--suite-ink);display:flex;align-items:center;gap:14px;padding:0 16px;height:48px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:-.01em}
+.logo-mark{width:26px;height:26px;border-radius:8px;background:var(--yellow);display:grid;place-items:center}
+.suite .crumb{color:#A1A1AA;font-weight:500}
+.suite-search{margin-left:auto;flex:0 1 360px;position:relative}
+.suite-search input{width:100%;height:32px;border-radius:8px;border:1px solid #3A3B40;background:#2A2B2F;color:#fff;padding:0 12px 0 32px;font:inherit}
+.suite-search input::placeholder{color:#A1A1AA}
+.suite-search svg{position:absolute;left:10px;top:9px}
+.me{width:30px;height:30px;border-radius:50%;background:#3A3B40;display:grid;place-items:center;font-size:12px;font-weight:600;flex:none}
+
+.wrap{padding-inline:16px;max-width:1480px;margin:0 auto}
+/* Site header */
+.site{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding-block:20px 0;flex-wrap:wrap}
+.site h1{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.site p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.pivots{display:flex;gap:4px;margin-top:14px;border-bottom:1px solid var(--border)}
+.pivot{background:none;border:0;padding:10px 12px 11px;font-weight:600;color:var(--muted);cursor:pointer;position:relative;display:flex;gap:8px;align-items:center}
+.pivot[aria-selected="true"]{color:var(--ink)}
+.pivot[aria-selected="true"]::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:var(--yellow)}
+.badge{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--yellow);color:#1C1D1F;font-size:11.5px;font-weight:700;display:inline-grid;place-items:center}
+.badge.bst{background:var(--bst);color:#fff}
+.pill.bstp{background:var(--bst-pale);color:var(--bst-ink)}
+button.stat.bsts{background:var(--bst-pale);border-color:color-mix(in srgb,var(--bst) 30%,var(--border));color:var(--bst-ink)}
+button.stat.bsts b{color:var(--bst-ink)}
+.mini.bstgo{background:var(--bst);border-color:var(--bst);color:#fff}
+
+/* Command bar */
+.cmd{display:flex;align-items:center;gap:4px;padding-block:10px;flex-wrap:wrap}
+.cbtn{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 10px;border-radius:8px;border:0;background:none;cursor:pointer;font-weight:500;white-space:nowrap}
+.cbtn:hover{background:var(--chip)}
+.cbtn.primary{background:var(--yellow);color:#1C1D1F;font-weight:600}
+.cbtn.primary:hover{filter:brightness(.96)}
+.sep{width:1px;height:20px;background:var(--border);margin:0 4px}
+.cmd .right{margin-left:auto;display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.viewsel{position:relative}
+.menu{position:absolute;z-index:30;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:6px;min-width:200px}
+.menu button{display:flex;width:100%;align-items:center;gap:8px;padding:8px 10px;border:0;background:none;border-radius:8px;cursor:pointer;text-align:left}
+.menu button:hover{background:var(--chip)}
+.menu .chk{width:16px;color:var(--yellow-ink)}
+.menu hr{border:0;border-top:1px solid var(--border);margin:4px}
+
+/* Summary + filters */
+.summary{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-block:4px 12px}
+.stat{display:flex;align-items:baseline;gap:6px;padding:6px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:13px;color:var(--muted)}
+.stat b{color:var(--ink);font-size:14px;font-variant-numeric:tabular-nums}
+button.stat{cursor:pointer}
+button.stat.alert{border-color:color-mix(in srgb,var(--red) 35%,var(--border));background:var(--red-pale);color:var(--red)}
+button.stat.alert b{color:var(--red)}
+button.stat.on-y{outline:2px solid var(--bst);outline-offset:-1px}
+button.stat.on{outline:2px solid var(--red);outline-offset:-1px}
+.seg{display:inline-flex;background:var(--chip);border-radius:10px;padding:3px;gap:2px;margin-left:auto;flex-wrap:wrap}
+.seg button{border:0;background:none;padding:5px 10px;border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+/* List */
+.listcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:32px}
+.scroller{overflow-x:auto}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:1080px}
+th{position:sticky;top:0;background:var(--surface);z-index:2;text-align:left;font-size:12px;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);padding:0;white-space:nowrap}
+th button{display:flex;align-items:center;gap:4px;width:100%;border:0;background:none;padding:11px 12px;cursor:pointer;font-weight:600;color:inherit;text-align:left}
+th button:hover{background:var(--hover);color:var(--ink)}
+th .arr{opacity:0;transition:opacity .15s}
+th button:hover .arr,th .arr.on{opacity:1}
+th.r button{justify-content:flex-end}
+td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+td.r{text-align:right}
+tbody tr.row{cursor:pointer}
+tbody tr.row:hover td{background:var(--hover)}
+tbody tr.row.active td{background:var(--sel)}
+tbody tr:last-child td{border-bottom:0}
+.dense td{padding-block:7px}
+.date b{font-weight:600;display:block;white-space:nowrap}
+.date span{color:var(--muted);font-size:12px}
+.pnum{font-weight:600;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.proj .pnum{display:block;font-size:14px;font-weight:600;color:var(--ink);overflow:visible}
+.phase{font-variant-numeric:tabular-nums}
+.proj span{color:var(--muted);font-size:12px;display:block;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.phase{display:inline-block;padding:2px 8px;border-radius:6px;background:var(--chip);font-size:12px;font-weight:600;white-space:nowrap}
+.person{display:flex;gap:8px;align-items:center;white-space:nowrap}
+.av{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:10.5px;font-weight:700;color:#1C1D1F;flex:none}
+.office{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.office i{width:7px;height:7px;border-radius:2px;display:inline-block}
+.veh .mono{display:block}
+.veh span{color:var(--muted);font-size:12px;white-space:nowrap}
+.work{max-width:320px;min-width:220px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink)}
+.dense .work{-webkit-line-clamp:1}
+.pill{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:12px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill.ok{color:var(--muted);background:none;padding-left:0;font-weight:500}
+.pill.flag{background:var(--red-pale);color:var(--red)}
+.pill.res{background:var(--chip);color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+.pill.pending{background:var(--yellow-pale);color:var(--yellow-ink)}
+.pill.approved{background:var(--green-pale);color:var(--green)}
+.pill.declined{background:var(--chip);color:var(--muted)}
+.pill.ent{background:var(--chip);color:var(--ink);font-weight:500}
+.pill.rent{background:var(--ink);color:var(--surface)}
+.pill.poolp{background:var(--chip);color:var(--ink);font-weight:500}
+.was{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.warn{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;color:var(--red);margin-top:2px}
+.conf{display:block;margin-top:4px;color:var(--muted);font-size:11.5px}
+.cars{display:flex;flex-direction:column;gap:8px}
+.car{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;padding:10px 12px;border:1px solid var(--border);border-radius:12px;cursor:pointer}
+.car:has(input:checked){border-color:var(--yellow);background:var(--yellow-pale)}
+.car.off{opacity:.55;cursor:not-allowed}
+.car input{accent-color:#C89A0E;margin:0}
+.car-tags{grid-column:2;display:flex;gap:6px;flex-wrap:wrap}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:1px 7px;border-radius:6px;background:var(--chip);color:var(--muted)}
+.tag.bad{background:var(--red-pale);color:var(--red)}
+.tag.ok{background:var(--green-pale);color:var(--green)}
+.inp{height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--ink);padding:0 10px;font-size:14px}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.more{color:var(--muted);font-size:12px;margin-left:4px}
+.grp td{background:var(--bg);font-weight:600;padding-block:8px;cursor:pointer;border-bottom:1px solid var(--border)}
+.grp td span{color:var(--muted);font-weight:500;margin-left:6px}
+.grp svg{vertical-align:-3px;margin-right:4px;transition:transform .15s}
+.grp.closed svg{transform:rotate(-90deg)}
+.acts{display:flex;gap:6px;justify-content:flex-end}
+.mini{height:28px;padding:0 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+.mini:hover{background:var(--chip)}
+.mini.go{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.empty{padding:48px 16px;text-align:center;color:var(--muted)}
+.note{max-width:220px;min-width:160px;color:var(--muted);font-size:13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.foot{display:flex;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--border);color:var(--muted);font-size:12.5px;flex-wrap:wrap;gap:8px}
+
+/* Details pane */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.18);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+.scrim.on{opacity:1;pointer-events:auto}
+.pane{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--surface);border-left:1px solid var(--border);box-shadow:var(--shadow);transform:translateX(102%);transition:transform .22s ease;z-index:50;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.pane.on{transform:none}
+.pane-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 20px 14px;border-bottom:1px solid var(--border)}
+.pane-h h2{margin:0;font-size:17px;letter-spacing:-.01em}
+.pane-h p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.x{width:32px;height:32px;border-radius:8px;border:0;background:none;cursor:pointer;display:grid;place-items:center;flex:none}
+.x:hover{background:var(--chip)}
+.pane-b{overflow:auto;padding:16px 20px 24px;display:flex;flex-direction:column;gap:18px;flex:1}
+.kv{display:grid;grid-template-columns:120px 1fr;gap:10px 12px;font-size:13.5px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;min-width:0}
+.sect h3{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:600}
+.box{background:var(--hover);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;font-size:13px}
+.checks div{display:flex;gap:7px;align-items:center}
+.issue{border:1px solid color-mix(in srgb,var(--red) 30%,var(--border));background:var(--red-pale);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.issue.done{background:var(--hover);border-color:var(--border)}
+.issue b{color:var(--red)}
+.issue.done b{color:var(--muted);text-decoration:line-through}
+.issue p{margin:0;font-size:13px}
+.issue .mini{align-self:flex-start}
+.odo{display:flex;align-items:center;gap:10px;font-variant-numeric:tabular-nums}
+.odo .bar{flex:1;height:4px;border-radius:2px;background:var(--border);position:relative}
+.odo .bar::after{content:"";position:absolute;inset:0;width:100%;border-radius:2px;background:var(--yellow)}
+.pane-f{display:flex;gap:8px;padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--border)}
+.pane-f .cbtn{flex:1;justify-content:center;border:1px solid var(--border);height:38px}
+.pane-f .cbtn.primary{border-color:transparent}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:10px;font-weight:500;opacity:0;transition:.2s;z-index:60;pointer-events:none;max-width:calc(100% - 32px)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* Suite buttons */
+.sbtn{position:relative;display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 10px;border-radius:8px;border:0;background:none;color:var(--suite-ink);cursor:pointer;font-weight:500;flex:none}
+.sbtn:hover{background:#2A2B2F}
+.sbtn.icon{width:32px;padding:0;justify-content:center}
+.sbtn.on{background:#2A2B2F}
+.ndot{position:absolute;top:5px;left:22px;width:9px;height:9px;border-radius:50%;background:var(--yellow);box-shadow:0 0 0 2px var(--suite)}
+.ndot::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--yellow);animation:ping 1.8s ease-out infinite}
+@keyframes ping{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.4);opacity:0}}
+.newbanner{display:flex;align-items:center;gap:10px;margin-top:16px;padding:10px 14px;border-radius:12px;background:var(--yellow-pale);color:var(--ink);font-size:13.5px;flex-wrap:wrap}
+.newbanner b{font-weight:600}
+.newbanner .mini{margin-left:auto}
+
+/* Weekly report */
+.wk-top{display:flex;align-items:center;gap:12px;padding-block:18px 14px;flex-wrap:wrap}
+.back{display:inline-flex;align-items:center;gap:6px;border:0;background:none;color:var(--muted);font-weight:500;cursor:pointer;padding:6px 8px 6px 2px;border-radius:8px}
+.back:hover{color:var(--ink)}
+.wk-nav{display:flex;align-items:center;gap:4px;margin-left:auto}
+.wk-nav button{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:grid;place-items:center}
+.wk-nav button:disabled{opacity:.35;cursor:default}
+.wk-nav select{height:32px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font:inherit;padding:0 8px}
+.wk-grid{display:grid;grid-template-columns:260px minmax(0,1fr);gap:20px;align-items:start;padding-bottom:40px}
+.paper{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 28px 22px;min-width:0}
+.paper-h{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:14px}
+.eyebrow{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.paper-h h2{margin:4px 0 2px;font-size:22px;letter-spacing:-.02em;text-wrap:balance}
+.paper-h p{margin:0;color:var(--muted);font-size:13px}
+.bigmi{text-align:right}
+.bigmi b{font-size:28px;letter-spacing:-.02em;display:block;font-variant-numeric:tabular-nums;line-height:1.1}
+.bigmi span{color:var(--muted);font-size:12.5px}
+.ph3{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:22px 0 8px}
+.ptbl{width:100%;border-collapse:collapse;min-width:0}
+.ptbl th{position:static;background:none;font-size:11.5px;padding:6px 8px;border-bottom:1px solid var(--border)}
+.ptbl td{padding:8px;border-bottom:1px solid var(--border);vertical-align:top}
+.ptbl tr:last-child td{border-bottom:0}
+.ptbl .tot td{border-top:2px solid var(--ink);font-weight:700}
+.ptbl td.r,.ptbl th.r{text-align:right}
+.trips{min-width:720px}
+.trips .cl th{border-bottom:0;padding-bottom:0;color:var(--ink);font-size:11px}
+.trips .cl th span{display:block;border-bottom:2px solid var(--yellow);padding-bottom:5px}
+.trips td.gap,.trips th.gap{width:28px;border:0;padding:0}
+.trips tr.z td{background:var(--zebra)}
+.trips tbody tr:not(.sub):hover td{background:var(--sel)}
+.trips tr.sub td{background:var(--bg);font-weight:600;border-bottom:1px solid var(--border)}
+.trips tr.sub td.gap{background:var(--bg)}
+.trips .desc{color:var(--ink);max-width:340px}
+.multi{display:inline-block;margin-left:6px;padding:0 6px;border-radius:5px;background:var(--chip);color:var(--muted);font-size:11px;font-weight:600}
+.pfoot{margin-top:18px;padding-top:10px;border-top:1px solid var(--border);color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.side{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px}
+.card h3{margin:0 0 4px;font-size:14px}
+.card p{margin:0;color:var(--muted);font-size:12.5px}
+.field{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--border);font-size:13.5px}
+.field:first-of-type{margin-top:10px}
+.field select{max-width:170px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font:inherit;font-size:13px;padding:0 6px}
+.sw{position:relative;width:38px;height:22px;flex:none}
+.sw input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.sw span{position:absolute;inset:0;border-radius:11px;background:var(--border);transition:.15s;pointer-events:none}
+.sw span::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.sw input:checked+span{background:var(--green)}
+.sw input:checked+span::after{transform:translateX(16px)}
+.sw input:focus-visible+span{outline:2px solid var(--yellow);outline-offset:2px}
+.next{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--hover);border:1px solid var(--border);font-size:12.5px;color:var(--muted)}
+.next b{color:var(--ink)}
+.card .cbtn{width:100%;justify-content:center;border:1px solid var(--border);height:38px;margin-top:10px}
+.card .cbtn.primary{border-color:transparent}
+.wl{display:flex;flex-direction:column;gap:6px;position:sticky;top:12px}
+.wl-h{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 4px 4px}
+.wl-item{display:flex;flex-direction:column;gap:5px;text-align:left;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);cursor:pointer}
+.wl-item:hover{background:var(--hover)}
+.wl-item.on{border-color:var(--yellow);box-shadow:inset 3px 0 0 var(--yellow)}
+.wl-item.cur{background:none;border-style:dashed;cursor:default}
+.wl-t{font-weight:600;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.wl-s{color:var(--muted);font-size:12.5px}
+.tag.newt{background:var(--yellow);color:#1C1D1F}
+.bstok{display:inline-flex;align-items:center;gap:4px;color:var(--green);font-size:12px;font-weight:600;white-space:nowrap}
+.bstno{color:var(--faint);font-size:12px;white-space:nowrap}
+.bstbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;padding:12px 14px;border-radius:12px;background:var(--hover);border:1px solid var(--border)}
+.bst-l{display:flex;flex-direction:column;gap:6px;min-width:200px;flex:1}
+.bst-l b{font-weight:600;font-size:13.5px}
+.prog{height:6px;border-radius:3px;background:var(--border);overflow:hidden;max-width:320px}
+.prog i{display:block;height:100%;background:var(--green);border-radius:3px;transition:width .25s}
+.bst-r{display:flex;gap:6px;flex-wrap:wrap}
+.trips td.chk,.trips th.chk{width:44px;text-align:center}
+.trips td.chk input{width:17px;height:17px;accent-color:var(--green);cursor:pointer;margin:2px 0 0}
+.trips tr.logged td:not(.gap){color:var(--muted)}
+@media (max-width:980px){.wk-grid{grid-template-columns:1fr}.wl{position:static;flex-direction:row;overflow-x:auto;padding-bottom:4px}.wl-h{display:none}.wl-item{flex:0 0 200px}.paper{padding:20px 16px}}
+@media print{
+  .suite,.wk-top,.side,#fleetView{display:none!important}
+  body,.paper{background:#fff!important;color:#000!important;border:0!important}
+  .wk-grid{display:block}
+}
+
+@media (max-width:720px){
+  .suite .crumb,.suite-search{display:none}
+  .sbtn .lbl{display:none}
+  .seg{margin-left:0}
+  .cbtn .lbl{display:none}
+  .kv{grid-template-columns:100px 1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="suite">
+  <div class="logo"><span class="logo-mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C1D1F" stroke-width="2.4" stroke-linecap="round"><path d="M4 16a8 8 0 1 1 16 0"/><path d="M12 16l4-5"/></svg></span>Gauge</div>
+  <span class="crumb">/ Fleet admin</span>
+  <label class="suite-search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search drivers, projects, vehicles" aria-label="Search this list"></label>
+  <button class="sbtn" id="weeklyBtn" title="Weekly mileage report"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg><span class="lbl">Weekly report</span><span class="ndot" id="ndot" hidden></span></button>
+  <button class="sbtn icon" id="themeBtn" aria-label="Switch theme"></button>
+  <span class="me" title="Fleet manager">FM</span>
+</header>
+
+<main class="wrap" id="weeklyView" hidden></main>
+<main class="wrap" id="fleetView">
+  <div class="site">
+    <div>
+      <h1>Fleet</h1>
+      <p>Vehicle reports and bookings across all Barge offices. Example data.</p>
+    </div>
+  </div>
+  <div id="banner"></div>
+  <div class="pivots" role="tablist">
+    <button class="pivot" role="tab" id="tab-reports" data-tab="reports" aria-selected="true">Reports <span class="badge bst" id="bstCount" title="Trips from finished weeks not logged in BST">0</span></button>
+    <button class="pivot" role="tab" id="tab-bookings" data-tab="bookings" aria-selected="false">Bookings <span class="badge" id="pendCount">0</span></button>
+  </div>
+
+  <div class="cmd">
+    <button class="cbtn primary" id="newBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="lbl" id="newLbl">New report</span></button>
+    <span class="sep"></span>
+    <button class="cbtn" id="csvBtn" title="Download the rows you see as a CSV that opens in Excel"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Export CSV</span></button>
+    <button class="cbtn" id="copyBtn" title="Copies the rows you see, ready to paste into Excel"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16M4 15h16M10 3v18"/></svg><span class="lbl">Copy for Excel</span></button>
+    <button class="cbtn" id="densBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span class="lbl" id="densLbl">Compact</span></button>
+    <div class="right">
+      <div class="viewsel">
+        <button class="cbtn" id="viewBtn" aria-haspopup="menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg><span id="viewLbl">All reports</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="menu" id="viewMenu" role="menu" hidden style="right:0;top:36px"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="listcard">
+    <div class="scroller"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+    <div class="foot"><span id="footL"></span><span id="footR"></span></div>
+  </div>
+</main>
+
+<div class="menu" id="colMenu" role="menu" hidden></div>
+<div class="scrim" id="scrim"></div>
+<aside class="pane" id="pane" aria-label="Details"></aside>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const OFFICES={Nashville:"#7C9CF5",Chattanooga:"#FEC524",Knoxville:"#F59E7C",Memphis:"#6CCB9A"};
+const PEOPLE={
+ "Priya Shah":"Nashville","Dan Whitfield":"Nashville","Alicia Gomez":"Nashville",
+ "Marcus Lee":"Chattanooga","Hannah Brooks":"Chattanooga","Tyler Nguyen":"Chattanooga",
+ "Jordan Price":"Knoxville","Megan Castillo":"Knoxville","Sam Okafor":"Knoxville",
+ "Renee Jackson":"Memphis","Chris Dawson":"Memphis"};
+const PROJ={
+ "3826104":"I-40 Bridge Rehabilitation","3819022":"Riverfront Greenway Ph. 2","3830517":"TVA Substation Upgrade",
+ "3824410":"Memphis Water Main Replacement","3821876":"CHA Airport Apron Expansion","3828093":"Knox County Schools HVAC"};
+const VEH={
+ "POOL-02":"2022 Ford Escape","POOL-03":"2021 Chevy Silverado","POOL-07":"2023 Ford F-150","POOL-09":"2020 Toyota Camry",
+ "POOL-11":"2022 Ford Explorer","POOL-12":"2023 Ford F-150","POOL-15":"2021 Ford Escape","POOL-16":"2022 Chevy Colorado",
+ "POOL-04":"2024 Toyota RAV4","POOL-08":"2022 Chevy Equinox","POOL-13":"2021 Toyota Tacoma","POOL-17":"2023 Ford Maverick",
+ "ENT-RENTAL":"Enterprise rental"};
+const VEH_OFFICE={"POOL-02":"Nashville","POOL-03":"Nashville","POOL-04":"Nashville","POOL-07":"Chattanooga","POOL-08":"Chattanooga","POOL-09":"Chattanooga","POOL-11":"Knoxville","POOL-12":"Knoxville","POOL-13":"Knoxville","POOL-15":"Memphis","POOL-16":"Memphis","POOL-17":"Memphis"};
+const CHECKS=["Tires","Lights","Fluids","Windshield","Body","Interior"];
+
+// date, project, phase, driver, vehicle, destination, odoStart, miles, work, [issue, check, driver note]
+const R=[
+["2026-10-07","3828093","04","Jordan Price","POOL-12","Farragut Middle School",48211,38,"Rooftop unit walkthrough with mechanical sub. Photographed curb adapters and duct penetrations for the RFI log.",["Check engine light on","Fluids","Came on near Pellissippi. Car drove fine but I stopped using it."]],
+["2026-10-06/2026-10-07","3826104","03","Marcus Lee","POOL-07","I-40 MM 386, Cookeville",61902,174,"Bearing replacement inspection on spans 4 and 5. Met TDOT inspector on site, collected field notes.",null],
+["2026-10-06","3824410","02","Renee Jackson","POOL-16","Poplar Ave & Highland St",33490,22,"Traffic control check before Monday's lane closure. Verified signage matches the MOT plan.",null],
+["2026-10-06","3830517","01","Priya Shah","POOL-02","TVA Gallatin Fossil Plant",27744,61,"Kickoff site visit. Walked the yard with TVA PM and confirmed survey control points.",["Tire pressure low (rear right)","Tires","TPMS warning on the way back. Aired up at the Gallatin Pilot."]],
+["2026-10-03","3821876","05","Hannah Brooks","POOL-09","Chattanooga Airport",88015,14,"Pavement core sampling with the geotech crew. Dropped samples at the lab on Amnicola.",null],
+["2026-10-03","3828093","04","Megan Castillo","POOL-11","Hardin Valley Academy",40122,29,"Punch list walk with the owner's rep. Logged 31 items, mostly ceiling grid and diffusers.",null],
+["2026-10-02","3819022","06","Tyler Nguyen","POOL-07","Riverwalk at Ross's Landing",61770,9,"Lighting pole foundation inspection. Two bases need re-pour per spec 03 30 00.",null],
+["2026-10-01/2026-10-02","3826104","03","Dan Whitfield","ENT-RENTAL","I-40 MM 386, Cookeville",null,162,"Owner progress meeting in Cookeville. Presented the schedule recovery plan.",null],
+["2026-10-01","3824410","02","Chris Dawson","POOL-15","Memphis Light, Gas & Water HQ",50388,11,"Utility coordination meeting. Got markups for the 24-inch main relocation.",["Windshield chip","Windshield","Small chip passenger side, about dime size. Probably from the gravel lot."]],
+["2026-10-01","3830517","01","Alicia Gomez","POOL-03","TVA Gallatin Fossil Plant",71230,58,"Topo survey support. Hauled GPS rover and tripods for the survey crew.",null],
+["2026-09-30","3828093","03","Sam Okafor","POOL-12","Powell Middle School",48140,31,"Commissioning witness for AHU-2. Functional test passed with two minor deficiencies.",null],
+["2026-09-30","3821876","05","Marcus Lee","POOL-07","Chattanooga Airport",61740,18,"Weekly OAC meeting and apron joint sealing observation.",null],
+["2026-09-29","3826104","02","Priya Shah","POOL-02","TDOT Region 3, Nashville",27690,16,"Plan review meeting on the deck overlay alternates.",null],
+["2026-09-29","3819022","06","Hannah Brooks","POOL-09","Riverwalk at Ross's Landing",87990,8,"Concrete placement observation on the overlook slab. Pulled cylinders.",["Wiper blades streaking","Windshield","Driver side wiper leaves a smear. Hard to see in the rain."]],
+["2026-09-26","3824410","01","Renee Jackson","POOL-16","Shelby County Engineering",33420,19,"Permit pickup and pre-con with the county inspector.",null],
+["2026-09-26","3828093","03","Jordan Price","POOL-11","Farragut Middle School",40070,36,"Ductwork rough-in observation. Flagged a clearance conflict with the sprinkler main.",null],
+["2026-09-24/2026-09-26","3830517","01","Dan Whitfield","POOL-03","TVA Gallatin Fossil Plant",71150,62,"Geotech boring layout with the drill crew.",["Passenger door sticks","Body","Have to pull hard to open it from inside."]],
+["2026-09-24/2026-09-25","3826104","02","Tyler Nguyen","POOL-07","I-40 MM 386, Cookeville",61552,170,"Field verification of existing bearing elevations for the shop drawings.",null],
+["2026-09-23","3821876","04","Hannah Brooks","POOL-09","Chattanooga Airport",87968,15,"FAA inspector walk of the temporary taxiway markings.",null],
+["2026-09-22","3824410","01","Chris Dawson","POOL-15","Poplar Ave & Highland St",50350,13,"Potholing observation to locate the existing gas line.",null],
+["2026-09-22","3828093","03","Megan Castillo","POOL-11","Hardin Valley Academy",40010,27,"Controls submittal review meeting with the school district facilities team.",null],
+["2026-09-19","3819022","05","Marcus Lee","POOL-07","Riverwalk at Ross's Landing",61530,10,"Final walk of the Phase 05 boardwalk with Parks & Rec.",null],
+["2026-09-18","3830517","01","Alicia Gomez","POOL-02","TVA Gallatin Fossil Plant",27620,60,"Site photo documentation for the existing conditions report.",null],
+];
+const reports=R.map((r,i)=>({id:"R-"+(1201+R.length-i),date:r[0].split("/")[0],end:r[0].split("/")[1]||r[0],project:r[1],phase:r[2],driver:r[3],office:PEOPLE[r[3]],vehicle:r[4],dest:r[5],odo:r[6],miles:r[7],work:r[8],
+  issue:r[9]?{text:r[9][0],check:r[9][1],note:r[9][2],resolved:i>10}:null}));
+// Older weeks for the archive: same crews, earlier dates
+(()=>{const src=reports.filter(r=>r.end>="2026-09-21"&&r.end<="2026-09-27");let n=1100;
+  [14,21,28].forEach((sh,k)=>src.forEach((r,x)=>{const sd=d=>{const t=new Date(d+"T12:00:00");t.setDate(t.getDate()-sh);return t.toISOString().slice(0,10)};
+    reports.push({...r,id:"R-"+(n--),date:sd(r.date),end:sd(r.end),miles:Math.max(6,Math.round(r.miles*(0.8+((x+k)%5)*0.1))),odo:r.odo?r.odo-sh*40:null,issue:null})}))})();
+// BST: older weeks fully logged, last week partly, this week not yet
+(()=>{const lw=reports.filter(r=>r.end>="2026-09-28"&&r.end<="2026-10-04").sort((a,b)=>a.date<b.date?-1:1).slice(0,4);
+  reports.forEach(r=>{r.bst=r.end<"2026-09-28"||lw.includes(r)})})();
+
+// start, end, requested on, driver, type, Enterprise pickup (rentals), requested vehicle, project, phase, destination, note, status, assigned car or confirmation #
+// Pool cars need approval. Rentals don't: the fleet manager books them with Enterprise.
+const B=[
+["2026-10-09","2026-10-09","2026-10-07","Sam Okafor","pool","","POOL-12","3828093","04","Powell Middle School","Need the truck, hauling ladders.","pending"],
+["2026-10-13","2026-10-14","2026-10-07","Priya Shah","ent","Enterprise BNA","Midsize SUV","3826104","03","I-40 MM 386, Cookeville","Overnight in Cookeville.","tobook"],
+["2026-10-10","2026-10-10","2026-10-08","Renee Jackson","pool","","POOL-15","3824410","02","Poplar Ave & Highland St","","pending"],
+["2026-10-15","2026-10-15","2026-10-06","Tyler Nguyen","pool","","POOL-07","3819022","06","Riverwalk at Ross's Landing","","pending"],
+["2026-10-09","2026-10-09","2026-10-08","Alicia Gomez","ent","Enterprise Downtown","Minivan","3830517","01","TVA Gallatin Fossil Plant","Taking 5 people from the survey crew.","tobook"],
+["2026-10-09","2026-10-09","2026-10-05","Hannah Brooks","pool","","POOL-09","3821876","05","Chattanooga Airport","","approved"],
+["2026-10-12","2026-10-12","2026-10-06","Jordan Price","pool","","POOL-12","3828093","04","Farragut Middle School","","approved","POOL-11"],
+["2026-10-14","2026-10-16","2026-10-02","Dan Whitfield","ent","Enterprise West End","Pickup truck with hitch","3830517","02","TVA Gallatin Fossil Plant","Need a hitch for the survey trailer.","booked","EP-48213"],
+["2026-10-20","2026-10-20","2026-10-07","Megan Castillo","pool","","POOL-13","3828093","04","Hardin Valley Academy","","approved"],
+["2026-10-10","2026-10-10","2026-10-04","Chris Dawson","pool","","POOL-16","3824410","02","MLGW HQ","","declined"],
+["2026-10-21","2026-10-22","2026-10-08","Marcus Lee","ent","Enterprise CHA","Any sedan","3826104","03","I-40 MM 386, Cookeville","Airport pickup, flying back from the TDOT conference.","tobook"],
+["2026-10-07","2026-10-07","2026-10-03","Marcus Lee","pool","","POOL-07","3826104","03","I-40 MM 386, Cookeville","","approved"],
+];
+const bookings=B.map((b,i)=>({id:"B-"+(480+i),start:b[0],end:b[1],requested:b[2],driver:b[3],office:PEOPLE[b[3]],type:b[4],pickup:b[4]==="ent"?b[5]:PEOPLE[b[3]]+" office",want:b[6],project:b[7],phase:b[8],dest:b[9],note:b[10],status:b[11],
+  assigned:b[4]==="pool"?(b[12]||b[6]):null,conf:b[4]==="ent"?(b[12]||""):""}));
+const STATUS={pending:["pending","Needs approval"],tobook:["pending","Needs booking"],approved:["approved","Approved"],booked:["approved","Booked"],declined:["declined","Declined"]};
+const needsBst=r=>!r.bst&&r.end<"2026-10-05"; // finished weeks only; this week can't be logged yet
+const needsAction=b=>b.status==="pending"||b.status==="tobook";
+const openIssueOn=v=>reports.find(x=>x.vehicle===v&&x.issue&&!x.issue.resolved);
+const busyOn=(v,b)=>bookings.find(o=>o!==b&&o.type==="pool"&&o.status==="approved"&&o.assigned===v&&o.start<=b.end&&o.end>=b.start);
+
+const TODAY="2026-10-08";
+const assignPick={};
+const st={tab:"reports",view:{reports:"all",bookings:"action"},office:"All",q:"",sort:{reports:{k:"date",d:-1},bookings:{k:"start",d:1}},group:{reports:null,bookings:null},closed:new Set(),dense:false,sel:null,issuesOnly:false};
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const D=s=>new Date(s+"T12:00:00");
+const fmt=(s,o)=>D(s).toLocaleDateString("en-US",o);
+const short=s=>fmt(s,{month:"short",day:"numeric"});
+const dow=s=>fmt(s,{weekday:"short"});
+const ini=n=>n.split(" ").map(x=>x[0]).join("");
+const avColor=n=>{const c=["#FEC524","#C7D2FE","#FBCFE8","#BBF7D0","#FED7AA","#BAE6FD","#E9D5FF"];let h=0;for(const ch of n)h=(h*31+ch.charCodeAt(0))%997;return c[h%c.length]};
+const phaseTxt=p=>/^\d+$/.test(p)?(p.length<=2?p.padStart(2,"0")+"00":p.padStart(4,"0")):p; // 4-digit phase code, the column header says "Phase"
+const person=n=>`<span class="person"><span class="av" style="background:${avColor(n)}">${ini(n)}</span>${esc(n)}</span>`;
+const office=o=>`<span class="office"><i style="background:${OFFICES[o]}"></i>${o}</span>`;
+const nDays=(s,e)=>Math.round((D(e)-D(s))/864e5)+1;
+const rangeTxt=(s,e)=>s===e?short(s):(D(s).getMonth()===D(e).getMonth()?short(s)+" – "+D(e).getDate():short(s)+" – "+short(e));
+const dateCell=(s,e,allDay)=>`<div class="date"><b>${rangeTxt(s,e)}</b><span>${s===e?dow(s)+(allDay?" · all day":""):dow(s)+" – "+dow(e)+" · "+nDays(s,e)+" days"}</span></div>`;
+const daysAgo=s=>Math.round((D(TODAY)-D(s))/864e5);
+const ICON={chev:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg>',
+ up:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 19V5M6 11l6-6 6 6"/></svg>',
+ down:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M6 13l6 6 6-6"/></svg>',
+ flag:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 21V4h11l-2 4 2 4H5"/></svg>',
+ check:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m5 12 5 5 9-10"/></svg>',
+ x:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>'};
+
+/* Columns: key, label, cell renderer, sort value, groupable, csv value */
+const COLS={
+ reports:[
+  {k:"date",l:"Trip dates",cell:r=>dateCell(r.date,r.end),v:r=>r.date,csv:r=>r.date+(r.end!==r.date?" to "+r.end:"")},
+  {k:"project",l:"Project #",g:1,cell:r=>`<div class="proj"><span class="pnum">${r.project}</span><span>${esc(PROJ[r.project])}</span></div>`,v:r=>r.project,gl:r=>r.project+" · "+PROJ[r.project],csv:r=>r.project},
+  {k:"phase",l:"Phase",g:1,cell:r=>`<span class="phase">${phaseTxt(r.phase)}</span>`,v:r=>r.phase,gl:r=>phaseTxt(r.phase),csv:r=>phaseTxt(r.phase)},
+  {k:"driver",l:"Driver",g:1,cell:r=>person(r.driver),v:r=>r.driver,csv:r=>r.driver},
+  {k:"office",l:"Reports to",g:1,cell:r=>office(r.office),v:r=>r.office,csv:r=>r.office},
+  {k:"vehicle",l:"Vehicle",g:1,cell:r=>`<div class="veh"><span class="mono">${r.vehicle==="ENT-RENTAL"?"Enterprise":r.vehicle}</span><span>${r.vehicle==="ENT-RENTAL"?"Rental":VEH[r.vehicle]}</span></div>`,v:r=>r.vehicle,gl:r=>r.vehicle==="ENT-RENTAL"?"Enterprise rental":r.vehicle+" · "+VEH[r.vehicle],csv:r=>r.vehicle==="ENT-RENTAL"?"Enterprise rental":r.vehicle+" "+VEH[r.vehicle]},
+  {k:"work",l:"Work description",cell:r=>`<div class="work">${esc(r.work)}</div>`,v:r=>r.work,csv:r=>r.work},
+  {k:"issue",l:"Car issues",cell:r=>!r.issue?`<span class="pill ok">None</span>`:r.issue.resolved?`<span class="pill res">${esc(r.issue.text)}</span>`:`<span class="pill flag">${ICON.flag}${esc(r.issue.text)}</span>`,v:r=>r.issue?(r.issue.resolved?1:2):0,csv:r=>r.issue?r.issue.text+(r.issue.resolved?" (resolved)":""):""},
+  {k:"miles",l:"Miles",r:1,cell:r=>`<span class="num">${r.miles}</span>`,v:r=>r.miles,csv:r=>r.miles},
+  {k:"bst",l:"BST",g:1,cell:r=>r.bst?`<span class="bstok" title="Logged in BST">${ICON.check}Logged</span>`:`<span class="bstno">Not yet</span>`,v:r=>r.bst?1:0,gl:r=>r.bst?"Logged in BST":"Not in BST yet",csv:r=>r.bst?"Logged":""},
+ ],
+ bookings:[
+  {k:"status",l:"Status",g:1,cell:b=>`<span class="pill ${STATUS[b.status][0]}"><span class="dot"></span>${STATUS[b.status][1]}</span>${b.conf?`<span class="conf mono">${esc(b.conf)}</span>`:""}`,v:b=>["pending","tobook","approved","booked","declined"].indexOf(b.status),gl:b=>STATUS[b.status][1],csv:b=>STATUS[b.status][1]+(b.conf?" "+b.conf:"")},
+  {k:"start",l:"Trip dates",cell:b=>dateCell(b.start,b.end,true),v:b=>b.start,csv:b=>b.start+(b.end!==b.start?" to "+b.end:"")},
+  {k:"project",l:"Project #",g:1,cell:b=>`<div class="proj"><span class="pnum">${b.project}</span><span>${esc(PROJ[b.project])}</span></div>`,v:b=>b.project,gl:b=>b.project+" · "+PROJ[b.project],csv:b=>b.project},
+  {k:"phase",l:"Phase",g:1,cell:b=>`<span class="phase">${phaseTxt(b.phase)}</span>`,v:b=>b.phase,gl:b=>phaseTxt(b.phase),csv:b=>phaseTxt(b.phase)},
+  {k:"driver",l:"Driver",g:1,cell:b=>person(b.driver),v:b=>b.driver,csv:b=>b.driver},
+  {k:"office",l:"Reports to",g:1,cell:b=>office(b.office),v:b=>b.office,csv:b=>b.office},
+  {k:"type",l:"Type",g:1,cell:b=>b.type==="ent"?`<span class="pill rent">Rental</span>`:`<span class="pill poolp">Pool car</span>`,v:b=>b.type,gl:b=>b.type==="ent"?"Rental":"Pool car",csv:b=>b.type==="ent"?"Rental":"Pool car"},
+  {k:"pickup",l:"Pickup",g:1,cell:b=>`<span style="white-space:nowrap">${esc(b.pickup)}</span>`,v:b=>b.pickup,csv:b=>b.pickup},
+  {k:"want",l:"Requested vehicle",g:1,cell:b=>b.type==="ent"?`<div class="veh"><span>${esc(b.want)}</span></div>`:
+     (b.assigned!==b.want?`<div class="veh"><span class="mono">${b.assigned}</span><span>${VEH[b.assigned]}</span><span class="was">Asked for ${b.want}</span></div>`:`<div class="veh"><span class="mono">${b.want}</span><span>${VEH[b.want]}</span>${needsAction(b)&&openIssueOn(b.want)?`<span class="warn">${ICON.flag}Open issue</span>`:""}</div>`),
+     v:b=>b.want,csv:b=>b.type==="ent"?b.want:b.want+" "+VEH[b.want]+(b.assigned!==b.want?" (assigned "+b.assigned+")":"")},
+  {k:"dest",l:"Destination",cell:b=>`<div class="work" style="min-width:150px">${esc(b.dest)}</div>`,v:b=>b.dest,csv:b=>b.dest},
+  {k:"note",l:"Note",cell:b=>b.note?`<div class="note">${esc(b.note)}</div>`:`<span style="color:var(--faint)">—</span>`,v:b=>b.note,csv:b=>b.note},
+  {k:"_a",l:"",nosort:1,cell:b=>b.status==="pending"?`<div class="acts"><button class="mini" data-act="decline" data-id="${b.id}">Decline</button><button class="mini" data-act="swap" data-id="${b.id}">Swap car</button><button class="mini go" data-act="approve" data-id="${b.id}">Approve</button></div>`:b.status==="tobook"?`<div class="acts"><button class="mini go" data-act="tobook" data-id="${b.id}">Book rental</button></div>`:"",csv:null},
+ ]};
+
+const VIEWS={
+ reports:[{k:"all",l:"All reports"},{k:"issues",l:"Open car issues"},{k:"week",l:"Last 7 days"},{k:"nobst",l:"Not in BST yet"},{k:"byoffice",l:"Grouped by office",group:"office"},{k:"byproject",l:"Grouped by project",group:"project"}],
+ bookings:[{k:"action",l:"Needs action"},{k:"upcoming",l:"Upcoming"},{k:"rentals",l:"Rentals"},{k:"all",l:"All bookings"},{k:"byoffice",l:"Grouped by office",group:"office"}]};
+
+function rows(){
+  const t=st.tab, v=st.view[t], q=st.q.trim().toLowerCase();
+  let list=t==="reports"?reports.slice():bookings.slice();
+  if(st.office!=="All")list=list.filter(r=>r.office===st.office);
+  if(t==="reports"){
+    if(v==="issues"||st.issuesOnly)list=list.filter(r=>r.issue&&!r.issue.resolved);
+    if(v==="week")list=list.filter(r=>daysAgo(r.end)<=7);
+    if(v==="nobst")list=list.filter(needsBst);
+  }else{
+    if(v==="action")list=list.filter(needsAction);
+    if(v==="rentals")list=list.filter(b=>b.type==="ent");
+    if(v==="upcoming")list=list.filter(b=>b.end>=TODAY&&b.status!=="declined");
+  }
+  if(q)list=list.filter(r=>JSON.stringify([r,PROJ[r.project],VEH[r.vehicle]||""]).toLowerCase().includes(q));
+  const s=st.sort[t], col=COLS[t].find(c=>c.k===s.k);
+  list.sort((a,b)=>{const x=col.v(a),y=col.v(b);return (x>y?1:x<y?-1:0)*s.d});
+  return list;
+}
+
+function renderHead(){
+  const t=st.tab,s=st.sort[t];
+  $("#tbl thead").innerHTML="<tr>"+COLS[t].map(c=>c.nosort?`<th></th>`:
+   `<th class="${c.r?"r":""}"><button data-col="${c.k}" aria-haspopup="menu">${c.l}<span class="arr ${s.k===c.k?"on":""}">${s.k===c.k?(s.d>0?ICON.up:ICON.down):ICON.chev}</span></button></th>`).join("")+"</tr>";
+}
+
+function renderBody(){
+  const t=st.tab, list=rows(), cols=COLS[t], g=st.group[t];
+  const rowHtml=r=>`<tr class="row ${st.sel===r.id?"active":""}" data-id="${r.id}" tabindex="0">`+cols.map(c=>`<td class="${c.r?"r":""}">${c.cell(r)}</td>`).join("")+"</tr>";
+  let html="";
+  if(!list.length){html=`<tr><td colspan="${cols.length}"><div class="empty">${t==="bookings"&&st.view.bookings==="action"?"Nothing waiting on you. Every request is approved or booked.":"No rows match. Try another office or clear the search."}</div></td></tr>`}
+  else if(g){
+    const col=cols.find(c=>c.k===g), groups=new Map();
+    list.forEach(r=>{const key=(col.gl||col.v)(r);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(r)});
+    [...groups.keys()].sort().forEach(key=>{
+      const items=groups.get(key), closed=st.closed.has(key);
+      const extra=t==="reports"?` · ${items.reduce((a,r)=>a+r.miles,0)} mi`+(items.some(r=>r.issue&&!r.issue.resolved)?` · ${items.filter(r=>r.issue&&!r.issue.resolved).length} open issue${items.filter(r=>r.issue&&!r.issue.resolved).length>1?"s":""}`:""):"";
+      html+=`<tr class="grp ${closed?"closed":""}" data-g="${esc(key)}"><td colspan="${cols.length}">${ICON.chev}${col.l}: ${esc(key)}<span>${items.length}${extra}</span></td></tr>`;
+      if(!closed)html+=items.map(rowHtml).join("");
+    });
+  }else html=list.map(rowHtml).join("");
+  $("#tbl tbody").innerHTML=html;
+  $("#tbl").classList.toggle("dense",st.dense);
+  const total=t==="reports"?reports.length:bookings.length;
+  $("#footL").textContent=`Showing ${list.length} of ${total} ${t}`;
+  $("#footR").textContent=t==="reports"?`${list.reduce((a,r)=>a+r.miles,0).toLocaleString()} miles in view`:`${list.filter(needsAction).length} need action in view`;
+}
+
+function renderSummary(){
+  const t=st.tab;
+  const seg=`<div class="seg" role="group" aria-label="Office">`+["All",...Object.keys(OFFICES)].map(o=>`<button data-office="${o}" aria-pressed="${st.office===o}">${o==="All"?"All offices":o}</button>`).join("")+`</div>`;
+  let s="";
+  if(t==="reports"){
+    const base=st.office==="All"?reports:reports.filter(r=>r.office===st.office);
+    const open=base.filter(r=>r.issue&&!r.issue.resolved).length;
+    const wk=base.filter(r=>daysAgo(r.end)<=7);
+    s=`<span class="stat"><b>${wk.length}</b> trips this week</span><span class="stat"><b>${wk.reduce((a,r)=>a+r.miles,0)}</b> miles this week</span>`+
+      `<button class="stat ${open?"alert":""} ${st.issuesOnly?"on":""}" id="issuesStat" aria-pressed="${st.issuesOnly}"><b>${open}</b> open car issue${open===1?"":"s"}</button>`+
+      `<button class="stat bsts ${st.view.reports==="nobst"?"on-y":""}" id="bstStat"><b>${base.filter(needsBst).length}</b> not logged in BST</button>`;
+  }else{
+    const base=st.office==="All"?bookings:bookings.filter(b=>b.office===st.office);
+    const p=base.filter(b=>b.status==="pending"),r=base.filter(b=>b.status==="tobook"),all=[...p,...r];
+    const oldest=all.length?Math.max(...all.map(b=>daysAgo(b.requested))):0;
+    s=`<span class="stat"><b>${p.length}</b> pool car${p.length===1?"":"s"} to approve</span><span class="stat"><b>${r.length}</b> rental${r.length===1?"":"s"} to book</span>`+(all.length?`<span class="stat">Oldest request <b>${oldest}d</b></span>`:"")+
+      `<span class="stat"><b>${base.filter(b=>(b.status==="approved"||b.status==="booked")&&b.end>=TODAY).length}</b> confirmed upcoming</span>`;
+  }
+  $("#summary").innerHTML=s+seg;
+  $("#pendCount").textContent=bookings.filter(needsAction).length;
+  $("#pendCount").hidden=!bookings.some(needsAction);
+  const nb=reports.filter(needsBst).length;$("#bstCount").textContent=nb;$("#bstCount").hidden=!nb;
+}
+
+function renderViews(){
+  const t=st.tab, cur=VIEWS[t].find(v=>v.k===st.view[t]);
+  $("#viewLbl").textContent=cur.l;
+  $("#viewMenu").innerHTML=VIEWS[t].map(v=>`<button role="menuitemradio" data-view="${v.k}"><span class="chk">${v.k===cur.k?ICON.check:""}</span>${v.l}</button>`).join("");
+  $("#newLbl").textContent=t==="reports"?"New report":"New booking";
+}
+
+function render(){renderViews();renderSummary();renderHead();renderBody();if(st.sel)renderPane()}
+
+/* Details pane */
+function renderPane(){
+  const t=st.sel[0]==="R"?"reports":"bookings";
+  const r=(t==="reports"?reports:bookings).find(x=>x.id===st.sel); if(!r)return closePane();
+  let h,b,f;
+  if(t==="reports"){
+    h=`<div><h2>${r.end===r.date?fmt(r.date,{weekday:"long",month:"long",day:"numeric"}):rangeTxt(r.date,r.end)+" · "+nDays(r.date,r.end)+"-day trip"}</h2><p>${r.id} · submitted by ${esc(r.driver)}</p></div>`;
+    const ck=CHECKS.map(c=>{const bad=r.issue&&r.issue.check===c&&!r.issue.resolved;return `<div style="color:${bad?"var(--red)":"var(--ink)"}">${bad?ICON.flag:`<span style="color:var(--green)">${ICON.check}</span>`}${c}</div>`}).join("");
+    b=`<dl class="kv">
+      <dt>Project</dt><dd><span class="pnum">${r.project}</span><br>${esc(PROJ[r.project])}</dd>
+      <dt>Phase</dt><dd><span class="phase">${phaseTxt(r.phase)}</span></dd>
+      <dt>Driver</dt><dd>${person(r.driver)}</dd>
+      <dt>Reports to</dt><dd>${office(r.office)} office</dd>
+      <dt>Vehicle</dt><dd>${r.vehicle==="ENT-RENTAL"?"Enterprise rental":`<span class="mono">${r.vehicle}</span> · ${VEH[r.vehicle]}`}</dd>
+      <dt>Destination</dt><dd>${esc(r.dest)}</dd>
+    </dl>
+    <label class="field" style="margin:0;border-top:0;border-bottom:1px solid var(--border);padding-top:0"><span><b style="font-weight:600">Logged in BST</b><br><span style="color:var(--muted);font-size:12.5px">${r.bst?"Mileage entered for this trip":"Not entered yet"}</span></span><span class="sw"><input type="checkbox" class="bstchk" data-id="${r.id}" ${r.bst?"checked":""}><span></span></span></label>
+    <div class="sect"><h3>Work performed</h3><div class="box">${esc(r.work)}</div></div>
+    ${r.issue?`<div class="sect"><h3>Car issue</h3><div class="issue ${r.issue.resolved?"done":""}"><b>${esc(r.issue.text)}</b><p>“${esc(r.issue.note)}”</p>${r.issue.resolved?`<p style="color:var(--muted)">Marked resolved by fleet manager</p><button class="mini" data-act="reopen" data-id="${r.id}">Reopen</button>`:`<button class="mini go" data-act="resolve" data-id="${r.id}">Mark resolved</button>`}</div></div>`:""}
+    <div class="sect"><h3>Mileage</h3>${r.odo?`<div class="odo"><span class="mono">${r.odo.toLocaleString()}</span><span class="bar"></span><span class="mono">${(r.odo+r.miles).toLocaleString()}</span></div><p style="margin:6px 0 0;color:var(--muted);font-size:13px">${r.miles} miles driven</p>`:`<p style="margin:0">${r.miles} miles, reported by driver (rental)</p>`}</div>
+    <div class="sect"><h3>Pre-trip inspection</h3><div class="checks">${ck}</div></div>`;
+    f=`<button class="cbtn" data-act="copyrow" data-id="${r.id}">Copy row</button>`;
+  }else{
+    h=`<div><h2>${rangeTxt(r.start,r.end)}${r.end!==r.start?" · "+nDays(r.start,r.end)+" days":""}</h2><p>${r.id} · requested ${short(r.requested)} (${daysAgo(r.requested)===0?"today":daysAgo(r.requested)+"d ago"})</p></div>`;
+    const pick=assignPick[r.id]||r.assigned;
+    let act="";
+    if(r.status==="pending"){
+      const cars=Object.keys(VEH_OFFICE).filter(v=>VEH_OFFICE[v]===r.office);
+      act=`<div class="sect"><h3>Assign a vehicle</h3><div class="cars">`+cars.map(v=>{const iss=openIssueOn(v),busy=busyOn(v,r);
+        return `<label class="car ${busy?"off":""}"><input type="radio" name="assign" value="${v}" ${v===pick?"checked":""} ${busy?"disabled":""}><span class="car-t"><span class="mono">${v}</span> · ${VEH[v]}</span><span class="car-tags">${v===r.want?`<span class="tag">Requested</span>`:""}${iss?`<span class="tag bad">${ICON.flag}${esc(iss.issue.text)}</span>`:""}${busy?`<span class="tag">Booked by ${esc(busy.driver.split(" ")[0])}</span>`:(!iss?`<span class="tag ok">Available</span>`:"")}</span></label>`}).join("")+`</div></div>`;
+    }else if(r.status==="tobook"){
+      act=`<div class="sect"><h3>Book with Enterprise</h3><div class="box" style="display:flex;flex-direction:column;gap:10px"><p style="margin:0;font-size:13px">Reserve a <b>${esc(r.want)}</b> at <b>${esc(r.pickup)}</b> for ${rangeTxt(r.start,r.end)} on Barge's account, then add the confirmation number. ${esc(r.driver.split(" ")[0])} gets it in the app.</p><label style="display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)">Enterprise confirmation #<input id="confNo" class="inp mono" placeholder="EP-00000" autocomplete="off"></label></div></div>`;
+    }
+    b=`<div><span class="pill ${STATUS[r.status][0]}"><span class="dot"></span>${STATUS[r.status][1]}</span>${r.conf?`<span class="conf mono">${esc(r.conf)}</span>`:""}</div>
+    <dl class="kv">
+      <dt>Type</dt><dd>${r.type==="ent"?`<span class="pill rent">Rental</span> no approval needed`:`<span class="pill poolp">Pool car</span>`}</dd>
+      <dt>Pickup</dt><dd>${esc(r.pickup)}</dd>
+      <dt>Requested</dt><dd>${r.type==="ent"?esc(r.want):`<span class="mono">${r.want}</span> · ${VEH[r.want]}`}</dd>
+      ${r.type==="pool"&&r.status!=="pending"&&r.status!=="declined"?`<dt>Assigned</dt><dd><span class="mono">${r.assigned}</span> · ${VEH[r.assigned]}${r.assigned!==r.want?` <span class="was" style="display:inline">swapped</span>`:""}</dd>`:""}
+      <dt>Project</dt><dd><span class="pnum">${r.project}</span><br>${esc(PROJ[r.project])}</dd>
+      <dt>Phase</dt><dd><span class="phase">${phaseTxt(r.phase)}</span></dd>
+      <dt>Driver</dt><dd>${person(r.driver)}</dd>
+      <dt>Reports to</dt><dd>${office(r.office)} office</dd>
+      <dt>Destination</dt><dd>${esc(r.dest)}</dd>
+    </dl>
+    ${r.note?`<div class="sect"><h3>Note for fleet manager</h3><div class="box">${esc(r.note)}</div></div>`:""}
+    ${act}`;
+    f=r.status==="pending"?`<button class="cbtn" data-act="decline" data-id="${r.id}">Decline</button><button class="cbtn primary" data-act="approve" data-id="${r.id}">${pick===r.want?"Approve "+r.want:"Approve with "+pick}</button>`
+     :r.status==="tobook"?`<button class="cbtn primary" data-act="book" data-id="${r.id}">Mark as booked</button>`
+     :`<button class="cbtn" data-act="copyrow" data-id="${r.id}">Copy row</button>`;
+  }
+  $("#pane").innerHTML=`<div class="pane-h">${h}<button class="x" data-act="close" aria-label="Close details">${ICON.x}</button></div><div class="pane-b">${b}</div><div class="pane-f">${f}</div>`;
+  $("#pane").classList.add("on"); if(matchMedia("(max-width:900px)").matches)$("#scrim").classList.add("on");
+}
+function openPane(id){st.sel=id;renderBody();renderPane()}
+function closePane(){st.sel=null;$("#pane").classList.remove("on");$("#scrim").classList.remove("on");renderBody()}
+
+/* Clipboard */
+let tt;function toast(m){const e=$("#toast");e.textContent=m;e.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("on"),2400)}
+function tsv(list){const cols=COLS[st.tab].filter(c=>c.csv);const clean=v=>String(v??"").replace(/[\t\n]/g," ");
+  return [cols.map(c=>c.l).join("\t"),...list.map(r=>cols.map(c=>clean(c.csv(r))).join("\t"))].join("\n")}
+async function copy(text,msg){try{await navigator.clipboard.writeText(text);toast(msg)}catch(e){toast("Copy is blocked here. Select the table and copy instead.")}}
+
+/* Storage (per-viewer conveniences only) */
+const store={get(k,d){try{const v=localStorage.getItem("gauge."+k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("gauge."+k,JSON.stringify(v))}catch(e){}}};
+
+/* Theme */
+const SUN='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+const MOON='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>';
+const isDark=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
+function paintTheme(){const d=isDark(),b=$("#themeBtn");b.innerHTML=d?SUN:MOON;b.setAttribute("aria-label",d?"Switch to light mode":"Switch to dark mode");b.title=d?"Light mode":"Dark mode"}
+function setTheme(t){document.documentElement.dataset.theme=t;store.set("theme",t);paintTheme()}
+{const t=store.get("theme",null);if(t)document.documentElement.dataset.theme=t;paintTheme();matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",paintTheme)}
+
+/* Weekly report: Mon–Sun weeks, a trip counts in the week it ends (when the report is submitted) */
+const addDays=(s,n)=>{const d=D(s);d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
+const WEEKS=["2026-09-28","2026-09-21","2026-09-14","2026-09-07","2026-08-31","2026-08-24"]; // newest first; each is ready the Monday after
+const THIS_WEEK="2026-10-05";
+const wk={i:0,office:"All",group:"none",open:false};
+const latestSeen=()=>store.get("seen",null)===WEEKS[0];
+const weekLabel=s=>rangeTxt(s,addDays(s,6));
+function paintDot(){const unseen=!latestSeen();$("#ndot").hidden=!unseen;$("#weeklyBtn").title=unseen?"New weekly report ready":"Weekly reports";
+  $("#banner").innerHTML=unseen&&!wk.open?`<div class="newbanner"><span class="pill pending"><span class="dot"></span>New</span><span><b>New weekly report for ${weekLabel(WEEKS[0])} is ready.</b></span><button class="mini go" data-act="openweekly">View report</button></div>`:""}
+function tripsIn(s,office){const e=addDays(s,6);let l=reports.filter(r=>r.end>=s&&r.end<=e);if(office&&office!=="All")l=l.filter(r=>r.office===office);
+  return l.sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:a.driver<b.driver?-1:1)}
+const weekRows=()=>tripsIn(WEEKS[wk.i],wk.office);
+function bstChip(l){const n=l.filter(r=>r.bst).length;
+  return !l.length?`<span class="bstno">No trips</span>`:n===l.length?`<span class="bstok">${ICON.check}Logged in BST</span>`:n===0?`<span class="pill bstp" style="height:20px"><span class="dot"></span>Not in BST</span>`:`<span class="pill bstp" style="height:20px"><span class="dot"></span>${n} of ${l.length} in BST</span>`}
+function renderWeekly(){
+  const s=WEEKS[wk.i],e=addDays(s,6),l=weekRows(),total=l.reduce((a,r)=>a+r.miles,0),logged=l.filter(r=>r.bst).length;
+  const tp=new Map();l.forEach(r=>{const k=r.project+"|"+r.phase;tp.has(k)||tp.set(k,[]);tp.get(k).push(r)});
+  const tpRows=[...tp.entries()].sort().map(([k,it])=>{const[p,ph]=k.split("|"),m=it.reduce((a,r)=>a+r.miles,0),done=it.every(r=>r.bst);
+    return `<tr><td><span class="pnum">${p}</span></td><td>${esc(PROJ[p])}</td><td><span class="phase">${phaseTxt(ph)}</span></td><td class="r num">${m}</td><td class="r">${done?`<span class="bstok">${ICON.check}</span>`:`<span class="bstno">${it.filter(r=>r.bst).length}/${it.length}</span>`}</td></tr>`}).join("");
+  const tripRow=(r,n)=>`<tr class="${r.bst?"logged":""} ${n%2?"z":""}"><td class="chk"><input type="checkbox" class="bstchk" data-id="${r.id}" ${r.bst?"checked":""} aria-label="Logged in BST: ${esc(r.driver)}, ${rangeTxt(r.date,r.end)}"></td><td class="a" style="white-space:nowrap"><b>${rangeTxt(r.date,r.end)}</b>${r.end!==r.date?`<span class="multi">${nDays(r.date,r.end)} days</span>`:""}<br><span style="color:var(--muted);font-size:12px">${r.end===r.date?dow(r.date):dow(r.date)+" – "+dow(r.end)}</span></td><td class="a"><span class="pnum">${r.project}</span></td><td class="a"><span class="phase">${phaseTxt(r.phase)}</span></td><td class="a r num"><b>${r.miles}</b></td><td class="gap"></td><td>${person(r.driver)}</td><td class="desc">${esc(r.work)}</td></tr>`;
+  let body="";
+  if(!l.length)body=`<tr><td colspan="8"><div class="empty">No trips ended this week${wk.office!=="All"?" for "+wk.office:""}.</div></td></tr>`;
+  else if(wk.group==="none")body=l.map(tripRow).join("");
+  else{const key=r=>wk.group==="driver"?r.driver:r.project+" · "+PROJ[r.project];const g=new Map();l.forEach(r=>{const k=key(r);g.has(k)||g.set(k,[]);g.get(k).push(r)});
+    [...g.keys()].sort().forEach(k=>{const it=g.get(k);body+=`<tr class="sub"><td></td><td colspan="3">${esc(k)} <span style="color:var(--muted);font-weight:500">· ${it.length} trip${it.length>1?"s":""}</span></td><td class="r num">${it.reduce((a,r)=>a+r.miles,0)}</td><td class="gap"></td><td colspan="2"></td></tr>`+it.map(tripRow).join("")})}
+  const opt=(arr,cur)=>arr.map(([v,t])=>`<option value="${esc(v)}" ${v===cur?"selected":""}>${t}</option>`).join("");
+  const seenLatest=latestSeen();
+  const list=`<div class="wl-item cur" aria-disabled="true"><div class="wl-t">${weekLabel(THIS_WEEK)}<span class="tag">This week</span></div><div class="wl-s">In progress · ready Mon, ${short(addDays(THIS_WEEK,7))}</div></div>`+
+    WEEKS.map((w,k)=>{const t=tripsIn(w,wk.office);return `<button class="wl-item ${k===wk.i?"on":""}" data-wk="${k}"><div class="wl-t">${weekLabel(w)}${k===0&&!seenLatest?`<span class="tag newt">New</span>`:""}</div><div class="wl-s">${t.length} trips · ${t.reduce((a,r)=>a+r.miles,0)} mi</div><div>${bstChip(t)}</div></button>`}).join("");
+  $("#weeklyView").innerHTML=`
+  <div class="wk-top">
+    <button class="back" data-act="closeweekly"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>Fleet</button>
+    <div class="wk-nav">
+      <select id="wkOffice" aria-label="Office">${opt([["All","All offices"],...Object.keys(OFFICES).map(o=>[o,o])],wk.office)}</select>
+      <select id="wkGroup" aria-label="Group trips">${opt([["none","No grouping"],["driver","Group by driver"],["project","Group by project"]],wk.group)}</select>
+    </div>
+  </div>
+  <div class="wk-grid">
+    <aside class="wl" aria-label="All weekly reports"><div class="wl-h">All weekly reports</div>${list}</aside>
+    <article class="paper">
+      <div class="paper-h">
+        <div><div class="eyebrow">Barge · Fleet · ${wk.office==="All"?"All offices":wk.office+" office"}</div><h2>Weekly mileage report</h2><p>${fmt(s,{month:"long",day:"numeric"})} – ${fmt(e,{month:"long",day:"numeric",year:"numeric"})} · Ready Mon, ${short(addDays(s,7))}</p></div>
+        <div class="bigmi"><b>${total.toLocaleString()}</b><span>miles · ${l.length} trip${l.length===1?"":"s"}</span></div>
+      </div>
+      <div class="bstbar">
+        <div class="bst-l"><b>${!l.length?"Nothing to log":logged===l.length?"All trips logged in BST":`${logged} of ${l.length} trips logged in BST`}</b><div class="prog"><i style="width:${l.length?logged/l.length*100:0}%"></i></div></div>
+        <div class="bst-r">
+          ${l.length&&logged<l.length?`<button class="mini bstgo" data-act="bstall">Mark all logged</button>`:l.length?`<button class="mini" data-act="bstnone">Clear BST checks</button>`:""}
+          <button class="mini" data-act="wkcsv">Download CSV</button>
+          <button class="mini" data-act="wkcopy">Copy for Excel</button>
+        </div>
+      </div>
+      <div class="ph3">Miles by project & phase</div>
+      <div class="scroller"><table class="ptbl"><thead><tr><th>Project #</th><th>Project</th><th>Phase</th><th class="r">Miles</th><th class="r">BST</th></tr></thead><tbody>${tpRows||`<tr><td colspan="5" style="color:var(--muted)">No trips.</td></tr>`}${l.length?`<tr class="tot"><td colspan="3">Total</td><td class="r num">${total}</td><td></td></tr>`:""}</tbody></table></div>
+      <div class="ph3">Trips</div>
+      <div class="scroller"><table class="ptbl trips">
+        <thead><tr class="cl"><th></th><th colspan="4"><span>Trip & charge</span></th><th class="gap"></th><th colspan="2"><span>Driver & work</span></th></tr>
+        <tr><th class="chk">BST</th><th>Trip dates</th><th>Project #</th><th>Phase</th><th class="r">Miles</th><th class="gap"></th><th>Driver</th><th>Description</th></tr></thead>
+        <tbody>${body}</tbody></table></div>
+      <div class="pfoot"><span>Trips count in the week they end. Check a trip once its miles are in BST.</span><span>${wk.i===0&&seenLatest?`<button class="back" style="padding:0;font-size:12px" data-act="unseen">Mark as unread</button>`:""}</span></div>
+    </article>
+  </div>`;
+}
+const WK_COLS=[["Start date",r=>r.date],["End date",r=>r.end],["Days",r=>nDays(r.date,r.end)],["Project #",r=>r.project],["Project",r=>PROJ[r.project]],["Phase",r=>phaseTxt(r.phase)],["Miles",r=>r.miles],["Driver",r=>r.driver],["Office",r=>r.office],["Description",r=>r.work],["Logged in BST",r=>r.bst?"Yes":"No"]];
+function markSeen(){if(wk.i===0)store.set("seen",WEEKS[0])}
+function openWeekly(){wk.open=true;closePane();$("#fleetView").hidden=true;$("#weeklyView").hidden=false;$("#weeklyBtn").classList.add("on");markSeen();paintDot();renderWeekly();scrollTo(0,0)}
+function closeWeekly(){wk.open=false;$("#fleetView").hidden=false;$("#weeklyView").hidden=true;$("#weeklyBtn").classList.remove("on");paintDot();render()}
+
+/* CSV download through the viewer's save prompt */
+let dl=null;window.claude?.use?.("downloads")?.then(d=>{dl=d}).catch(()=>{});
+const csvCell=v=>{v=String(v??"");return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+async function saveCsv(filename,head,rows){
+  const text="﻿"+[head,...rows].map(r=>r.map(csvCell).join(",")).join("\r\n");
+  if(!dl){toast("Download isn't available in this view. Use Copy for Excel.");return}
+  try{await dl.save({filename,data:text});toast("CSV saved. It opens in Excel.")}catch(e){if(e?.code!=="declined")toast(e?.code==="rate_limited"?"A save prompt is already open.":"Couldn't save the file here. Use Copy for Excel.")}
+}
+
+/* Events */
+document.addEventListener("change",e=>{
+  const id=e.target.id;
+  if(e.target.name==="assign"&&st.sel){assignPick[st.sel]=e.target.value;renderPane();return}
+  if(id==="wkOffice"){wk.office=e.target.value;renderWeekly()}
+  if(id==="wkGroup"){wk.group=e.target.value;renderWeekly()}
+  if(e.target.classList.contains("bstchk")){const r=reports.find(x=>x.id===e.target.dataset.id);r.bst=e.target.checked;toast(r.bst?"Marked as logged in BST.":"Unchecked. Not in BST yet.");
+    if(wk.open)renderWeekly();else render()}
+});
+document.addEventListener("click",e=>{
+  const el=e.target.closest("[data-tab],[data-wk],[data-view],[data-office],[data-col],[data-sort],[data-group],[data-act],.grp,tr.row,#viewBtn,#bstStat,#copyBtn,#csvBtn,#themeBtn,#weeklyBtn,#densBtn,#newBtn,#issuesStat,#scrim");
+  if(!e.target.closest("#viewMenu,#viewBtn"))$("#viewMenu").hidden=true;
+  if(!e.target.closest("#colMenu,[data-col]"))$("#colMenu").hidden=true;
+  if(!el)return;
+  if(el.dataset.tab){st.tab=el.dataset.tab;st.issuesOnly=false;document.querySelectorAll(".pivot").forEach(p=>p.setAttribute("aria-selected",p===el));closePane();render();return}
+  if(el.id==="viewBtn"){$("#viewMenu").hidden=!$("#viewMenu").hidden;return}
+  if(el.dataset.view){const v=VIEWS[st.tab].find(x=>x.k===el.dataset.view);st.view[st.tab]=v.k;st.group[st.tab]=v.group||null;st.issuesOnly=false;$("#viewMenu").hidden=true;render();return}
+  if(el.dataset.office){st.office=el.dataset.office;render();return}
+  if(el.id==="bstStat"){const on=st.view.reports==="nobst";st.view.reports=on?"all":"nobst";st.group.reports=null;st.issuesOnly=false;render();return}
+  if(el.id==="issuesStat"){st.issuesOnly=!st.issuesOnly;render();return}
+  if(el.dataset.col){const c=COLS[st.tab].find(x=>x.k===el.dataset.col),m=$("#colMenu"),r=el.getBoundingClientRect();
+    m.innerHTML=`<button data-sort="${c.k}:1">${ICON.up}${c.k==="date"||c.k==="start"||c.k==="miles"?"Oldest / smallest first":"A to Z"}</button><button data-sort="${c.k}:-1">${ICON.down}${c.k==="date"||c.k==="start"||c.k==="miles"?"Newest / largest first":"Z to A"}</button>`+
+      (c.g?`<hr><button data-group="${c.k}"><span class="chk">${st.group[st.tab]===c.k?ICON.check:""}</span>Group by ${c.l.toLowerCase()}</button>`:"")+(st.group[st.tab]?`<button data-group=""><span class="chk"></span>Remove grouping</button>`:"");
+    m.style.position="fixed";m.style.top=(r.bottom+4)+"px";m.style.left=Math.min(r.left,innerWidth-216)+"px";m.hidden=false;return}
+  if(el.dataset.sort){const[k,d]=el.dataset.sort.split(":");st.sort[st.tab]={k,d:+d};$("#colMenu").hidden=true;renderHead();renderBody();return}
+  if(el.dataset.group!==undefined){st.group[st.tab]=el.dataset.group||null;st.closed.clear();$("#colMenu").hidden=true;renderBody();return}
+  if(el.classList.contains("grp")){const k=el.dataset.g;st.closed.has(k)?st.closed.delete(k):st.closed.add(k);renderBody();return}
+  if(el.dataset.wk){wk.i=+el.dataset.wk;markSeen();paintDot();renderWeekly();return}
+  if(el.id==="themeBtn"){setTheme(isDark()?"light":"dark");return}
+  if(el.id==="weeklyBtn"){wk.open?closeWeekly():openWeekly();return}
+  if(el.id==="csvBtn"){const l=rows(),cols=COLS[st.tab].filter(c=>c.csv);saveCsv(`gauge-${st.tab}-${TODAY}.csv`,cols.map(c=>c.l),l.map(r=>cols.map(c=>c.csv(r))));return}
+  if(el.id==="copyBtn"){const l=rows();copy(tsv(l),`Copied ${l.length} rows. Paste into Excel.`);return}
+  if(el.id==="densBtn"){st.dense=!st.dense;$("#densLbl").textContent=st.dense?"Comfortable":"Compact";renderBody();return}
+  if(el.id==="newBtn"){toast(st.tab==="reports"?"Drivers submit reports from the Gauge app.":"New booking form isn't in this prototype yet.");return}
+  if(el.id==="scrim"){closePane();return}
+  if(el.dataset.act){e.stopPropagation();const id=el.dataset.id,a=el.dataset.act;
+    if(a==="close")return closePane();
+    if(a==="approve"){const b=bookings.find(x=>x.id===id),v=assignPick[id]||b.assigned;b.assigned=v;b.status="approved";toast(v===b.want?`Approved ${v}. ${b.driver.split(" ")[0]} gets a notification.`:`Approved with ${v} instead of ${b.want}. ${b.driver.split(" ")[0]} gets a notification.`);render();return}
+    if(a==="decline"){const b=bookings.find(x=>x.id===id);b.status="declined";toast(`Declined. ${b.driver.split(" ")[0]} gets a notification.`);render();return}
+    if(a==="swap"||a==="tobook"){openPane(id);setTimeout(()=>{const t=document.querySelector(a==="swap"?".cars":"#confNo");t?.scrollIntoView({block:"center"});if(a==="tobook")$("#confNo")?.focus()},240);return}
+    if(a==="book"){const b=bookings.find(x=>x.id===id),c=($("#confNo")?.value||"").trim();if(!c){toast("Add the Enterprise confirmation number first.");$("#confNo")?.focus();return}b.conf=c;b.status="booked";toast(`Booked. ${b.driver.split(" ")[0]} gets ${c} in the app.`);render();return}
+    if(a==="openweekly")return openWeekly();
+    if(a==="closeweekly")return closeWeekly();
+    if(a==="bstall"||a==="bstnone"){const l=weekRows();l.forEach(r=>r.bst=a==="bstall");toast(a==="bstall"?`Marked ${l.length} trips as logged in BST.`:"BST checks cleared for this week.");renderWeekly();return}
+    if(a==="wkcsv"){const l=weekRows();saveCsv(`gauge-weekly-mileage-${WEEKS[wk.i]}${wk.office!=="All"?"-"+wk.office.toLowerCase():""}.csv`,WK_COLS.map(c=>c[0]),l.map(r=>WK_COLS.map(c=>c[1](r))));return}
+    if(a==="wkcopy"){const l=weekRows();copy([WK_COLS.map(c=>c[0]).join("\t"),...l.map(r=>WK_COLS.map(c=>String(c[1](r)).replace(/[\t\n]/g," ")).join("\t"))].join("\n"),`Copied ${l.length} trips. Paste into Excel.`);return}
+    if(a==="unseen"){store.set("seen",null);paintDot();renderWeekly();toast("Marked as unread.");return}
+    if(a==="resolve"||a==="reopen"){reports.find(x=>x.id===id).issue.resolved=a==="resolve";toast(a==="resolve"?"Issue marked resolved.":"Issue reopened.");render();return}
+    if(a==="copyrow"){const r=[...reports,...bookings].find(x=>x.id===id);copy(tsv([r]),"Copied row with headers.");return}
+  }
+  if(el.matches("tr.row"))openPane(el.dataset.id);
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){if(st.sel)closePane();$("#viewMenu").hidden=true;$("#colMenu").hidden=true}
+  if(e.key==="Enter"&&e.target.matches("tr.row"))openPane(e.target.dataset.id);
+});
+$("#q").addEventListener("input",e=>{st.q=e.target.value;renderBody()});
+render();paintDot();
+</script>
+
+</body></html>
