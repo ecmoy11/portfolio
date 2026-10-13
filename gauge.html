@@ -106,7 +106,7 @@
     <img src="images/gauge/update/web/v3-qr-scan.webp" alt="Scanning the vehicle QR code to start a report">
     <img src="images/gauge/update/web/v3-journey-log.webp" alt="The journey log with trip mileage as the hero number, badged as billed to project">
     <img src="images/gauge/update/web/v3-inspection.webp" alt="The vehicle inspection collapsed onto a single screen with flagging">
-    <a class="csr-hero-mark" href="#build" aria-label="How this was built: All human"><img src="assets/build-icons/hmc-human.svg" alt=""></a>
+    <a class="csr-hero-mark" href="#build" aria-label="How this was built: Human-led"><img src="assets/build-icons/hmc-human-led.svg" alt=""></a>
   </header>
 
   <div class="csr-shell">
@@ -140,7 +140,7 @@
           <div><dt>Role</dt><dd>Product Designer</dd></div>
           <div><dt>Type</dt><dd>Self-Initiated / Internal Tool</dd></div>
           <div><dt>Duration</dt><dd>2023&ndash;2026, on and off around a full-time role</dd></div>
-          <div><dt>Tools</dt><dd>Figma</dd></div>
+          <div><dt>Tools</dt><dd>Figma, Claude Code</dd></div>
           <div class="half"><dt>Methods</dt><dd>Employee Interviews, Workflow Shadowing, Usability Testing</dd></div>
           <div class="half"><dt>Deliverables</dt><dd>Three design iterations, QR inspection flow, mileage logging prototype, admin reporting view</dd></div>
         </dl>
@@ -187,18 +187,32 @@
               </div>
             </div></div>
           </div>
-          <div class="cs-sticky-media"><div class="cs-collage stack wide" data-drift="170">
-            <div class="pcol" data-rate="0.35">
-              <figure class="paper-fig">
-                <img src="images/gauge/update/web/paper-vehicle-report.webp" alt="The Barge Design Solutions paper vehicle report, filled in by hand" loading="lazy">
-                <p class="csr-cap">The form Gauge replaced. One sheet per vehicle per week, filled in at the end of it.</p>
-              </figure>
-              <figure class="paper-fig">
-                <img src="images/gauge/update/web/paper-odometer-detail.webp" alt="Close crop of the handwritten odometer rows: starting, ending and total mileage" loading="lazy">
-                <p class="csr-cap">Starting 21438. Ending 21669, or 21668. Total 225, or 228. That last number is the one billed to a project.</p>
-              </figure>
+          <div class="gz">
+            <div class="gz-pin">
+              <div class="gz-frame"><div class="gz-layer">
+                <figure class="gz-fig gz-wide">
+                  <div class="gz-img"><img src="images/gauge/update/web/paper-vehicle-report.webp" alt="The Barge Design Solutions paper vehicle report, filled in by hand" loading="lazy"></div>
+                  <p class="csr-cap gz-cap">The form Gauge replaced. One sheet per vehicle per trip.</p>
+                </figure>
+                <figure class="gz-fig gz-detail">
+                  <div class="gz-img">
+                    <img src="images/gauge/update/web/paper-odometer-detail.webp" alt="Close crop of the handwritten odometer rows: starting, ending and total mileage" loading="lazy">
+                    <span class="gz-mark" style="--x:63%;--y:49%"><span class="gz-dot" aria-hidden="true">!</span><span class="gz-pop">Written over.</span></span>
+                    <span class="gz-mark" style="--x:63%;--y:77%"><span class="gz-dot" aria-hidden="true">!</span><span class="gz-pop">Illegible. 227? 225? 221?</span></span>
+                  </div>
+                  <ul class="gz-legend" aria-hidden="true">
+                    <li><b>Starting</b>Written over.</li>
+                    <li><b>Total</b>Illegible. 227? 225? 221?</li>
+                  </ul>
+                  <p class="csr-cap gz-cap">Messy handwriting turns every digit into a question, and the total is the number billed to the&nbsp;project.</p>
+                </figure>
+              </div></div>
+              <div class="gz-caps" aria-hidden="true">
+                <p class="csr-cap a">The form Gauge replaced. One sheet per vehicle per trip.</p>
+                <p class="csr-cap b off">Messy handwriting turns every digit into a question, and the total is the number billed to the&nbsp;project.</p>
+              </div>
             </div>
-          </div></div>
+          </div>
         </div>
       </section>
 
@@ -316,6 +330,20 @@
               <div class="tiltwrap" style="--rot:-3deg"><img class="tilt" src="images/gauge/update/web/v3-inspection.webp" alt="Vehicle inspection collapsed onto one screen with flagging and photo evidence" loading="lazy"></div>
               <div class="tiltwrap"><img class="tilt" src="images/gauge/update/web/v3-success.webp" alt="Report submitted, with the billed mileage confirmed" loading="lazy"></div>
             </div>
+            <a class="csr-proto gx-proto-sm" href="prototypes/gauge-mobile.html" target="_blank" rel="noopener">
+              <span>Clickable prototype</span>
+              <b>Gauge mobile &rarr;</b>
+              <em>emmamoystner.design/prototypes/gauge-mobile</em>
+            </a>
+            <div class="tiltwrap gx-tilewrap">
+              <button class="gx-tile tilt" type="button" data-proto="prototypes/gauge-admin.html" data-desktop-only
+                      data-proto-title="Gauge fleet admin, interactive prototype"
+                      aria-label="Open the Gauge admin prototype">
+                <span class="gx-screen"><img src="images/gauge/update/web/admin-reports.webp" alt="The Gauge fleet admin: a reports table of trips by driver, project, phase and miles" loading="lazy"></span>
+                <span class="gx-badge"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20.5" fill="#1a1a1a" stroke="#fff" stroke-width="1.5"/><g transform="translate(12.4 12.4) scale(0.8)" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></g></svg></span>
+              </button>
+              <p class="gx-note">Best explored on a laptop</p>
+            </div>
           </div>
 
           <div class="cs-fd-text">
@@ -330,6 +358,10 @@
             <div class="cs-fd-block" data-fd-step="3">
               <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-3">03 &middot; One Screen for Inspection</div>
               <div class="cs-fd-body" id="fd-body-3"><div><p>The compliance checklist became a single tappable screen with flag capability rather than a sequence. Same coverage, a fraction of the friction, and flagging a problem is now faster than ignoring it was on paper.</p></div></div>
+            </div>
+            <div class="cs-fd-block" data-fd-step="4">
+              <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-4">04 &middot; The Admin Side</div>
+              <div class="cs-fd-body" id="fd-body-4"><div><p>Streamlined for Barge specifically. The team already knew SharePoint and used BST for accounting, so the admin looks like a SharePoint list and every trip checks off once it&rsquo;s in&nbsp;BST.</p></div></div>
             </div>
           </div>
         </div>
@@ -348,21 +380,21 @@
       <!-- ---------- HOW THIS WAS BUILT ---------- -->
       <section class="csr-sec" id="build" data-csr-section>
         <div class="csr-eyebrow">How this was built</div>
-        <h2 class="csr-display">Human, start to finish.</h2>
-        <p>No generative tools in this one. It came out of a real internal problem, and the whole of it was drawn by hand in Figma.</p>
+        <h2 class="csr-display">Figma for the design, Claude&nbsp;Code to make it&nbsp;tappable.</h2>
+        
 
         <div class="build-grid">
           <div class="build-scale">
-            <div class="build-step is-here"><img src="assets/build-icons/hmc-human.svg" alt="" aria-hidden="true"><span>All human</span></div>
-            <div class="build-step"><img src="assets/build-icons/hmc-human-led.svg" alt="" aria-hidden="true"><span>Human-led</span></div>
+            <div class="build-step"><img src="assets/build-icons/hmc-human.svg" alt="" aria-hidden="true"><span>All human</span></div>
+            <div class="build-step is-here"><img src="assets/build-icons/hmc-human-led.svg" alt="" aria-hidden="true"><span>Human-led</span></div>
             <div class="build-step"><img src="assets/build-icons/hmc-balanced.svg" alt="" aria-hidden="true"><span>Machine-assisted</span></div>
             <div class="build-step"><img src="assets/build-icons/hmc-machine-led.svg" alt="" aria-hidden="true"><span>Machine-led</span></div>
             <div class="build-step"><img src="assets/build-icons/hmc-machine.svg" alt="" aria-hidden="true"><span>All machine</span></div>
           </div>
           <div>
             <dl class="build-split">
-              <div><dt>What the machine did</dt><dd>Nothing.</dd></div>
-              <div><dt>What I did</dt><dd>All of it. The problem framing, the research, three rounds of screens, the testing, the&nbsp;write-up.</dd></div>
+              <div><dt>What the machine did</dt><dd>Turned the Figma designs into clickable prototypes, and helped me iterate on&nbsp;them.</dd></div>
+              <div><dt>What I did</dt><dd>Everything else. The problem framing, the research, three rounds of screens, the testing, the&nbsp;write-up.</dd></div>
             </dl>
             <p class="build-credit">Scale &middot; Human&ndash;Machine Collaboration, Dubai Future Foundation</p>
           </div>
@@ -413,5 +445,236 @@
 <script src="assets/case-study.js"></script>
 <script src="assets/case-study-rail.js"></script>
 <script src="assets/build-mark.js"></script>
+<!-- gz: paper form scroll-zoom (page-local, #problem only) -->
+<style id="gz-style">
+/* Static by default (phones, reduced motion, no JS): the two images stack, markers showing.
+   .is-pinned turns it into one pinned frame that zooms from the sheet into the odometer rows. */
+.gz{margin-top:34px;}
+.gz-fig{margin:0 0 34px;}
+.gz-fig img{display:block;width:100%;height:auto;border-radius:4px;background:#fff;}
+.gz-img{position:relative;}
+.gz-cap{margin-top:12px;}
+
+/* ---- markers: orange "!" plus a pop-up ---- */
+.gz-mark{position:absolute;left:var(--x);top:var(--y);width:0;height:0;z-index:2;}
+.gz-dot{position:absolute;left:-13px;top:-13px;width:26px;height:26px;border-radius:50%;
+  background:var(--orange,#E15304);color:#fff;display:grid;place-items:center;
+  font:700 15px/1 var(--font-primary,Inter,sans-serif);box-shadow:0 0 0 3px #fff,0 4px 12px rgba(0,0,0,.25);}
+.gz-pop{position:absolute;left:22px;top:-15px;white-space:nowrap;padding:6px 10px 5px;border-radius:6px;
+  background:#1d1d1f;color:#fff;font:500 .8rem/1.4 var(--font-mono,monospace);letter-spacing:.03em;
+  box-shadow:0 6px 18px -6px rgba(0,0,0,.4);}
+.gz-pop::before{content:"";position:absolute;left:-5px;top:11px;border:5px solid transparent;border-left:0;border-right-color:#1d1d1f;}
+.gz-legend{display:none;}
+/* phones: the rows are too close for pop-ups, so the dots stay and the questions list underneath */
+@media (max-width:600px){
+  .gz-dot{width:16px;height:16px;left:-8px;top:-8px;font-size:10px;box-shadow:0 0 0 2px #fff;}
+  .gz-pop{display:none;}
+  .gz-legend{display:block;list-style:none;margin:12px 0 0;padding:0;}
+  .gz-legend li{display:flex;gap:10px;align-items:baseline;margin:0 0 6px;font:500 .72rem/1.4 var(--font-mono,monospace);color:var(--text-dark,#1a1a1a);}
+  .gz-legend b{color:var(--orange,#E15304);font-weight:600;min-width:62px;}
+}
+
+/* ---- pinned mode ---- */
+.gz.is-pinned{position:relative;height:calc(var(--gz-run,120vh) + var(--gz-pin-h));margin-top:40px;}
+.gz.is-pinned .gz-pin{position:sticky;top:var(--gz-top,96px);height:var(--gz-pin-h);}
+.gz.is-pinned .gz-frame{position:relative;width:var(--gz-w);height:var(--gz-h);overflow:hidden;border-radius:4px;background:#fff;
+  box-shadow:0 1px 2px rgba(0,0,0,.06),0 18px 40px -24px rgba(0,0,0,.35);}
+.gz.is-pinned .gz-layer{position:absolute;inset:0;transform-origin:0 0;}
+.gz.is-pinned .gz-fig{margin:0;}
+.gz.is-pinned .gz-wide,.gz.is-pinned .gz-wide .gz-img,.gz.is-pinned .gz-wide img{width:100%;height:100%;border-radius:0;}
+/* the crisp crop sits exactly over its own rows on the wide sheet, then fades in */
+.gz.is-pinned .gz-detail{position:absolute;left:9.375%;top:31.186%;width:37.25%;height:15.55%;opacity:0;transition:opacity .35s ease;}
+.gz.is-pinned .gz-detail .gz-img,.gz.is-pinned .gz-detail img{width:100%;height:100%;border-radius:0;}
+.gz.is-pinned .gz-detail.on{opacity:1;}
+/* markers are inside the scaled layer, so undo the zoom on them */
+.gz.is-pinned .gz-mark{transform:scale(var(--gz-inv,1));transform-origin:0 0;opacity:0;transition:opacity .3s ease;}
+.gz.is-pinned .gz-mark .gz-dot{transform:scale(.6);transition:transform .35s cubic-bezier(.2,1.4,.4,1);}
+.gz.is-pinned .gz-mark.on{opacity:1;}
+.gz.is-pinned .gz-mark.on .gz-dot{transform:none;}
+.gz.is-pinned .gz-caps{position:relative;width:var(--gz-w);margin-top:14px;}
+.gz.is-pinned .gz-caps p.csr-cap{position:absolute;left:0;right:0;top:0;margin:0;transition:opacity .35s ease;}
+.gz.is-pinned .gz-wide .gz-cap,.gz.is-pinned .gz-detail .gz-cap{display:none;}
+.gz.is-pinned .gz-caps p.csr-cap.off{opacity:0;}
+.gz-caps{display:none;}
+.gz.is-pinned .gz-caps{display:block;}
+</style>
+
+<script id="gz-script">
+(function(){
+  var root = document.querySelector('.gz'); if(!root) return;
+  var R = {x:.09375, y:.311856, w:.3725, h:.155498};   // the odometer rows inside the wide sheet (template-matched)
+  var ASPECT = 1164/1600;
+  var wide = window.matchMedia('(min-width:901px)'), reduce = window.matchMedia('(prefers-reduced-motion:reduce)');
+  var layer = root.querySelector('.gz-layer'), detail = root.querySelector('.gz-detail'),
+      marks = [].slice.call(root.querySelectorAll('.gz-mark')),
+      capA = root.querySelector('.gz-caps .a'), capB = root.querySelector('.gz-caps .b');
+  var S = 1, ticking = false;
+
+  function size(){
+    var on = wide.matches && !reduce.matches;
+    root.classList.toggle('is-pinned', on);
+    if(!on){ layer && (layer.style.transform=''); marks.forEach(function(m){m.classList.add('on')}); detail.classList.add('on'); return; }
+    var col = root.parentElement.getBoundingClientRect().width;
+    var nav = 72, capH = 64;
+    var maxH = window.innerHeight - nav - 40 - capH;
+    var w = Math.min(col, maxH / ASPECT), h = w * ASPECT;
+    root.style.setProperty('--gz-w', w+'px'); root.style.setProperty('--gz-h', h+'px');
+    root.style.setProperty('--gz-pin-h', (h + capH)+'px');
+    root.style.setProperty('--gz-top', Math.max(nav+16, (window.innerHeight - h - capH)/2 + 20)+'px');
+    S = Math.min(1/R.w, (1/R.h)*1) * .94;     // fill the frame width with the rows, a little air
+    root.style.setProperty('--gz-inv', 1/S);
+    update();
+  }
+  function ease(t){ return t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+  function clamp(v){ return Math.max(0, Math.min(1, v)); }
+  function update(){
+    ticking = false;
+    if(!root.classList.contains('is-pinned')) return;
+    var r = root.getBoundingClientRect(), pinH = parseFloat(getComputedStyle(root).getPropertyValue('--gz-pin-h'));
+    var p = clamp((parseFloat(getComputedStyle(root).getPropertyValue('--gz-top')) - r.top) / (r.height - pinH));
+    var t = ease(clamp((p - .1) / .45));          // 0.10 -> 0.55: the zoom
+    var s = 1 + (S - 1) * t;
+    // keep the rows' centre heading for the frame's centre
+    var fw = layer.clientWidth, fh = layer.clientHeight;
+    var cx = (R.x + R.w/2) * fw, cy = (R.y + R.h/2) * fh;
+    var tx = (fw/2 - cx*S) * t, ty = (fh/2 - cy*S) * t;
+    layer.style.transform = 'translate('+tx+'px,'+ty+'px) scale('+s+')';
+    detail.classList.toggle('on', p > .52);
+    capA.classList.toggle('off', p > .55); capB.classList.toggle('off', p <= .55);
+    marks.forEach(function(m, i){ m.classList.toggle('on', p > .6 + i*.1); });
+  }
+  function req(){ if(!ticking){ ticking = true; requestAnimationFrame(update); } }
+  window.addEventListener('scroll', req, {passive:true});
+  window.addEventListener('resize', size);
+  (wide.addEventListener ? wide.addEventListener('change', size) : wide.addListener(size));
+  (reduce.addEventListener ? reduce.addEventListener('change', size) : reduce.addListener(size));
+  size();
+})();
+</script>
+<!-- /gz -->
+
+<!-- gx: Gauge admin prototype tile + lightbox (page-local, scoped to #solution) -->
+<style id="gx-style">
+
+/* ---- the admin tile: sits in the media column under the phones, spans both ---- */
+.cs-fd-media.flow .gx-tilewrap{grid-column:1 / -1;margin-top:20px;
+  /* a softer perspective than the phones' 900px (this is a wide object), and a small inset so
+     the tilted edge never pokes past .cs-fd's overflow clip and gets sliced */
+  perspective:1700px;padding:0 10px;}
+@media (min-width:1101px){ .cs-fd-media.flow .gx-tilewrap{margin-top:34px;} }
+.gx-tile{position:relative;display:block;width:100%;padding:0;border:0;background:none;
+  font:inherit;color:inherit;text-align:left;border-radius:12px;
+  /* the cursor IS the affordance: one circle, both maximize arrows */
+  cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2244%22%20height%3D%2244%22%20viewBox%3D%220%200%2044%2044%22%3E%3Ccircle%20cx%3D%2222%22%20cy%3D%2222%22%20r%3D%2220.5%22%20fill%3D%22%231a1a1a%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.5%22/%3E%3Cg%20transform%3D%22translate%2812.4%2012.4%29%20scale%280.8%29%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%2215%203%2021%203%2021%209%22/%3E%3Cpolyline%20points%3D%229%2021%203%2021%203%2015%22/%3E%3Cline%20x1%3D%2221%22%20y1%3D%223%22%20x2%3D%2214%22%20y2%3D%2210%22/%3E%3Cline%20x1%3D%223%22%20y1%3D%2221%22%20x2%3D%2210%22%20y2%3D%2214%22/%3E%3C/g%3E%3C/svg%3E") 22 22, zoom-in;}
+.gx-tile:focus-visible{outline:2px solid var(--orange,#E15304);outline-offset:6px;}
+.gx-tile img{display:block;width:100%;height:auto;}
+/* no device frame: just the screen, sitting on the page like the phones do */
+.gx-screen{display:block;border-radius:10px;overflow:hidden;background:#fff;
+  box-shadow:0 0 0 1px rgba(0,0,0,.06),0 26px 50px -26px rgba(0,0,0,.4);}
+.gx-screen img{border-radius:0;}
+
+/* the same circle as a static badge, for anyone without a cursor to carry it:
+   touch screens always, keyboard users on focus */
+.gx-badge{position:absolute;top:14px;right:14px;width:40px;height:40px;opacity:0;
+  transition:opacity .2s ease;pointer-events:none;}
+.gx-badge svg{display:block;width:100%;height:100%;}
+.gx-tile:focus-visible .gx-badge{opacity:1;}
+@media (hover:none),(pointer:coarse){ .gx-badge{opacity:1;} }
+
+/* small screens: the admin is a desktop tool, so it stays a picture */
+.gx-note{display:none;margin:12px 0 0;font:400 .7rem/1.5 var(--font-mono,monospace);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--text-muted,#8a8580);}
+@media (max-width:900px){
+  .gx-tile[data-desktop-only]{cursor:default;}
+  .gx-tile[data-desktop-only] .gx-badge{display:none;}
+  .gx-note{display:block;}
+}
+
+
+/* ---- mobile prototype link: the .csr-proto card, between the phones and the admin,
+   same width as the admin tile, tight to both ---- */
+#solution .cs-fd-media.flow .gx-proto-sm{grid-column:1 / -1;display:block;max-width:none;
+  margin:0;padding:16px 22px 15px;}
+/* sits tight under the phones (about 30px while it is on screen; the drift moves it
+   between ~12 and ~44) and further from the laptop, so it reads as the phones' link */
+@media (min-width:1101px){ #solution .cs-fd-media.flow .gx-proto-sm{margin-top:8px;} }
+#solution .gx-proto-sm b{font-size:calc(1.05rem * var(--head-scale,1));margin-top:7px;}
+#solution .gx-proto-sm em{margin-top:5px;}
+
+/* ---- lightbox ---- */
+.gx-lb{border:0;padding:0;margin:auto;background:transparent;max-width:none;max-height:none;overflow:visible;
+  width:min(1440px,94vw);height:90vh;}
+.gx-lb::backdrop{background:rgba(18,16,14,.82);}
+.gx-lb[open]{animation:gx-in .22s cubic-bezier(.2,.7,.3,1);}
+.gx-lb[open]::backdrop{animation:gx-fade .22s ease;}
+@keyframes gx-in{from{opacity:0;transform:scale(.97);}to{opacity:1;transform:none;}}
+@keyframes gx-fade{from{opacity:0;}to{opacity:1;}}
+@media (prefers-reduced-motion:reduce){ .gx-lb[open]{animation:gx-fade .2s ease;} }
+.gx-lb iframe{display:block;width:100%;height:100%;border:0;border-radius:10px;background:#f6f6f4;}
+.gx-close{position:absolute;top:-14px;right:-14px;z-index:2;width:40px;height:40px;border-radius:50%;border:0;
+  background:#fff;color:#1a1a1a;display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3);}
+.gx-close svg{width:18px;height:18px;}
+.gx-close:focus-visible{outline:2px solid var(--orange,#E15304);outline-offset:3px;}
+@media (max-width:600px){ .gx-close{top:8px;right:8px;} }
+</style>
+
+<dialog class="gx-lb" id="gx-lb" aria-label="Interactive prototype">
+  <button class="gx-close" type="button" aria-label="Close prototype">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+</dialog>
+
+<script id="gx-script">
+(function(){
+  var lb = document.getElementById('gx-lb'); if(!lb) return;
+  var closeBtn = lb.querySelector('.gx-close'), opener = null;
+  var small = window.matchMedia('(max-width:900px)');
+
+  // desktop-only tiles stop being buttons on small screens
+  function syncDesktopOnly(){
+    document.querySelectorAll('.gx-tile[data-desktop-only]').forEach(function(t){
+      if(small.matches){ t.setAttribute('tabindex','-1'); t.setAttribute('aria-disabled','true'); }
+      else { t.removeAttribute('tabindex'); t.removeAttribute('aria-disabled'); }
+    });
+  }
+  syncDesktopOnly(); (small.addEventListener ? small.addEventListener('change',syncDesktopOnly) : small.addListener(syncDesktopOnly));
+
+  function open(tile){
+    if(tile.hasAttribute('data-desktop-only') && small.matches) return;
+    opener = tile;
+    var f = document.createElement('iframe');      // created on open, never on page load
+    f.src = tile.dataset.proto;
+    f.title = tile.dataset.protoTitle || 'Interactive prototype';
+    lb.appendChild(f);
+    lb.showModal();
+    closeBtn.focus();
+    document.documentElement.style.overflow = 'hidden';
+  }
+  function cleanup(){
+    var f = lb.querySelector('iframe'); if(f) f.remove();   // drop it, so nothing keeps running
+    document.documentElement.style.overflow = '';
+    if(opener){
+      var w = opener.closest('.tiltwrap'), t = w && w.querySelector('.tilt');
+      if(t) t.style.transform = 'rotateX(0deg) rotateY(0deg)';  // don't come back to a frozen tilt
+      opener.focus({preventScroll:true}); opener = null;
+    }
+  }
+  document.addEventListener('click', function(e){
+    var t = e.target.closest('.gx-tile'); if(t){ e.preventDefault(); open(t); }
+  });
+  closeBtn.addEventListener('click', function(){ lb.close(); });
+  lb.addEventListener('close', cleanup);                  // Esc fires cancel -> close
+  lb.addEventListener('click', function(e){ if(e.target === lb) lb.close(); });  // backdrop
+  // keep Tab inside: the close button and the iframe are the only two stops
+  lb.addEventListener('keydown', function(e){
+    if(e.key !== 'Tab') return;
+    var f = lb.querySelector('iframe'); if(!f) return;
+    if(!e.shiftKey && document.activeElement === f){ e.preventDefault(); closeBtn.focus(); }
+    else if(e.shiftKey && document.activeElement === closeBtn){ e.preventDefault(); f.focus(); }
+  });
+})();
+</script>
+<!-- /gx -->
+
 </body>
 </html>
