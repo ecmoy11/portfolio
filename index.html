@@ -96,7 +96,7 @@ a { color: inherit; text-decoration: none; }
   padding: 24px 48px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end; /* home page has no wordmark (Oct 20 2026) */
   transition: background 0.5s ease, padding 0.4s ease, border-color 0.5s ease;
   border-bottom: 1px solid transparent;
 }
@@ -1708,35 +1708,6 @@ a { color: inherit; text-decoration: none; }
   .footer span::before{left:-9px;}
 }
 
-/* ============ SQUARE CURSOR ============ */
-/* Desktop mice only. Touch, pen and reduced-motion keep the system cursor. */
-@media (hover: hover) and (pointer: fine) {
-  html.has-sq-cursor, html.has-sq-cursor * { cursor: none !important; }
-}
-.sq-cursor {
-  position: fixed; top: 0; left: 0; z-index: 2147483000;
-  pointer-events: none;
-  display: flex; align-items: center; gap: 10px;
-  opacity: 0; transition: opacity .2s ease-out;
-  will-change: transform;
-}
-.sq-cursor.is-on { opacity: 1; }
-.sq-dot {
-  width: 8px; height: 8px; flex-shrink: 0;
-  background: var(--orange);
-  transition: width .12s ease-out, height .12s ease-out;
-}
-.sq-cursor.is-text .sq-dot { width: 2px; height: 20px; }
-.sq-label {
-  font-family: var(--font-mono);
-  font-size: 12px; font-weight: 500;
-  letter-spacing: .12em; text-transform: uppercase;
-  color: var(--orange);
-  white-space: nowrap;
-  opacity: 0; transform: translateX(-4px);
-  transition: opacity .15s ease-out, transform .15s ease-out;
-}
-.sq-cursor.is-tile .sq-label { opacity: 1; transform: none; }
 </style>
 <style id="a11y-utils">
 /* Accessibility utilities. Added 2026-09-09 in the audit pass.
@@ -1758,7 +1729,6 @@ a { color: inherit; text-decoration: none; }
 
 <!-- ======== NAV ======== -->
 <nav class="nav" id="nav" aria-label="Main">
-  <a href="index.html" class="nav-logo">Emma Moystner</a>
   <div class="nav-right">
     <a href="index.html">Work</a>
     <a href="side-quests.html">Side Quests</a>
@@ -2607,7 +2577,6 @@ window.addEventListener('scroll', () => {
 gsap.registerPlugin(ScrollTrigger);
 
 // Entrance · nav fades in, tiles handled by reveal-up below
-gsap.to('.nav-logo', { opacity: 1, duration: 0.6, ease: 'power2.out', delay: 0.15 });
 gsap.to('.nav-right', { opacity: 1, duration: 0.6, ease: 'power2.out', delay: 0.3 });
 
 // Reveal-up for all sections
@@ -2730,29 +2699,7 @@ if (window.csScrollies.length) {
 })();
 </script>
 
-<!-- Square cursor: its own block so a CDN failure elsewhere can't take it down -->
-<div class="sq-cursor" aria-hidden="true"><span class="sq-dot"></span><span class="sq-label">View project</span></div>
-<script>
-(function () {
-  var fine = window.matchMedia('(hover: hover) and (pointer: fine)');
-  var calm = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (!fine.matches || calm.matches) return;
-  var el = document.querySelector('.sq-cursor');
-  if (!el) return;
-  document.documentElement.classList.add('has-sq-cursor');
-  var TEXT = 'h1,h2,h3,h4,p,li,blockquote,.hero-eyebrow';
-  window.addEventListener('mousemove', function (e) {
-    el.style.transform = 'translate(' + (e.clientX - 4) + 'px,' + (e.clientY - 4) + 'px)';
-    el.classList.add('is-on');
-    var t = e.target;
-    var tile = t.closest && t.closest('.work-tile');
-    var link = t.closest && t.closest('a,button,[role="button"],input,select,textarea,label');
-    el.classList.toggle('is-tile', !!tile);
-    el.classList.toggle('is-text', !link && !!(t.closest && t.closest(TEXT)));
-  }, { passive: true });
-  document.addEventListener('mouseleave', function () { el.classList.remove('is-on'); });
-  window.addEventListener('blur', function () { el.classList.remove('is-on'); });
-})();
-</script>
+<!-- Square cursor: shared, its own file so a CDN failure elsewhere can't take it down -->
+<script src="assets/sq-cursor.js" defer></script>
 </body>
 </html>
