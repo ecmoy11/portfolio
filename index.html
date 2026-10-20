@@ -1781,8 +1781,13 @@ a { color: inherit; text-decoration: none; }
   <div class="grid-col">
     <!-- Capstone: Nav Health -->
     <a class="work-tile reveal-up" style="--o:0" href="nav.html">
-      <div class="tile-media" style="aspect-ratio:4/5;">
-        <img src="images/capstone/updates/web/nav-title-header.webp" alt="Nav Health: the waiting view and the assistant screen" loading="lazy">
+      <!-- 4/5 is the loop's own ratio (1080x1350), so `cover` crops nothing. -->
+      <div class="tile-media" style="aspect-ratio:4/5;background:#E8EBF0;">
+        <video src="images/capstone/updates/web/nav-header-loop.mp4"
+               poster="images/capstone/updates/web/nav-header-loop-poster.jpg"
+               width="1080" height="1350"
+               autoplay muted loop playsinline preload="metadata"
+               aria-label="Nav Health: the waiting view and the assistant screen, a patient asking Nav whether they can do anything about the anxiety"></video>
         <div class="tile-overlay">
           <span class="tile-pill tile-pill-name">Nav Health</span>
           <span class="tile-pill tile-pill-tag">Healthcare &middot; Service Design / Capstone</span>
