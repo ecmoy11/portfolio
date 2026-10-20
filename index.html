@@ -96,7 +96,7 @@ a { color: inherit; text-decoration: none; }
   padding: 24px 48px;
   display: flex;
   align-items: center;
-  justify-content: flex-end; /* home page has no wordmark (Oct 20 2026) */
+  justify-content: space-between;
   transition: background 0.5s ease, padding 0.4s ease, border-color 0.5s ease;
   border-bottom: 1px solid transparent;
 }
@@ -1729,6 +1729,7 @@ a { color: inherit; text-decoration: none; }
 
 <!-- ======== NAV ======== -->
 <nav class="nav" id="nav" aria-label="Main">
+  <a href="index.html" class="nav-logo">Emma Moystner</a>
   <div class="nav-right">
     <a href="index.html">Work</a>
     <a href="side-quests.html">Side Quests</a>
@@ -2577,6 +2578,7 @@ window.addEventListener('scroll', () => {
 gsap.registerPlugin(ScrollTrigger);
 
 // Entrance · nav fades in, tiles handled by reveal-up below
+gsap.to('.nav-logo', { opacity: 1, duration: 0.6, ease: 'power2.out', delay: 0.15 });
 gsap.to('.nav-right', { opacity: 1, duration: 0.6, ease: 'power2.out', delay: 0.3 });
 
 // Reveal-up for all sections
