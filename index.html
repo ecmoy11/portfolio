@@ -220,11 +220,26 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ============ HERO INTRO ============ */
+/* Hero and grid share one container so the headline's left edge
+   lines up with the first column of tiles. */
+:root { --home-max: 1240px; --home-pad: 48px; --home-gap: 24px; }
+
 .hero-intro {
-  padding: 160px 48px 56px;
-  max-width: 1600px;
+  padding: 168px var(--home-pad) 64px;
+  max-width: calc(var(--home-max) + var(--home-pad) * 2);
   margin: 0 auto;
   background: var(--bg-cream);
+}
+
+.hero-statement {
+  font-family: var(--font-primary);
+  font-size: clamp(1.9rem, 4.2vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--text-dark);
+  max-width: 28ch;
+  text-wrap: balance;
 }
 
 .hero-eyebrow {
@@ -234,35 +249,35 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--orange);
-  margin-bottom: 20px;
-}
-
-.hero-statement {
-  font-family: var(--font-primary);
-  font-size: clamp(1.6rem, 3.6vw, 2.9rem);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: var(--text-dark);
-  max-width: 52ch;
+  margin-top: 28px;
 }
 
 @media (max-width: 700px) {
-  .hero-intro { padding: 120px 24px 40px; }
+  :root { --home-pad: 20px; --home-gap: 16px; }
+  .hero-intro { padding: 120px var(--home-pad) 40px; }
+  .hero-eyebrow { margin-top: 20px; font-size: 11px; letter-spacing: 0.14em; }
 }
 
 /* ============ WORK GRID ============ */
 #work-grid {
-  padding: 8px 8px 8px;
+  padding: 0 var(--home-pad) 96px;
   background: var(--bg-cream);
   min-height: 100vh;
 }
 
 .grid-inner {
-  columns: 3;
-  column-gap: 8px;
-  max-width: 1600px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--home-gap);
+  align-items: start;
+  max-width: var(--home-max);
   margin: 0 auto;
+}
+
+.grid-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--home-gap);
 }
 
 .work-tile {
@@ -271,8 +286,6 @@ a { color: inherit; text-decoration: none; }
   text-decoration: none;
   position: relative;
   cursor: pointer;
-  break-inside: avoid;
-  margin-bottom: 8px;
 }
 
 .tile-media {
@@ -441,13 +454,10 @@ a { color: inherit; text-decoration: none; }
   .playground-card-info { opacity: 1; transform: none; }
 }
 
-@media (max-width: 1024px) {
-  .grid-inner { columns: 2; }
-}
-
 @media (max-width: 700px) {
-  #work-grid { padding-top: 8px; }
-  .grid-inner { columns: 1; }
+  .grid-inner { display: flex; flex-direction: column; align-items: stretch; }
+  .grid-col { display: contents; }
+  .grid-inner .work-tile { order: var(--o); }
   .tile-overlay { opacity: 1; transform: none; }
 }
 
@@ -1697,6 +1707,36 @@ a { color: inherit; text-decoration: none; }
   .footer{padding:52px 24px 40px;margin-top:56px;gap:16px;font-size:9px;letter-spacing:0.18em;}
   .footer span::before{left:-9px;}
 }
+
+/* ============ SQUARE CURSOR ============ */
+/* Desktop mice only. Touch, pen and reduced-motion keep the system cursor. */
+@media (hover: hover) and (pointer: fine) {
+  html.has-sq-cursor, html.has-sq-cursor * { cursor: none !important; }
+}
+.sq-cursor {
+  position: fixed; top: 0; left: 0; z-index: 2147483000;
+  pointer-events: none;
+  display: flex; align-items: center; gap: 10px;
+  opacity: 0; transition: opacity .2s ease-out;
+  will-change: transform;
+}
+.sq-cursor.is-on { opacity: 1; }
+.sq-dot {
+  width: 8px; height: 8px; flex-shrink: 0;
+  background: var(--orange);
+  transition: width .12s ease-out, height .12s ease-out;
+}
+.sq-cursor.is-text .sq-dot { width: 2px; height: 20px; }
+.sq-label {
+  font-family: var(--font-mono);
+  font-size: 12px; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--orange);
+  white-space: nowrap;
+  opacity: 0; transform: translateX(-4px);
+  transition: opacity .15s ease-out, transform .15s ease-out;
+}
+.sq-cursor.is-tile .sq-label { opacity: 1; transform: none; }
 </style>
 <style id="a11y-utils">
 /* Accessibility utilities. Added 2026-09-09 in the audit pass.
@@ -1713,6 +1753,7 @@ a { color: inherit; text-decoration: none; }
 </style>
 </head>
 <body>
+
 <a class="skip-link" href="#main">Skip to content</a>
 
 <!-- ======== NAV ======== -->
@@ -1757,16 +1798,18 @@ a { color: inherit; text-decoration: none; }
 <!-- ======== HERO INTRO ======== -->
 <main id="main">
 <section class="hero-intro reveal-up">
-  <p class="hero-eyebrow">Interaction Designer &middot; ArtCenter M.Des</p>
-  <h1 class="hero-statement">Hey, I'm Emma. A designer who loves real people, messy problems, and a good challenge.</h1>
+  <h1 class="hero-statement">Emma Moystner is a product designer who advocates for users, loves messy problems and a good&nbsp;challenge.</h1>
+  <p class="hero-eyebrow">Interaction Designer &middot; ArtCenter&nbsp;M.Des</p>
 </section>
 
 <!-- ======== WORK GRID ======== -->
 <section id="work-grid">
   <div class="grid-inner">
-
+  <!-- Two columns, read left-right in this order: Nav, Gauge, COROS, Solace, Aster House, Airline.
+       On mobile the columns dissolve (display:contents) and --o restores that order. -->
+  <div class="grid-col">
     <!-- Capstone: Nav Health -->
-    <a class="work-tile reveal-up" href="capstone.html">
+    <a class="work-tile reveal-up" style="--o:0" href="capstone.html">
       <div class="tile-media" style="aspect-ratio:4/5;">
         <img src="images/capstone/updates/web/nav-title-header.webp" alt="Nav Health: the waiting view and the assistant screen" loading="lazy">
         <div class="tile-overlay">
@@ -1776,35 +1819,8 @@ a { color: inherit; text-decoration: none; }
       </div>
     </a>
 
-    <!-- 01 · Airline Interaction Design 2036 -->
-    <a class="work-tile reveal-up" href="airline-2036.html">
-      <!-- 20/11 is the loop's own ratio (1920x1056), so `cover` crops nothing. -->
-      <div class="tile-media" style="aspect-ratio:20/11;">
-        <video src="images/airline%202036/airline-loop-tile.mp4"
-               poster="images/airline%202036/airline-loop-poster.jpg"
-               width="1280" height="704"
-               autoplay muted loop playsinline preload="metadata"
-               aria-label="Airline Interaction Design 2036: a cancelled flight, three reroute options, and a rebooking, playing out in the 2036 terminal"></video>
-        <div class="tile-overlay">
-          <span class="tile-pill tile-pill-name">Airline Interaction Design 2036</span>
-          <span class="tile-pill tile-pill-tag">Aviation &middot; Futures / Service Design</span>
-        </div>
-      </div>
-    </a>
-
-    <!-- 02 · Solace Health -->
-    <a class="work-tile reveal-up" href="solace.html">
-      <div class="tile-media" style="aspect-ratio:1/1;background:#dfdee1;">
-        <img src="images/solace/Solace%20-%20MacBook%20Air%20M2.png" alt="Solace Health: Sprint Ticket Panel" style="object-fit:contain;" loading="lazy">
-        <div class="tile-overlay">
-          <span class="tile-pill tile-pill-name">Solace Health</span>
-          <span class="tile-pill tile-pill-tag">Healthcare &middot; Systems / Process</span>
-        </div>
-      </div>
-    </a>
-
     <!-- 03 · COROS -->
-    <a class="work-tile reveal-up" href="coros.html">
+    <a class="work-tile reveal-up" style="--o:2" href="coros.html">
       <div class="tile-media" style="aspect-ratio:4/5;">
         <img src="images/coros/web/iphone-watch.webp" alt="The COROS redesign on a phone and a watch: the phone shows Phase Insights reading Ovulatory Phase, day 14 of 28; the watch shows Cycle Day 27, Luteal Phase" width="1280" height="1600" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
         <div class="tile-overlay">
@@ -1814,30 +1830,8 @@ a { color: inherit; text-decoration: none; }
       </div>
     </a>
 
-    <!-- 04 · Airbnb Group Booking -->
-    <a class="work-tile reveal-up" href="airbnb.html">
-      <div class="tile-media" style="aspect-ratio:7/5;">
-        <img src="images/airbnb/updates/web/airbnb-cover.webp" alt="Airbnb group booking: the wishlist, the splitting method and the group message thread" loading="lazy">
-        <div class="tile-overlay">
-          <span class="tile-pill tile-pill-name">Airbnb Group Booking</span>
-          <span class="tile-pill tile-pill-tag">Travel &middot; Concept Redesign</span>
-        </div>
-      </div>
-    </a>
-
-    <!-- 05 · Gauge -->
-    <a class="work-tile reveal-up" href="gauge.html">
-      <div class="tile-media" style="aspect-ratio:4/5;">
-        <img src="images/gauge/update/web/gauge-tile.webp" alt="Gauge: Vehicle Report App" class="zoom-crop" style="width:100%;height:100%;object-fit:cover;">
-        <div class="tile-overlay">
-          <span class="tile-pill tile-pill-name">Gauge</span>
-          <span class="tile-pill tile-pill-tag">Enterprise &middot; Self-Initiated</span>
-        </div>
-      </div>
-    </a>
-
     <!-- 06 · Aster House Productions -->
-    <a class="work-tile reveal-up" href="aster-house.html">
+    <a class="work-tile reveal-up" style="--o:4" href="aster-house.html">
       <!-- 31/20 is the loop's own ratio (1488x960), so `cover` crops nothing. -->
       <div class="tile-media" style="aspect-ratio:31/20;background:#CCBDC8;">
         <video src="images/aster-house/aster-house-tile.mp4"
@@ -1851,6 +1845,46 @@ a { color: inherit; text-decoration: none; }
         </div>
       </div>
     </a>
+  </div>
+  <div class="grid-col">
+    <!-- 05 · Gauge -->
+    <a class="work-tile reveal-up" style="--o:1" href="gauge.html">
+      <div class="tile-media" style="aspect-ratio:4/5;">
+        <img src="images/gauge/update/web/gauge-tile.webp" alt="Gauge: Vehicle Report App" class="zoom-crop" style="width:100%;height:100%;object-fit:cover;">
+        <div class="tile-overlay">
+          <span class="tile-pill tile-pill-name">Gauge</span>
+          <span class="tile-pill tile-pill-tag">Enterprise &middot; Self-Initiated</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 02 · Solace Health -->
+    <a class="work-tile reveal-up" style="--o:3" href="solace.html">
+      <div class="tile-media" style="aspect-ratio:1/1;background:#dfdee1;">
+        <img src="images/solace/Solace%20-%20MacBook%20Air%20M2.png" alt="Solace Health: Sprint Ticket Panel" style="object-fit:contain;" loading="lazy">
+        <div class="tile-overlay">
+          <span class="tile-pill tile-pill-name">Solace Health</span>
+          <span class="tile-pill tile-pill-tag">Healthcare &middot; Systems / Process</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 01 · Airline Interaction Design 2036 -->
+    <a class="work-tile reveal-up" style="--o:5" href="airline-2036.html">
+      <!-- 20/11 is the loop's own ratio (1920x1056), so `cover` crops nothing. -->
+      <div class="tile-media" style="aspect-ratio:20/11;">
+        <video src="images/airline%202036/airline-loop-tile.mp4"
+               poster="images/airline%202036/airline-loop-poster.jpg"
+               width="1280" height="704"
+               autoplay muted loop playsinline preload="metadata"
+               aria-label="Airline Interaction Design 2036: a cancelled flight, three reroute options, and a rebooking, playing out in the 2036 terminal"></video>
+        <div class="tile-overlay">
+          <span class="tile-pill tile-pill-name">Airline Interaction Design 2036</span>
+          <span class="tile-pill tile-pill-tag">Aviation &middot; Futures / Service Design</span>
+        </div>
+      </div>
+    </a>
+  </div>
 
   </div>
 </section>
@@ -2693,6 +2727,31 @@ if (window.csScrollies.length) {
   // so these sit well clear of it. They are a last resort, not a race.
   setTimeout(clear, 5000);
   addEventListener('load', function () { setTimeout(clear, 4000); });
+})();
+</script>
+
+<!-- Square cursor: its own block so a CDN failure elsewhere can't take it down -->
+<div class="sq-cursor" aria-hidden="true"><span class="sq-dot"></span><span class="sq-label">View project</span></div>
+<script>
+(function () {
+  var fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+  var calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!fine.matches || calm.matches) return;
+  var el = document.querySelector('.sq-cursor');
+  if (!el) return;
+  document.documentElement.classList.add('has-sq-cursor');
+  var TEXT = 'h1,h2,h3,h4,p,li,blockquote,.hero-eyebrow';
+  window.addEventListener('mousemove', function (e) {
+    el.style.transform = 'translate(' + (e.clientX - 4) + 'px,' + (e.clientY - 4) + 'px)';
+    el.classList.add('is-on');
+    var t = e.target;
+    var tile = t.closest && t.closest('.work-tile');
+    var link = t.closest && t.closest('a,button,[role="button"],input,select,textarea,label');
+    el.classList.toggle('is-tile', !!tile);
+    el.classList.toggle('is-text', !link && !!(t.closest && t.closest(TEXT)));
+  }, { passive: true });
+  document.addEventListener('mouseleave', function () { el.classList.remove('is-on'); });
+  window.addEventListener('blur', function () { el.classList.remove('is-on'); });
 })();
 </script>
 </body>
