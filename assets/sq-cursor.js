@@ -76,7 +76,10 @@
       var t = e.target;
       if (!t || !t.closest) return;
       var text = '';
-      for (var i = 0; i < LABELS.length; i++) {
+      /* any element can name its own label, e.g. data-cursor-label="Coming soon" */
+      var own = t.closest('[data-cursor-label]');
+      if (own) text = own.getAttribute('data-cursor-label');
+      else for (var i = 0; i < LABELS.length; i++) {
         if (t.closest(LABELS[i][0])) { text = LABELS[i][1]; break; }
       }
       if (text) label.textContent = text;
