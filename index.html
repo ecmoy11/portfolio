@@ -318,6 +318,10 @@ a { color: inherit; text-decoration: none; }
   transform: scale(1.02);
 }
 
+/* Coming-soon tile: not a link, so no pointer and no hover zoom */
+.work-tile--soon { cursor: default; }
+.work-tile--soon:hover .tile-media video { transform: none; }
+
 /* Pre-cropped images keep their base zoom and add a little more on hover */
 .tile-media img.zoom-crop { transform: scale(1.17); }
 .work-tile:hover .tile-media img.zoom-crop { transform: scale(1.21); }
@@ -1833,6 +1837,23 @@ a { color: inherit; text-decoration: none; }
         </div>
       </div>
     </a>
+
+    <!-- Coming soon · tennis community (client unnamed on purpose). A <div>, not an <a>:
+         it is a teaser and goes nowhere. The cursor reads "Coming soon" via data-cursor-label.
+         80/51 is the loop's own ratio (1280x816), so `cover` crops nothing. -->
+    <div class="work-tile work-tile--soon reveal-up" style="--o:6" data-cursor-label="Coming soon">
+      <div class="tile-media" style="aspect-ratio:80/51;background:#F7F9F0;">
+        <video src="images/tennis/tennis-tile.mp4"
+               poster="images/tennis/tennis-tile-poster.jpg"
+               width="1280" height="816"
+               autoplay muted loop playsinline preload="metadata"
+               aria-label="Coming soon: a tennis ball drops in and bounces across a blank court-white field"></video>
+        <div class="tile-overlay">
+          <span class="tile-pill tile-pill-name">Community Tennis</span>
+          <span class="tile-pill tile-pill-tag">Systems &middot; Web Design</span>
+        </div>
+      </div>
+    </div>
 
     <!-- 02 · Solace Health -->
     <a class="work-tile reveal-up" style="--o:3" href="solace.html">
