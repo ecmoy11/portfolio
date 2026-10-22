@@ -79,8 +79,10 @@
 /* These are recordings, not a photo collage, so they hold a rigid column:
    one line, same width, same left edge, even spacing, and no drift. Capped
    at 360 the way case-study-rail.css caps solace's portrait canvas. */
-.nav-vid{max-width:360px;margin:0 0 40px;}
+.nav-vid{max-width:450px;margin:0 0 40px;}
 .nav-vid:last-child{margin-bottom:0;}
+/* .cs-fd-media .pcol is pointer-events:none for the drift layer; the recordings open in the lightbox, so take clicks back */
+#solution .nav-vid{pointer-events:auto;}
 .nav-vid video{
   /* width/height attributes are on the elements so the column reserves the
      right space before the file loads; CSS keeps them fluid. */
@@ -92,7 +94,7 @@
    560px column. Even the columns and let the recordings fill theirs, so the
    width is spread rather than pooled in a gap. Only above the 1100px stack. */
 @media (min-width:1101px){
-  #solution .cs-fd{grid-template-columns:1fr 1fr;column-gap:64px;}
+  #solution .cs-fd{grid-template-columns:5fr 3fr;column-gap:64px;}
   #solution .nav-vid{max-width:none;}
 }
 
@@ -448,9 +450,9 @@
         <div class="cs-section cs-fd">
           <div class="cs-fd-media flow is-single" data-drift="0" data-drift-anchor="sticky">
             <div class="pcol">
-              <div class="nav-vid"><video autoplay muted loop playsinline preload="metadata" width="760" height="1446" poster="images/capstone/video/web/waittime-poster.jpg" aria-label="The wait card over half an hour: the estimate moves from 20 to 35 minutes down to under 20, then back up to under 25, each change stamped with when it was set and announced by a notice that a nurse has reviewed the waiting room"><source src="images/capstone/video/web/waittime.mp4" type="video/mp4"></video></div>
-              <div class="nav-vid"><video autoplay muted loop playsinline preload="metadata" width="760" height="1588" poster="images/capstone/video/web/triage-poster.jpg" aria-label="The triage card expanding to show what the level means, what it does not mean, and that it can change if you are reassessed"><source src="images/capstone/video/web/triage.mp4" type="video/mp4"></video></div>
-              <div class="nav-vid"><video autoplay muted loop playsinline preload="metadata" width="760" height="1354" poster="images/capstone/video/web/island-poster.jpg" aria-label="The wait on the lock screen and in the Dynamic Island, reading under 25 minutes and seen by the care team, before opening into the app"><source src="images/capstone/video/web/island.mp4" type="video/mp4"></video></div>
+              <div class="nav-vid" data-zoom data-caption="01 &middot; Say the wait honestly"><video autoplay muted loop playsinline preload="metadata" width="1104" height="1380" poster="images/capstone/video/web/solution-01-poster.jpg" aria-label="The wait card as the estimate changes over the visit: 30 to 60 minutes, then 20 to 35, then up to 30 to 55 with a notice that the ER just got busier and the patient has not lost their place"><source src="images/capstone/video/web/solution-01.mp4" type="video/mp4"></video></div>
+              <div class="nav-vid" data-zoom data-caption="02 &middot; Translate the number"><video autoplay muted loop playsinline preload="metadata" width="1104" height="1380" poster="images/capstone/video/web/solution-02-poster.jpg" aria-label="The level 3 triage card opening to show what the level means, what it does not mean, and that it can change if you are reassessed"><source src="images/capstone/video/web/solution-02.mp4" type="video/mp4"></video></div>
+              <div class="nav-vid" data-zoom data-caption="03 &middot; Design for the glance"><video autoplay muted loop playsinline preload="metadata" width="1104" height="1380" poster="images/capstone/video/web/solution-03-poster.jpg" aria-label="The wait on the lock screen and in the Dynamic Island, reading 30 to 60 minutes and seen by the care team, before opening into the app"><source src="images/capstone/video/web/solution-03.mp4" type="video/mp4"></video></div>
             </div>
           </div>
 
@@ -464,7 +466,7 @@
               <div class="cs-fd-body" id="fd-body-2"><div><p>The level never arrives alone: what it means, what it doesn&rsquo;t, and that you can be reassessed. Levels three to five describe how many resources the visit needs, so a three isn&rsquo;t a middling score. <span class="highlight">Steps, not&nbsp;score.</span></p></div></div>
             </div>
             <div class="cs-fd-block" data-fd-step="3">
-              <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-3">03 &middot; Complete at a glance</div>
+              <div class="cs-section-label tight" role="button" tabindex="0" aria-expanded="false" aria-controls="fd-body-3">03 &middot; Design for the glance</div>
               <div class="cs-fd-body" id="fd-body-3"><div><p>Some people want every detail. Others want as little as possible. So the surface layer stands on its own, and the wait follows you to the lock screen, so you can put the phone down without losing your&nbsp;place.</p></div></div>
             </div>
           </div>
@@ -524,7 +526,7 @@
       <!-- ---------- TRY IT ---------- -->
       <section class="csr-sec" id="tryit" data-csr-section>
         <div class="csr-eyebrow">Try It Out</div>
-        <h2 class="csr-display">The whole argument takes about fifteen&nbsp;seconds.</h2>
+        <h2 class="csr-display">Working prototype</h2>
         <p>Open the triage panel, change the level, and watch the same three lines hold at every&nbsp;one.</p>
 
         <div class="cs-image-wide cs-proto-wide">
