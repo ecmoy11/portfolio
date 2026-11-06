@@ -1919,8 +1919,8 @@ a { color: inherit; text-decoration: none; }
   </div>
   <div class="cs-body">
     <div class="cs-tldr">
-      <div class="cs-tldr-row"><div class="cs-tldr-label">Problem</div><div class="cs-tldr-text">Control a game with your bare hands over a webcam &mdash; no keys, no props. But computer-vision input is <strong>noisy, physical, and imperfect</strong>; your hand is never perfectly still.</div></div>
-      <div class="cs-tldr-row"><div class="cs-tldr-label">Insight</div><div class="cs-tldr-text">The interesting question wasn&rsquo;t &ldquo;can a hand control Tetris.&rdquo; It was what happens to play when the input is imperfect &mdash; so instead of hiding the jitter, <strong>lean into it</strong> and match the machine&rsquo;s behavior to what hands already do.</div></div>
+      <div class="cs-tldr-row"><div class="cs-tldr-label">Problem</div><div class="cs-tldr-text">Control a game with your bare hands over a webcam: no keys, no props. But computer-vision input is <strong>noisy, physical, and imperfect</strong>; your hand is never perfectly still.</div></div>
+      <div class="cs-tldr-row"><div class="cs-tldr-label">Insight</div><div class="cs-tldr-text">The interesting question wasn&rsquo;t &ldquo;can a hand control Tetris.&rdquo; It was what happens to play when the input is imperfect, so instead of hiding the jitter, <strong>lean into it</strong> and match the machine&rsquo;s behavior to what hands already do.</div></div>
       <div class="cs-tldr-row"><div class="cs-tldr-label">Outcome</div><div class="cs-tldr-text">A genuinely playable gesture controller: deadzone/delay/repeat stabilization, gesture arbitration enforcing <strong>one gesture, one action</strong>, and floating emoji &ldquo;receipts&rdquo; that make invisible input visible (and surfaced a hidden bug).</div></div>
     </div>
 
@@ -1951,7 +1951,7 @@ a { color: inherit; text-decoration: none; }
       <div class="cs-section-label">Taming the Jitter</div>
       <p>The first working build was unplayable: far too sensitive. Even when I thought my hand was still, tiny wrist tremors read as movement, so the piece drifted on its own. The root cause: I was mapping wrist position to movement <em>every single frame</em>, and handpose updates many times a second, so any micro-variation flipped the "move" state. Noise was being treated as intent.</p>
       <p>The fix was three layers of stabilization, which together turned movement into a tiny state machine. A <strong>deadzone</strong> ignores small drift around center, so the wrist has to travel a real distance before it counts as a direction. A <strong>delay</strong> proves intent, the first move fires instantly, but repeats only start after you've held a direction briefly, so a quick lean doesn't run the piece away. And a <strong>repeat rate</strong> makes held movement slide at a predictable speed instead of stuttering frame-by-frame.</p>
-      <div class="quote-block">The change matched the reality of how people actually hold their hands in front of a camera. Movement finally felt intentional instead of twitchy — and that one fix made the whole thing feel "playable."</div>
+      <div class="quote-block">The change matched the reality of how people actually hold their hands in front of a camera. Movement finally felt intentional instead of twitchy, and that one fix made the whole thing feel "playable."</div>
     </div>
 
     <div class="cs-section">
