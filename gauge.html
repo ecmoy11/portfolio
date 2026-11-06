@@ -146,11 +146,11 @@
 
         <dl class="csr-meta">
           <div><dt>Role</dt><dd>Product Designer</dd></div>
-          <div><dt>Type</dt><dd>Self-Initiated / Internal Tool</dd></div>
+          <div><dt>Type</dt><dd>Self-Initiated, Solo / Internal Tool</dd></div>
           <div><dt>Duration</dt><dd>2023&ndash;2026, on and off around a full-time role</dd></div>
           <div><dt>Tools</dt><dd>Figma, Claude Code</dd></div>
-          <div class="half"><dt>Methods</dt><dd>Employee Interviews, Workflow Shadowing, Usability Testing</dd></div>
-          <div class="half"><dt>Deliverables</dt><dd>Three design iterations, QR inspection flow, mileage logging prototype, admin reporting view</dd></div>
+          <div class="half"><dt>Methods</dt><dd>User interviews, workflow shadowing, iterative usability testing</dd></div>
+          <div class="half"><dt>Deliverables</dt><dd>Three design iterations, QR inspection flow, high-fidelity mileage logging prototype, admin reporting view</dd></div>
         </dl>
       </section>
 
@@ -339,13 +339,13 @@
               <div class="tiltwrap"><img class="tilt" src="images/gauge/update/web/v3-success.webp" alt="Report submitted, with the billed mileage confirmed" loading="lazy"></div>
             </div>
             <a class="csr-proto gx-proto-sm" href="prototypes/gauge-mobile.html" target="_blank" rel="noopener">
-              <span>Clickable prototype</span>
+              <span>High-fidelity prototype</span>
               <b>Gauge mobile &rarr;</b>
               <em>emmamoystner.design/prototypes/gauge-mobile</em>
             </a>
             <div class="tiltwrap gx-tilewrap">
               <button class="gx-tile tilt" type="button" data-proto="prototypes/gauge-admin.html" data-desktop-only
-                      data-proto-title="Gauge fleet admin, interactive prototype"
+                      data-proto-title="Gauge fleet admin, high-fidelity prototype"
                       aria-label="Open the Gauge admin prototype">
                 <span class="gx-screen"><img src="images/gauge/update/web/admin-reports.webp" alt="The Gauge fleet admin: a reports table of trips by driver, project, phase and miles" loading="lazy"></span>
                 <span class="gx-badge"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20.5" fill="#1a1a1a" stroke="#fff" stroke-width="1.5"/><g transform="translate(12.4 12.4) scale(0.8)" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></g></svg></span>
@@ -379,7 +379,7 @@
       <section class="csr-sec" id="testing" data-csr-section>
         <div class="csr-eyebrow">Testing</div>
         <h2 class="csr-display">Every tester submitted unassisted, and the detail they raised unprompted was the billing badge.</h2>
-        <p><strong>Submission without struggle.</strong> Every tester submitted a report unassisted. The digital process was immediately faster and less error-prone than paper.</p>
+        <p><strong>Submission without struggle.</strong> Drivers and administrators reached a 100% unassisted task completion rate on the final prototype.</p>
         <p><strong>QR scan equals instant confidence.</strong> Auto-filling vehicle details removed the friction point users complained about most, and it changed their posture toward the whole app.</p>
         <p><strong>Mileage billing clarity.</strong> The hero number plus the Billed to project badge was the detail testers mentioned unprompted. It answered a question the old process left open.</p>
       </section>
@@ -402,7 +402,7 @@
           <div>
             <dl class="build-split">
               <div><dt>What the machine did</dt><dd>Turned the Figma designs into clickable prototypes, and helped me iterate on&nbsp;them.</dd></div>
-              <div><dt>What I did</dt><dd>Everything else. The problem framing, the research, three rounds of screens, the testing, the&nbsp;write-up.</dd></div>
+              <div><dt>What I did</dt><dd>Everything else. The problem framing, the user interviews and workflow shadowing, three iterations, the iterative testing, the&nbsp;write-up.</dd></div>
             </dl>
             <p class="build-credit">Scale &middot; Human&ndash;Machine Collaboration, Dubai Future Foundation</p>
           </div>
@@ -626,7 +626,7 @@
 @media (max-width:600px){ .gx-close{top:8px;right:8px;} }
 </style>
 
-<dialog class="gx-lb" id="gx-lb" aria-label="Interactive prototype">
+<dialog class="gx-lb" id="gx-lb" aria-label="High-fidelity prototype">
   <button class="gx-close" type="button" aria-label="Close prototype">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
   </button>
@@ -652,7 +652,7 @@
     opener = tile;
     var f = document.createElement('iframe');      // created on open, never on page load
     f.src = tile.dataset.proto;
-    f.title = tile.dataset.protoTitle || 'Interactive prototype';
+    f.title = tile.dataset.protoTitle || 'High-fidelity prototype';
     lb.appendChild(f);
     lb.showModal();
     closeBtn.focus();
