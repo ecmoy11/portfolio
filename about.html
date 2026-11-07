@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About · Emma Moystner</title>
-<meta name="description" content="How I got from international business to interaction design, the three things that show up in everything I make, and where I stand on designing with AI.">
+<meta name="description" content="Interaction designer with an M.Des from ArtCenter. How I think about design, where I&#39;ve been, and what I do outside of the office.">
 <link rel="canonical" href="https://emmamoystner.design/about.html">
 <meta name="author" content="Emma Moystner">
 
@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Emma Moystner">
 <meta property="og:url" content="https://emmamoystner.design/about.html">
 <meta property="og:title" content="About &middot; Emma Moystner">
-<meta property="og:description" content="How I got from international business to interaction design, the three things that show up in everything I make, and where I stand on designing with AI.">
+<meta property="og:description" content="Interaction designer with an M.Des from ArtCenter. How I think about design, where I&#39;ve been, and what I do outside of the office.">
 <meta property="og:image" content="https://emmamoystner.design/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -20,7 +20,7 @@
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="About &middot; Emma Moystner">
-<meta name="twitter:description" content="How I got from international business to interaction design, the three things that show up in everything I make, and where I stand on designing with AI.">
+<meta name="twitter:description" content="Interaction designer with an M.Des from ArtCenter. How I think about design, where I&#39;ve been, and what I do outside of the office.">
 <meta name="twitter:image" content="https://emmamoystner.design/og-image.png">
 
 
@@ -30,7 +30,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=DM+Serif+Display&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
 
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,7 +41,6 @@
   --orange: #E15304;
   --lavender: #9DA5C5;
   --burgundy: #410016;
-  --olive: #775D0F;
 
   --bg-cream: #FAF8F5;
   --bg-warm: #FFF5EE;
@@ -54,10 +53,11 @@
   --font-primary: 'Inter', -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --font-serif: 'DM Serif Display', serif;
+  --f-head: 'Newsreader', var(--font-serif), Georgia, serif; /* same stack as case-study-rail.css */
 
-  --pad: 48px;
-  /* the one line the page hangs off, borrowed from the hang layout */
-  --rail: 220px;
+  --pad: clamp(24px, 7vw, 160px);  /* editorial gutters: grow with the screen */
+  --wrap: 1120px;
+  --lab-offset: 0px;
 }
 
 html {
@@ -67,17 +67,14 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 body { overflow-x: hidden; }
-/* Typographic hygiene, page wide. `balance` evens out short headings so a
-   single word can't drop to its own line; `pretty` stops paragraphs and the
-   small mono notes from ending on an orphan. */
 h1, h2, h3 { text-wrap: balance; }
-p, .rail-note, .idx-note, .band-label { text-wrap: pretty; }
+p, .when, .sec-label { text-wrap: pretty; }
 a { color: inherit; text-decoration: none; }
 ::selection { background: var(--orange); color: var(--white); }
 
-/* ============ NAV ============ */
+/* ============ NAV (contract: 13 / 12 / 12, unchanged from about.html) ============ */
 .nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  position: fixed; top: var(--lab-offset); left: 0; right: 0; z-index: 100;
   padding: 24px 48px; display: flex; align-items: center; justify-content: space-between;
   transition: background 0.5s ease, padding 0.4s ease, border-color 0.5s ease;
   border-bottom: 1px solid transparent;
@@ -87,15 +84,6 @@ a { color: inherit; text-decoration: none; }
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   padding: 16px 48px; border-bottom-color: rgba(0,0,0,0.06);
 }
-/* white over the orange hero, dark once you scroll */
-.nav:not(.scrolled) .nav-logo { color: var(--white); }
-.nav:not(.scrolled) .nav-right a:not(.nav-cta) { color: rgba(255,255,255,0.75); }
-.nav:not(.scrolled) .nav-right a:not(.nav-cta):hover,
-.nav:not(.scrolled) .nav-right a.active { color: var(--white); }
-.nav:not(.scrolled) .nav-cta { background: var(--white); color: var(--orange) !important; }
-.nav:not(.scrolled) .nav-cta:hover { background: var(--bg-warm); }
-.nav:not(.scrolled) .mobile-menu-toggle span { background: var(--white); }
-.mobile-menu-toggle.open span { background: var(--text-dark) !important; }
 .nav-logo { font-family: var(--font-mono); font-size: 13px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dark); }
 .nav-right { display: flex; align-items: center; gap: 32px; }
 .nav-right a { font-family: var(--font-mono); font-size: 12px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); transition: color 0.3s; cursor: pointer; }
@@ -112,26 +100,30 @@ a { color: inherit; text-decoration: none; }
 .connect-dropdown a:hover svg { opacity: 1; }
 .connect-dropdown-divider { height: 1px; background: var(--divider); margin: 4px 8px; }
 
-/* ============ HERO: split, edge to edge ============ */
-.b-hero {
-  min-height: 92vh;
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
-}
+.mobile-menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; width: 36px; height: 36px; flex-direction: column; justify-content: center; align-items: center; gap: 5px; }
+.mobile-menu-toggle span { display: block; width: 20px; height: 1.5px; background: var(--text-dark); transition: transform 0.3s, opacity 0.3s; }
+.mobile-menu-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.mobile-menu-toggle.open span:nth-child(2) { opacity: 0; }
+.mobile-menu-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+.mobile-nav-overlay { display: none; position: fixed; inset: 0; background: var(--bg-cream); z-index: 99; flex-direction: column; justify-content: center; align-items: center; gap: 32px; opacity: 0; transition: opacity 0.3s ease; }
+.mobile-nav-overlay.open { display: flex; opacity: 1; }
+.mobile-nav-overlay a { font-size: 1.8rem; font-weight: 200; letter-spacing: -0.02em; color: var(--text-dark); text-transform: uppercase; }
+.mobile-nav-overlay a:hover { color: var(--orange); }
+.mobile-nav-overlay .mobile-connect-links { display: flex; gap: 24px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--divider); }
+.mobile-nav-overlay .mobile-connect-links a { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 400; letter-spacing: 0.15em; color: var(--text-muted); }
+
+
+/* ============ LAYOUT ============ */
+.wrap { max-width: calc(var(--wrap) + var(--pad) * 2); margin: 0 auto; padding: 0 var(--pad); }
+
+/* ============ HERO: the live about.html header, split edge to edge ============ */
+.b-hero { min-height: 78vh; display: grid; grid-template-columns: 1.15fr 1fr; }
 .b-hero-left {
-  background: var(--orange);
-  color: var(--white);
-  padding: 160px var(--pad) 64px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  background: var(--orange); color: var(--white);
+  padding: calc(var(--lab-offset) + 130px) var(--pad) 56px;
+  display: flex; flex-direction: column; justify-content: flex-end;
 }
-.b-hero-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.62rem; letter-spacing: 0.3em;
-  text-transform: uppercase; opacity: 0.75;
-  margin-bottom: 28px;
-}
+.b-hero-eyebrow { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.75; margin-bottom: 28px; }
 .b-hero-title {
   font-family: var(--font-primary);
   font-size: clamp(2.8rem, 7.5vw, 7rem);
@@ -140,233 +132,121 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: 34px;
 }
 .b-hero-title span { font-weight: 400; color: var(--peach); }
-.b-hero-left p {
-  font-size: clamp(1rem, 1.42vw, 1.28rem);
-  font-weight: 300; line-height: 1.7;
-  max-width: 57ch; opacity: 0.94;
-}
+.b-hero-left p { font-size: clamp(1rem, 1.42vw, 1.28rem); font-weight: 300; line-height: 1.7; max-width: 52ch; opacity: 0.94; }
 .b-hero-right { position: relative; overflow: hidden; background: var(--burgundy); }
 .b-hero-right::before {
   content: ""; position: absolute; inset: 0 0 auto 0; height: 190px; z-index: 2;
   background: linear-gradient(to bottom, rgba(65,0,22,0.42), rgba(65,0,22,0));
   pointer-events: none;
 }
-.b-hero-right img {
-  width: 100%; height: 100%;
-  object-fit: cover; object-position: 50% 25%;
+.b-hero-right img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; display: block; }
+
+/* white nav over the orange hero, dark once you scroll (same as about.html) */
+.nav:not(.scrolled) .nav-logo { color: var(--white); }
+.nav:not(.scrolled) .nav-right a:not(.nav-cta) { color: rgba(255,255,255,0.75); }
+.nav:not(.scrolled) .nav-right a:not(.nav-cta):hover,
+.nav:not(.scrolled) .nav-right a.active { color: var(--white); }
+.nav:not(.scrolled) .nav-cta { background: var(--white); color: var(--orange) !important; }
+.nav:not(.scrolled) .nav-cta:hover { background: var(--bg-warm); }
+.nav:not(.scrolled) .mobile-menu-toggle span { background: var(--white); }
+.mobile-menu-toggle.open span { background: var(--text-dark) !important; }
+
+/* ============ EDITORIAL SECTIONS ============
+   Each section is one spread: a serif title in a narrow left column,
+   the content beside it. Keeps the scroll short and gives the page a
+   magazine rhythm instead of stacked blocks. */
+.sec {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  gap: 0 clamp(40px, 5vw, 96px);
+  padding-top: clamp(64px, 7vw, 112px);
+  padding-bottom: clamp(64px, 7vw, 112px);
+  /* hairline rule that stops at the gutters, so it lines up with the text */
+  background: linear-gradient(var(--text-dark), var(--text-dark)) center top / calc(100% - var(--pad) * 2) 1px no-repeat;
+}
+.sec:first-of-type { background: none; }
+.sec-head { position: sticky; top: calc(var(--lab-offset) + 84px); align-self: start; }
+/* eyebrow + title match the case studies exactly:
+   .csr-eyebrow and .csr-display in assets/case-study-rail.css */
+.sec-num {
   display: block;
+  font-family: var(--font-mono); font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-light);
+  margin-bottom: 12px;
+}
+.sec-title {
+  font-family: var(--f-head);
+  font-weight: 400;
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  font-variation-settings: 'opsz' 60;
+  color: var(--text-dark);
 }
 
-/* ============ INDEX ============ */
-.b-index { background: var(--bg-cream); padding: 0 0 40px; }
-.idx-row {
+/* Philosophy: one column. Heading left, sentence right, one line each. */
+.ph-grid { display: block; }
+.ph-item {
   display: grid;
-  grid-template-columns: 110px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 24px;
-  padding: 26px var(--pad);
-  border-bottom: 1px solid var(--divider);
-  transition: background 0.4s ease, color 0.4s ease;
-  cursor: pointer;
-}
-.idx-row:first-child { border-top: 1px solid var(--text-dark); }
-.idx-num { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.2em; color: var(--orange); }
-.idx-title {
-  font-size: clamp(1.3rem, 3vw, 2.3rem);
-  font-weight: 200; letter-spacing: -0.03em;
-  text-transform: uppercase;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.idx-note {
-  font-family: var(--font-mono); font-size: 0.6rem;
-  letter-spacing: 0.14em; color: var(--text-muted);
-  opacity: 0; transform: translateX(-10px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  white-space: nowrap;
-}
-.idx-row:hover { background: var(--orange); color: var(--white); }
-.idx-row:hover .idx-num { color: rgba(255,255,255,0.75); }
-.idx-row:hover .idx-title { transform: translateX(14px); }
-.idx-row:hover .idx-note { opacity: 1; transform: translateX(0); color: rgba(255,255,255,0.8); }
-
-/* ============ THE RAIL ============ */
-/* Mono label sits left of the line and stays put while its section scrolls.
-   Every railed band shares the same 1240 container, so the labels line up. */
-.rail-grid {
-  max-width: 1240px; margin: 0 auto;
-  display: grid;
-  grid-template-columns: var(--rail) minmax(0, 1fr);
-  gap: 0 64px;
-  align-items: start;
-}
-.rail {
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--orange);
-  padding-top: 0.55rem;
-  position: sticky;
-  top: 96px;
-}
-.rail .rail-note {
-  display: block;
-  margin-top: 14px;
-  color: var(--text-muted);
-  letter-spacing: 0.12em;
-  text-transform: none;
-  font-size: 0.6rem;
-  line-height: 1.7;
-  max-width: 178px;
-}
-
-/* ============ BANDS ============ */
-.band { padding: 150px var(--pad); border-top: 1px solid var(--divider); }
-.band-label {
-  font-family: var(--font-mono); font-size: 0.6rem;
-  letter-spacing: 0.3em; text-transform: uppercase;
-  color: var(--orange); margin-bottom: 26px;
-}
-.band h2 {
-  font-family: var(--font-primary);
-  font-size: clamp(1.8rem, 3.6vw, 3rem);
-  font-weight: 300; line-height: 1.2;
-  letter-spacing: -0.03em;
-}
-.band h2 strong { font-weight: 500; }
-.band p { font-size: 1rem; font-weight: 300; line-height: 1.9; color: var(--text-light); }
-.band p + p { margin-top: 1.4rem; }
-.highlight { color: var(--text-dark); font-weight: 500; border-bottom: 2px solid var(--orange); }
-
-/* story: rail, then the text. No image here on purpose, the photography
-   all lives in the mosaic further down. */
-.b-story { align-items: start; }
-.b-story h2 { margin-bottom: 34px; max-width: 21ch; }
-.b-story-text { max-width: 66ch; }
-
-/* how I work: rail, then three rows. Same shape every row:
-   number, heading on the left, the answer on the right. */
-.b-work-head { margin-bottom: 64px; }
-.work-row {
-  display: grid;
-  grid-template-columns: 68px minmax(0, 1fr) minmax(0, 1.12fr);
-  gap: 0 36px;
-  padding: 46px 0;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 0 clamp(24px, 3vw, 48px);
+  padding: 18px 0;
   border-top: 1px solid var(--divider);
-  align-items: start;
+  align-items: baseline;
 }
-.work-row:first-of-type { border-top: 1px solid var(--text-dark); }
-.work-row:last-child { border-bottom: 1px solid var(--divider); }
-.work-row .num {
-  font-family: var(--font-mono); font-size: 0.62rem;
-  letter-spacing: 0.2em; color: var(--orange);
-  padding-top: 0.5rem;
+.ph-item:first-child { border-top: none; padding-top: 6px; }
+.ph-item h3 {
+  font-size: clamp(1.05rem, 1.35vw, 1.2rem);
+  font-weight: 500; letter-spacing: -0.02em; line-height: 1.3;
+  text-wrap: pretty; /* balance split the AI heading in two when it fits on one line */
 }
-.work-row h3 {
-  font-size: clamp(1.25rem, 2vw, 1.7rem);
-  font-weight: 300; letter-spacing: -0.03em;
-  line-height: 1.25;
-}
-.work-row p { font-size: 0.95rem; line-height: 1.9; padding-top: 0.4rem; }
+.ph-item p { font-size: 0.93rem; font-weight: 300; line-height: 1.7; color: var(--text-light); }
 
-/* ============ AI: burgundy, edge to edge ============ */
-.b-ai {
-  background: var(--burgundy);
-  color: var(--white);
-  padding: 150px var(--pad) 120px;
-  border-top: none;
-  position: relative;
-  overflow: hidden;
-}
-.b-ai::after {
-  content: ""; position: absolute;
-  left: 0; right: 0; bottom: 0; height: 6px;
-  background: var(--orange);
-}
-.b-ai-inner { max-width: 1240px; margin: 0 auto; }
-.b-ai .band-label { color: var(--peach); }
-.b-ai .b-ai-head {
-  font-family: var(--font-primary);
-  /* declared past `.band h2` on purpose: a plain class loses to it and the
-     heading silently collapses to the small band size */
-  font-size: clamp(2rem, 4.2vw, 3.4rem);
-  font-weight: 200; letter-spacing: -0.05em;
-  line-height: 0.92; text-transform: uppercase;
-  margin-bottom: 34px;
-}
-.b-ai-head span { color: var(--peach); font-weight: 400; }
-.b-ai .b-ai-lede {
-  font-size: clamp(1.05rem, 1.7vw, 1.4rem);
-  font-weight: 300; line-height: 1.6;
-  max-width: none;
-  margin-bottom: 90px;
-}
-/* the second beat: same measure as the lede, one step quieter */
-.b-ai .b-ai-sub {
-  font-size: clamp(0.95rem, 1.15vw, 1.05rem);
-  font-weight: 300; line-height: 1.9;
-  max-width: none;
-  margin-bottom: 90px;
-}
-/* `.band p` sets --text-light, which is a grey on burgundy. Beat it. */
-.b-ai .b-ai-lede { color: var(--white); }
-.b-ai .b-ai-sub  { color: rgba(255,255,255,0.86); }
-.ai-rows { border-top: 1px solid rgba(255,255,255,0.22); }
-.ai-row {
+/* Career: one tight line per role */
+.c-row {
   display: grid;
-  grid-template-columns: 90px minmax(0, 1.05fr) minmax(0, 1.15fr);
-  gap: 0 48px;
-  padding: 44px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.14);
-  align-items: start;
-  transition: padding-left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  grid-template-columns: 120px minmax(0, 0.9fr) minmax(0, 1.4fr);
+  gap: 0 clamp(24px, 3vw, 48px);
+  padding: 16px 0;
+  border-top: 1px solid var(--divider);
+  align-items: baseline;
 }
-.ai-row:hover { padding-left: 14px; }
-.ai-row .num { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.22em; color: var(--peach); padding-top: 0.5rem; }
-.ai-row h3 {
-  font-size: clamp(1.2rem, 1.9vw, 1.6rem);
-  font-weight: 300; letter-spacing: -0.025em;
-  line-height: 1.3; color: var(--white);
-}
-.ai-row p { font-size: 0.95rem; font-weight: 300; line-height: 1.9; color: rgba(255,255,255,0.78); }
+.c-row:first-child { border-top: none; padding-top: 6px; }
+.c-row .when { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em; color: var(--orange); white-space: nowrap; }
+.c-row h3 { font-size: 1rem; font-weight: 500; letter-spacing: -0.01em; }
+.c-row p { font-size: 0.88rem; font-weight: 300; line-height: 1.6; color: var(--text-light); }
 
-/* ============ BEYOND: edge to edge mosaic ============ */
-.b-beyond { border-top: none; padding-bottom: 0; }
-.b-beyond-inner {
-  margin-bottom: 90px;
-  grid-template-columns: var(--rail) minmax(0, 0.82fr) minmax(0, 1.15fr);
+/* Outside: copy under the title, mosaic beside it */
+.outside-copy {
+  font-size: 0.95rem; font-weight: 300; line-height: 1.7;
+  color: var(--text-light);
+  margin-top: 20px; max-width: 30ch;
 }
-.b-beyond h2 { max-width: 14ch; }
 .mosaic {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-auto-rows: 15vw;
-  gap: 6px;
+  grid-auto-rows: min(8.5vw, 132px);
+  gap: 5px;
 }
-.mosaic figure { overflow: hidden; position: relative; }
+.mosaic figure { overflow: hidden; position: relative; border-radius: 3px; }
 .mosaic img {
   width: 100%; height: 100%;
   object-fit: cover; display: block;
-  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .mosaic figure:hover img { transform: scale(1.05); }
 .mosaic figcaption {
-  position: absolute; left: 12px; bottom: 12px;
+  position: absolute; left: 10px; bottom: 10px;
   font-family: var(--font-mono); font-size: 0.55rem;
   letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--white); opacity: 0;
-  transform: translateY(6px);
+  color: var(--white); opacity: 0; transform: translateY(6px);
   transition: opacity 0.35s ease, transform 0.35s ease;
   text-shadow: 0 1px 8px rgba(0,0,0,0.6);
 }
 .mosaic figure:hover figcaption { opacity: 1; transform: translateY(0); }
-/* 2026-11-04: on a mouse the caption becomes the site cursor's orange label
-   (data-cursor-label, same as the homepage tiles), so the in-photo caption hides.
-   Touch and reduced motion get no custom cursor, so they keep the corner caption. */
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .mosaic figcaption { display: none; }
 }
-/* explicit 6 x 4 placement so the grid always closes with no holes */
 .mosaic figure:nth-child(1)  { grid-column: 1 / 3; grid-row: 1 / 3; }
 .mosaic figure:nth-child(2)  { grid-column: 3 / 4; grid-row: 1 / 3; }
 .mosaic figure:nth-child(3)  { grid-column: 4 / 5; grid-row: 1 / 2; }
@@ -380,132 +260,79 @@ a { color: inherit; text-decoration: none; }
 .mosaic figure:nth-child(11) { grid-column: 2 / 3; grid-row: 4 / 5; }
 .mosaic figure:nth-child(12) { grid-column: 3 / 5; grid-row: 4 / 5; }
 
-/* ============ EDUCATION strip ============ */
-.b-edu { padding: 130px var(--pad); }
-.b-edu-inner { max-width: 1240px; margin: 0 auto; }
-.edu-strip { max-width: 880px; border-top: 1px solid var(--text-dark); }
-/* 2026-11-04: a vertical list, read like a mini resume. Date in its own column. */
-.edu-cell { display: grid; grid-template-columns: 150px minmax(0, 1fr); column-gap: 40px; padding: 28px 0; border-bottom: 1px solid var(--divider); }
-.edu-cell:last-child { border-bottom: none; }
-.edu-cell .when { grid-row: 1 / span 2; padding-top: 0.45em; font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.18em; color: var(--orange); }
-.edu-cell h3, .edu-cell p { grid-column: 2; }
-.edu-cell p { max-width: 62ch; }
-.edu-cell h3 { font-size: 1.02rem; font-weight: 500; margin-bottom: 6px; }
-.edu-cell p { font-size: 0.88rem; font-weight: 300; line-height: 1.75; color: var(--text-light); }
-
-/* ============ CONNECT: orange band ============ */
-.b-connect {
+/* ============ CONNECT BAND: orange, ends in the oversized wordmark ============ */
+.connect {
   background: var(--orange); color: var(--white);
-  padding: 150px var(--pad) 140px;
-  border-top: none;
+  padding-top: clamp(56px, 6vw, 96px);
+  overflow: hidden;
 }
-.b-connect-inner { max-width: 1240px; margin: 0 auto; }
-.b-connect h2 {
-  font-family: var(--font-primary);
-  font-size: clamp(2.6rem, 8vw, 6.5rem);
-  font-weight: 200; letter-spacing: -0.05em;
-  line-height: 0.92; text-transform: uppercase;
-  margin-bottom: 40px;
+.status {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 0.95rem; font-weight: 400; line-height: 1.35;
 }
-.b-connect p { font-size: 1.1rem; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.92); max-width: 46ch; margin-bottom: 48px; }
-.b-big-link {
-  display: inline-block;
-  font-size: clamp(1.1rem, 2.6vw, 2.1rem);
-  font-weight: 300; letter-spacing: -0.025em;
-  color: var(--white);
-  border-bottom: 2px solid rgba(255,255,255,0.5);
-  padding-bottom: 5px; transition: border-color 0.3s;
+.status-dot {
+  width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+  background: linear-gradient(90deg, var(--white) 50%, var(--burgundy) 50%);
+  box-shadow: 0 0 0 2px var(--burgundy) inset;
 }
-.b-big-link:hover { border-bottom-color: var(--white); }
-.b-connect-links { display: flex; gap: 30px; margin-top: 44px; flex-wrap: wrap; }
-.b-connect-links a {
-  font-family: var(--font-mono); font-size: 0.65rem;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(255,255,255,0.72);
-  border-bottom: 1px solid transparent; transition: color 0.3s, border-color 0.3s;
+.connect-msg {
+  text-align: center;
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  font-weight: 400; line-height: 1.35; letter-spacing: -0.015em;
+  max-width: 28ch; margin: 48px auto 56px; text-wrap: balance;
 }
-.b-connect-links a:hover { color: var(--white); border-bottom-color: var(--white); }
-
-/* ============ FOOTER ============ */
-.footer { background: var(--text-dark); color: rgba(255,255,255,0.5); padding: 80px 48px 40px; }
-.footer-top { max-width: 1100px; margin: 0 auto 64px; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; }
-.footer-tagline { font-size: 1.1rem; font-weight: 300; color: rgba(255,255,255,0.7); line-height: 1.6; }
-.footer-col h2 { font-family: var(--font-mono); font-size: 0.55rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 16px; }
-.footer-col p, .footer-col a { display: block; font-size: 0.85rem; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.8; transition: color 0.3s; }
-.footer-col a:hover { color: rgba(255,255,255,0.9); }
-.footer-bottom { max-width: 1100px; margin: 0 auto; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 300; }
+.connect-msg a { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+.connect-msg a:hover { color: var(--burgundy); }
+.connect-links { display: flex; gap: 32px; flex-wrap: wrap; }
+.connect-links a { font-size: 0.95rem; font-weight: 400; }
+.connect-links a::after { content: "\2197"; font-size: 0.8em; margin-left: 4px; vertical-align: super; }
+.connect-links a:hover { color: var(--burgundy); }
+.wordmark {
+  /* the old footer's serif, pushed heavier: edge to edge, plus a stroke
+     to thicken DM Serif (it only ships one weight) */
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 15.4vw;
+  line-height: 0.74;
+  letter-spacing: -0.045em;
+  -webkit-text-stroke: 0.022em var(--burgundy);
+  paint-order: stroke fill;
+  white-space: nowrap;
+  text-align: center;
+  color: var(--burgundy);
+  margin-top: 48px;
+  margin-bottom: -0.04em;
+  user-select: none;
+}
+.copyright {
+  position: absolute; right: var(--pad); bottom: 14px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+}
+.connect { position: relative; }
 
 /* ============ REVEAL ============ */
-.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.85s ease, transform 0.85s ease; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.reveal.visible { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 
-/* ============ MOBILE MENU ============ */
-.mobile-menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; width: 36px; height: 36px; flex-direction: column; justify-content: center; align-items: center; gap: 5px; }
-.mobile-menu-toggle span { display: block; width: 20px; height: 1.5px; background: var(--text-dark); transition: transform 0.3s, opacity 0.3s; }
-.mobile-menu-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-.mobile-menu-toggle.open span:nth-child(2) { opacity: 0; }
-.mobile-menu-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-.mobile-nav-overlay { display: none; position: fixed; inset: 0; background: var(--bg-cream); z-index: 99; flex-direction: column; justify-content: center; align-items: center; gap: 32px; opacity: 0; transition: opacity 0.3s ease; }
-.mobile-nav-overlay.open { display: flex; opacity: 1; }
-.mobile-nav-overlay a { font-size: 1.8rem; font-weight: 200; letter-spacing: -0.02em; color: var(--text-dark); text-transform: uppercase; }
-.mobile-nav-overlay a:hover { color: var(--orange); }
-.mobile-nav-overlay .mobile-connect-links { display: flex; gap: 24px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--divider); }
-.mobile-nav-overlay .mobile-connect-links a { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 400; letter-spacing: 0.15em; color: var(--text-muted); }
-
 /* ============ RESPONSIVE ============ */
-@media (max-width: 1100px) {
-  :root { --rail: 150px; }
-  .rail-grid { gap: 0 40px; }
-  .rail .rail-note { max-width: none; }
-  /* rail keeps its column; everything else stacks inside the content column */
-  .b-beyond-inner { grid-template-columns: var(--rail) minmax(0, 1fr); }
-  .b-beyond-inner > div:not(.rail) + div { margin-top: 28px; }
-  .b-beyond-inner > div:not(.rail) { grid-column: 2 / 3; }
-  .b-beyond h2 { max-width: none; }
-  .work-row { grid-template-columns: 54px minmax(0, 1fr); gap: 0 20px; }
-  .work-row h3 { margin-bottom: 14px; }
-  .work-row p { grid-column: 2 / 3; padding-top: 0; }
-  .mosaic { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 24vw; }
-  .mosaic figure:nth-child(n) { grid-column: auto; grid-row: auto; }
-  .mosaic figure:nth-child(1) { grid-column: span 2; grid-row: span 2; }
-  .mosaic figure:nth-child(7) { grid-column: span 2; grid-row: span 2; }
-
-}
-
-@media (max-width: 820px) {
-  :root { --pad: 24px; }
-  .edu-cell { grid-template-columns: 1fr; padding: 24px 0; }
-  .edu-cell .when { grid-row: auto; padding-top: 0; margin-bottom: 10px; }
-  .edu-cell h3, .edu-cell p { grid-column: 1; }
-  /* rail gives up its column and becomes a label above the section */
-  .rail-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
-  .rail { position: static; padding-top: 0; margin-bottom: 20px; }
-  .b-beyond-inner { grid-template-columns: minmax(0, 1fr); }
-  .b-beyond-inner > div:not(.rail) { grid-column: 1 / -1; }
-  .work-row { grid-template-columns: 40px minmax(0, 1fr); gap: 0 14px; padding: 34px 0; }
-  .work-row p { grid-column: 2 / 3; }
-  .b-hero { grid-template-columns: minmax(0,1fr); min-height: 0; }
-  .b-hero-left { padding: 130px var(--pad) 56px; }
-  .b-hero-right { height: 56vh; order: 2; }
-  .idx-row { grid-template-columns: 54px minmax(0,1fr); padding: 20px var(--pad); }
-  .idx-note { display: none; }
-  .band { padding: 84px var(--pad); }
-  .b-ai { padding: 90px var(--pad) 96px; }
-  .b-ai-lede { margin-bottom: 48px; }
-  .ai-row { grid-template-columns: minmax(0,1fr); gap: 12px; padding: 32px 0; }
-  .ai-row .num { padding-top: 0; }
-  .mosaic { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 40vw; }
-  .mosaic figure:nth-child(n) { grid-column: auto; grid-row: auto; }
-  .b-connect { padding: 90px var(--pad) 96px; }
-  .b-edu { padding: 84px var(--pad); }
-  .nav { padding: 16px 24px; }
-  .nav.scrolled { padding: 12px 24px; }
+@media (max-width: 900px) {
+  .nav, .nav.scrolled { padding-left: 24px; padding-right: 24px; }
   .nav-right { display: none; }
   .mobile-menu-toggle { display: flex; }
-  .footer { padding: 56px 24px 32px; }
-  .footer-top { grid-template-columns: 1fr; gap: 32px; }
-  .footer-bottom { flex-direction: column; gap: 8px; }
+  .b-hero { grid-template-columns: 1fr; }
+  .b-hero-right { height: 70vh; order: -1; }
+  .b-hero-left { padding-top: 56px; }
+  .sec { grid-template-columns: 1fr; gap: 28px; }
+  .sec-head { position: static; }
+  .ph-item { grid-template-columns: 1fr; gap: 6px; }
+  .c-row { grid-template-columns: 1fr; gap: 6px; }
+  .mosaic { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 42vw; }
+  .mosaic figure:nth-child(n) { grid-column: auto; grid-row: auto; }
+  .mosaic figure:nth-child(1), .mosaic figure:nth-child(6), .mosaic figure:nth-child(11) { grid-column: 1 / 3; }
+  .connect-msg { margin: 56px auto 64px; }
+  .copyright { position: static; display: block; padding: 0 var(--pad) 16px; text-align: right; }
 }
 </style>
 <style id="a11y-utils">
@@ -540,9 +367,9 @@ a { color: inherit; text-decoration: none; }
     <a href="index.html">Work</a>
     <a href="side-quests.html">Side Quests</a>
     <a href="about.html" class="active">About</a>
-    <a href="Emma-Moystner-Resume.pdf" target="_blank">Resume<span class="visually-hidden"> (PDF, opens in a new tab)</span></a>
+    <a href="resume.moystner.pdf" target="_blank">Resume<span class="visually-hidden"> (PDF, opens in a new tab)</span></a>
     <div class="nav-connect-wrap">
-      <a href="#" class="nav-cta" onclick="toggleConnectDropdown(event)">Connect</a>
+      <a href="#" class="nav-cta" id="connect-toggle" onclick="toggleConnectDropdown(event)">Connect</a>
       <div class="connect-dropdown" id="connect-dropdown">
         <a href="mailto:emmamoystner.design@gmail.com">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
@@ -570,236 +397,123 @@ a { color: inherit; text-decoration: none; }
   </div>
 </div>
 
-<!-- ======== HERO ======== -->
 <main id="main">
+
+<!-- ======== HERO (from about.html, plus the AI line) ======== -->
 <header class="b-hero">
   <div class="b-hero-left">
     <div class="b-hero-eyebrow">About</div>
     <h1 class="b-hero-title">Emma<br>Moystner<span>.</span></h1>
-    <p>Interaction designer finishing an M.Des at ArtCenter.<br>I got here by way of international business, four years of project coordination at an architecture and engineering firm, and a stubborn interest in why people do what they&nbsp;do.</p>
+    <p>Interaction designer with an M.Des from ArtCenter.<br>I got here by way of international business, four years of project coordination at an architecture and engineering firm, and a stubborn interest in why people do what they&nbsp;do. I use AI for rapid prototyping and validating&nbsp;solutions.</p>
   </div>
   <div class="b-hero-right">
-    <img src="Headshot_Moystner.jpg" alt="Emma Moystner" onerror="this.style.display='none'">
+    <img src="Headshot_Moystner.jpg" alt="Emma Moystner">
   </div>
 </header>
 
-<!-- ======== INDEX ======== -->
-<nav class="b-index" aria-label="Page contents">
-  <a class="idx-row" href="#story">
-    <span class="idx-num">01</span>
-    <span class="idx-title">Where I came from</span>
-    <span class="idx-note">Tennessee, a detour through Oregon, then design school</span>
-  </a>
-  <a class="idx-row" href="#work">
-    <span class="idx-num">02</span>
-    <span class="idx-title">How I work</span>
-    <span class="idx-note">Systems, translation, and craft</span>
-  </a>
-  <a class="idx-row" href="#ai">
-    <span class="idx-num">03</span>
-    <span class="idx-title">The AI part</span>
-    <span class="idx-note">Let's talk about it</span>
-  </a>
-  <a class="idx-row" href="#beyond">
-    <span class="idx-num">04</span>
-    <span class="idx-title">Beyond the pixels</span>
-    <span class="idx-note">Tennis, running, sometimes surfing, read, repeat</span>
-  </a>
-  <a class="idx-row" href="#paper">
-    <span class="idx-num">05</span>
-    <span class="idx-title">On paper</span>
-    <span class="idx-note">The short version</span>
-  </a>
-  <a class="idx-row" href="#connect">
-    <span class="idx-num">06</span>
-    <span class="idx-title">Let's work together</span>
-    <span class="idx-note">Currently looking</span>
-  </a>
-</nav>
-
-<!-- ======== STORY ======== -->
-<section class="band b-story rail-grid" id="story">
-  <div class="rail reveal">
-    01 / Where I came from
-    <span class="rail-note">Tennessee, a detour through Oregon, back to Tennessee, then design school</span>
-  </div>
-  <div class="reveal">
-    <h2>I didn't start in design. I started by trying to understand <strong>people.</strong></h2>
-    <div class="b-story-text">
-      <p>I studied international business and cultures at Tennessee Tech, with minors in Spanish and religious studies. I've always been fascinated by how people see the world differently, and how the systems around us either support them or let them down.</p>
-      <p>After graduating, I spent four years as a project coordinator at an architecture and engineering firm, where I watched design decisions ripple through real projects and real people's lives. Somewhere along the way I realized I wanted to be the one <span class="highlight">designing the systems,</span> not just carrying them out.</p>
-      <p>Now I'm finishing my M.Des in Interaction Design at ArtCenter. I think in systems, I care about the details, and I'm looking for my first in-house role as a product designer.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ======== HOW I WORK ======== -->
-<section class="band b-work rail-grid" id="work">
-  <div class="rail reveal">
-    02 / How I work
-    <span class="rail-note">The three things that show up in everything I make</span>
-  </div>
-  <div>
-  <div class="b-work-head reveal">
-    <h2>What I bring to a team.</h2>
-  </div>
-  <article class="work-row reveal">
-    <span class="num">01</span>
-    <h3>I start with the whole system.</h3>
-    <p>Before I design a screen I want to know what the business needs, what the user is actually doing at that moment, and what happens downstream when they get it wrong. Strategy and craft aren't separate jobs to me. The system is the material.</p>
-  </article>
-  <article class="work-row reveal">
-    <span class="num">02</span>
-    <h3>I'm useful in the rooms between disciplines.</h3>
-    <p>Four years translating between architects, engineers, and clients taught me that most projects don't fail on the work, they fail on the handoff. I can talk to anyone in the room, and I like being the one who gets the group to agree on what we're actually solving.</p>
-  </article>
-  <article class="work-row reveal">
-    <span class="num">03</span>
-    <h3>Craft is the argument.</h3>
-    <p>A good idea in a sloppy artifact is just an opinion. I sweat the type, the copy, the empty state, and the second click, because that's the level where people decide whether to trust the thing.</p>
-  </article>
-  </div>
-</section>
-
-<!-- ======== AI ======== -->
-<section class="band b-ai" id="ai">
-  <div class="b-ai-inner">
-    <div class="band-label reveal">03 / The AI part</div>
-    <h2 class="b-ai-head reveal">Let's talk<br><span>about it.</span></h2>
-    <p class="b-ai-lede reveal">I'm AI native. I learned to design before these tools were any good, and I've spent graduate school watching them develop exponentially. Having done it both ways, I know when to trust myself and when the model is wrong. I don't fear it and I don't hand it the wheel. I love how quickly I can get an idea in front of someone now, and the decisions are still mine to make and to answer for.</p>
-    <div class="ai-rows">
-      <article class="ai-row reveal">
-        <span class="num">01</span>
-        <h3>Understanding comes first, or the speed is worthless.</h3>
-        <p>These tools are very fast at producing and not fast at all at knowing why. If I haven't done the work to understand the problem and the person on the other end of it, all the speed does is get me to the wrong answer sooner.</p>
+<!-- ======== PHILOSOPHY ======== -->
+<section class="sec wrap" id="philosophy">
+  <div class="sec-head reveal"><span class="sec-num">01</span><h2 class="sec-title">Philosophy</h2></div>
+  <div class="ph-grid reveal">
+      <article class="ph-item">
+        <h3>Clarity is kindness.</h3>
+        <p>I believe good design makes things feel simple, even when the underlying process is&nbsp;complex.</p>
       </article>
-      <article class="ai-row reveal">
-        <span class="num">02</span>
-        <h3>It's a tool, which means it has a right use.</h3>
-        <p>I reach for it when it's the right instrument for the thing in front of me, not because it happens to be on the desk. Using it for its own sake gets you volume. Using it because it's the right move gets you a better answer sooner, and knowing which one you're doing is most of the skill.</p>
+      <article class="ph-item">
+        <h3>Great work is collaborative.</h3>
+        <p>The best solutions rarely come from working alone. I value early collaboration, because different perspectives lead to stronger&nbsp;products.</p>
       </article>
-      <article class="ai-row reveal">
-        <span class="num">03</span>
-        <h3>Say what you used, and where.</h3>
-        <p>Disclosure matters to me. If a model helped me get somewhere, I'll tell you where, and I can walk you through what was mine and what wasn't. That isn't a confession. It's how the work stays legible to the people who have to trust it, and the norms for saying it out loud are still being written.</p>
+      <article class="ph-item">
+        <h3>Details make the difference.</h3>
+        <p>The details matter. They might go unnoticed individually, but together they shape how a product&nbsp;feels.</p>
       </article>
-      <article class="ai-row reveal">
-        <span class="num">04</span>
-        <h3>The last pass is mine.</h3>
-        <p>Type, copy, spacing, the empty state, the second click. That's the layer where someone decides whether to trust a thing, and it's the layer I want my own hands on. I'll take help getting to a draft. I won't take it on the finish.</p>
+      <article class="ph-item">
+        <h3>Design should solve real problems.</h3>
+        <p>I don't design just to make things look good. Every decision should serve a purpose, address a user need, or make the product work&nbsp;better.</p>
       </article>
-    </div>
+      <article class="ph-item">
+        <h3>Understanding comes before speed.</h3>
+        <p>AI helps me prototype and test ideas fast, but it can't tell me why a problem matters. I do that work first, so the speed takes me somewhere&nbsp;useful.</p>
+      </article>
   </div>
 </section>
 
-<!-- ======== BEYOND ======== -->
-<section class="band b-beyond" id="beyond">
-  <div class="b-beyond-inner rail-grid">
-    <div class="rail reveal">
-      04 / Beyond the pixels
-      <span class="rail-note">Tennis is my current&nbsp;obsession</span>
+<!-- ======== CAREER ======== -->
+<section class="sec wrap" id="career">
+  <div class="sec-head reveal"><span class="sec-num">02</span><h2 class="sec-title">Career</h2></div>
+  <div class="career reveal">
+    <div class="c-row">
+      <div class="when">2026 &ndash;</div>
+      <h3>Freelance product designer</h3>
+      <p>Client work across web and mobile, from research through prototyping and usability&nbsp;testing.</p>
     </div>
-    <div class="reveal">
-      <h2>Outside of the office.</h2>
+    <div class="c-row">
+      <div class="when">2025 &ndash; 2026</div>
+      <h3>ArtCenter College of Design</h3>
+      <p>M.Des in Interaction Design. Systems design, service design, futures thinking, design&nbsp;research.</p>
     </div>
-    <div class="reveal">
-      <p>I'm someone who loves adventure and play in equal measure. I surf (poorly but enthusiastically), climb, run, and I'm currently deep in a tennis obsession. I'm always ready to pick up whatever hobby catches my eye next.</p>
-      <p>When I'm not designing, you'll probably find me with a matcha in hand and a book I can't put down. If you have a recommendation, seriously, send it my way.</p>
-      <p>I believe the best work comes from people who love the little things in life. I'm always down for a new challenge, a new city, a new conversation. Let's go.</p>
+    <div class="c-row">
+      <div class="when">2022 &ndash; 2026</div>
+      <h3>Project coordinator, A/E</h3>
+      <p>Schedules, document control, and keeping architects and engineers in sync. Four years watching design decisions turn into buildings, budgets, and people's&nbsp;Tuesdays.</p>
     </div>
-  </div>
-  <div class="mosaic reveal">
-    <figure class="m-big" data-cursor-label="Redwoods"><img src="personal%20photos/redwoods.jpg" alt="Emma in the redwoods" onerror="this.parentElement.style.display='none'"><figcaption>Redwoods</figcaption></figure>
-    <figure class="m-tall" data-cursor-label="Surf trip, zero photos"><img src="personal%20photos/surf.jpg" alt="Emma surfing the counter" onerror="this.parentElement.style.display='none'"><figcaption>Surf trip, zero photos</figcaption></figure>
-    <figure data-cursor-label="Safety First"><img src="personal%20photos/bike.jpg" alt="Emma biking" onerror="this.parentElement.style.display='none'"><figcaption>Safety First</figcaption></figure>
-    <figure class="m-wide" data-cursor-label="My Bestie"><img src="personal%20photos/pup.jpg" alt="A dog on the windowsill" onerror="this.parentElement.style.display='none'"><figcaption>My Bestie</figcaption></figure>
-    <figure data-cursor-label="Love a Hike"><img src="personal%20photos/hike.jpg" alt="Emma hiking" onerror="this.parentElement.style.display='none'"><figcaption>Love a Hike</figcaption></figure>
-    <figure class="m-wide" data-cursor-label="The Good Times"><img src="personal%20photos/friends.jpg" alt="Emma and friends" onerror="this.parentElement.style.display='none'"><figcaption>The Good Times</figcaption></figure>
-    <figure class="m-tall" data-cursor-label="Pura Vida"><img src="personal%20photos/waterfall.jpg" alt="Emma at a waterfall" onerror="this.parentElement.style.display='none'"><figcaption>Pura Vida</figcaption></figure>
-    <figure data-cursor-label="Miles"><img src="personal%20photos/run.jpg" alt="Emma running" onerror="this.parentElement.style.display='none'"><figcaption>Miles</figcaption></figure>
-    <figure class="m-wide" data-cursor-label="Me and My Happy Place"><img src="personal%20photos/travel.JPG" alt="Emma traveling" onerror="this.parentElement.style.display='none'"><figcaption>Me and My Happy Place</figcaption></figure>
-    <figure data-cursor-label="City walk"><img src="personal%20photos/sanfran.jpg" alt="Emma exploring" onerror="this.parentElement.style.display='none'"><figcaption>City walk</figcaption></figure>
-    <figure data-cursor-label="Love the Sun"><img src="personal%20photos/beach.jpg" alt="Emma at the beach" onerror="this.parentElement.style.display='none'"><figcaption>Love the Sun</figcaption></figure>
-    <figure class="m-wide" data-cursor-label="Rainbow"><img src="personal%20photos/tj.JPG" alt="Emma under a rainbow" onerror="this.parentElement.style.display='none'"><figcaption>Rainbow</figcaption></figure>
-  </div>
-</section>
-
-<!-- ======== EDUCATION ======== -->
-<section class="b-edu" id="paper">
-  <div class="b-edu-inner reveal">
-    <div class="band-label">05 / On paper</div>
-    <div class="edu-strip">
-      <div class="edu-cell">
-        <div class="when">2026 &ndash;</div>
-        <h3>Freelance product designer</h3>
-        <p>Client work across web and mobile, from research through prototyping and usability testing.</p>
-      </div>
-      <div class="edu-cell">
-        <div class="when">2025 &ndash; 2026</div>
-        <h3>ArtCenter College of Design</h3>
-        <p>M.Des in Interaction Design. Systems design, service design, futures thinking, design research.</p>
-      </div>
-      <div class="edu-cell">
-        <div class="when">2022 &ndash; 2026</div>
-        <h3>Project coordinator, A/E</h3>
-        <p>Schedules, document control, and keeping architects and engineers in sync. Four years watching design decisions turn into buildings, budgets, and people's Tuesdays.</p>
-      </div>
-      <div class="edu-cell">
-        <div class="when">2021 &ndash; 2022</div>
-        <h3>Executive assistant, Oregon</h3>
-        <p>Client portfolios, contracts, and document review. The detour, and the first time I saw how much of a business runs on process.</p>
-      </div>
-      <div class="edu-cell">
-        <div class="when">2017 &ndash; 2021</div>
-        <h3>Tennessee Tech</h3>
-        <p>B.S. International Business and Cultures. Minors in Spanish and religious studies.</p>
-      </div>
+    <div class="c-row">
+      <div class="when">2021 &ndash; 2022</div>
+      <h3>Executive assistant, Oregon</h3>
+      <p>Client portfolios, contracts, and document review. The detour, and the first time I saw how much of a business runs on&nbsp;process.</p>
     </div>
+    <div class="c-row">
+      <div class="when">2017 &ndash; 2021</div>
+      <h3>Tennessee Tech</h3>
+      <p>B.S. International Business and Cultures. Minors in Spanish and religious&nbsp;studies.</p>
+    
   </div>
 </section>
 
-<!-- ======== CONNECT ======== -->
-<section class="band b-connect" id="connect">
-  <div class="b-connect-inner reveal">
-    <h2>Let's work<br>together.</h2>
-    <p>I'm looking for my first in-house product design role somewhere that cares about doing good work. If that sounds like your team, I'd love to chat.</p>
-    <a href="mailto:emmamoystner.design@gmail.com" class="b-big-link">emmamoystner.design@gmail.com</a>
-    <div class="b-connect-links">
+<!-- ======== OUTSIDE OF THE OFFICE ======== -->
+<section class="sec wrap" id="outside">
+  <div class="sec-head reveal">
+    <span class="sec-num">03</span><h2 class="sec-title">Outside of the office</h2>
+    <p class="outside-copy">You can find me playing tennis, running, or, if I'm near a beach, surfing (poorly but enthusiastically). I'm always up for an adventure, and it's better with friends. On slower days, it's a matcha and a book I can't put down. If you have a recommendation, send it my&nbsp;way.</p>
+  </div>
+  <div class="mosaic reveal" data-cursor-chip>
+    <figure data-cursor-label="Redwoods"><img src="personal%20photos/redwoods.jpg" alt="Emma in the redwoods" loading="lazy"><figcaption>Redwoods</figcaption></figure>
+    <figure data-cursor-label="Surf trip, zero photos"><img src="personal%20photos/surf.jpg" alt="Emma surfing the counter" loading="lazy"><figcaption>Surf trip, zero photos</figcaption></figure>
+    <figure data-cursor-label="Safety First"><img src="personal%20photos/bike.jpg" alt="Emma biking" loading="lazy"><figcaption>Safety First</figcaption></figure>
+    <figure data-cursor-label="My Bestie"><img src="personal%20photos/pup.jpg" alt="A dog on the windowsill" loading="lazy"><figcaption>My Bestie</figcaption></figure>
+    <figure data-cursor-label="Love a Hike"><img src="personal%20photos/hike.jpg" alt="Emma hiking" loading="lazy"><figcaption>Love a Hike</figcaption></figure>
+    <figure data-cursor-label="The Good Times"><img src="personal%20photos/friends.jpg" alt="Emma and friends" loading="lazy"><figcaption>The Good Times</figcaption></figure>
+    <figure data-cursor-label="Pura Vida"><img src="personal%20photos/waterfall.jpg" alt="Emma at a waterfall" loading="lazy"><figcaption>Pura Vida</figcaption></figure>
+    <figure data-cursor-label="Miles"><img src="personal%20photos/run.jpg" alt="Emma running" loading="lazy"><figcaption>Miles</figcaption></figure>
+    <figure data-cursor-label="Me and My Happy Place"><img src="personal%20photos/travel.JPG" alt="Emma traveling" loading="lazy"><figcaption>Me and My Happy Place</figcaption></figure>
+    <figure data-cursor-label="City walk"><img src="personal%20photos/sanfran.jpg" alt="Emma exploring" loading="lazy"><figcaption>City walk</figcaption></figure>
+    <figure data-cursor-label="Love the Sun"><img src="personal%20photos/beach.jpg" alt="Emma at the beach" loading="lazy"><figcaption>Love the Sun</figcaption></figure>
+    <figure data-cursor-label="Rainbow"><img src="personal%20photos/tj.JPG" alt="Emma under a rainbow" loading="lazy"><figcaption>Rainbow</figcaption></figure>
+  </div>
+</section>
+
+</main>
+
+<!-- ======== CONNECT + FOOTER (one band, Anna-style) ======== -->
+<footer class="connect" id="connect">
+  <div class="wrap">
+    <div class="status"><span class="status-dot" aria-hidden="true"></span><span>Currently open for<br>full-time product design roles</span></div>
+    <p class="connect-msg">Drop me a message on <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn</a>, or send me an <a href="mailto:emmamoystner.design@gmail.com">email</a>. I'd love to&nbsp;chat.</p>
+    <div class="connect-links">
+      <a href="resume.moystner.pdf" target="_blank">Resume<span class="visually-hidden"> (PDF, opens in a new tab)</span></a>
       <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a>
-      <a href="Emma-Moystner-Resume.pdf" target="_blank">Resume<span class="visually-hidden"> (PDF, opens in a new tab)</span></a>
       <a href="index.html">See the work</a>
     </div>
   </div>
-</section>
-
-<!-- ======== FOOTER ======== -->
-</main>
-
-<footer class="footer">
-  <div class="footer-top">
-    <div class="footer-tagline">Designing with intention. Always learning.</div>
-    <div class="footer-col">
-      <h2>Program</h2>
-      <p>ArtCenter College of Design</p>
-      <p>Graduate IxD, 2026</p>
-    </div>
-    <div class="footer-col">
-      <h2>Connect</h2>
-      <a href="mailto:emmamoystner.design@gmail.com">emmamoystner.design@gmail.com</a>
-      <a href="https://www.linkedin.com/in/emmamoystner" target="_blank">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>&copy; 2026 Emma Moystner</span>
-    <span>Portfolio</span>
-  </div>
+  <div class="wordmark" aria-hidden="true">Emma Moystner</div>
+  <span class="copyright">&copy; 2026</span>
 </footer>
 
 <script>
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 50);
-});
+}, { passive: true });
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -825,7 +539,8 @@ function toggleMobileMenu() {
   document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
 }
 </script>
-
+<!-- fallback: if the observer never fires, don't leave content invisible -->
+<script>setTimeout(()=>document.querySelectorAll('.reveal:not(.visible)').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight)el.classList.add('visible')}),1500);</script>
 <script src="assets/sq-cursor.js" defer></script>
 </body>
 </html>
